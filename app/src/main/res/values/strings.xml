@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Tennis bot</string>
+    <string name="onboarding_text">Ракеточная Эко-Система\nТысячи игроков, в разных странах мира уже нашли себе равных партнеров, друзей и присоединились к самому большому сообществу «Теннис бот»</string>
+    <string name="onboarding_start_button">Начать</string>
+    <string name="onboarding_proceed_without_registration_button">Войти без регистрации</string>
+    <string name="onboarding_login_button">Войти</string>
+</resources>
