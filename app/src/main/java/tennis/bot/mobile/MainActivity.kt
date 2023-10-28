@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import tennis.bot.mobile.databinding.ActivityMainBinding
+import tennis.bot.mobile.onboarding.LoginProposalFragment
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

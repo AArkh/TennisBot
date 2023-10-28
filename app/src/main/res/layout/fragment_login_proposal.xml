@@ -1,76 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
 
-    <View
-        android:background="@drawable/gradient_background"
-        android:id="@+id/gradient_background"
-        android:layout_height="0dp"
-        android:layout_width="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/list"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_marginBottom="40dp"
+		app:layout_constraintBottom_toTopOf="@+id/description_view_pager"
+		app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Central ImageView for PNG -->
-    <ImageView
-        android:id="@+id/central_image"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/gradient_background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/gradient_background" />
+	<androidx.viewpager2.widget.ViewPager2
+		android:id="@+id/description_view_pager"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginHorizontal="20dp"
+		android:layout_marginBottom="24dp"
+		android:orientation="horizontal"
+		app:layout_constraintBottom_toTopOf="@+id/tab_layout"
+		tools:itemCount="2"
+		tools:listitem="@layout/item_titled_text" />
 
-    <!-- Description text -->
-    <TextView
-        android:id="@+id/text_description"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="@string/onboarding_text"
-        android:textSize="16sp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/button_start"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+	<com.google.android.material.tabs.TabLayout
+		android:id="@+id/tab_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="40dp"
+		android:background="@color/tb_white"
+		app:layout_constraintBottom_toTopOf="@+id/button_start"
+		app:layout_constraintLeft_toLeftOf="@+id/button_start"
+		app:layout_constraintRight_toRightOf="@+id/button_start"
+		app:tabBackground="@drawable/background_tab_indicator"
+		app:tabGravity="center"
+		app:tabIndicator="@drawable/tab_indicator_drawable"
+		app:tabIndicatorColor="@color/tb_black"
+		app:tabIndicatorGravity="stretch"
+		app:tabPaddingEnd="8dp"
+		app:tabPaddingStart="8dp"
+		app:tabTextColor="@color/tb_black" />
 
-    <com.google.android.material.button.MaterialButton
-        style="@style/Widget.TennisBot.Button.Active"
-        android:id="@+id/button_start"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_width="match_parent"
-        android:text="@string/onboarding_start_button"
-        app:layout_constraintBottom_toTopOf="@id/button_without_registration"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/button_start"
+		style="@style/Widget.TennisBot.Button.Active"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginHorizontal="20dp"
+		android:layout_marginBottom="10dp"
+		android:text="@string/onboarding_start_button"
+		app:layout_constraintBottom_toTopOf="@id/button_without_registration"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent" />
 
-    <com.google.android.material.button.MaterialButton
-        style="@style/Widget.TennisBot.Button.Secondary"
-        android:id="@+id/button_without_registration"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_width="match_parent"
-        android:text="@string/onboarding_proceed_without_registration_button"
-        app:layout_constraintBottom_toTopOf="@id/button_login"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/button_without_registration"
+		style="@style/Widget.TennisBot.Button.Secondary"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginHorizontal="20dp"
+		android:layout_marginBottom="10dp"
+		android:text="@string/onboarding_proceed_without_registration_button"
+		app:layout_constraintBottom_toTopOf="@id/button_login"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent" />
 
-    <com.google.android.material.button.MaterialButton
-        style="@style/Widget.TennisBot.Button.Inactive"
-        android:id="@+id/button_login"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_width="match_parent"
-        android:text="@string/onboarding_login_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/button_login"
+		style="@style/Widget.TennisBot.Button.Inactive"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginHorizontal="20dp"
+		android:layout_marginBottom="8dp"
+		android:text="@string/onboarding_login_button"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
