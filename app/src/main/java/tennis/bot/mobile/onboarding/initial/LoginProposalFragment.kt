@@ -10,6 +10,7 @@ import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.databinding.FragmentLoginProposalBinding
 import tennis.bot.mobile.onboarding.phone.PhoneInputFragment
+import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -39,8 +40,12 @@ class LoginProposalFragment : CoreFragment<FragmentLoginProposalBinding>() {
                 .addToBackStack(PhoneInputFragment::class.java.name)
                 .commit()
         }
-        binding.buttonLogin.setOnClickListener { }
-        binding.buttonWithoutRegistration.setOnClickListener { }
+        binding.buttonLogin.setOnClickListener {
+            requireContext().showToast("To be implemented yet")
+        }
+        binding.buttonWithoutRegistration.setOnClickListener {
+            requireContext().showToast("To be implemented yet")
+        }
 
         textAdapter.setListAndNotify(listOf(
             TitledText(
