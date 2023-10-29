@@ -1,5 +1,6 @@
 package tennis.bot.mobile.onboarding.initial
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
 import androidx.recyclerview.widget.GridLayoutManager
@@ -13,6 +14,7 @@ import tennis.bot.mobile.onboarding.phone.PhoneInputFragment
 import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
+@SuppressLint("ClickableViewAccessibility")
 @AndroidEntryPoint
 class LoginProposalFragment : CoreFragment<FragmentLoginProposalBinding>() {
 
@@ -20,6 +22,7 @@ class LoginProposalFragment : CoreFragment<FragmentLoginProposalBinding>() {
     @Inject lateinit var textAdapter: LoginProposalViewPagerAdapter
     @Inject lateinit var imageAdapter: LoginProposalImageAdapter
     @Inject lateinit var decoration: LoginProposalImageDecoration
+    @Inject lateinit var touchListener: DraggingTouchListener
 
     override var drawUnderStatusBar: Boolean = true
 
@@ -31,6 +34,7 @@ class LoginProposalFragment : CoreFragment<FragmentLoginProposalBinding>() {
         binding.imageList.setHasFixedSize(true)
         binding.imageList.itemAnimator = null
         binding.imageList.addItemDecoration(decoration)
+        binding.imageList.setOnTouchListener(touchListener)
 
         TabLayoutMediator(binding.tabLayout, binding.descriptionViewPager) { _, _ -> }.attach()
 
