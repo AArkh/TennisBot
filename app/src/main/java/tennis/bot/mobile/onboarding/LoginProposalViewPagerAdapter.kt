@@ -5,8 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import tennis.bot.mobile.core.CoreAdapter
 import tennis.bot.mobile.databinding.ItemTitledTextBinding
+import javax.inject.Inject
 
-class LoginProposalViewPagerAdapter : CoreAdapter<TitledTextViewHolder>() {
+class LoginProposalViewPagerAdapter @Inject constructor() : CoreAdapter<TitledTextViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TitledTextViewHolder {
         val binding = ItemTitledTextBinding.inflate(LayoutInflater.from(parent.context), parent, false)

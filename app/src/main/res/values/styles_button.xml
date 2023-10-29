@@ -12,8 +12,7 @@
         <item name="iconPadding">0dp</item>
         <item name="cornerRadius">10dp</item>
         <!-- todo add font to v28, they're using some Gilroy one -->
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="android:textSize">22sp</item>
+        <item name="android:textSize">15sp</item>
         <!--By default, they are 6dp: for our buttons they looks too heavy with these values-->
         <item name="android:insetTop">2dp</item>
         <item name="android:insetBottom">2dp</item>

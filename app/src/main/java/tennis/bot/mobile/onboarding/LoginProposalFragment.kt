@@ -2,23 +2,33 @@ package tennis.bot.mobile.onboarding
 
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 import tennis.bot.mobile.R
+import tennis.bot.mobile.core.Inflation
+import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.databinding.FragmentLoginProposalBinding
+import javax.inject.Inject
 
-class LoginProposalFragment : Fragment() {
+@AndroidEntryPoint
+class LoginProposalFragment : CoreFragment<FragmentLoginProposalBinding>() {
 
-    private lateinit var binding: FragmentLoginProposalBinding
-    private val adapter = LoginProposalViewPagerAdapter()
+    override val bindingInflation: Inflation<FragmentLoginProposalBinding> = FragmentLoginProposalBinding::inflate
+    @Inject lateinit var textAdapter: LoginProposalViewPagerAdapter
+    @Inject lateinit var imageAdapter: LoginProposalImageAdapter
+    @Inject lateinit var decoration: LoginProposalImageDecoration
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentLoginProposalBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override var drawUnderStatusBar: Boolean = true
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.descriptionViewPager.adapter = adapter
+        super.onViewCreated(view, savedInstanceState)
+        binding.descriptionViewPager.adapter = textAdapter
+        binding.imageList.layoutManager = GridLayoutManager(requireContext(), 4)
+        binding.imageList.adapter = imageAdapter
+        binding.imageList.setHasFixedSize(true)
+        binding.imageList.itemAnimator = null
+        binding.imageList.addItemDecoration(decoration)
 
         TabLayoutMediator(binding.tabLayout, binding.descriptionViewPager) { _, _ -> }.attach()
 
@@ -26,7 +36,7 @@ class LoginProposalFragment : Fragment() {
         binding.buttonStart.setOnClickListener { }
         binding.buttonWithoutRegistration.setOnClickListener { }
 
-        adapter.setListAndNotify(listOf(
+        textAdapter.setListAndNotify(listOf(
             TitledText(
                 requireContext().getString(R.string.onboarding_text_title),
                 requireContext().getString(R.string.onboarding_text)
@@ -39,6 +49,25 @@ class LoginProposalFragment : Fragment() {
                 requireContext().getString(R.string.onboarding_text_title),
                 requireContext().getString(R.string.onboarding_text)
             ),
+        ))
+
+        imageAdapter.setListAndNotify(listOf(
+            LoginProposalImage(R.drawable.login_image_8),
+//            LoginProposalImage(R.drawable.login_image_2),
+            LoginProposalImage(R.drawable.login_image_8),
+            LoginProposalImage(R.drawable.login_image_9),
+            LoginProposalImage(R.drawable.login_image_10),
+            LoginProposalImage(R.drawable.login_image_8),
+//            LoginProposalImage(R.drawable.login_image_5),
+            LoginProposalImage(R.drawable.login_image_1),
+            LoginProposalImage(R.drawable.login_image_3),
+            LoginProposalImage(R.drawable.login_image_8),
+//            LoginProposalImage(R.drawable.login_image_7),
+            LoginProposalImage(R.drawable.login_image_blank),
+            LoginProposalImage(R.drawable.login_image_0),
+            LoginProposalImage(R.drawable.login_image_4),
+            LoginProposalImage(R.drawable.login_image_8),
+//            LoginProposalImage(R.drawable.login_image_6),
         ))
     }
 }
