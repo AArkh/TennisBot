@@ -1,4 +1,4 @@
-package tennis.bot.mobile.onboarding
+package tennis.bot.mobile.onboarding.initial
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

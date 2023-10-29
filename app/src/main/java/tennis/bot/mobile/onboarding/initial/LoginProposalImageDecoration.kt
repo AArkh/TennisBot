@@ -1,4 +1,4 @@
-package tennis.bot.mobile.onboarding
+package tennis.bot.mobile.onboarding.initial
 
 import android.content.Context
 import android.graphics.Rect

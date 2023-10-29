@@ -1,4 +1,4 @@
-package tennis.bot.mobile.onboarding
+package tennis.bot.mobile.onboarding.initial
 
 import android.os.Bundle
 import android.view.*
@@ -9,6 +9,7 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.databinding.FragmentLoginProposalBinding
+import tennis.bot.mobile.onboarding.phone.PhoneInputFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -32,8 +33,13 @@ class LoginProposalFragment : CoreFragment<FragmentLoginProposalBinding>() {
 
         TabLayoutMediator(binding.tabLayout, binding.descriptionViewPager) { _, _ -> }.attach()
 
+        binding.buttonStart.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container_view, PhoneInputFragment())
+                .addToBackStack(PhoneInputFragment::class.java.name)
+                .commit()
+        }
         binding.buttonLogin.setOnClickListener { }
-        binding.buttonStart.setOnClickListener { }
         binding.buttonWithoutRegistration.setOnClickListener { }
 
         textAdapter.setListAndNotify(listOf(
