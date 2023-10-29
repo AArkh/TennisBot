@@ -13,10 +13,10 @@ class LoginProposalImageDecoration @Inject constructor(
     @ApplicationContext context: Context,
 ) : RecyclerView.ItemDecoration() {
 
-    private val spanOneSpacing = context.dpToPx(10)
+    private val spanOneSpacing = context.dpToPx(20)
     private val spanTwoSpacing = context.dpToPx(40)
-    private val spanThreeSpacing = context.dpToPx(120)
-    private val spanFourSpacing = context.dpToPx(80)
+    private val spanThreeSpacing = context.dpToPx(110)
+    private val spanFourSpacing = context.dpToPx(60)
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         val layoutParams = view.layoutParams as GridLayoutManager.LayoutParams
