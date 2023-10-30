@@ -17,4 +17,6 @@
 
     <color name="state_ripple">#296C86AD</color>
     <color name="state_ripple_2">#292F8AF5</color>
+
+    <color name="invisible">#00000000</color>
 </resources>
