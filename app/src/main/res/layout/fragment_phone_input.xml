@@ -36,7 +36,20 @@
 
 	</com.google.android.material.textfield.TextInputLayout>
 
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="20dp"
+		android:layout_marginBottom="16dp"
+		android:text="Введи номер телефона"
+		android:textColor="@color/tb_black"
+		android:textSize="27sp"
+		android:textStyle="bold"
+		app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
+		app:layout_constraintStart_toStartOf="parent" />
+
 	<ImageView
+		android:id="@+id/open_countries_sheet_iv"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:src="@drawable/chevron_right_md"

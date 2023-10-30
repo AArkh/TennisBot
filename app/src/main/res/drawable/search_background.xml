@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/tb_bg_card" /> <!-- Fill color of the square (red in this example) -->
+    <corners android:radius="16dp" /> <!-- Radius determines the amount of rounding -->
+</shape>
