@@ -28,9 +28,9 @@
 			android:id="@+id/phone_et"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:maxLength="14"
-			android:inputType="phone"
 			android:digits="1234567890 +()-"
+			android:inputType="phone"
+			android:maxLength="14"
 			android:paddingStart="56dp"
 			android:textSize="22sp" />
 
@@ -48,25 +48,31 @@
 		app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
 		app:layout_constraintStart_toStartOf="parent" />
 
-	<ImageView
-		android:id="@+id/open_countries_sheet_iv"
+	<LinearLayout
+		android:id="@+id/open_countries_sheet_layout"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:src="@drawable/chevron_right_md"
-		app:layout_constraintBottom_toBottomOf="@+id/textInputLayout"
-		app:layout_constraintLeft_toRightOf="@+id/country_iv"
-		app:layout_constraintTop_toTopOf="@+id/textInputLayout" />
-
-	<ImageView
-		android:id="@+id/country_iv"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_gravity="start"
+		android:gravity="center"
 		android:layout_marginStart="12dp"
-		android:src="@drawable/russia"
+		android:layout_marginBottom="5dp"
 		app:layout_constraintBottom_toBottomOf="@+id/textInputLayout"
 		app:layout_constraintLeft_toLeftOf="@+id/textInputLayout"
-		app:layout_constraintTop_toTopOf="@+id/textInputLayout" />
+		app:layout_constraintTop_toTopOf="@+id/textInputLayout"
+		>
+		<ImageView
+			android:id="@+id/country_iv"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="50"
+			android:src="@drawable/russia" />
+		<ImageView
+			android:id="@+id/chevron_iv"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="50"
+			android:src="@drawable/chevron_right_md" />
+	</LinearLayout>
+
 
 	<ImageView
 		android:id="@+id/x_iv"
@@ -74,7 +80,11 @@
 		android:layout_height="wrap_content"
 		android:layout_gravity="end"
 		android:layout_marginEnd="10dp"
+		android:layout_marginBottom="5dp"
 		android:src="@drawable/x"
+		android:background="@drawable/search_background"
+		android:backgroundTint="@color/tb_gray_border"
+		android:padding="2dp"
 		android:visibility="invisible"
 		app:layout_constraintBottom_toBottomOf="@+id/textInputLayout"
 		app:layout_constraintRight_toRightOf="@+id/textInputLayout"
