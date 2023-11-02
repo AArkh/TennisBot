@@ -11,11 +11,17 @@ import tennis.bot.mobile.databinding.RecyclerCountryItemBinding
 import javax.inject.Inject
 
 class PhoneInputAdapter @Inject constructor() : CoreAdapter<CountryCodeItemViewHolder>() {
+
+    var clickListener: ((item: CountryItem) -> Unit)? = null
+
     override fun onBindViewHolder(holder: CountryCodeItemViewHolder, item: Any) {
         val countryItem = item as? CountryItem ?: throw IllegalArgumentException("Item must be CountryItem")
         holder.binding.countryIconIv.setImageResource(countryItem.icon)
         holder.binding.countryNameTv.text = countryItem.countryName
         holder.binding.countryCodeTv.text = countryItem.countryCode
+        holder.itemView.setOnClickListener {
+            clickListener?.invoke(item)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CountryCodeItemViewHolder {

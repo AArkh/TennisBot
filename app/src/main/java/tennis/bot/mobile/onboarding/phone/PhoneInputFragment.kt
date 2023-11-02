@@ -2,10 +2,21 @@ package tennis.bot.mobile.onboarding.phone
 
 import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.FragmentResultListener
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.subscribe
+import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
@@ -13,14 +24,28 @@ import tennis.bot.mobile.databinding.FragmentPhoneInputBinding
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
+class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>()
+//    , FragmentResultListener
+{
     override val bindingInflation: Inflation<FragmentPhoneInputBinding> = FragmentPhoneInputBinding::inflate
     @Inject lateinit var countryAdapter: PhoneInputAdapter
 
+    @Inject lateinit var repository: CountryCodeRepository
+
+//    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+//        parentFragmentManager.setFragmentResultListener(
+//            CountryCodesDialogFragment.COUNTRY_REQUEST_CODE_KEY,
+//            viewLifecycleOwner,
+//            this
+//        )
+//        return super.onCreateView(inflater, container, savedInstanceState)
+//    }
+//
+//    override fun onFragmentResult(requestKey: String, result: Bundle) {
+//        Log.d("1234567", "onFragmentResult() called with: requestKey = $requestKey, result = ${result.getString(CountryCodesDialogFragment.SELECTED_COUNTRY_CODE_KEY)}")
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-
         binding.phoneEt.addTextChangedListener {
             if (it?.isEmpty() == true) {
                 binding.xIv.visibility = View.INVISIBLE
@@ -45,6 +70,16 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
                 .replace(R.id.fragment_container_view, SmsCodeFragment())
                 .addToBackStack(SmsCodeFragment::class.java.name)
                 .commit()
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                repository.selectedCountryFlow
+                    .onEach { countryItem ->
+                        Log.d("1234567", "onViewCreated: $countryItem")
+                    }
+                    .launchIn(lifecycleScope)
+            }
         }
 
         binding.openCountriesSheetLayout.setOnClickListener {
