@@ -1,12 +1,10 @@
 package tennis.bot.mobile.onboarding.phone
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.RecyclerView
 import tennis.bot.mobile.core.CoreAdapter
+import tennis.bot.mobile.core.CoreUtilsItem
 import tennis.bot.mobile.databinding.RecyclerCountryItemBinding
 import javax.inject.Inject
 
@@ -40,4 +38,4 @@ data class CountryItem(
     val icon: Int,
     val countryName: String,
     val countryCode: String
-)
+): CoreUtilsItem()

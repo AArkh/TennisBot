@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import tennis.bot.mobile.core.CoreAdapter
+import tennis.bot.mobile.core.CoreUtilsItem
 import tennis.bot.mobile.databinding.ItemTitledTextBinding
 import javax.inject.Inject
 
@@ -28,4 +29,4 @@ class TitledTextViewHolder(
 data class TitledText(
     val title: String,
     val text: String,
-)
+) : CoreUtilsItem()
