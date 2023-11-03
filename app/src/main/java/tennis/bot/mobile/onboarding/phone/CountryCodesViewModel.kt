@@ -13,7 +13,7 @@ class CountryCodesViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val initialList = listOf(
-        CountryItem(R.drawable.russia_big, "Россия", "+7"),
+        CountryItem(R.drawable.russia, "Россия", "+7"),
         CountryItem(R.drawable.ukraine, "Украина", "+380"),
         CountryItem(R.drawable.belarus, "Беларусь", "+375"),
         CountryItem(R.drawable.kazakhstan, "Казахстан", "+7"),

@@ -1,5 +1,6 @@
 package tennis.bot.mobile.onboarding.phone
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.util.Log
@@ -33,16 +34,7 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
-//        requireActivity().supportFragmentManager.setFragmentResultListener(
-//            CountryCodesDialogFragment.COUNTRY_REQUEST_CODE_KEY, viewLifecycleOwner, { requestKey, result ->
-//                Log.d("1234567", "2 called with: requestKey = $requestKey, result = ${result.getString(CountryCodesDialogFragment.SELECTED_COUNTRY_CODE_KEY)}")
-//            }
-//        )
-        setFragmentResultListener(
-            CountryCodesDialogFragment.COUNTRY_REQUEST_CODE_KEY, { requestKey, result ->
-                Log.d("1234567", "1 called with: requestKey = $requestKey, result = ${result.getString(CountryCodesDialogFragment.SELECTED_COUNTRY_CODE_KEY)}")
-            }
-        )
+
         return view
     }
 
@@ -77,6 +69,19 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
             val bottomSheet = CountryCodesDialogFragment()
             bottomSheet.show(childFragmentManager, bottomSheet.getTag())
         }
+        setFragmentResultListener(
+            CountryCodesDialogFragment.COUNTRY_REQUEST_CODE_KEY
+        ) { requestKey, result ->
+            binding.textInputLayout.prefixText = result.getString(CountryCodesDialogFragment.SELECTED_COUNTRY_CODE_KEY)
+        }
+
+        setFragmentResultListener(
+            CountryCodesDialogFragment.COUNTRY_REQUEST_ICON_KEY
+        ) { requestKey, result ->
+            binding.countryIv.setImageResource(result.getInt(CountryCodesDialogFragment.SELECTED_COUNTRY_ICON_KEY))
+        }
+
+
 
         super.onViewCreated(view, savedInstanceState)
     }
