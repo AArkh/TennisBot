@@ -31,8 +31,7 @@ class CountryCodesDialogFragment : CoreBottomSheetDialogFragment<FragmentCountry
             dialog?.dismiss()
         }
         countryAdapter.clickListener = {
-//            setFragmentResult(COUNTRY_REQUEST_CODE_KEY, bundleOf(SELECTED_COUNTRY_CODE_KEY to it.countryCode))
-            viewModel.onClick(it)
+            requireActivity().supportFragmentManager.setFragmentResult(COUNTRY_REQUEST_CODE_KEY, bundleOf(SELECTED_COUNTRY_CODE_KEY to it.countryCode))
             dialog?.dismiss()
         }
 

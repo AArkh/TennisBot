@@ -41,7 +41,3 @@ data class CountryItem(
     val countryName: String,
     val countryCode: String
 )
-
-interface CountryCodesClickHandler {
-    fun onItemClick(position: Int)
-}

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.FragmentResultListener
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -24,26 +25,26 @@ import tennis.bot.mobile.databinding.FragmentPhoneInputBinding
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>()
-//    , FragmentResultListener
-{
+class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
     override val bindingInflation: Inflation<FragmentPhoneInputBinding> = FragmentPhoneInputBinding::inflate
     @Inject lateinit var countryAdapter: PhoneInputAdapter
 
     @Inject lateinit var repository: CountryCodeRepository
 
-//    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-//        parentFragmentManager.setFragmentResultListener(
-//            CountryCodesDialogFragment.COUNTRY_REQUEST_CODE_KEY,
-//            viewLifecycleOwner,
-//            this
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = super.onCreateView(inflater, container, savedInstanceState)
+//        requireActivity().supportFragmentManager.setFragmentResultListener(
+//            CountryCodesDialogFragment.COUNTRY_REQUEST_CODE_KEY, viewLifecycleOwner, { requestKey, result ->
+//                Log.d("1234567", "2 called with: requestKey = $requestKey, result = ${result.getString(CountryCodesDialogFragment.SELECTED_COUNTRY_CODE_KEY)}")
+//            }
 //        )
-//        return super.onCreateView(inflater, container, savedInstanceState)
-//    }
-//
-//    override fun onFragmentResult(requestKey: String, result: Bundle) {
-//        Log.d("1234567", "onFragmentResult() called with: requestKey = $requestKey, result = ${result.getString(CountryCodesDialogFragment.SELECTED_COUNTRY_CODE_KEY)}")
-//    }
+        setFragmentResultListener(
+            CountryCodesDialogFragment.COUNTRY_REQUEST_CODE_KEY, { requestKey, result ->
+                Log.d("1234567", "1 called with: requestKey = $requestKey, result = ${result.getString(CountryCodesDialogFragment.SELECTED_COUNTRY_CODE_KEY)}")
+            }
+        )
+        return view
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.phoneEt.addTextChangedListener {
@@ -72,30 +73,9 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>()
                 .commit()
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                repository.selectedCountryFlow
-                    .onEach { countryItem ->
-                        Log.d("1234567", "onViewCreated: $countryItem")
-                    }
-                    .launchIn(lifecycleScope)
-            }
-        }
-
         binding.openCountriesSheetLayout.setOnClickListener {
-            val bottomSheet: CountryCodesDialogFragment = CountryCodesDialogFragment()
+            val bottomSheet = CountryCodesDialogFragment()
             bottomSheet.show(childFragmentManager, bottomSheet.getTag())
-//            val dialog = BottomSheetDialog(requireContext())
-//            val dialogView = layoutInflater.inflate(R.layout.country_phones_bottom_sheet, null)
-//            val closeBtn = dialogView.findViewById<ImageView>(R.id.close_button_iv)
-//            val countriesRecycler = dialogView.findViewById<RecyclerView>(R.id.countries_list_rv)
-//            countriesRecycler.adapter = countryAdapter
-//            countriesRecycler.layoutManager = LinearLayoutManager(requireContext())
-//            closeBtn.setOnClickListener {
-//                dialog.dismiss()
-//            }
-//            dialog.setContentView(dialogView)
-//            dialog.show()
         }
 
         super.onViewCreated(view, savedInstanceState)
