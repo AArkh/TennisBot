@@ -1,7 +1,6 @@
 package tennis.bot.mobile.onboarding.phone
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
@@ -32,10 +31,8 @@ class CountryCodesDialogFragment : CoreBottomSheetDialogFragment<FragmentCountry
             dialog?.dismiss()
         }
         countryAdapter.clickListener = {
-            setFragmentResult(COUNTRY_REQUEST_CODE_KEY, bundleOf(SELECTED_COUNTRY_CODE_KEY to it.countryCode))
-            viewModel.onClick(it)
+            requireActivity().supportFragmentManager.setFragmentResult(COUNTRY_REQUEST_CODE_KEY, bundleOf(SELECTED_COUNTRY_CODE_KEY to it.countryCode))
             dialog?.dismiss()
-            Log.i("test", "countryAdapter.clickListener is called")
         }
 
         lifecycleScope.launch {

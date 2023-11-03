@@ -1,6 +1,5 @@
 package tennis.bot.mobile.onboarding.phone
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +7,6 @@ import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.RecyclerView
 import tennis.bot.mobile.core.CoreAdapter
-import tennis.bot.mobile.core.CoreUtilsItem
 import tennis.bot.mobile.databinding.RecyclerCountryItemBinding
 import javax.inject.Inject
 
@@ -23,7 +21,6 @@ class PhoneInputAdapter @Inject constructor() : CoreAdapter<CountryCodeItemViewH
         holder.binding.countryCodeTv.text = countryItem.countryCode
         holder.itemView.setOnClickListener {
             clickListener?.invoke(item)
-            Log.i("test", "itemView.setOnClickListener is called. $item is invoked")
         }
     }
 
@@ -32,7 +29,6 @@ class PhoneInputAdapter @Inject constructor() : CoreAdapter<CountryCodeItemViewH
             .inflate(LayoutInflater.from(parent.context), parent, false)
         return CountryCodeItemViewHolder(binding)
     }
-
 
 }
 
@@ -45,4 +41,3 @@ data class CountryItem(
     val countryName: String,
     val countryCode: String
 )
-
