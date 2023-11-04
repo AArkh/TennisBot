@@ -5,19 +5,20 @@ import android.view.View
 import android.view.ViewTreeObserver
 import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreBottomSheetDialogFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentCountryCodesBinding
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class CountryCodesDialogFragment : CoreBottomSheetDialogFragment<FragmentCountryCodesBinding>() {
@@ -38,7 +39,7 @@ class CountryCodesDialogFragment : CoreBottomSheetDialogFragment<FragmentCountry
         countryAdapter.clickListener = {
             requireActivity().supportFragmentManager.setFragmentResult(
                 COUNTRY_REQUEST_CODE_KEY,
-                bundleOf(SELECTED_COUNTRY_CODE_KEY to it.countryCode,)
+                bundleOf(SELECTED_COUNTRY_CODE_KEY to it.countryCode)
             )
             requireActivity().supportFragmentManager.setFragmentResult(
                 COUNTRY_REQUEST_ICON_KEY,
@@ -59,18 +60,23 @@ class CountryCodesDialogFragment : CoreBottomSheetDialogFragment<FragmentCountry
             }
         }
 
-
-    // todo Диалог вылезает не полностью после того как клава выдвигается
-    // todo либо ручками анимировано вызывать setStateExpanded, либо просто на фулскрин выдвигать диалог по-умолчанию
-
-    val listener = object : ViewTreeObserver.OnGlobalLayoutListener {
-        override fun onGlobalLayout() {
-            binding.root.layoutParams.height = binding.root.height
-            binding.root.viewTreeObserver.removeOnGlobalLayoutListener(this)
+        val listener = object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                binding.root.layoutParams.height = binding.root.height
+                binding.root.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
         }
+        binding.root.viewTreeObserver.addOnGlobalLayoutListener(listener)
+
+        dialog?.setOnShowListener {
+            val d: BottomSheetDialog = dialog as BottomSheetDialog
+            val view = d.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+            if (view != null) {
+                BottomSheetBehavior.from(view).state = BottomSheetBehavior.STATE_EXPANDED
+            }
+        }
+
     }
-    binding.root.viewTreeObserver.addOnGlobalLayoutListener(listener)
-}
 
     companion object {
         const val COUNTRY_REQUEST_CODE_KEY = "COUNTRY_CODE_KEY"
