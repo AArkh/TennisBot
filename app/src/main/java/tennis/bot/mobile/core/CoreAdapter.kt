@@ -23,22 +23,20 @@ abstract class CoreAdapter<ViewHolder: RecyclerView.ViewHolder> : RecyclerView.A
 
     fun submitList(newList: List<CoreUtilsItem>) {
         val diffResult = DiffUtil.calculateDiff(CoreDiffCallback(ArrayList(items), newList))
-        items.addAll(newList)
+        items= newList
         diffResult.dispatchUpdatesTo(this)
     }
 }
-}
+
 
 abstract class CoreUtilsItem {
-    val fields = this::class.java.declaredFields
 
     open fun isSameItem(other: CoreUtilsItem): Boolean = this == other
 
-    open fun isSameContent(other: CoreUtilsItem): Boolean = 
-        this.fields.contentEquals(other.fields)
+    open fun isSameContent(other: CoreUtilsItem): Boolean = other::class.java.name == this::class.java.name
 }
 
-class CoreDiffCallback (
+class CoreDiffCallback(
     private val oldList: List<CoreUtilsItem>,
     private val newList: List<CoreUtilsItem>
 ): DiffUtil.Callback() {
@@ -46,15 +44,9 @@ class CoreDiffCallback (
         return oldList[oldItemPosition].isSameItem(newList[newItemPosition]) 
     }
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return when {
-            oldList[oldItemPosition].isSameContent(newList[newItemPosition]) -> true
-            else -> false
-        }
+        return oldList[oldItemPosition].isSameContent(newList[newItemPosition])
     }
-    override fun getOldListSize(): Int {
-        return oldList.size
-    }
-    override fun getNewListSize(): Int {
-        return newList.size
-    }
+    override fun getOldListSize(): Int = oldList.size
+    override fun getNewListSize(): Int = newList.size
+
 }
