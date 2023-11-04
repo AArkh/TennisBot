@@ -65,6 +65,7 @@ dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
 
     // Monitoring
     // Todo - add project to firebase
