@@ -49,7 +49,7 @@ class CountryCodesDialogFragment : CoreBottomSheetDialogFragment<FragmentCountry
         }
 
         binding.searchBarEt.addTextChangedListener {
-//            viewModel.onSearchInput(it.toString())
+            viewModel.onSearchInput(it.toString())
         }
 
         lifecycleScope.launch {

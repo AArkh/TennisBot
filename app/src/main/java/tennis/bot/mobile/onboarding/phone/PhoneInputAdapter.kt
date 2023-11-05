@@ -1,11 +1,11 @@
 package tennis.bot.mobile.onboarding.phone
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.RecyclerView
+import coil.ImageLoader
+import coil.decode.SvgDecoder
+import coil.load
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import tennis.bot.mobile.core.CoreAdapter
@@ -19,7 +19,13 @@ class PhoneInputAdapter @Inject constructor() : CoreAdapter<CountryCodeItemViewH
 
     override fun onBindViewHolder(holder: CountryCodeItemViewHolder, item: Any) {
         val countryItem = item as? CountryItem ?: throw IllegalArgumentException("Item must be CountryItem")
-//        holder.binding.countryIconIv.setImageResource(countryItem.icon)
+        holder.binding.countryIconIv
+            .load("https://hatscripts.github.io/circle-flags/flags/${countryItem.icon.lowercase()}.svg",
+            ImageLoader.Builder(holder.itemView.context)
+                .components {
+                    add(SvgDecoder.Factory())
+                }
+                .build())
         holder.binding.countryNameTv.text = countryItem.countryName
         holder.binding.countryCodeTv.text = countryItem.countryCode
         holder.itemView.setOnClickListener {

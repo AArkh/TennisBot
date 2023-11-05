@@ -3,7 +3,7 @@ package tennis.bot.mobile.onboarding.phone
 import kotlinx.serialization.json.Json
 
 class CountriesJson {
-    val data = Json.decodeFromString<List<CountryItem>>("""
+    val data = Json{ignoreUnknownKeys = true}.decodeFromString<List<CountryItem>>("""
         [
           {
             "name": "Afghanistan",
@@ -1314,7 +1314,7 @@ class CountriesJson {
             "dial_code": "+992"
           },
           {
-            "name": "Tanzania, United Republic of Tanzania",
+            "name": "Tanzania",
             "flag": "🇹🇿",
             "code": "TZ",
             "dial_code": "+255"
@@ -1434,7 +1434,7 @@ class CountriesJson {
             "dial_code": "+678"
           },
           {
-            "name": "Venezuela, Bolivarian Republic of Venezuela",
+            "name": "Venezuela",
             "flag": "🇻🇪",
             "code": "VE",
             "dial_code": "+58"

@@ -8,8 +8,8 @@
     android:paddingVertical="12dp">
     <ImageView
         android:id="@+id/country_icon_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
         android:src="@drawable/russia"/>
     <TextView
         android:id="@+id/country_name_tv"
