@@ -84,6 +84,9 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
 
+    // Ui
+    implementation("com.airbnb.android:lottie:6.1.0")
+
     // DI
     val hiltVersion = "2.48"
     implementation("com.google.dagger:hilt-android:$hiltVersion")
