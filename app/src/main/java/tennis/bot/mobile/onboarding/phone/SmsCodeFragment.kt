@@ -1,7 +1,6 @@
 package tennis.bot.mobile.onboarding.phone
 
 import android.app.Activity
-import android.content.Context
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
@@ -23,7 +22,6 @@ class SmsCodeFragment : CoreFragment<FragmentSmsCodeBinding>() {
     override val bindingInflation: Inflation<FragmentSmsCodeBinding> = FragmentSmsCodeBinding::inflate
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         val listTv = listOf(binding.num1, binding.num2, binding.num3, binding.num4)
         val listLines = listOf(binding.line1, binding.line2, binding.line3, binding.line4)
         val correctCode = "1234"
@@ -50,7 +48,6 @@ class SmsCodeFragment : CoreFragment<FragmentSmsCodeBinding>() {
             } else {
                 binding.errorTv.visibility = View.INVISIBLE
             }
-
         }
 
         object : CountDownTimer(30000, 1000) {
@@ -67,9 +64,9 @@ class SmsCodeFragment : CoreFragment<FragmentSmsCodeBinding>() {
                 binding.timerTv.visibility = View.GONE
             }
         }.start()
-
         super.onViewCreated(view, savedInstanceState)
     }
+
     private fun displayNumbersInTextViews(
         numbers: List<String>,
         textViews: List<TextView>,
