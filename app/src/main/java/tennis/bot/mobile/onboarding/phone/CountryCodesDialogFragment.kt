@@ -1,8 +1,10 @@
 package tennis.bot.mobile.onboarding.phone
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import android.view.ViewTreeObserver
+import android.view.inputmethod.InputMethodManager
 import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
@@ -70,12 +72,12 @@ class CountryCodesDialogFragment : CoreBottomSheetDialogFragment<FragmentCountry
 
         dialog?.setOnShowListener {
             val d: BottomSheetDialog = dialog as BottomSheetDialog
-            val view = d.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-            if (view != null) {
-                BottomSheetBehavior.from(view).state = BottomSheetBehavior.STATE_EXPANDED
+            val inputMethodManager = activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            val v = d.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+            if (inputMethodManager.isAcceptingText) {
+                BottomSheetBehavior.from(v as View).state = BottomSheetBehavior.STATE_EXPANDED
             }
         }
-
     }
 
     companion object {
