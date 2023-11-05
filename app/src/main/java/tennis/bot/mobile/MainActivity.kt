@@ -20,18 +20,7 @@ class MainActivity : AppCompatActivity() {
         if (supportFragmentManager.fragments.isEmpty()) {
             supportFragmentManager.beginTransaction()
                 .add(binding.fragmentContainerView.id, LoginProposalFragment())
-                .addToBackStack(LoginProposalFragment::class.java.name)
                 .commit()
         }
     }
-
-//    override fun onBackPressed() {
-//        if (supportFragmentManager.backStackEntryCount > 0) {
-//            // Pop the fragment from back stack if there's one
-//            supportFragmentManager.popBackStack()
-//        } else {
-//            // If there's no fragment in the back stack, call the super method
-//            super.onBackPressed()
-//        }
-//    }
 }

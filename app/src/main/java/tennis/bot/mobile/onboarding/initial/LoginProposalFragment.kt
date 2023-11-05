@@ -40,8 +40,8 @@ class LoginProposalFragment : CoreFragment<FragmentLoginProposalBinding>() {
 
         binding.buttonStart.setOnClickListener {
             parentFragmentManager.beginTransaction()
+                .addToBackStack(this::class.java.name)
                 .replace(R.id.fragment_container_view, PhoneInputFragment())
-                .addToBackStack(PhoneInputFragment::class.java.name)
                 .commit()
         }
         binding.buttonLogin.setOnClickListener {
