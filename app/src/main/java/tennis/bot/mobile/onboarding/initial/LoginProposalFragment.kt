@@ -68,21 +68,17 @@ class LoginProposalFragment : CoreFragment<FragmentLoginProposalBinding>() {
 
         imageAdapter.setListAndNotify(listOf(
             LoginProposalImage(R.drawable.login_image_8),
-//            LoginProposalImage(R.drawable.login_image_2),
-            LoginProposalImage(R.drawable.login_image_8),
+            LoginProposalImage(R.drawable.login_image_2),
             LoginProposalImage(R.drawable.login_image_9),
             LoginProposalImage(R.drawable.login_image_10),
-            LoginProposalImage(R.drawable.login_image_8),
-//            LoginProposalImage(R.drawable.login_image_5),
+            LoginProposalImage(R.drawable.login_image_5),
             LoginProposalImage(R.drawable.login_image_1),
             LoginProposalImage(R.drawable.login_image_3),
-            LoginProposalImage(R.drawable.login_image_8),
-//            LoginProposalImage(R.drawable.login_image_7),
+            LoginProposalImage(R.drawable.login_image_7),
             LoginProposalImage(R.drawable.login_image_blank),
             LoginProposalImage(R.drawable.login_image_0),
             LoginProposalImage(R.drawable.login_image_4),
-            LoginProposalImage(R.drawable.login_image_8),
-//            LoginProposalImage(R.drawable.login_image_6),
+            LoginProposalImage(R.drawable.login_image_6),
         ))
     }
 }

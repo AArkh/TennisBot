@@ -1,14 +1,16 @@
 package tennis.bot.mobile.onboarding.phone
 
-import android.util.Log
 import androidx.annotation.WorkerThread
 import java.lang.StringBuilder
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class PhoneInputRepository @Inject constructor(
     private val smsApi: SmsApi
 ) {
 
+    @Throws(Exception::class)
     @WorkerThread
     suspend fun requestSmsCode(phone: String): Boolean {
         val result = kotlin.runCatching {
@@ -17,6 +19,7 @@ class PhoneInputRepository @Inject constructor(
         return result.getOrElse { return false }.isSuccessful
     }
 
+    @Throws(Exception::class)
     @WorkerThread
     suspend fun validateSmsCode(code: String, phone: String): Boolean {
         val response = kotlin.runCatching {
