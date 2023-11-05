@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class CountryCodesDialogFragment : CoreBottomSheetDialogFragment<FragmentCountryCodesBinding>() {
+open class CountryCodesDialogFragment : CoreBottomSheetDialogFragment<FragmentCountryCodesBinding>() {
     override val bindingInflation: Inflation<FragmentCountryCodesBinding> =
         FragmentCountryCodesBinding::inflate
 

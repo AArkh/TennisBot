@@ -14,6 +14,7 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentSmsCodeBinding
+import tennis.bot.mobile.onboarding.location.LocationFragment
 import kotlin.math.min
 
 
@@ -22,6 +23,8 @@ class SmsCodeFragment : CoreFragment<FragmentSmsCodeBinding>() {
     override val bindingInflation: Inflation<FragmentSmsCodeBinding> = FragmentSmsCodeBinding::inflate
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         val listTv = listOf(binding.num1, binding.num2, binding.num3, binding.num4)
         val listLines = listOf(binding.line1, binding.line2, binding.line3, binding.line4)
         val correctCode = "1234"
@@ -64,7 +67,13 @@ class SmsCodeFragment : CoreFragment<FragmentSmsCodeBinding>() {
                 binding.timerTv.visibility = View.GONE
             }
         }.start()
-        super.onViewCreated(view, savedInstanceState)
+
+        binding.buttonNext.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container_view, LocationFragment())
+                .addToBackStack(LocationFragment::class.java.name)
+                .commit()
+        }
     }
 
     private fun displayNumbersInTextViews(

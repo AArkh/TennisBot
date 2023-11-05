@@ -39,6 +39,8 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         binding.phoneEt.addTextChangedListener {
             if (it?.isEmpty() == true) {
                 binding.xIv.visibility = View.INVISIBLE
@@ -69,6 +71,7 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
             val bottomSheet = CountryCodesDialogFragment()
             bottomSheet.show(childFragmentManager, bottomSheet.getTag())
         }
+
         setFragmentResultListener(
             CountryCodesDialogFragment.COUNTRY_REQUEST_CODE_KEY
         ) { requestKey, result ->
@@ -80,9 +83,5 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
         ) { requestKey, result ->
             binding.countryIv.setImageResource(result.getInt(CountryCodesDialogFragment.SELECTED_COUNTRY_ICON_KEY))
         }
-
-
-
-        super.onViewCreated(view, savedInstanceState)
     }
 }

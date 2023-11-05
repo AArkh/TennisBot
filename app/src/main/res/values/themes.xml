@@ -7,13 +7,13 @@
         <item name="android:windowBackground">@color/tb_bg_main</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
         <item name="android:windowLightStatusBar">true</item>
-        <item name="colorPrimary">@color/tb_black</item>
-        <item name="colorPrimaryVariant">@color/tb_black</item>
-        <item name="colorOnPrimary">@color/tb_white</item>
+        <item name="colorPrimary">@color/tb_white</item>
+        <item name="colorPrimaryVariant">@color/tb_gray_light</item>
+        <item name="colorOnPrimary">@color/tb_black</item>
         <item name="colorAccent">@color/tb_primary_green</item>
         <item name="colorSecondary">@color/tb_gray_border</item>
         <item name="colorSecondaryVariant">@color/tb_gray_border</item>
-        <item name="colorOnSecondary">@color/tb_white</item>
+        <item name="colorOnSecondary">@color/tb_black</item>
         <item name="android:fontFamily">@font/questrial</item>
     </style>
 

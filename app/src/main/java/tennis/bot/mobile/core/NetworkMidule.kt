@@ -18,7 +18,7 @@ class NetworkModule {
         return Retrofit.Builder()
             .baseUrl("https://bugz.su:8443/")
             .callbackExecutor(Executors.newSingleThreadExecutor())
-//            .addConverterFactory(Json.asConverterFactory())
+            .addConverterFactory(Json.asConverterFactory())
             .build()
     }
 

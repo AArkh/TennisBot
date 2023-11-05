@@ -10,7 +10,7 @@ import tennis.bot.mobile.core.CoreUtilsItem
 import tennis.bot.mobile.databinding.RecyclerCountryItemBinding
 import javax.inject.Inject
 
-class PhoneInputAdapter @Inject constructor() : CoreAdapter<CountryCodeItemViewHolder>() {
+open class PhoneInputAdapter @Inject constructor() : CoreAdapter<CountryCodeItemViewHolder>() {
     var clickListener: ((item: CountryItem) -> Unit)? = null
 
     override fun onBindViewHolder(holder: CountryCodeItemViewHolder, item: Any) {
@@ -36,7 +36,7 @@ class CountryCodeItemViewHolder(
 
 @Serializable
 data class CountryItem(
-    @SerialName("code") val icon: Int,
-    @SerialName("name") val countryName: String,
-    @SerialName("dial_code") val countryCode: String
+    val icon: Int,
+    val countryName: String,
+    val countryCode: String
 ) : CoreUtilsItem()

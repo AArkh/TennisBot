@@ -6,7 +6,7 @@ import retrofit2.http.Query
 import tennis.bot.mobile.onboarding.phone.CountryItem
 
 interface apiService {
-    @GET("apod")
-    fun getData(@Query("api_key") key: String = "4nf26H20czhc8GqRbiB8fadE8PI3UH8darWvNel9"): Call<CountryItem>
+    @GET("core/api/dictionaries/countries")
+    fun getData(): Call<CountryItem>
 
 }
