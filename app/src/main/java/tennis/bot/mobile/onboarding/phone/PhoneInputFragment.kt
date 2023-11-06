@@ -1,62 +1,47 @@
 package tennis.bot.mobile.onboarding.phone
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
-import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.setFragmentResultListener
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.subscribe
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentPhoneInputBinding
+import tennis.bot.mobile.utils.hideKeyboard
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
     override val bindingInflation: Inflation<FragmentPhoneInputBinding> = FragmentPhoneInputBinding::inflate
-    @Inject lateinit var countryAdapter: PhoneInputAdapter
-
-    @Inject lateinit var repository: CountryCodeRepository
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = super.onCreateView(inflater, container, savedInstanceState)
-
-        return view
-    }
+    @Inject
+    lateinit var countryAdapter: PhoneInputAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.phoneEt.addTextChangedListener {
             if (it?.isEmpty() == true) {
-                binding.xIv.visibility = View.INVISIBLE
+                binding.clearButton.visibility = View.INVISIBLE
             } else {
-                binding.xIv.visibility = View.VISIBLE
+                binding.clearButton.visibility = View.VISIBLE
             }
         }
         binding.phoneEt.addTextChangedListener(PhoneNumberFormattingTextWatcher("US"))
-        binding.phoneEt.doOnTextChanged { text, start, before, count ->
+        binding.phoneEt.doOnTextChanged { text, _, _, _ ->
             if (text!!.length < 14) {
-                binding.textInputLayout.error = "Введите действительный номер"
+                binding.textInputLayout.error = requireContext().getString(R.string.onboarding_text_incorrect_phone_number)
             } else {
                 binding.textInputLayout.error = null
             }
         }
-        binding.xIv.setOnClickListener {
+        binding.clearButton.setOnClickListener {
             binding.phoneEt.setText("")
         }
 
@@ -68,19 +53,18 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
         }
 
         binding.openCountriesSheetLayout.setOnClickListener {
-            val bottomSheet = CountryCodesDialogFragment()
-            bottomSheet.show(childFragmentManager, bottomSheet.getTag())
+            requireContext().hideKeyboard()
+            lifecycleScope.launch {
+                delay(180L) // wait for keyboard to hide
+                val bottomSheet = CountryCodesDialogFragment()
+                bottomSheet.show(childFragmentManager, bottomSheet.tag)
+            }
         }
 
         setFragmentResultListener(
             CountryCodesDialogFragment.COUNTRY_REQUEST_CODE_KEY
-        ) { requestKey, result ->
+        ) { _, result ->
             binding.textInputLayout.prefixText = result.getString(CountryCodesDialogFragment.SELECTED_COUNTRY_CODE_KEY)
-        }
-
-        setFragmentResultListener(
-            CountryCodesDialogFragment.COUNTRY_REQUEST_ICON_KEY
-        ) { requestKey, result ->
             binding.countryIv.setImageResource(result.getInt(CountryCodesDialogFragment.SELECTED_COUNTRY_ICON_KEY))
         }
     }

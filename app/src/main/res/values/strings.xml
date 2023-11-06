@@ -3,8 +3,12 @@
     <string name="onboarding_text_title">Ракеточная Эко-Система</string>
     <string name="onboarding_text">Тысячи игроков, в разных странах мира уже нашли себе равных партнеров, друзей и присоединились к самому большому сообществу «Теннис бот»</string>
     <string name="onboarding_start_button">Начать</string>
-    <string name="onboarding_proceed_without_registration_button">Войти без регистрации</string>
     <string name="onboarding_login_button">Войти</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- phone input -->
+    <string name="onboarding_title_insert_phone_number">Введи номер телефона</string>
+    <string name="onboarding_text_incorrect_phone_number">Введите действительный номер</string>
+    <string name="onboarding_proceed_without_registration_button">Войти без регистрации</string>
+    <string name="onboarding_continue_button">Далее</string>
+
 </resources>
