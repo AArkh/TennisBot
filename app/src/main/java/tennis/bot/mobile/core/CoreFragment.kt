@@ -24,6 +24,7 @@ abstract class CoreFragment<BINDING : ViewBinding> : Fragment() {
     protected lateinit var binding: BINDING
     // Property to determine if the view goes under the status bar.
     open var drawUnderStatusBar: Boolean = false
+    open var adjustToKeyboard: Boolean = false
     private var initialBottomPadding: Int = -1
 
     @CallSuper
@@ -31,12 +32,14 @@ abstract class CoreFragment<BINDING : ViewBinding> : Fragment() {
         binding = bindingInflation(inflater)
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insetsCompat: WindowInsetsCompat ->
             val statusBarInsets: Insets = insetsCompat.getInsets(WindowInsetsCompat.Type.systemBars())
+            val keyboardInsets: Insets = insetsCompat.getInsets(WindowInsetsCompat.Type.ime())
             val newStatusBarTop = if (drawUnderStatusBar) 0 else statusBarInsets.top
+            val keyboardBottom = if (adjustToKeyboard) keyboardInsets.bottom else 0
             val bottomPadding = if (initialBottomPadding == -1) {
                 initialBottomPadding = binding.root.paddingBottom
-                initialBottomPadding + statusBarInsets.bottom
+                initialBottomPadding + statusBarInsets.bottom + keyboardBottom
             } else {
-                initialBottomPadding + statusBarInsets.bottom
+                initialBottomPadding + statusBarInsets.bottom + keyboardBottom
             }
             binding.root.updatePadding(
                 top = newStatusBarTop,

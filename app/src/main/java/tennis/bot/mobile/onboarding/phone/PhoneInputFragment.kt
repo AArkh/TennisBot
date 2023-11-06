@@ -19,6 +19,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
+
+    override var adjustToKeyboard: Boolean = true
     override val bindingInflation: Inflation<FragmentPhoneInputBinding> = FragmentPhoneInputBinding::inflate
     @Inject
     lateinit var countryAdapter: PhoneInputAdapter
@@ -35,10 +37,18 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
         }
         binding.phoneEt.addTextChangedListener(PhoneNumberFormattingTextWatcher("US"))
         binding.phoneEt.doOnTextChanged { text, _, _, _ ->
-            if (text!!.length < 14) {
-                binding.textInputLayout.error = requireContext().getString(R.string.onboarding_text_incorrect_phone_number)
+            if (text!!.length in 1..13) {
+                val errorMessage = requireContext().getString(R.string.onboarding_text_incorrect_phone_number)
+                binding.textInputLayout.error = errorMessage
             } else {
                 binding.textInputLayout.error = null
+            }
+            val buttonEnabled = text.length == 14
+            binding.buttonNext.isEnabled = buttonEnabled
+            if (buttonEnabled) {
+                binding.buttonNext.setBackgroundResource(R.drawable.btn_bkg_enabled)
+            } else {
+                binding.buttonNext.setBackgroundResource(R.drawable.btn_bkg_disabled)
             }
         }
         binding.clearButton.setOnClickListener {
