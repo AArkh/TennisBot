@@ -3,9 +3,9 @@ package tennis.bot.mobile.onboarding.phone
 import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.view.View
-import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -15,6 +15,7 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentPhoneInputBinding
 import tennis.bot.mobile.utils.hideKeyboard
+import tennis.bot.mobile.utils.updateTextIfNeeded
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -24,32 +25,13 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
     override val bindingInflation: Inflation<FragmentPhoneInputBinding> = FragmentPhoneInputBinding::inflate
     @Inject
     lateinit var countryAdapter: PhoneInputAdapter
+    private val phoneInputViewModel: PhoneInputViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.phoneEt.addTextChangedListener {
-            if (it?.isEmpty() == true) {
-                binding.clearButton.visibility = View.INVISIBLE
-            } else {
-                binding.clearButton.visibility = View.VISIBLE
-            }
-        }
         binding.phoneEt.addTextChangedListener(PhoneNumberFormattingTextWatcher("US"))
         binding.phoneEt.doOnTextChanged { text, _, _, _ ->
-            if (text!!.length in 1..13) {
-                val errorMessage = requireContext().getString(R.string.onboarding_text_incorrect_phone_number)
-                binding.textInputLayout.error = errorMessage
-            } else {
-                binding.textInputLayout.error = null
-            }
-            val buttonEnabled = text.length == 14
-            binding.buttonNext.isEnabled = buttonEnabled
-            if (buttonEnabled) {
-                binding.buttonNext.setBackgroundResource(R.drawable.btn_bkg_enabled)
-            } else {
-                binding.buttonNext.setBackgroundResource(R.drawable.btn_bkg_disabled)
-            }
+            phoneInputViewModel.onTextInput(text ?: "")
         }
         binding.clearButton.setOnClickListener {
             binding.phoneEt.setText("")
@@ -74,8 +56,25 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
         setFragmentResultListener(
             CountryCodesDialogFragment.COUNTRY_REQUEST_CODE_KEY
         ) { _, result ->
-            binding.textInputLayout.prefixText = result.getString(CountryCodesDialogFragment.SELECTED_COUNTRY_CODE_KEY)
-            binding.countryIv.setImageResource(result.getInt(CountryCodesDialogFragment.SELECTED_COUNTRY_ICON_KEY))
+            val countryCode = result.getString(CountryCodesDialogFragment.SELECTED_COUNTRY_CODE_KEY, "+7")
+            val countryIcon = result.getInt(CountryCodesDialogFragment.SELECTED_COUNTRY_ICON_KEY)
+            phoneInputViewModel.onCountryPicked(countryCode, countryIcon)
+        }
+
+        subscribeToFlowOn(phoneInputViewModel.uiStateFlow) { uiState: PhoneInputUiState ->
+            binding.textInputLayout.prefixText = uiState.prefix
+            binding.countryIv.setImageResource(uiState.iconRes)
+            binding.phoneEt.updateTextIfNeeded(uiState.userInput)
+
+            binding.buttonNext.isEnabled = uiState.proceedButtonEnabled
+            val buttonBackground = if (uiState.proceedButtonEnabled) {
+                R.drawable.btn_bkg_enabled
+            } else {
+                R.drawable.btn_bkg_disabled
+            }
+            binding.buttonNext.setBackgroundResource(buttonBackground)
+            binding.textInputLayout.error = uiState.errorMessage
+            binding.clearButton.visibility = if (uiState.clearButtonVisible) View.VISIBLE else View.INVISIBLE
         }
     }
 }

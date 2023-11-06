@@ -10,7 +10,12 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
 typealias Inflation<T> = (LayoutInflater) -> T
 
@@ -52,5 +57,17 @@ abstract class CoreFragment<BINDING : ViewBinding> : Fragment() {
         }
         ViewCompat.requestApplyInsets(binding.root)
         return binding.root
+    }
+
+    fun <FlowType> subscribeToFlowOn(
+        flow: Flow<FlowType>,
+        state: Lifecycle.State = Lifecycle.State.CREATED,
+        action: suspend (FlowType) -> Unit
+    ) {
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(state) {
+                flow.collect { state -> action(state) }
+            }
+        }
     }
 }
