@@ -65,6 +65,8 @@ dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation("io.coil-kt:coil:2.5.0")
+    implementation("io.coil-kt:coil-svg:2.5.0")
 
     // Monitoring
     // Todo - add project to firebase

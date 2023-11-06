@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.RecyclerView
 import tennis.bot.mobile.core.CoreAdapter
+import tennis.bot.mobile.core.CoreUtilsItem
 import tennis.bot.mobile.databinding.ItemLoginProposalRoundedImageBinding
 import javax.inject.Inject
 
@@ -26,4 +27,4 @@ class LoginProposalImageViewHolder(
     val binding: ItemLoginProposalRoundedImageBinding
 ) : RecyclerView.ViewHolder(binding.root)
 
-class LoginProposalImage(@DrawableRes val imageRes: Int)
+class LoginProposalImage(@DrawableRes val imageRes: Int): CoreUtilsItem()
