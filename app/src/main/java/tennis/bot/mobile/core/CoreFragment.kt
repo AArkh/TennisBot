@@ -10,7 +10,12 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
 typealias Inflation<T> = (LayoutInflater) -> T
 
@@ -24,6 +29,7 @@ abstract class CoreFragment<BINDING : ViewBinding> : Fragment() {
     protected lateinit var binding: BINDING
     // Property to determine if the view goes under the status bar.
     open var drawUnderStatusBar: Boolean = false
+    open var adjustToKeyboard: Boolean = false
     private var initialBottomPadding: Int = -1
 
     @CallSuper
@@ -31,12 +37,14 @@ abstract class CoreFragment<BINDING : ViewBinding> : Fragment() {
         binding = bindingInflation(inflater)
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insetsCompat: WindowInsetsCompat ->
             val statusBarInsets: Insets = insetsCompat.getInsets(WindowInsetsCompat.Type.systemBars())
+            val keyboardInsets: Insets = insetsCompat.getInsets(WindowInsetsCompat.Type.ime())
             val newStatusBarTop = if (drawUnderStatusBar) 0 else statusBarInsets.top
+            val keyboardBottom = if (adjustToKeyboard) keyboardInsets.bottom else 0
             val bottomPadding = if (initialBottomPadding == -1) {
                 initialBottomPadding = binding.root.paddingBottom
-                initialBottomPadding + statusBarInsets.bottom
+                initialBottomPadding + statusBarInsets.bottom + keyboardBottom
             } else {
-                initialBottomPadding + statusBarInsets.bottom
+                initialBottomPadding + statusBarInsets.bottom + keyboardBottom
             }
             binding.root.updatePadding(
                 top = newStatusBarTop,
@@ -49,5 +57,17 @@ abstract class CoreFragment<BINDING : ViewBinding> : Fragment() {
         }
         ViewCompat.requestApplyInsets(binding.root)
         return binding.root
+    }
+
+    fun <FlowType> subscribeToFlowOn(
+        flow: Flow<FlowType>,
+        state: Lifecycle.State = Lifecycle.State.CREATED,
+        action: suspend (FlowType) -> Unit
+    ) {
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(state) {
+                flow.collect { state -> action(state) }
+            }
+        }
     }
 }

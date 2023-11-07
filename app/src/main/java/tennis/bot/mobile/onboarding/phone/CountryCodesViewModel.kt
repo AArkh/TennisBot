@@ -8,9 +8,7 @@ import tennis.bot.mobile.R
 import javax.inject.Inject
 
 @HiltViewModel
-open class CountryCodesViewModel @Inject constructor(
-    private val repository: CountryCodeRepository,
-) : ViewModel() {
+class CountryCodesViewModel @Inject constructor() : ViewModel() {
 
     private val initialList = listOf(
         CountryItem(R.drawable.russia, "Россия", "+7"),
@@ -21,10 +19,6 @@ open class CountryCodesViewModel @Inject constructor(
     )
     private val _uiStateFlow: MutableStateFlow<List<CountryItem>> = MutableStateFlow(initialList)
     val uiStateFlow = _uiStateFlow.asStateFlow()
-
-    fun onClick(item: CountryItem) {
-        repository.selectedCountryFlow.value = item
-    }
 
     fun onSearchInput(userInput: String) {
         val filteredList = initialList.filter {

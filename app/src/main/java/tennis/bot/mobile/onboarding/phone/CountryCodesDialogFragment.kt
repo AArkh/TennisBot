@@ -41,11 +41,7 @@ open class CountryCodesDialogFragment : CoreBottomSheetDialogFragment<FragmentCo
         countryAdapter.clickListener = {
             requireActivity().supportFragmentManager.setFragmentResult(
                 COUNTRY_REQUEST_CODE_KEY,
-                bundleOf(SELECTED_COUNTRY_CODE_KEY to it.countryCode)
-            )
-            requireActivity().supportFragmentManager.setFragmentResult(
-                COUNTRY_REQUEST_ICON_KEY,
-                bundleOf(SELECTED_COUNTRY_ICON_KEY to it.icon)
+                bundleOf(SELECTED_COUNTRY_CODE_KEY to it.countryCode, SELECTED_COUNTRY_ICON_KEY to it.icon)
             )
             dialog?.dismiss()
         }
@@ -83,7 +79,6 @@ open class CountryCodesDialogFragment : CoreBottomSheetDialogFragment<FragmentCo
     companion object {
         const val COUNTRY_REQUEST_CODE_KEY = "COUNTRY_CODE_KEY"
         const val SELECTED_COUNTRY_CODE_KEY = "SELECTED_COUNTRY_CODE_KEY"
-        const val COUNTRY_REQUEST_ICON_KEY = "COUNTRY_REQUEST_ICON_KEY"
         const val SELECTED_COUNTRY_ICON_KEY = "SELECTED_COUNTRY_ICON_KEY"
     }
 }
