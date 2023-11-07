@@ -28,7 +28,7 @@ open class CountryCodesDialogFragment : CoreBottomSheetDialogFragment<FragmentCo
         FragmentCountryCodesBinding::inflate
 
     @Inject
-    lateinit var countryAdapter: PhoneInputAdapter
+    open lateinit var countryAdapter: PhoneInputAdapter
     private val viewModel: CountryCodesViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

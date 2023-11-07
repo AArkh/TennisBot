@@ -36,7 +36,7 @@ class CountryCodeItemViewHolder(
 
 @Serializable
 data class CountryItem(
-    val icon: Int,
-    val countryName: String,
-    val countryCode: String
+    val icon: Int?,
+    @SerialName("name") val countryName: String,
+    val countryCode: String?
 ) : CoreUtilsItem()

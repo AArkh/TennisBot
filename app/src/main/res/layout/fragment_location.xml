@@ -30,6 +30,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/country_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="50"
@@ -63,6 +64,7 @@
         app:layout_constraintTop_toBottomOf="@id/country_pick_layout">
 
         <TextView
+            android:id="@+id/city_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="50"
@@ -96,6 +98,7 @@
         app:layout_constraintTop_toBottomOf="@id/city_pick_layout">
 
         <TextView
+            android:id="@+id/district_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="50"

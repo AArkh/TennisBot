@@ -8,7 +8,7 @@ import tennis.bot.mobile.R
 import javax.inject.Inject
 
 @HiltViewModel
-class CountryCodesViewModel @Inject constructor(
+open class CountryCodesViewModel @Inject constructor(
     private val repository: CountryCodeRepository,
 ) : ViewModel() {
 
@@ -21,6 +21,7 @@ class CountryCodesViewModel @Inject constructor(
     )
     private val _uiStateFlow: MutableStateFlow<List<CountryItem>> = MutableStateFlow(initialList)
     val uiStateFlow = _uiStateFlow.asStateFlow()
+
     fun onClick(item: CountryItem) {
         repository.selectedCountryFlow.value = item
     }

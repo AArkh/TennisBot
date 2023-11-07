@@ -30,6 +30,7 @@
 			android:layout_height="wrap_content"
 			android:digits="1234567890 +()-"
 			android:inputType="phone"
+			android:cursorVisible="true"
 			android:maxLength="14"
 			android:paddingStart="56dp"
 			android:textSize="22sp" />

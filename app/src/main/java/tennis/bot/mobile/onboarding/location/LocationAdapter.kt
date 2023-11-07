@@ -1,6 +1,7 @@
 package tennis.bot.mobile.onboarding.location
 
 import android.view.View
+import kotlinx.serialization.Serializable
 import tennis.bot.mobile.core.CoreAdapter
 import tennis.bot.mobile.onboarding.phone.CountryCodeItemViewHolder
 import tennis.bot.mobile.onboarding.phone.PhoneInputAdapter
