@@ -51,6 +51,7 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
                 LocationUiState.Loading -> {
                     // loading screen, everything else is hidden
                 }
+                LocationUiState.Error -> {} // error logic
             }
         }
     }

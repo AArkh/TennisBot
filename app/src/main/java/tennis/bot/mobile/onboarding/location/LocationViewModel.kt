@@ -1,10 +1,15 @@
 package tennis.bot.mobile.onboarding.location
 
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -14,13 +19,28 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LocationViewModel @Inject constructor(
-    private val repository: LocationRepository,
+    private val repository: LocationRepo,
 ) : ViewModel() {
 
     @Inject lateinit var locationApi: LocationApi
 
-    private val _uiStateFlow = MutableStateFlow<LocationUiState>(LocationUiState.Loading)
+    private val _uiStateFlow = MutableStateFlow<LocationUiState>(LocationUiState.Loading) //
     val uiStateFlow = _uiStateFlow.asStateFlow()
+
+    private val handler = Handler(Looper.getMainLooper())
+
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.getLocations() // handler.post
+            repository.getLocations() // handler.post
+            repository.getLocations() // handler.post
+            repository.getLocations() // handler.post
+        }
+
+        handler.post {
+            println("i'm on main thread")
+        }
+    }
 
     private val initialList = listOf(
         CountryItem(R.drawable.russia, "Россия", "+7"),
