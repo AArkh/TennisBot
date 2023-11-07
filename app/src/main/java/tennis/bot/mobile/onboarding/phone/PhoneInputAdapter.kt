@@ -2,6 +2,7 @@ package tennis.bot.mobile.onboarding.phone
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -36,7 +37,7 @@ class CountryCodeItemViewHolder(
 
 @Serializable
 data class CountryItem(
-    val icon: Int,
-    @SerialName("name") val countryName: String,
-    val countryCode: String?
+    @DrawableRes val icon: Int,
+    @SerialName("name") val countryName: String, // Russia localized
+    val countryCode: String? // +7
 ) : CoreUtilsItem()

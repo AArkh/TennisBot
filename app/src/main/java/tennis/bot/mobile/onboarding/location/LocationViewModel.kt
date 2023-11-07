@@ -19,6 +19,9 @@ class LocationViewModel @Inject constructor(
 
     @Inject lateinit var locationApi: LocationApi
 
+    private val _uiStateFlow = MutableStateFlow<LocationUiState>(LocationUiState.Loading)
+    val uiStateFlow = _uiStateFlow.asStateFlow()
+
     private val initialList = listOf(
         CountryItem(R.drawable.russia, "Россия", "+7"),
         CountryItem(R.drawable.ukraine, "Украина", "+380"),
@@ -37,7 +40,7 @@ class LocationViewModel @Inject constructor(
                         val item: CountryItem = responseItem.next()
                         listOfCountries.add(
                             element = CountryItem(
-                                null,
+                                R.drawable.belarus,
                                 item.countryName,
                                 null
                             )
@@ -54,17 +57,17 @@ class LocationViewModel @Inject constructor(
 
         })
 
-    private val _uiStateFlow: MutableStateFlow<List<CountryItem>> = MutableStateFlow(initialList)
-    val uiStateFlow = _uiStateFlow.asStateFlow()
+//    private val _uiStateFlow: MutableStateFlow<List<CountryItem>> = MutableStateFlow(initialList)
+//    val uiStateFlow = _uiStateFlow.asStateFlow()
 
     fun onClick(item: CountryItem) {
         repository.selectedCountryFlow.value = item
     }
 
-    fun onSearchInput(userInput: String) {
-        val filteredList = initialList.filter {
-            it.countryName.contains(userInput, ignoreCase = true)
-        }
-        _uiStateFlow.value = filteredList
-    }
+//    fun onSearchInput(userInput: String) {
+//        val filteredList = initialList.filter {
+//            it.countryName.contains(userInput, ignoreCase = true)
+//        }
+//        _uiStateFlow.value = filteredList
+//    }
 }
