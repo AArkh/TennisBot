@@ -32,26 +32,65 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
         setFragmentResultListener(
             LocationDialogFragment.COUNTRY_REQUEST_KEY
         ) { requestKey, result ->
-            binding.countryTv.text = result.getString(LocationDialogFragment.SELECTED_COUNTRY_KEY)
+            val countryResult = result.getString(LocationDialogFragment.SELECTED_COUNTRY_KEY, "Страна")
+            viewModel.onCountrySelected(countryResult)
+        }
+
+        setFragmentResultListener(
+            LocationDialogFragment.CITY_REQUEST_KEY
+        ) { requestKey, result ->
+            binding.cityTv.text = result.getString(LocationDialogFragment.SELECTED_CITY_KEY)
+        }
+
+        setFragmentResultListener(
+            LocationDialogFragment.DISTRICT_REQUEST_KEY
+        ) { requestKey, result ->
+            binding.districtTv.text = result.getString(LocationDialogFragment.SELECTED_DISTRICT_KEY)
         }
 
 
 
         subscribeToFlowOn(viewModel.uiStateFlow) { uiState: LocationUiState ->
             when(uiState) {
-                is LocationUiState.CitySelected -> {
-                     binding.button.enabled = uiState.nextButtonEnabled
+                LocationUiState.Initial -> {
+                    binding.titleTv.visibility = View.VISIBLE
+                    binding.countryPickLayout.visibility = View.VISIBLE
+                    binding.cityPickLayout.visibility = View.INVISIBLE
+                    binding.districtPickLayout.visibility = View.INVISIBLE
+
+                    binding.countryTv.text = "Страна"
+                    binding.cityTv.text = "Город"
+                    binding.districtTv.text = "Район"
                 }
                 is LocationUiState.CountrySelected -> {
+                    binding.countryTv.text = uiState.country
+                    binding.cityTv.text = "Город"
+                    binding.districtTv.text = "Район"
 
+                    binding.cityPickLayout.visibility = View.VISIBLE
+                    binding.districtPickLayout.visibility = View.INVISIBLE
+                }
+                is LocationUiState.CitySelected -> {
+                    binding.countryTv.text = uiState.country
+                    binding.cityTv.text = uiState.city
+                    binding.districtPickLayout.visibility = View.VISIBLE
                 }
                 is LocationUiState.DistrictSelected -> {
-
+                    binding.countryTv.text = uiState.country
+                    binding.cityTv.text = uiState.city
+                    binding.districtTv.text = uiState.district
+                    // button appears here
                 }
                 LocationUiState.Loading -> {
                     // loading screen, everything else is hidden
+                    binding.countryPickLayout.visibility = View.GONE
+                    binding.cityPickLayout.visibility = View.GONE
+                    binding.districtPickLayout.visibility = View.GONE
+                    binding.titleTv.visibility = View.GONE
                 }
-                LocationUiState.Error -> {} // error logic
+                LocationUiState.Error -> {
+
+                } // error logic
             }
         }
     }

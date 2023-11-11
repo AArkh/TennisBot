@@ -13,4 +13,6 @@ class LocationAdapter @Inject constructor() : PhoneInputAdapter() {
         holder.binding.countryIconIv.visibility = View.GONE
         holder.binding.countryCodeTv.visibility = View.GONE
     }
+
+
 }

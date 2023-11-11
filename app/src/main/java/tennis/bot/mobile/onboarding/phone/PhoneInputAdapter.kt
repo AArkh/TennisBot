@@ -38,6 +38,6 @@ class CountryCodeItemViewHolder(
 @Serializable
 data class CountryItem(
     @DrawableRes val icon: Int,
-    @SerialName("name") val countryName: String, // Russia localized
-    val countryCode: String? // +7
+    val countryName: String, // Russia localized
+    val countryCode: String // +7
 ) : CoreUtilsItem()

@@ -1,6 +1,8 @@
 package tennis.bot.mobile.onboarding.location
 
 sealed class LocationUiState {
+
+    object Initial: LocationUiState()
     object Error : LocationUiState()
     object Loading : LocationUiState()
     data class CountrySelected(

@@ -1,20 +1,11 @@
 package tennis.bot.mobile.onboarding.location
 
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import tennis.bot.mobile.R
-import tennis.bot.mobile.onboarding.phone.CountryItem
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,65 +15,57 @@ class LocationViewModel @Inject constructor(
 
     @Inject lateinit var locationApi: LocationApi
 
-    private val _uiStateFlow = MutableStateFlow<LocationUiState>(LocationUiState.Loading) //
+    private val _uiStateFlow = MutableStateFlow<LocationUiState>(LocationUiState.Loading)
+
+
     val uiStateFlow = _uiStateFlow.asStateFlow()
-
-    private val handler = Handler(Looper.getMainLooper())
-
+    private var locations = emptyList<Location>()
     init {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.getLocations() // handler.post
-            repository.getLocations() // handler.post
-            repository.getLocations() // handler.post
-            repository.getLocations() // handler.post
-        }
-
-        handler.post {
-            println("i'm on main thread")
-        }
-    }
-
-    private val initialList = listOf(
-        CountryItem(R.drawable.russia, "Россия", "+7"),
-        CountryItem(R.drawable.ukraine, "Украина", "+380"),
-        CountryItem(R.drawable.belarus, "Беларусь", "+375"),
-        CountryItem(R.drawable.kazakhstan, "Казахстан", "+7"),
-        CountryItem(R.drawable.canada, "Канада", "+1")
-    )
-
-    private val initialList2 =
-        locationApi.getLocationData().enqueue(object: Callback<CountryList> {
-            override fun onResponse(call: Call<CountryList>, response: Response<CountryList>) {
-                val responseItem = response.body()?.listIterator()
-                val listOfCountries = ArrayList<CountryItem>()
-                if (responseItem != null) {
-                    while (responseItem.hasNext()) {
-                        val item: CountryItem = responseItem.next()
-                        listOfCountries.add(
-                            element = CountryItem(
-                                R.drawable.belarus,
-                                item.countryName,
-                                null
-                            )
-                        )
-                        Log.i("items", item.countryName)
-                    }
-
-                }
+        viewModelScope.launch {
+            locations = repository.getLocations()
+            val country = locations.find{
+                it.countryName == "Россия"
+                // default country = picked phone code
+            }
+            if(country == null) {
+                _uiStateFlow.value = LocationUiState.Initial
+            } else {
+                _uiStateFlow.value = LocationUiState.CountrySelected(country.countryName, false)
             }
 
-            override fun onFailure(call: Call<CountryList>, t: Throwable) {
-                TODO("Not yet implemented")
-            }
+        }
 
-        })
-
-//    private val _uiStateFlow: MutableStateFlow<List<CountryItem>> = MutableStateFlow(initialList)
-//    val uiStateFlow = _uiStateFlow.asStateFlow()
-
-    fun onClick(item: CountryItem) {
-        repository.selectedCountryFlow.value = item
     }
+
+    fun onCountrySelected(selectedCountry: String) {
+        val prevState = uiStateFlow.value as LocationUiState.Initial
+        val newState = LocationUiState.CountrySelected(
+            country = selectedCountry,
+            nextButtonEnabled = false
+        )
+    }
+
+    fun onCitySelected(selectedCountry: String, selectedCity: String) {
+        val prevState = uiStateFlow.value as LocationUiState.CountrySelected
+        val newState = LocationUiState.CitySelected(
+            country = selectedCountry,
+            city = selectedCity,
+            nextButtonEnabled = false
+            )
+    }
+
+    fun onDistrictSelected(selectedCountry: String, selectedCity: String, selectedDistrict: String) {
+        val prevState = uiStateFlow.value as LocationUiState.CitySelected
+        val newState = LocationUiState.DistrictSelected(
+            country = selectedCountry,
+            city = selectedCity,
+            district = selectedDistrict,
+            nextButtonEnabled = true
+        )
+    }
+
+
+
 
 //    fun onSearchInput(userInput: String) {
 //        val filteredList = initialList.filter {

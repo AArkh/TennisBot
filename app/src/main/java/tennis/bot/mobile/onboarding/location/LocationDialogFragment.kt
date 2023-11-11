@@ -1,5 +1,6 @@
 package tennis.bot.mobile.onboarding.location
 
+import android.health.connect.datatypes.ExerciseRoute
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
@@ -10,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import tennis.bot.mobile.core.CoreUtilsItem
 import tennis.bot.mobile.onboarding.phone.CountryCodesDialogFragment
 import tennis.bot.mobile.onboarding.phone.CountryCodesViewModel
 import tennis.bot.mobile.onboarding.phone.PhoneInputAdapter
@@ -20,7 +22,7 @@ class LocationDialogFragment: CountryCodesDialogFragment() {
 
     @Inject
     lateinit var locationAdapter: LocationAdapter
-    private val viewModel: LocationViewModel by viewModels()
+    private val viewModel: LocationDialogViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -34,9 +36,11 @@ class LocationDialogFragment: CountryCodesDialogFragment() {
                 }
             }
         }
-        binding.searchBarEt.addTextChangedListener {
-            viewModel.onSearchInput(it.toString())
-        }
+//        binding.searchBarEt.addTextChangedListener {
+//            viewModel.onSearchInput(it.toString())
+//        }
+
+//              how to pass arguments to the fragment's viewmodel
 
         locationAdapter.clickListener = {
             requireActivity().supportFragmentManager.setFragmentResult(
