@@ -9,6 +9,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import tennis.bot.mobile.App.Companion.ctx
+import java.lang.StringBuilder
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -69,7 +70,7 @@ class AccountInfoRepository @Inject constructor(
 	}
 
 	fun recordPhoneNumberAndSmsCode(phoneNumber: String, smsVerifyCode: String) {
-		sharedPreferences.edit().putString(PHONE_NUMBER_HEADER, phoneNumber).apply()
+		sharedPreferences.edit().putString(PHONE_NUMBER_HEADER, phoneNumber.toApiNumericFormat()).apply()
 		sharedPreferences.edit().putString(SMS_VERIFY_CODE_HEADER, smsVerifyCode).apply()
 	}
 
@@ -92,6 +93,16 @@ class AccountInfoRepository @Inject constructor(
 
 	fun recordPassword(password: String){
 		sharedPreferences.edit().putString(PASSWORD_HEADER, password).apply()
+	}
+
+	private fun String.toApiNumericFormat(): String {
+		val builder = StringBuilder()
+		for (char in this) {
+			if (char.isDigit()) {
+				builder.append(char)
+			}
+		}
+		return builder.toString()
 	}
 
 	companion object {

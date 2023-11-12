@@ -19,8 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PhoneInputViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val repository: PhoneInputRepository,
-    private val accountInfo: AccountInfoRepository
+    private val repository: PhoneInputRepository
 ) : ViewModel() {
 
     private val _uiStateFlow = MutableStateFlow(

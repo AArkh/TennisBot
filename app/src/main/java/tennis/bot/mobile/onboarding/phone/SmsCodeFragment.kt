@@ -11,7 +11,6 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentSmsCodeBinding
-import tennis.bot.mobile.onboarding.location.LocationFragment
 import tennis.bot.mobile.onboarding.phone.SmsCodeViewModel.Companion.SMS_CODE_LENGTH
 import tennis.bot.mobile.onboarding.sport.SportFragment
 import tennis.bot.mobile.utils.showKeyboard
@@ -117,6 +116,18 @@ class SmsCodeFragment : CoreFragment<FragmentSmsCodeBinding>() {
             }
             listTv[i].text = numbers.getOrNull(i)
             listLines[i].backgroundTintList = colorTint
+        }
+    }
+
+    companion object {
+        const val PHONE_NUMBER_ARGUMENT = "SmsCodeFragment"
+
+        fun newInstance(phoneNumber: String): SmsCodeFragment {
+            val fragment = SmsCodeFragment()
+            val args = Bundle()
+            args.putString(PHONE_NUMBER_ARGUMENT, phoneNumber)
+            fragment.arguments = args
+            return fragment
         }
     }
 }
