@@ -38,10 +38,12 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
         }
 
         binding.buttonNext.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_view, SmsCodeFragment())
-                .addToBackStack(SmsCodeFragment::class.java.name)
-                .commit()
+            phoneInputViewModel.onNextClicked {
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_view, SmsCodeFragment())
+                    .addToBackStack(SmsCodeFragment::class.java.name)
+                    .commit()
+            }
         }
 
         binding.openCountriesSheetLayout.setOnClickListener {
