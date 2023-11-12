@@ -78,6 +78,15 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
         }
 
         binding.buttonNext.setOnClickListener {
+            phoneInputViewModel.onNextClicked {
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_view, SmsCodeFragment.newInstance(it))
+                    .addToBackStack(SmsCodeFragment::class.java.name)
+                    .commit()
+            }
+        }
+
+        binding.buttonNext.setOnClickListener {
             //todo тут не отправляем смс, есть метод во view model
             parentFragment?.arguments = bundleOf(
                 PHONE_NUMBER to binding.phoneEt.text.toString()
