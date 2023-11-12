@@ -5,11 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
+import tennis.bot.mobile.utils.AppCoroutineScopes
 import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
@@ -19,14 +21,16 @@ class PhoneInputViewModel @Inject constructor(
     private val repository: PhoneInputRepository,
 ) : ViewModel() {
 
-    private val _uiStateFlow = MutableStateFlow(PhoneInputUiState(
-        iconRes = R.drawable.russia,
-        prefix = "+7",
-        userInput = "",
-        errorMessage = null,
-        proceedButtonEnabled = false,
-        clearButtonVisible = false
-    ))
+    private val _uiStateFlow = MutableStateFlow(
+        PhoneInputUiState(
+            iconRes = R.drawable.russia,
+            prefix = "+7",
+            userInput = "",
+            errorMessage = null,
+            proceedButtonEnabled = false,
+            clearButtonVisible = false
+        )
+    )
     val uiStateFlow = _uiStateFlow.asStateFlow()
 
     private val errorText = context.getString(R.string.onboarding_text_incorrect_phone_number)
@@ -59,15 +63,17 @@ class PhoneInputViewModel @Inject constructor(
         )
     }
 
-    fun onNextClicked(successCallback: () -> Unit) {
-        viewModelScope.launch(Dispatchers.IO) {
+    fun onNextClicked(successCallback: (phoneNumber: String) -> Unit) {
+        AppCoroutineScopes.appWorkerScope.launch {
+            val value = uiStateFlow.value
+            val phoneNumber = value.prefix + " " + value.userInput
+            successCallback.invoke(phoneNumber)
             kotlin.runCatching {
-                val value = uiStateFlow.value
-                repository.requestSmsCode(value.prefix + value.userInput)
+                repository.requestSmsCode(phoneNumber)
             }.onFailure {
-                context.showToast("Failed to request sms code")
-            }.onSuccess {
-                successCallback.invoke()
+                if (it !is CancellationException) {
+                    context.showToast("Failed to request sms code")
+                }
             }
         }
     }

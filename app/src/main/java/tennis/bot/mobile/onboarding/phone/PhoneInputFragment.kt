@@ -36,11 +36,14 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
         binding.clearButton.setOnClickListener {
             binding.phoneEt.setText("")
         }
+        binding.backButton.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
 
         binding.buttonNext.setOnClickListener {
             phoneInputViewModel.onNextClicked {
                 parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container_view, SmsCodeFragment())
+                    .replace(R.id.fragment_container_view, SmsCodeFragment.newInstance(it))
                     .addToBackStack(SmsCodeFragment::class.java.name)
                     .commit()
             }

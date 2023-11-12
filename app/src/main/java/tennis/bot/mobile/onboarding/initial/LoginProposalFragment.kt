@@ -1,6 +1,7 @@
 package tennis.bot.mobile.onboarding.initial
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.view.*
 import androidx.recyclerview.widget.GridLayoutManager
@@ -35,6 +36,9 @@ class LoginProposalFragment : CoreFragment<FragmentLoginProposalBinding>() {
         binding.imageList.itemAnimator = null
         binding.imageList.addItemDecoration(decoration)
         binding.imageList.setOnTouchListener(touchListener)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            binding.imageList.overScrollMode = View.OVER_SCROLL_NEVER
+        }
 
         TabLayoutMediator(binding.tabLayout, binding.descriptionViewPager) { _, _ -> }.attach()
 
