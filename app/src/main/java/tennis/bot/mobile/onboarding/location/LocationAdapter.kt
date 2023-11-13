@@ -1,17 +1,18 @@
 package tennis.bot.mobile.onboarding.location
 
-import android.view.View
-import kotlinx.serialization.Serializable
-import tennis.bot.mobile.core.CoreAdapter
 import tennis.bot.mobile.onboarding.phone.CountryCodeItemViewHolder
+import tennis.bot.mobile.onboarding.phone.CountryItem
 import tennis.bot.mobile.onboarding.phone.PhoneInputAdapter
 import javax.inject.Inject
 
 class LocationAdapter @Inject constructor() : PhoneInputAdapter() {
     override fun onBindViewHolder(holder: CountryCodeItemViewHolder, item: Any) {
-        super.onBindViewHolder(holder, item)
-        holder.binding.countryIconIv.visibility = View.GONE
-        holder.binding.countryCodeTv.visibility = View.GONE
+        val countryItem = item as? CountryItem ?: throw IllegalArgumentException("Item must be CountryItem")
+        holder.binding.countryIconIv.setImageResource(countryItem.icon)
+        holder.binding.countryNameTv.text = countryItem.countryName
+        holder.itemView.setOnClickListener {
+            clickListener?.invoke(item)
+        }
     }
 
 

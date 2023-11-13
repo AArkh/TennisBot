@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
@@ -16,6 +17,7 @@ import tennis.bot.mobile.onboarding.phone.CountryCodesDialogFragment
 import tennis.bot.mobile.onboarding.phone.PhoneInputUiState
 import tennis.bot.mobile.utils.updateTextIfNeeded
 
+@AndroidEntryPoint
 class LocationFragment : CoreFragment<FragmentLocationBinding>() {
     override val bindingInflation: Inflation<FragmentLocationBinding> = FragmentLocationBinding::inflate
 
@@ -31,20 +33,20 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
 
         setFragmentResultListener(
             LocationDialogFragment.COUNTRY_REQUEST_KEY
-        ) { requestKey, result ->
+        ) { _, result ->
             val countryResult = result.getString(LocationDialogFragment.SELECTED_COUNTRY_KEY, "Страна")
             viewModel.onCountrySelected(countryResult)
         }
 
         setFragmentResultListener(
             LocationDialogFragment.CITY_REQUEST_KEY
-        ) { requestKey, result ->
+        ) { _, result ->
             binding.cityTv.text = result.getString(LocationDialogFragment.SELECTED_CITY_KEY)
         }
 
         setFragmentResultListener(
             LocationDialogFragment.DISTRICT_REQUEST_KEY
-        ) { requestKey, result ->
+        ) { _, result ->
             binding.districtTv.text = result.getString(LocationDialogFragment.SELECTED_DISTRICT_KEY)
         }
 

@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import tennis.bot.mobile.databinding.ActivityMainBinding
 import tennis.bot.mobile.onboarding.initial.LoginProposalFragment
 import tennis.bot.mobile.onboarding.location.LocationRepo
@@ -31,7 +33,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
-            locationRepo.precacheLocations()
+            withContext(Dispatchers.IO) {
+                locationRepo.precacheLocations()
+            }
+
         }
     }
 }

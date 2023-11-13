@@ -3,9 +3,11 @@ package tennis.bot.mobile.onboarding.location
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,17 +24,18 @@ class LocationViewModel @Inject constructor(
     private var locations = emptyList<Location>()
     init {
         viewModelScope.launch {
-            locations = repository.getLocations()
-            val country = locations.find{
-                it.countryName == "Россия"
-                // default country = picked phone code
+            withContext(Dispatchers.IO) {
+                locations = repository.getLocations()
+                val country = locations.find{
+                    it.countryName == "Россия"
+                    // default country = picked phone code
+                }
+                if(country == null) {
+                    _uiStateFlow.value = LocationUiState.Initial
+                } else {
+                    _uiStateFlow.value = LocationUiState.CountrySelected(country.countryName, false)
+                }
             }
-            if(country == null) {
-                _uiStateFlow.value = LocationUiState.Initial
-            } else {
-                _uiStateFlow.value = LocationUiState.CountrySelected(country.countryName, false)
-            }
-
         }
 
     }

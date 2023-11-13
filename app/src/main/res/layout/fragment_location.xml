@@ -40,18 +40,16 @@
             android:layout_marginStart="16dp"
             android:layout_marginVertical="13.5dp"/>
 
+        <ImageView
+            android:id="@+id/country_chevron_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/chevron_left" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/country_chevron_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginEnd="10dp"
-        android:src="@drawable/chevron_left"
-        app:layout_constraintBottom_toBottomOf="@+id/country_pick_layout"
-        app:layout_constraintRight_toRightOf="@+id/country_pick_layout"
-        app:layout_constraintTop_toTopOf="@+id/country_pick_layout" />
+
 
     <LinearLayout
         android:id="@+id/city_pick_layout"
@@ -74,18 +72,17 @@
             android:layout_marginStart="16dp"
             android:layout_marginVertical="13.5dp"/>
 
+        <ImageView
+            android:id="@+id/city_chevron_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/chevron_left" />
+
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/city_chevron_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginEnd="10dp"
-        android:src="@drawable/chevron_left"
-        app:layout_constraintBottom_toBottomOf="@+id/city_pick_layout"
-        app:layout_constraintRight_toRightOf="@+id/city_pick_layout"
-        app:layout_constraintTop_toTopOf="@+id/city_pick_layout" />
+
 
     <LinearLayout
         android:id="@+id/district_pick_layout"
@@ -108,18 +105,17 @@
             android:layout_marginStart="16dp"
             android:layout_marginVertical="13.5dp"/>
 
+        <ImageView
+            android:id="@+id/district_chevron_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/chevron_left" />
+
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/district_chevron_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginEnd="10dp"
-        android:src="@drawable/chevron_left"
-        app:layout_constraintBottom_toBottomOf="@+id/district_pick_layout"
-        app:layout_constraintRight_toRightOf="@+id/district_pick_layout"
-        app:layout_constraintTop_toTopOf="@+id/district_pick_layout" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

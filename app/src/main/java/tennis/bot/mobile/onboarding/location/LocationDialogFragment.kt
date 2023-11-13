@@ -1,20 +1,16 @@
 package tennis.bot.mobile.onboarding.location
 
-import android.health.connect.datatypes.ExerciseRoute
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import tennis.bot.mobile.core.CoreUtilsItem
 import tennis.bot.mobile.onboarding.phone.CountryCodesDialogFragment
-import tennis.bot.mobile.onboarding.phone.CountryCodesViewModel
-import tennis.bot.mobile.onboarding.phone.PhoneInputAdapter
 import javax.inject.Inject
 
 @AndroidEntryPoint

@@ -7,10 +7,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import tennis.bot.mobile.onboarding.location.Location
 import tennis.bot.mobile.onboarding.location.LocationCityConverter
 import tennis.bot.mobile.onboarding.location.LocationDao
 import tennis.bot.mobile.onboarding.location.LocationDatabase
-import tennis.bot.mobile.onboarding.location.LocationDistrictConverter
 import javax.inject.Singleton
 
 @Module
@@ -21,8 +21,7 @@ class StorageModule {
     @Singleton
     fun provideAppDatabase(
         @ApplicationContext context: Context,
-            locationCityConverter: LocationCityConverter,
-            locationDistrictConverter: LocationDistrictConverter
+            locationCityConverter: LocationCityConverter
         ): LocationDatabase {
         return Room.databaseBuilder(
             context.applicationContext,
@@ -30,10 +29,16 @@ class StorageModule {
             "location_database"
         )
             .addTypeConverter(locationCityConverter)
-            .addTypeConverter(locationDistrictConverter)
             .fallbackToDestructiveMigration()
             .build()
     }
+
+    @Provides
+    fun provideLocationCityConverter(): LocationCityConverter{
+        return LocationCityConverter()
+    }
+
+
 
     @Provides
     fun provideLocationDao(
