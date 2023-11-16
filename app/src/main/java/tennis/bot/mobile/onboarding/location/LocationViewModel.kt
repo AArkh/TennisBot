@@ -37,34 +37,33 @@ class LocationViewModel @Inject constructor(
                 }
             }
         }
-
     }
 
     fun onCountrySelected(selectedCountry: String) {
-        val prevState = uiStateFlow.value as LocationUiState.Initial
         val newState = LocationUiState.CountrySelected(
             country = selectedCountry,
             nextButtonEnabled = false
         )
+        _uiStateFlow.value = newState
     }
 
     fun onCitySelected(selectedCountry: String, selectedCity: String) {
-        val prevState = uiStateFlow.value as LocationUiState.CountrySelected
         val newState = LocationUiState.CitySelected(
             country = selectedCountry,
             city = selectedCity,
             nextButtonEnabled = false
             )
+        _uiStateFlow.value = newState
     }
 
     fun onDistrictSelected(selectedCountry: String, selectedCity: String, selectedDistrict: String) {
-        val prevState = uiStateFlow.value as LocationUiState.CitySelected
         val newState = LocationUiState.DistrictSelected(
             country = selectedCountry,
             city = selectedCity,
             district = selectedDistrict,
             nextButtonEnabled = true
         )
+        _uiStateFlow.value = newState
     }
 
 

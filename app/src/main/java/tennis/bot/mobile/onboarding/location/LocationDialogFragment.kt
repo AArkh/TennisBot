@@ -43,19 +43,24 @@ class LocationDialogFragment: CountryCodesDialogFragment() {
                 COUNTRY_REQUEST_KEY,
                 bundleOf(SELECTED_COUNTRY_KEY to it.countryName)
             )
-
-
+                dialog?.dismiss()
         }
+
+//        subscribeToFlowOn(viewModel.uiStateFlow) { uiState: LocationDialogUiState ->
+//            when(uiState) {
+//
+//            }
+//        }
 
 
     }
     companion object {
         const val COUNTRY_REQUEST_KEY = "COUNTRY_KEY"
         const val SELECTED_COUNTRY_KEY = "SELECTED_COUNTRY_KEY"
-        const val CITY_REQUEST_KEY = "COUNTRY_KEY"
-        const val SELECTED_CITY_KEY = "SELECTED_COUNTRY_KEY"
-        const val DISTRICT_REQUEST_KEY = "COUNTRY_KEY"
-        const val SELECTED_DISTRICT_KEY = "SELECTED_COUNTRY_KEY"
+        const val CITY_REQUEST_KEY = "CITY_KEY"
+        const val SELECTED_CITY_KEY = "SELECTED_CITY_KEY"
+        const val DISTRICT_REQUEST_KEY = "DISTRICT_KEY"
+        const val SELECTED_DISTRICT_KEY = "SELECTED_DISTRICT_KEY"
 
     }
 }

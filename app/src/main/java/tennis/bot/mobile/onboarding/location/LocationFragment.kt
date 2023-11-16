@@ -22,13 +22,25 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
     override val bindingInflation: Inflation<FragmentLocationBinding> = FragmentLocationBinding::inflate
 
     val viewModel : LocationViewModel by viewModels()
+    val viewModelDialog: LocationDialogViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.countryPickLayout.setOnClickListener {
             val bottomSheet = LocationDialogFragment()
-            bottomSheet.show(childFragmentManager, bottomSheet.getTag())
+            bottomSheet.show(childFragmentManager, bottomSheet.tag)
+        }
+
+        binding.cityPickLayout.setOnClickListener {
+            val bottomSheet = LocationDialogFragment()
+            bottomSheet.show(childFragmentManager, bottomSheet.tag)
+            viewModelDialog.loadCitiesList()
+        }
+
+        binding.districtPickLayout.setOnClickListener {
+            val bottomSheet = LocationDialogFragment()
+            bottomSheet.show(childFragmentManager, bottomSheet.tag)
         }
 
         setFragmentResultListener(
@@ -49,8 +61,6 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
         ) { _, result ->
             binding.districtTv.text = result.getString(LocationDialogFragment.SELECTED_DISTRICT_KEY)
         }
-
-
 
         subscribeToFlowOn(viewModel.uiStateFlow) { uiState: LocationUiState ->
             when(uiState) {

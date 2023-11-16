@@ -17,18 +17,25 @@ class LocationDialogViewModel @Inject constructor(
     private val repository: LocationRepo,
 ) : ViewModel(){
 
-    private var locations = emptyList<Location>()
-    private var countries = emptyList<CountryItem>()
+    private val _uiStateFlow: MutableStateFlow<List<CountryItem>> = MutableStateFlow(emptyList())
+    val uiStateFlow = _uiStateFlow.asStateFlow()
+
+    var locations: List<Location> = emptyList()
 
     init {
         viewModelScope.launch {
             withContext(Dispatchers.IO){
-            locations = repository.getLocations()
+                locations = repository.getLocations()
+                _uiStateFlow.value = LocationRepo.DataMapper().getCountryList(locations)
             }
-            countries = LocationRepo.DataMapper().getCountryList(locations)
         }
     }
 
-    private val _uiStateFlow: MutableStateFlow<List<CountryItem>> = MutableStateFlow(countries)
-    val uiStateFlow = _uiStateFlow.asStateFlow()
+    fun loadCitiesList() {
+        _uiStateFlow.value = LocationRepo.DataMapper().getCityList(locations, "Russia")
+
+    }
+
+
+
 }
