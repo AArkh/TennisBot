@@ -32,9 +32,11 @@ class LocationDialogFragment: CountryCodesDialogFragment() {
                 viewModel.loadCountryList()
             }
             "city" -> {
+                // get selected country also
                 viewModel.loadCitiesList()
             }
             "district" -> {
+                // get selected country and city also
                 viewModel.loadDisctictList()
             }
         }
