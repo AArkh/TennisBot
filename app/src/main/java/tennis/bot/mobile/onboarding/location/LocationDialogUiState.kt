@@ -6,15 +6,7 @@ sealed class LocationDialogUiState {
 
     object Loading : LocationDialogUiState()
 
-    data class countryDataPassed(
+    data class dataPassed(
         val dataList: List<CountryItem>
-    ): LocationDialogUiState()
-
-    data class cityDataPassed(
-        val dataList: List<CountryItem>
-    ): LocationDialogUiState()
-
-    data class districtDataPassed(
-        val dataList: List<CountryItem>
-    ): LocationDialogUiState()
+    ) : LocationDialogUiState()
 }
