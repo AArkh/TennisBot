@@ -29,7 +29,7 @@ class LocationDialogFragment: CountryCodesDialogFragment() {
 
         when(type) {
             "country" -> {
-                viewModel.loadCountryList()
+                viewModel.loadCountriesList()
             }
             "city" -> {
                 // get selected country also
@@ -37,14 +37,14 @@ class LocationDialogFragment: CountryCodesDialogFragment() {
             }
             "district" -> {
                 // get selected country and city also
-                viewModel.loadDisctictList()
+                viewModel.loadDistrictsList()
             }
         }
 
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModel.uiStateFlow.collect { countryList ->
-                    locationAdapter.submitList(countryList)
+                    locationAdapter.submitList(viewModel.dataToPortray)
                 }
             }
         }
