@@ -7,14 +7,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.onboarding.phone.CountryCodesDialogFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class LocationDialogFragment: CountryCodesDialogFragment() {
+class LocationDialogFragment : CountryCodesDialogFragment() {
 
     @Inject
     lateinit var locationAdapter: LocationAdapter
@@ -27,11 +26,11 @@ class LocationDialogFragment: CountryCodesDialogFragment() {
 
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                viewModel.uiStateFlow.collect { countryList ->
-                    locationAdapter.submitList(countryList)
-                }
+                viewModel.loadCountriesList()
             }
         }
+
+
 //        binding.searchBarEt.addTextChangedListener {
 //            viewModel.onSearchInput(it.toString())
 //        }
@@ -43,17 +42,31 @@ class LocationDialogFragment: CountryCodesDialogFragment() {
                 COUNTRY_REQUEST_KEY,
                 bundleOf(SELECTED_COUNTRY_KEY to it.countryName)
             )
-                dialog?.dismiss()
+            dialog?.dismiss()
         }
 
-//        subscribeToFlowOn(viewModel.uiStateFlow) { uiState: LocationDialogUiState ->
-//            when(uiState) {
-//
-//            }
-//        }
+        subscribeToFlowOn(viewModel.uiStateFlow) { uiState: LocationDialogUiState ->
+            when (uiState) {
+                is LocationDialogUiState.Loading -> {}
+                is LocationDialogUiState.countryDataPassed -> {
+                    locationAdapter.submitList(viewModel.dataToPortray)
+                }
+
+                is LocationDialogUiState.cityDataPassed -> {
+                    locationAdapter.submitList(viewModel.dataToPortray)
+                }
+
+                is LocationDialogUiState.districtDataPassed -> {
+                    locationAdapter.submitList(viewModel.dataToPortray)
+                }
+
+            }
+        }
 
 
     }
+
+
     companion object {
         const val COUNTRY_REQUEST_KEY = "COUNTRY_KEY"
         const val SELECTED_COUNTRY_KEY = "SELECTED_COUNTRY_KEY"

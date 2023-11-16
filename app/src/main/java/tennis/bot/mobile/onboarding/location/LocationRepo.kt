@@ -59,7 +59,7 @@ class LocationRepo @Inject constructor(
             }
         }
 
-        fun getDistrict(responseData: List<Location>, selectedCountry: String, selectedCity: String): List<CountryItem> {
+        fun getDistrictList(responseData: List<Location>, selectedCountry: String, selectedCity: String): List<CountryItem> {
             val country = responseData.find { return@find it.countryName == selectedCountry }
             val city = country?.cities?.find { return@find it.name == selectedCity }
             if (country?.cities?.isNotEmpty() == true && city?.districts?.isNotEmpty() == true) {
