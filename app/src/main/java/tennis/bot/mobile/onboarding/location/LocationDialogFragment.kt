@@ -7,13 +7,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.onboarding.phone.CountryCodesDialogFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class LocationDialogFragment : CountryCodesDialogFragment() {
+class LocationDialogFragment: CountryCodesDialogFragment() {
 
     @Inject
     lateinit var locationAdapter: LocationAdapter
@@ -24,49 +25,37 @@ class LocationDialogFragment : CountryCodesDialogFragment() {
 
         binding.countriesListRv.adapter = locationAdapter
 
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                viewModel.loadCountriesList()
+        val type = arguments?.getString(LocationFragment.SOME_KEY)
+
+        when(type) {
+            "country" -> {
+                viewModel.loadCountryList()
+            }
+            "city" -> {
+                // get selected country also
+                viewModel.loadCitiesList()
+            }
+            "district" -> {
+                // get selected country and city also
+                viewModel.loadDisctictList()
             }
         }
 
-
-//        binding.searchBarEt.addTextChangedListener {
-//            viewModel.onSearchInput(it.toString())
-//        }
-
-//              how to pass arguments to the fragment's viewmodel
-
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
+                viewModel.uiStateFlow.collect { countryList ->
+                    locationAdapter.submitList(countryList)
+                }
+            }
+        }
         locationAdapter.clickListener = {
             requireActivity().supportFragmentManager.setFragmentResult(
                 COUNTRY_REQUEST_KEY,
                 bundleOf(SELECTED_COUNTRY_KEY to it.countryName)
             )
-            dialog?.dismiss()
+                dialog?.dismiss()
         }
-
-        subscribeToFlowOn(viewModel.uiStateFlow) { uiState: LocationDialogUiState ->
-            when (uiState) {
-                is LocationDialogUiState.Loading -> {}
-                is LocationDialogUiState.countryDataPassed -> {
-                    locationAdapter.submitList(viewModel.dataToPortray)
-                }
-
-                is LocationDialogUiState.cityDataPassed -> {
-                    locationAdapter.submitList(viewModel.dataToPortray)
-                }
-
-                is LocationDialogUiState.districtDataPassed -> {
-                    locationAdapter.submitList(viewModel.dataToPortray)
-                }
-
-            }
-        }
-
-
     }
-
-
     companion object {
         const val COUNTRY_REQUEST_KEY = "COUNTRY_KEY"
         const val SELECTED_COUNTRY_KEY = "SELECTED_COUNTRY_KEY"

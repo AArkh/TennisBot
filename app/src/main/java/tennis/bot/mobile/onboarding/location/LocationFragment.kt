@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,21 +24,31 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
 
     val viewModel : LocationViewModel by viewModels()
 
+    companion object {
+        const val SOME_KEY = "somsdfadfg"
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.countryPickLayout.setOnClickListener {
             val bottomSheet = LocationDialogFragment()
+            bottomSheet.arguments = bundleOf(SOME_KEY to "country")
             bottomSheet.show(childFragmentManager, bottomSheet.tag)
         }
 
         binding.cityPickLayout.setOnClickListener {
             val bottomSheet = LocationDialogFragment()
+            bottomSheet.arguments = bundleOf(SOME_KEY to "city")
             bottomSheet.show(childFragmentManager, bottomSheet.tag)
         }
 
         binding.districtPickLayout.setOnClickListener {
             val bottomSheet = LocationDialogFragment()
+            bottomSheet.arguments = bundleOf(
+                SOME_KEY to "district", // other keys
+                "selected_country" to "Russia", // итд
+            )
             bottomSheet.show(childFragmentManager, bottomSheet.tag)
         }
 
