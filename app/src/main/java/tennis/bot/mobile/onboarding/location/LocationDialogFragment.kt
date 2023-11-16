@@ -25,6 +25,20 @@ class LocationDialogFragment: CountryCodesDialogFragment() {
 
         binding.countriesListRv.adapter = locationAdapter
 
+        val type = arguments?.getString(LocationFragment.SOME_KEY)
+
+        when(type) {
+            "country" -> {
+                viewModel.loadCountryList()
+            }
+            "city" -> {
+                viewModel.loadCitiesList()
+            }
+            "district" -> {
+                viewModel.loadDisctictList()
+            }
+        }
+
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModel.uiStateFlow.collect { countryList ->
@@ -32,12 +46,6 @@ class LocationDialogFragment: CountryCodesDialogFragment() {
                 }
             }
         }
-//        binding.searchBarEt.addTextChangedListener {
-//            viewModel.onSearchInput(it.toString())
-//        }
-
-//              how to pass arguments to the fragment's viewmodel
-
         locationAdapter.clickListener = {
             requireActivity().supportFragmentManager.setFragmentResult(
                 COUNTRY_REQUEST_KEY,
@@ -45,14 +53,6 @@ class LocationDialogFragment: CountryCodesDialogFragment() {
             )
                 dialog?.dismiss()
         }
-
-//        subscribeToFlowOn(viewModel.uiStateFlow) { uiState: LocationDialogUiState ->
-//            when(uiState) {
-//
-//            }
-//        }
-
-
     }
     companion object {
         const val COUNTRY_REQUEST_KEY = "COUNTRY_KEY"
