@@ -1,6 +1,7 @@
 package tennis.bot.mobile.onboarding.location
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
@@ -30,10 +31,12 @@ class LocationDialogFragment: CountryCodesDialogFragment() {
         when(type) {
             "country" -> {
                 viewModel.loadCountriesList()
+                Log.i("debug","type = country is executed")
             }
             "city" -> {
                 // get selected country also
                 viewModel.loadCitiesList()
+                Log.i("debug","type = city is executed")
             }
             "district" -> {
                 // get selected country and city also
@@ -45,9 +48,18 @@ class LocationDialogFragment: CountryCodesDialogFragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModel.uiStateFlow.collect { countryList ->
                     locationAdapter.submitList(viewModel.dataToPortray)
+                    Log.i("debug","flow collected a value in DialogFragment")
                 }
             }
         }
+
+
+//        binding.searchBarEt.addTextChangedListener {
+//            viewModel.onSearchInput(it.toString())
+//        }
+
+//              how to pass arguments to the fragment's viewmodel
+
         locationAdapter.clickListener = {
             requireActivity().supportFragmentManager.setFragmentResult(
                 COUNTRY_REQUEST_KEY,
@@ -55,7 +67,18 @@ class LocationDialogFragment: CountryCodesDialogFragment() {
             )
                 dialog?.dismiss()
         }
+
+        subscribeToFlowOn(viewModel.uiStateFlow) { uiState: LocationDialogUiState ->
+            when (uiState) {
+                is LocationDialogUiState.Loading -> {}
+                is LocationDialogUiState.dataPassed -> {
+                    locationAdapter.submitList(viewModel.dataToPortray)
+                    Log.i("debug","dataPassed is executed")
+                }
+            }
+        }
     }
+
     companion object {
         const val COUNTRY_REQUEST_KEY = "COUNTRY_KEY"
         const val SELECTED_COUNTRY_KEY = "SELECTED_COUNTRY_KEY"

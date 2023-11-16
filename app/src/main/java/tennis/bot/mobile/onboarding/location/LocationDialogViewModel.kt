@@ -1,5 +1,6 @@
 package tennis.bot.mobile.onboarding.location
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,28 +23,30 @@ class LocationDialogViewModel @Inject constructor(
     var locations: List<Location> = emptyList()
     var dataToPortray: List<CountryItem> = emptyList()
 
-    init {
-        viewModelScope.launch {
+        val locationStuff = viewModelScope.launch {
             withContext(Dispatchers.IO){
                 locations = repository.getLocations()
-                loadCountriesList()
             }
+                loadCountriesList()
+                Log.i("debug","viewModelScope.launch is executed with Context")
         }
-    }
+
 
     fun loadCountriesList() {
+        Log.i("debug","loadCountriesList() is executed")
         dataToPortray = LocationRepo.DataMapper().getCountryList(locations)
-        _uiStateFlow.value = LocationDialogUiState.countryDataPassed(dataToPortray)
+        _uiStateFlow.value = LocationDialogUiState.dataPassed(dataToPortray)
     }
 
     fun loadCitiesList() {
+        Log.i("debug","loadCitiesList() is executed")
         dataToPortray = LocationRepo.DataMapper().getCityList(locations, "Russia")
-        _uiStateFlow.value = LocationDialogUiState.cityDataPassed(dataToPortray)
+        _uiStateFlow.value = LocationDialogUiState.dataPassed(dataToPortray)
     }
 
     fun loadDistrictsList() {
         dataToPortray = LocationRepo.DataMapper().getDistrictList(locations, "Russia", "SPb")
-        _uiStateFlow.value = LocationDialogUiState.districtDataPassed(dataToPortray)
+        _uiStateFlow.value = LocationDialogUiState.dataPassed(dataToPortray)
     }
 
 
