@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
 
-abstract class CoreBottomSheetDialogFragment<BINDING : ViewBinding>() : BottomSheetDialogFragment() {
+abstract class CoreBottomSheetDialogFragment<BINDING : ViewBinding> : BottomSheetDialogFragment() {
 
     protected abstract val bindingInflation: Inflation<BINDING>
     protected lateinit var binding: BINDING

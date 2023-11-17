@@ -15,22 +15,18 @@ class LocationViewModel @Inject constructor(
     private val repository: LocationRepo,
 ) : ViewModel() {
 
-    @Inject lateinit var locationApi: LocationApi
-
     private val _uiStateFlow = MutableStateFlow<LocationUiState>(LocationUiState.Loading)
-
-
     val uiStateFlow = _uiStateFlow.asStateFlow()
-    private var locations = emptyList<Location>()
+
     init {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                locations = repository.getLocations()
-                val country = locations.find{
+                val locations = repository.getLocations()
+                val country = locations.find {
                     it.countryName == "Россия"
                     // default country = picked phone code
                 }
-                if(country == null) {
+                if (country == null) {
                     _uiStateFlow.value = LocationUiState.Initial
                 } else {
                     _uiStateFlow.value = LocationUiState.CountrySelected(country.countryName, false)
@@ -52,7 +48,7 @@ class LocationViewModel @Inject constructor(
             country = selectedCountry,
             city = selectedCity,
             nextButtonEnabled = false
-            )
+        )
         _uiStateFlow.value = newState
     }
 
@@ -65,8 +61,6 @@ class LocationViewModel @Inject constructor(
         )
         _uiStateFlow.value = newState
     }
-
-
 
 
 //    fun onSearchInput(userInput: String) {

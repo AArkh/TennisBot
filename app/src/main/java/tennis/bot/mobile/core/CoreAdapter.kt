@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 
 // DiffUtils
-abstract class CoreAdapter<ViewHolder: RecyclerView.ViewHolder> : RecyclerView.Adapter<ViewHolder>() {
+abstract class CoreAdapter<ViewHolder : RecyclerView.ViewHolder> : RecyclerView.Adapter<ViewHolder>() {
 
     protected var items: List<CoreUtilsItem> = listOf()
 
@@ -23,7 +23,7 @@ abstract class CoreAdapter<ViewHolder: RecyclerView.ViewHolder> : RecyclerView.A
 
     fun submitList(newList: List<CoreUtilsItem>) {
         val diffResult = DiffUtil.calculateDiff(CoreDiffCallback(ArrayList(items), newList))
-        items= newList
+        items = newList
         diffResult.dispatchUpdatesTo(this)
     }
 }
@@ -39,13 +39,15 @@ abstract class CoreUtilsItem {
 class CoreDiffCallback(
     private val oldList: List<CoreUtilsItem>,
     private val newList: List<CoreUtilsItem>
-): DiffUtil.Callback() {
+) : DiffUtil.Callback() {
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldList[oldItemPosition].isSameItem(newList[newItemPosition]) 
+        return oldList[oldItemPosition].isSameItem(newList[newItemPosition])
     }
+
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         return oldList[oldItemPosition].isSameContent(newList[newItemPosition])
     }
+
     override fun getOldListSize(): Int = oldList.size
     override fun getNewListSize(): Int = newList.size
 

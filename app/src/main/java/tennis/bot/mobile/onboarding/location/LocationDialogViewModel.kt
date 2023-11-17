@@ -20,35 +20,28 @@ class LocationDialogViewModel @Inject constructor(
     private val _uiStateFlow = MutableStateFlow<LocationDialogUiState>(LocationDialogUiState.Loading)
     val uiStateFlow = _uiStateFlow.asStateFlow()
 
-    var locations: List<Location> = emptyList()
-    var dataToPortray: List<CountryItem> = emptyList()
-
-        val locationStuff = viewModelScope.launch {
-            withContext(Dispatchers.IO){
-                locations = repository.getLocations()
-            }
-                loadCountriesList()
-                Log.i("debug","viewModelScope.launch is executed with Context")
-        }
-
+    // Тут были какие-то данные. Мы ничего не храним во viewModel, все данные по-умолчанию лежат в репозиториях
 
     fun loadCountriesList() {
-        Log.i("debug","loadCountriesList() is executed")
-        dataToPortray = LocationRepo.DataMapper().getCountryList(locations)
-        _uiStateFlow.value = LocationDialogUiState.dataPassed(dataToPortray)
+        Log.d("1234567", "loadCountriesList: ")
+        _uiStateFlow.value = LocationDialogUiState.Loading // Начинаем загрузку
+        viewModelScope.launch(Dispatchers.IO) { // Уходим с ui-потока, юзер пока видит крутилку загрузочную
+            kotlin.runCatching {
+                val dataToPortray = repository.getLocations() // Асинхронно получаем locations, если не получится, то поймаем ошибку
+                val formatted = LocationRepo.DataMapper().getCountryList(dataToPortray) // Маппим полученные данные в нужный формат
+                _uiStateFlow.value = LocationDialogUiState.DataPassed(formatted) // Обновляем данные
+            }.onFailure {
+                // Если по какой-то причине репо или маппер взорвались при получении location - показываем юзеру ошибку
+                _uiStateFlow.value = LocationDialogUiState.Error
+            }
+        }
     }
 
     fun loadCitiesList() {
-        Log.i("debug","loadCitiesList() is executed")
-        dataToPortray = LocationRepo.DataMapper().getCityList(locations, "Russia")
-        _uiStateFlow.value = LocationDialogUiState.dataPassed(dataToPortray)
+        // аналогично как loadCountriesList
     }
 
     fun loadDistrictsList() {
-        dataToPortray = LocationRepo.DataMapper().getDistrictList(locations, "Russia", "SPb")
-        _uiStateFlow.value = LocationDialogUiState.dataPassed(dataToPortray)
+        // аналогично как loadCountriesList
     }
-
-
-
 }

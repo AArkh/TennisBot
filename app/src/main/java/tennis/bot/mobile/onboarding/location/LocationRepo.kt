@@ -16,25 +16,27 @@ class LocationRepo @Inject constructor(
     private val dao: LocationDao, // Room shit
 ) {
 
-//     This is called for precaching in mainActivity
+    private val stubData = listOf(Location(1, "Russia", "Russian flag", listOf(
+        Location.LocationCity(2, "Moscow",
+            listOf(
+                Location.LocationCity.LocationDistrict(3, "Khimky"),
+                Location.LocationCity.LocationDistrict(4, "Arbat"),
+                Location.LocationCity.LocationDistrict(5, "Red Square"))),
+        Location.LocationCity(6, "SPb", listOf(
+            Location.LocationCity.LocationDistrict(7, "Petroga"),
+            Location.LocationCity.LocationDistrict(8, "Vasilevsky Island"),
+            Location.LocationCity.LocationDistrict(9, "Devyatkino")
+        )))),
+        Location(2, "Serbia", "Serbian flag", listOf()),
+        Location(3, "USA", "USA flag", listOf()),
+        Location(4, "UK", "UK flag", listOf()),
+    )
+
     @WorkerThread
     suspend fun precacheLocations() = getLocations()
 
-//     This is called at location fragment and dialog
-
     @WorkerThread
     suspend fun getLocations() : List<Location> {
-        dao.insert(Location(1, "Russia", "Russian flag", listOf(
-                Location.LocationCity(2, "Moscow",
-                listOf(
-                    Location.LocationCity.LocationDistrict(3, "Khimky"),
-                    Location.LocationCity.LocationDistrict(4, "Arbat"),
-                    Location.LocationCity.LocationDistrict(5, "Red Square"))),
-            Location.LocationCity(6, "SPb", listOf(
-                Location.LocationCity.LocationDistrict(7, "Petroga"),
-                Location.LocationCity.LocationDistrict(8, "Vasilevsky Island"),
-                Location.LocationCity.LocationDistrict(9, "Devyatkino")
-            )))))
         val cachedLocations = dao.getLocations()
         if (cachedLocations.isNotEmpty()) {
             return cachedLocations
@@ -42,9 +44,11 @@ class LocationRepo @Inject constructor(
 //        val networkLocations = api.getLocationData().execute().body()
 //        dao.saveLocations(networkLocations)
 //        return networkLocations
-    return emptyList()
+        dao.insert(stubData)
+        return stubData
     }
 
+    // fixme Это херовый паттерн. Вынести в отдельный файл, через DI и передаваить в конструктор viewModel
     class DataMapper {
         fun getCountryList(responseData: List<Location>): List<CountryItem> {
             return responseData.map { return@map CountryItem(0, it.countryName, "") }

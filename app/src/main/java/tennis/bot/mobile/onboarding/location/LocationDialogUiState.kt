@@ -6,7 +6,9 @@ sealed class LocationDialogUiState {
 
     object Loading : LocationDialogUiState()
 
-    data class dataPassed(
+    object Error : LocationDialogUiState()
+
+    data class DataPassed(
         val dataList: List<CountryItem>
     ) : LocationDialogUiState()
 }

@@ -9,8 +9,8 @@ import androidx.room.Update
 
 @Dao
 interface LocationDao {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(item: Location)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(items: List<Location>)
 
     @Update
     suspend fun update(item: Location)
