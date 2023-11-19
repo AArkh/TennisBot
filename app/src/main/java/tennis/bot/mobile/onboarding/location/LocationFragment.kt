@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -39,7 +40,9 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
 
         binding.cityPickLayout.setOnClickListener {
             val bottomSheet = LocationDialogFragment()
-            bottomSheet.arguments = bundleOf(SOME_KEY to "city")
+            bottomSheet.arguments = bundleOf(
+                SOME_KEY to "city",
+                )
             bottomSheet.show(childFragmentManager, bottomSheet.tag)
         }
 
@@ -62,13 +65,19 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
         setFragmentResultListener(
             LocationDialogFragment.CITY_REQUEST_KEY
         ) { _, result ->
-            binding.cityTv.text = result.getString(LocationDialogFragment.SELECTED_CITY_KEY)
+            val cityResult = result.getString(LocationDialogFragment.SELECTED_CITY_KEY, "Город")
+            viewModel.onCitySelected(binding.countryTv.text.toString(), cityResult)
         }
 
         setFragmentResultListener(
             LocationDialogFragment.DISTRICT_REQUEST_KEY
         ) { _, result ->
-            binding.districtTv.text = result.getString(LocationDialogFragment.SELECTED_DISTRICT_KEY)
+            val districtResult = result.getString(LocationDialogFragment.SELECTED_DISTRICT_KEY, "Район")
+            viewModel.onDistrictSelected(binding.countryTv.text.toString(), binding.cityTv.text.toString(), districtResult)
+        }
+
+        binding.buttonNext.setOnClickListener {
+            Toast.makeText(context, "We move onward", Toast.LENGTH_SHORT).show()
         }
 
         subscribeToFlowOn(viewModel.uiStateFlow) { uiState: LocationUiState ->
@@ -78,6 +87,9 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
                     binding.countryPickLayout.visibility = View.VISIBLE
                     binding.cityPickLayout.visibility = View.INVISIBLE
                     binding.districtPickLayout.visibility = View.INVISIBLE
+                    binding.buttonNext.visibility = View.VISIBLE
+                    binding.buttonNext.isEnabled = false
+                    binding.buttonNext.setBackgroundResource(R.drawable.btn_bkg_disabled)
 
                     binding.countryTv.text = "Страна"
                     binding.cityTv.text = "Город"
@@ -88,19 +100,38 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
                     binding.cityTv.text = "Город"
                     binding.districtTv.text = "Район"
 
-                    binding.cityPickLayout.visibility = View.VISIBLE
-                    binding.districtPickLayout.visibility = View.INVISIBLE
+                    binding.buttonNext.isEnabled = false
+                    binding.buttonNext.setBackgroundResource(R.drawable.btn_bkg_disabled)
+
+                    if(!uiState.nextButtonEnabled) {
+                        binding.cityPickLayout.visibility = View.VISIBLE
+                        binding.districtPickLayout.visibility = View.INVISIBLE
+                    } else {
+                        binding.buttonNext.isEnabled = true
+                        binding.buttonNext.setBackgroundResource(R.drawable.btn_bkg_enabled)
+                    }
                 }
                 is LocationUiState.CitySelected -> {
                     binding.countryTv.text = uiState.country
                     binding.cityTv.text = uiState.city
-                    binding.districtPickLayout.visibility = View.VISIBLE
+
+                    binding.buttonNext.isEnabled = false
+                    binding.buttonNext.setBackgroundResource(R.drawable.btn_bkg_disabled)
+
+                    if(!uiState.nextButtonEnabled) {
+                        binding.districtPickLayout.visibility = View.VISIBLE
+                    } else {
+                        binding.buttonNext.isEnabled = true
+                        binding.buttonNext.setBackgroundResource(R.drawable.btn_bkg_enabled)
+                    }
                 }
                 is LocationUiState.DistrictSelected -> {
                     binding.countryTv.text = uiState.country
                     binding.cityTv.text = uiState.city
                     binding.districtTv.text = uiState.district
-                    // button appears here
+
+                    binding.buttonNext.isEnabled = true
+                    binding.buttonNext.setBackgroundResource(R.drawable.btn_bkg_enabled)
                 }
                 LocationUiState.Loading -> {
                     // loading screen, everything else is hidden
@@ -108,6 +139,7 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
                     binding.cityPickLayout.visibility = View.GONE
                     binding.districtPickLayout.visibility = View.GONE
                     binding.titleTv.visibility = View.GONE
+                    binding.buttonNext.visibility = View.GONE
                 }
                 LocationUiState.Error -> {
 

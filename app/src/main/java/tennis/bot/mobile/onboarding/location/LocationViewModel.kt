@@ -1,5 +1,6 @@
 package tennis.bot.mobile.onboarding.location
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,20 +37,45 @@ class LocationViewModel @Inject constructor(
     }
 
     fun onCountrySelected(selectedCountry: String) {
-        val newState = LocationUiState.CountrySelected(
-            country = selectedCountry,
-            nextButtonEnabled = false
-        )
-        _uiStateFlow.value = newState
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                kotlin.runCatching {
+                    val newState = LocationUiState.CountrySelected(
+                        country = selectedCountry,
+                        nextButtonEnabled = repository.getLocations()
+                            .find { it.countryName == selectedCountry }
+                            ?.cities!!.isEmpty()
+                    )
+                    _uiStateFlow.value = newState
+                    Log.d("1234567", "onCountrySelected: success")
+                }.onFailure {
+                    _uiStateFlow.value = LocationUiState.Error
+                    Log.d("1234567", "onCountrySelected: error")
+                }
+            }
+        }
     }
 
     fun onCitySelected(selectedCountry: String, selectedCity: String) {
-        val newState = LocationUiState.CitySelected(
-            country = selectedCountry,
-            city = selectedCity,
-            nextButtonEnabled = false
-        )
-        _uiStateFlow.value = newState
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                kotlin.runCatching {
+                    val newState = LocationUiState.CitySelected(
+                        country = selectedCountry,
+                        city = selectedCity,
+                        nextButtonEnabled = repository.getLocations()
+                            .find { it.countryName == selectedCountry }
+                            ?.cities!!.find { it.name == selectedCity }
+                            ?.districts!!.isEmpty()
+                    )
+                    _uiStateFlow.value = newState
+                    Log.d("1234567", "onCitySelected: success")
+                }.onFailure {
+                    _uiStateFlow.value = LocationUiState.Error
+                    Log.d("1234567", "onCitySelected: error")
+                }
+            }
+        }
     }
 
     fun onDistrictSelected(selectedCountry: String, selectedCity: String, selectedDistrict: String) {

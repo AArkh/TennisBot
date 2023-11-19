@@ -33,15 +33,42 @@ class LocationDialogViewModel @Inject constructor(
             }.onFailure {
                 // Если по какой-то причине репо или маппер взорвались при получении location - показываем юзеру ошибку
                 _uiStateFlow.value = LocationDialogUiState.Error
+                Log.d("1234567", "loadCountriesList: error")
             }
         }
     }
 
-    fun loadCitiesList() {
+    fun loadCitiesList(pickedCountry: String) {
         // аналогично как loadCountriesList
+        Log.d("1234567", "loadCitiesList: ")
+        _uiStateFlow.value = LocationDialogUiState.Loading // Начинаем загрузку
+        viewModelScope.launch(Dispatchers.IO) { // Уходим с ui-потока, юзер пока видит крутилку загрузочную
+            kotlin.runCatching {
+                val dataToPortray = repository.getLocations() // Асинхронно получаем locations, если не получится, то поймаем ошибку
+                val formatted = LocationRepo.DataMapper().getCityList(dataToPortray, pickedCountry) // Маппим полученные данные в нужный формат
+                _uiStateFlow.value = LocationDialogUiState.DataPassed(formatted) // Обновляем данные
+            }.onFailure {
+                // Если по какой-то причине репо или маппер взорвались при получении location - показываем юзеру ошибку
+                _uiStateFlow.value = LocationDialogUiState.Error
+                Log.d("1234567", "loadCitiesList: error")
+            }
+        }
     }
 
-    fun loadDistrictsList() {
+    fun loadDistrictsList(pickedCountry: String, pickedCity: String) {
         // аналогично как loadCountriesList
+        Log.d("1234567", "loadDistrictsList: ")
+        _uiStateFlow.value = LocationDialogUiState.Loading // Начинаем загрузку
+        viewModelScope.launch(Dispatchers.IO) { // Уходим с ui-потока, юзер пока видит крутилку загрузочную
+            kotlin.runCatching {
+                val dataToPortray = repository.getLocations() // Асинхронно получаем locations, если не получится, то поймаем ошибку
+                val formatted = LocationRepo.DataMapper().getDistrictList(dataToPortray, pickedCountry, pickedCity) // Маппим полученные данные в нужный формат
+                _uiStateFlow.value = LocationDialogUiState.DataPassed(formatted) // Обновляем данные
+            }.onFailure {
+                // Если по какой-то причине репо или маппер взорвались при получении location - показываем юзеру ошибку
+                _uiStateFlow.value = LocationDialogUiState.Error
+                Log.d("1234567", "loadDistrictsList: error")
+            }
+        }
     }
 }

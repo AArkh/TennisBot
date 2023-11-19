@@ -12,10 +12,8 @@ import tennis.bot.mobile.onboarding.phone.CountryItem
 
 interface LocationApi {
     @GET("api/dictionaries/countries")
-    fun getLocationData() : Call<LocationList>
+    fun getLocationData() : Call<List<Location>>
 }
-
-class LocationList: ArrayList<Location>()
 
 @Entity(tableName = "location")
 @Serializable

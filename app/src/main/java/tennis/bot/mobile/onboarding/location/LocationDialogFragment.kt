@@ -26,19 +26,38 @@ class LocationDialogFragment : CountryCodesDialogFragment() {
             }
             "city" -> {
                 // get selected country also
-                viewModel.loadCitiesList()
+                viewModel.loadCitiesList(currentCountry)
             }
             "district" -> {
                 // get selected country and city also
-                viewModel.loadDistrictsList()
+                viewModel.loadDistrictsList(currentCountry, currentCity)
             }
         }
 
         locationAdapter.clickListener = {
-            requireActivity().supportFragmentManager.setFragmentResult(
-                COUNTRY_REQUEST_KEY,
-                bundleOf(SELECTED_COUNTRY_KEY to it.countryName)
-            )
+            when(arguments?.getString(LocationFragment.SOME_KEY)) {
+                "country" -> {
+                    requireActivity().supportFragmentManager.setFragmentResult(
+                        COUNTRY_REQUEST_KEY,
+                        bundleOf(SELECTED_COUNTRY_KEY to it.countryName)
+                    )
+                    currentCountry = it.countryName
+                }
+                "city" -> {
+                    requireActivity().supportFragmentManager.setFragmentResult(
+                        CITY_REQUEST_KEY,
+                        bundleOf(SELECTED_CITY_KEY to it.countryName)
+                    )
+                    currentCity = it.countryName
+                }
+                "district" -> {
+                    requireActivity().supportFragmentManager.setFragmentResult(
+                        DISTRICT_REQUEST_KEY,
+                        bundleOf(SELECTED_DISTRICT_KEY to it.countryName)
+                    )
+                    currentDistrict = it.countryName
+                }
+            }
             dialog?.dismiss()
         }
 
@@ -60,5 +79,8 @@ class LocationDialogFragment : CountryCodesDialogFragment() {
         const val SELECTED_CITY_KEY = "SELECTED_CITY_KEY"
         const val DISTRICT_REQUEST_KEY = "DISTRICT_KEY"
         const val SELECTED_DISTRICT_KEY = "SELECTED_DISTRICT_KEY"
+        var currentCountry = ""
+        var currentCity = ""
+        var currentDistrict = ""
     }
 }
