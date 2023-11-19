@@ -15,7 +15,7 @@ import javax.inject.Inject
 class LocationAdapter @Inject constructor() : PhoneInputAdapter() {
     override fun onBindViewHolder(holder: CountryCodeItemViewHolder, item: Any) {
         val countryItem = item as? CountryItem ?: throw IllegalArgumentException("Item must be CountryItem")
-        holder.binding.countryIconIv.setImageResource(countryItem.icon)
+        holder.binding.countryIconIv.visibility = View.GONE
         holder.binding.countryNameTv.text = countryItem.countryName
         holder.binding.countryCodeTv.visibility = View.GONE
         holder.itemView.setOnClickListener {

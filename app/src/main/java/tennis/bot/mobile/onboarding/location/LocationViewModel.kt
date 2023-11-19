@@ -23,14 +23,11 @@ class LocationViewModel @Inject constructor(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val locations = repository.getLocations()
-                val country = locations.find {
-                    it.countryName == "Россия"
-                    // default country = picked phone code
-                }
+                Log.d("1234567", "Got locations in LocationViewModel")
+                val country = null // TODO default country = picked phone code
                 if (country == null) {
                     _uiStateFlow.value = LocationUiState.Initial
-                } else {
-                    _uiStateFlow.value = LocationUiState.CountrySelected(country.countryName, false)
+                    Log.d("1234567", "country is null in LocationViewModel")
                 }
             }
         }

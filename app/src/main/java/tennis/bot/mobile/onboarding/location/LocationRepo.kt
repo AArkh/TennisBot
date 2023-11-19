@@ -38,19 +38,6 @@ class LocationRepo @Inject constructor(
         Location(13, "UK", "UK flag", listOf()),
     )
 
-//    var data: List<Location> = emptyList()
-//    private val notStubData = api.getLocationData().enqueue(object: Callback<List<Location>> {
-//        override fun onResponse(call: Call<List<Location>>, response: Response<List<Location>>) {
-//            data = response.body()!!
-//            Log.d("1234567", "onResponse is a Success")
-//        }
-//
-//        override fun onFailure(call: Call<List<Location>>, t: Throwable) {
-//            Log.d("1234567", "onFailure is triggered by $t")
-//        }
-//
-//    })
-
     @WorkerThread
     suspend fun precacheLocations(): List<Location> {
         val networkLocations = api.getLocationData().execute().body()
@@ -65,31 +52,5 @@ class LocationRepo @Inject constructor(
             return cachedLocations
         }
         return precacheLocations()
-    }
-
-    // fixme Это херовый паттерн. Вынести в отдельный файл, через DI и передаваить в конструктор viewModel
-    class DataMapper {
-        fun getCountryList(responseData: List<Location>): List<CountryItem> {
-            return responseData.map { return@map CountryItem(0, it.countryName, "") }
-        }
-
-        fun getCityList(responseData: List<Location>, selectedCountry: String): List<CountryItem> {
-            val country = responseData.find { return@find it.countryName == selectedCountry }
-            if (country?.cities?.isNotEmpty() == true) {
-                return country.cities.map { return@map CountryItem(0, it.name, "") }
-            } else {
-                return emptyList()
-            }
-        }
-
-        fun getDistrictList(responseData: List<Location>, selectedCountry: String, selectedCity: String): List<CountryItem> {
-            val country = responseData.find { return@find it.countryName == selectedCountry }
-            val city = country?.cities?.find { return@find it.name == selectedCity }
-            if (country?.cities?.isNotEmpty() == true && city?.districts?.isNotEmpty() == true) {
-                return city.districts.map { return@map CountryItem(0, it.title, "") }
-            } else {
-                return emptyList()
-            }
-        }
     }
 }

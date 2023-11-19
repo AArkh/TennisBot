@@ -85,6 +85,7 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
                 LocationUiState.Initial -> {
                     binding.titleTv.visibility = View.VISIBLE
                     binding.countryPickLayout.visibility = View.VISIBLE
+                    binding.countryPickLayout.setBackgroundResource(R.drawable.country_button_outline_active)
                     binding.cityPickLayout.visibility = View.INVISIBLE
                     binding.districtPickLayout.visibility = View.INVISIBLE
                     binding.buttonNext.visibility = View.VISIBLE
@@ -100,6 +101,11 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
                     binding.cityTv.text = "Город"
                     binding.districtTv.text = "Район"
 
+                    binding.cityPickLayout.visibility = View.INVISIBLE
+                    binding.districtPickLayout.visibility = View.INVISIBLE
+                    binding.countryPickLayout.setBackgroundResource(R.drawable.country_button_outline)
+                    binding.cityPickLayout.setBackgroundResource(R.drawable.country_button_outline_active)
+                    binding.districtPickLayout.setBackgroundResource(R.drawable.country_button_outline)
                     binding.buttonNext.isEnabled = false
                     binding.buttonNext.setBackgroundResource(R.drawable.btn_bkg_disabled)
 
@@ -114,7 +120,11 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
                 is LocationUiState.CitySelected -> {
                     binding.countryTv.text = uiState.country
                     binding.cityTv.text = uiState.city
+                    binding.districtTv.text = "Район"
 
+                    binding.districtPickLayout.visibility = View.INVISIBLE
+                    binding.cityPickLayout.setBackgroundResource(R.drawable.country_button_outline)
+                    binding.districtPickLayout.setBackgroundResource(R.drawable.country_button_outline_active)
                     binding.buttonNext.isEnabled = false
                     binding.buttonNext.setBackgroundResource(R.drawable.btn_bkg_disabled)
 
@@ -130,6 +140,7 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
                     binding.cityTv.text = uiState.city
                     binding.districtTv.text = uiState.district
 
+                    binding.districtPickLayout.setBackgroundResource(R.drawable.country_button_outline)
                     binding.buttonNext.isEnabled = true
                     binding.buttonNext.setBackgroundResource(R.drawable.btn_bkg_enabled)
                 }

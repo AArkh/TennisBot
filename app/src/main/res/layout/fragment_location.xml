@@ -10,25 +10,27 @@
         android:id="@+id/title_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="125dp"
         android:layout_marginStart="20dp"
         android:layout_marginBottom="16dp"
         android:text="Твое местоположение"
         android:textColor="@color/tb_black"
-        android:textSize="27sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/country_pick_layout"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/country_pick_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="168dp"
+        android:layout_marginTop="16dp"
         android:layout_marginHorizontal="20dp"
         android:background="@drawable/country_button_outline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/title_tv">
 
         <TextView
             android:id="@+id/country_tv"
@@ -36,7 +38,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="50"
             android:text="Страна"
-            android:textSize="19sp"
+            android:textSize="14sp"
+            android:textColor="@color/tb_black"
             android:layout_marginStart="16dp"
             android:layout_marginVertical="13.5dp"/>
 
@@ -68,7 +71,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="50"
             android:text="Город"
-            android:textSize="19sp"
+            android:textSize="14sp"
+            android:textColor="@color/tb_black"
             android:layout_marginStart="16dp"
             android:layout_marginVertical="13.5dp"/>
 
@@ -101,7 +105,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="50"
             android:text="Район"
-            android:textSize="19sp"
+            android:textSize="14sp"
+            android:textColor="@color/tb_black"
             android:layout_marginStart="16dp"
             android:layout_marginVertical="13.5dp"/>
 

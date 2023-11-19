@@ -15,12 +15,11 @@ import javax.inject.Inject
 @HiltViewModel
 class LocationDialogViewModel @Inject constructor(
     private val repository: LocationRepo,
+    private val dataMapper: LocationDataMapper
 ) : ViewModel(){
 
     private val _uiStateFlow = MutableStateFlow<LocationDialogUiState>(LocationDialogUiState.Loading)
     val uiStateFlow = _uiStateFlow.asStateFlow()
-
-    // Тут были какие-то данные. Мы ничего не храним во viewModel, все данные по-умолчанию лежат в репозиториях
 
     fun loadCountriesList() {
         Log.d("1234567", "loadCountriesList: ")
@@ -28,7 +27,7 @@ class LocationDialogViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) { // Уходим с ui-потока, юзер пока видит крутилку загрузочную
             kotlin.runCatching {
                 val dataToPortray = repository.getLocations() // Асинхронно получаем locations, если не получится, то поймаем ошибку
-                val formatted = LocationRepo.DataMapper().getCountryList(dataToPortray) // Маппим полученные данные в нужный формат
+                val formatted = dataMapper.getCountryList(dataToPortray) // Маппим полученные данные в нужный формат
                 _uiStateFlow.value = LocationDialogUiState.DataPassed(formatted) // Обновляем данные
             }.onFailure {
                 // Если по какой-то причине репо или маппер взорвались при получении location - показываем юзеру ошибку
@@ -45,7 +44,7 @@ class LocationDialogViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) { // Уходим с ui-потока, юзер пока видит крутилку загрузочную
             kotlin.runCatching {
                 val dataToPortray = repository.getLocations() // Асинхронно получаем locations, если не получится, то поймаем ошибку
-                val formatted = LocationRepo.DataMapper().getCityList(dataToPortray, pickedCountry) // Маппим полученные данные в нужный формат
+                val formatted = dataMapper.getCityList(dataToPortray, pickedCountry) // Маппим полученные данные в нужный формат
                 _uiStateFlow.value = LocationDialogUiState.DataPassed(formatted) // Обновляем данные
             }.onFailure {
                 // Если по какой-то причине репо или маппер взорвались при получении location - показываем юзеру ошибку
@@ -62,7 +61,7 @@ class LocationDialogViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) { // Уходим с ui-потока, юзер пока видит крутилку загрузочную
             kotlin.runCatching {
                 val dataToPortray = repository.getLocations() // Асинхронно получаем locations, если не получится, то поймаем ошибку
-                val formatted = LocationRepo.DataMapper().getDistrictList(dataToPortray, pickedCountry, pickedCity) // Маппим полученные данные в нужный формат
+                val formatted = dataMapper.getDistrictList(dataToPortray, pickedCountry, pickedCity) // Маппим полученные данные в нужный формат
                 _uiStateFlow.value = LocationDialogUiState.DataPassed(formatted) // Обновляем данные
             }.onFailure {
                 // Если по какой-то причине репо или маппер взорвались при получении location - показываем юзеру ошибку
