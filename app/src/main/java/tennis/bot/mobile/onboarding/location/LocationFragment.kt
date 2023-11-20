@@ -17,6 +17,7 @@ import tennis.bot.mobile.databinding.FragmentLocationBinding
 import tennis.bot.mobile.databinding.FragmentPhoneInputBinding
 import tennis.bot.mobile.onboarding.phone.CountryCodesDialogFragment
 import tennis.bot.mobile.onboarding.phone.PhoneInputUiState
+import tennis.bot.mobile.onboarding.photopick.PhotoPickFragment
 import tennis.bot.mobile.utils.updateTextIfNeeded
 
 @AndroidEntryPoint
@@ -77,7 +78,10 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
         }
 
         binding.buttonNext.setOnClickListener {
-            Toast.makeText(context, "We move onward", Toast.LENGTH_SHORT).show()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container_view, PhotoPickFragment())
+                .addToBackStack(PhotoPickFragment::class.java.name)
+                .commit()
         }
 
         subscribeToFlowOn(viewModel.uiStateFlow) { uiState: LocationUiState ->
