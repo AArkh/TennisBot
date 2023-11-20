@@ -1,11 +1,13 @@
 package tennis.bot.mobile.onboarding.location
 
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import okhttp3.internal.notifyAll
 import tennis.bot.mobile.onboarding.phone.CountryCodesDialogFragment
 import javax.inject.Inject
 
@@ -64,8 +66,14 @@ class LocationDialogFragment : CountryCodesDialogFragment() {
 
         subscribeToFlowOn(viewModel.uiStateFlow) { uiState: LocationDialogUiState ->
             when (uiState) {
-                is LocationDialogUiState.Loading -> {}
+                is LocationDialogUiState.Loading -> {
+                    binding.loadingBar.visibility = View.VISIBLE
+                    binding.errorLayout.visibility = View.GONE
+                }
                 is LocationDialogUiState.DataPassed -> {
+                    binding.loadingBar.visibility = View.GONE
+                    binding.errorLayout.visibility = View.GONE
+
                     locationAdapter.submitList(uiState.dataList)
                     binding.searchBarEt.addTextChangedListener {
                         val userInput = it.toString()
@@ -75,7 +83,26 @@ class LocationDialogFragment : CountryCodesDialogFragment() {
                         locationAdapter.submitList(filteredList)
                     }
                 }
-                LocationDialogUiState.Error -> {}
+                LocationDialogUiState.Error -> {
+                    binding.errorLayout.visibility = View.VISIBLE
+                    binding.tryAgainTv.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+                    binding.tryAgainTv.setOnClickListener {
+                        when (arguments?.getString(LocationFragment.SOME_KEY)) {
+                            "country" -> {
+                                viewModel.loadCountriesList()
+                            }
+                            "city" -> {
+                                // get selected country also
+                                viewModel.loadCitiesList(currentCountry)
+                            }
+                            "district" -> {
+                                // get selected country and city also
+                                viewModel.loadDistrictsList(currentCountry, currentCity)
+                            }
+                        }
+                    }
+                    binding.loadingBar.visibility = View.GONE
+                }
             }
         }
     }

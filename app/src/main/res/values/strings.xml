@@ -10,5 +10,7 @@
     <string name="onboarding_text_incorrect_phone_number">Введите действительный номер</string>
     <string name="onboarding_proceed_without_registration_button">Войти без регистрации</string>
     <string name="onboarding_continue_button">Далее</string>
+    <string name="error_text">Упс! Что-то пошло не так</string>
+    <string name="error_try_again_text">Попробовать еще раз</string>
 
 </resources>

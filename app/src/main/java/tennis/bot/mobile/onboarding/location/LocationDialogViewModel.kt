@@ -1,6 +1,7 @@
 package tennis.bot.mobile.onboarding.location
 
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,8 +21,6 @@ class LocationDialogViewModel @Inject constructor(
 
     private val _uiStateFlow = MutableStateFlow<LocationDialogUiState>(LocationDialogUiState.Loading)
     val uiStateFlow = _uiStateFlow.asStateFlow()
-
-
 
     fun loadCountriesList() {
         Log.d("1234567", "loadCountriesList: ")
