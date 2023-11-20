@@ -4,14 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import tennis.bot.mobile.core.CoreAdapter
 import tennis.bot.mobile.core.CoreUtilsItem
 import tennis.bot.mobile.databinding.RecyclerCountryItemBinding
 import javax.inject.Inject
 
-open class PhoneInputAdapter @Inject constructor() : CoreAdapter<CountryCodeItemViewHolder>() {
+open class CountryCodesAdapter @Inject constructor() : CoreAdapter<CountryCodeItemViewHolder>() {
     var clickListener: ((item: CountryItem) -> Unit)? = null
 
     override fun onBindViewHolder(holder: CountryCodeItemViewHolder, item: Any) {

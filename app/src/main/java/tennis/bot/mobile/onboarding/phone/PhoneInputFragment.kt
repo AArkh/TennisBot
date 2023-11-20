@@ -24,7 +24,7 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
     override var adjustToKeyboard: Boolean = true
     override val bindingInflation: Inflation<FragmentPhoneInputBinding> = FragmentPhoneInputBinding::inflate
     @Inject
-    lateinit var countryAdapter: PhoneInputAdapter
+    lateinit var countryAdapter: CountryCodesAdapter
     private val phoneInputViewModel: PhoneInputViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

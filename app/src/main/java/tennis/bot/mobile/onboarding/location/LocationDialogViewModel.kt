@@ -21,6 +21,8 @@ class LocationDialogViewModel @Inject constructor(
     private val _uiStateFlow = MutableStateFlow<LocationDialogUiState>(LocationDialogUiState.Loading)
     val uiStateFlow = _uiStateFlow.asStateFlow()
 
+
+
     fun loadCountriesList() {
         Log.d("1234567", "loadCountriesList: ")
         _uiStateFlow.value = LocationDialogUiState.Loading // Начинаем загрузку

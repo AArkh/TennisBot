@@ -3,6 +3,7 @@ package tennis.bot.mobile.onboarding.location
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import tennis.bot.mobile.onboarding.phone.CountryCodesDialogFragment
@@ -66,6 +67,13 @@ class LocationDialogFragment : CountryCodesDialogFragment() {
                 is LocationDialogUiState.Loading -> {}
                 is LocationDialogUiState.DataPassed -> {
                     locationAdapter.submitList(uiState.dataList)
+                    binding.searchBarEt.addTextChangedListener {
+                        val userInput = it.toString()
+                        val filteredList = uiState.dataList.filter {
+                            it.countryName.contains(userInput, ignoreCase = true)
+                        }
+                        locationAdapter.submitList(filteredList)
+                    }
                 }
                 LocationDialogUiState.Error -> {}
             }

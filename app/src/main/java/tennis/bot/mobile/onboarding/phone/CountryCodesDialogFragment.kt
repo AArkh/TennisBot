@@ -28,7 +28,7 @@ open class CountryCodesDialogFragment : CoreBottomSheetDialogFragment<FragmentCo
         FragmentCountryCodesBinding::inflate
 
     @Inject
-    open lateinit var countryAdapter: PhoneInputAdapter
+    open lateinit var countryAdapter: CountryCodesAdapter
     private val viewModel: CountryCodesViewModel by viewModels()
 
     protected open var hasFixedHeight = true
