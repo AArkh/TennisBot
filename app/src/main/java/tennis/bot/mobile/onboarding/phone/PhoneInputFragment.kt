@@ -3,6 +3,7 @@ package tennis.bot.mobile.onboarding.phone
 import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -14,6 +15,7 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentPhoneInputBinding
+import tennis.bot.mobile.onboarding.location.LocationFragment
 import tennis.bot.mobile.utils.hideKeyboard
 import tennis.bot.mobile.utils.updateTextIfNeeded
 import javax.inject.Inject
@@ -27,6 +29,10 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
     lateinit var countryAdapter: CountryCodesAdapter
     private val phoneInputViewModel: PhoneInputViewModel by viewModels()
 
+    companion object {
+        const val PHONE_NUMBER = "PHONE_NUMBER"
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.phoneEt.addTextChangedListener(PhoneNumberFormattingTextWatcher("US"))
@@ -35,13 +41,6 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
         }
         binding.clearButton.setOnClickListener {
             binding.phoneEt.setText("")
-        }
-
-        binding.buttonNext.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_view, SmsCodeFragment())
-                .addToBackStack(SmsCodeFragment::class.java.name)
-                .commit()
         }
 
         binding.openCountriesSheetLayout.setOnClickListener {
@@ -75,6 +74,16 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
             binding.buttonNext.setBackgroundResource(buttonBackground)
             binding.textInputLayout.error = uiState.errorMessage
             binding.clearButton.visibility = if (uiState.clearButtonVisible) View.VISIBLE else View.INVISIBLE
+        }
+
+        binding.buttonNext.setOnClickListener {
+            parentFragment?.arguments = bundleOf(
+                PHONE_NUMBER to binding.phoneEt.text.toString()
+            )
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container_view, SmsCodeFragment())
+                .addToBackStack(SmsCodeFragment::class.java.name)
+                .commit()
         }
     }
 }

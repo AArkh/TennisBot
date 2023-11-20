@@ -6,11 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".onboarding.location.LocationFragment">
 
+    <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/search_background"
+        android:backgroundTint="@color/tb_gray_border"
+        android:padding="6dp"
+        android:src="@drawable/chevron_vertical"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/tb_gray_active" />
+
     <TextView
         android:id="@+id/title_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="125dp"
+        android:layout_marginTop="26dp"
         android:layout_marginStart="20dp"
         android:layout_marginBottom="16dp"
         android:text="Твое местоположение"
@@ -19,7 +34,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/country_pick_layout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/back_button" />
 
     <LinearLayout
         android:id="@+id/country_pick_layout"

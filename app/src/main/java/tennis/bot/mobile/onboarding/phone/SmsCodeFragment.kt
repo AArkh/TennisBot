@@ -7,6 +7,8 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.OnBackPressedDispatcher
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -67,6 +69,8 @@ class SmsCodeFragment : CoreFragment<FragmentSmsCodeBinding>() {
                 binding.timerTv.visibility = View.GONE
             }
         }.start()
+
+        binding.title.text = "Введи код отправленный на ${arguments?.getString(PhoneInputFragment.PHONE_NUMBER)}"
 
         binding.buttonNext.setOnClickListener {
             parentFragmentManager.beginTransaction()
