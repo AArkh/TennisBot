@@ -70,7 +70,7 @@ class SmsCodeFragment : CoreFragment<FragmentSmsCodeBinding>() {
             }
         }.start()
 
-        binding.title.text = "Введи код отправленный на ${arguments?.getString(PhoneInputFragment.PHONE_NUMBER)}"
+//        binding.title.text = "Введи код отправленный на ${arguments?.getString(PhoneInputFragment.PHONE_NUMBER)}"
 
         binding.buttonNext.setOnClickListener {
             parentFragmentManager.beginTransaction()
