@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
-                locationRepo.precacheLocations()
+                locationRepo.precacheLocations() // todo if this throw exception app crashes
             }
 
         }

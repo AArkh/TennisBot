@@ -1,10 +1,7 @@
 package tennis.bot.mobile.onboarding.location
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
@@ -14,10 +11,6 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentLocationBinding
-import tennis.bot.mobile.databinding.FragmentPhoneInputBinding
-import tennis.bot.mobile.onboarding.phone.CountryCodesDialogFragment
-import tennis.bot.mobile.onboarding.phone.PhoneInputUiState
-import tennis.bot.mobile.utils.updateTextIfNeeded
 
 @AndroidEntryPoint
 class LocationFragment : CoreFragment<FragmentLocationBinding>() {
@@ -26,7 +19,7 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
     val viewModel : LocationViewModel by viewModels()
 
     companion object {
-        const val SOME_KEY = "somsdfadfg"
+        const val SELECT_ACTION = "somsdfadfg"
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -34,14 +27,14 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
 
         binding.countryPickLayout.setOnClickListener {
             val bottomSheet = LocationDialogFragment()
-            bottomSheet.arguments = bundleOf(SOME_KEY to "country")
+            bottomSheet.arguments = bundleOf(SELECT_ACTION to "country")
             bottomSheet.show(childFragmentManager, bottomSheet.tag)
         }
 
         binding.cityPickLayout.setOnClickListener {
             val bottomSheet = LocationDialogFragment()
             bottomSheet.arguments = bundleOf(
-                SOME_KEY to "city",
+                SELECT_ACTION to "city",
                 )
             bottomSheet.show(childFragmentManager, bottomSheet.tag)
         }
@@ -49,7 +42,7 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
         binding.districtPickLayout.setOnClickListener {
             val bottomSheet = LocationDialogFragment()
             bottomSheet.arguments = bundleOf(
-                SOME_KEY to "district", // other keys
+                SELECT_ACTION to "district", // other keys
                 "selected_country" to "Russia", // итд
             )
             bottomSheet.show(childFragmentManager, bottomSheet.tag)

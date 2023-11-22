@@ -18,11 +18,12 @@ abstract class LocationDatabase : RoomDatabase() {
 @ProvidedTypeConverter
 class LocationCityConverter {
     @TypeConverter
-    fun CityfromList(value: List<Location.LocationCity>) = Json.encodeToString(value)
+    fun CityfromList(value: List<Location.LocationCity>) = Json.encodeToString(value) //todo naming here
 
     @TypeConverter
     fun CitytoList(value: String) = Json.decodeFromString<List<Location.LocationCity>>(value)
 
+    // todo why so black?? research
     @TypeConverter
     fun DistrictfromList(value: List<Location.LocationCity.LocationDistrict>) = Json.encodeToString(value)
 

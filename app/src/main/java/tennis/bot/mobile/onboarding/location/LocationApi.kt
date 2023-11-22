@@ -12,7 +12,7 @@ import tennis.bot.mobile.onboarding.phone.CountryItem
 
 interface LocationApi {
     @GET("api/dictionaries/countries")
-    fun getLocationData() : Call<List<Location>>
+    fun getLocationData(): Call<List<Location>>
 }
 
 @Entity(tableName = "location")
@@ -22,7 +22,7 @@ data class Location(
     @SerialName("name") @ColumnInfo(name = "countryName") val countryName: String,
     @ColumnInfo(name = "flag") val flag: String,
     @ColumnInfo(name = "cities") val cities: List<LocationCity>,
-): CoreUtilsItem() {
+) : CoreUtilsItem() {
     @Serializable
     data class LocationCity(
         val id: Int,

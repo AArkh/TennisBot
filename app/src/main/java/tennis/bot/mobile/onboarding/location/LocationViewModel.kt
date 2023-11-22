@@ -16,38 +16,23 @@ class LocationViewModel @Inject constructor(
     private val repository: LocationRepo,
 ) : ViewModel() {
 
-    private val _uiStateFlow = MutableStateFlow<LocationUiState>(LocationUiState.Loading)
+    private val _uiStateFlow = MutableStateFlow<LocationUiState>(LocationUiState.Initial)
     val uiStateFlow = _uiStateFlow.asStateFlow()
-
-    init {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                val locations = repository.getLocations()
-                Log.d("1234567", "Got locations in LocationViewModel")
-                val country = null // TODO default country = picked phone code
-                if (country == null) {
-                    _uiStateFlow.value = LocationUiState.Initial
-                    Log.d("1234567", "country is null in LocationViewModel")
-                }
-            }
-        }
-    }
 
     fun onCountrySelected(selectedCountry: String) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 kotlin.runCatching {
-                    val newState = LocationUiState.CountrySelected(
+                    val locations = repository.getLocations()
+                    val nextButtonEnabled = locations.find { country: Location ->
+                        country.countryName == selectedCountry
+                    }?.cities.isNullOrEmpty()
+                    _uiStateFlow.value = LocationUiState.CountrySelected(
                         country = selectedCountry,
-                        nextButtonEnabled = repository.getLocations()
-                            .find { it.countryName == selectedCountry }
-                            ?.cities!!.isEmpty()
+                        nextButtonEnabled = nextButtonEnabled
                     )
-                    _uiStateFlow.value = newState
-                    Log.d("1234567", "onCountrySelected: success")
                 }.onFailure {
                     _uiStateFlow.value = LocationUiState.Error
-                    Log.d("1234567", "onCountrySelected: error")
                 }
             }
         }
@@ -64,7 +49,7 @@ class LocationViewModel @Inject constructor(
                             .find { it.countryName == selectedCountry }
                             ?.cities!!.find { it.name == selectedCity }
                             ?.districts!!.isEmpty()
-                    )
+                    ) // todo analogichno
                     _uiStateFlow.value = newState
                     Log.d("1234567", "onCitySelected: success")
                 }.onFailure {
@@ -84,12 +69,4 @@ class LocationViewModel @Inject constructor(
         )
         _uiStateFlow.value = newState
     }
-
-
-//    fun onSearchInput(userInput: String) {
-//        val filteredList = initialList.filter {
-//            it.countryName.contains(userInput, ignoreCase = true)
-//        }
-//        _uiStateFlow.value = filteredList
-//    }
 }

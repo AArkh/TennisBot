@@ -28,21 +28,17 @@ class PhoneInputViewModel @Inject constructor(
 
     fun onTextInput(text: CharSequence) {
         val prevState: PhoneInputUiState = _uiStateFlow.value
-        val prefix = prevState.prefix
-        val icon = prevState.iconRes
         val isClearButtonVisible = text.isNotEmpty()
-        val errorMessage = if (text.length in 1..13) {
+        val errorMessage = if ( text.isNotEmpty() && text.length < 14) {
             errorText
         } else {
             null
         }
-        _uiStateFlow.value = PhoneInputUiState(
-            prefix = prefix,
-            iconRes = icon,
+        _uiStateFlow.value = prevState.copy(
+            userInput = text.toString(),
             clearButtonVisible = isClearButtonVisible,
             errorMessage = errorMessage,
-            userInput = text,
-            proceedButtonEnabled = text.length == 14
+            proceedButtonEnabled = text.length == 14 //todo переработать для разных стран
         )
     }
 

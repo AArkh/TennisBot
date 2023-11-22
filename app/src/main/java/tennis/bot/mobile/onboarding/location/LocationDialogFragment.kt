@@ -7,7 +7,6 @@ import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import okhttp3.internal.notifyAll
 import tennis.bot.mobile.onboarding.phone.CountryCodesDialogFragment
 import javax.inject.Inject
 
@@ -23,28 +22,15 @@ class LocationDialogFragment : CountryCodesDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.countriesListRv.adapter = locationAdapter
-        when (arguments?.getString(LocationFragment.SOME_KEY)) {
-            "country" -> {
-                viewModel.loadCountriesList()
-            }
-            "city" -> {
-                // get selected country also
-                viewModel.loadCitiesList(currentCountry)
-            }
-            "district" -> {
-                // get selected country and city also
-                viewModel.loadDistrictsList(currentCountry, currentCity)
-            }
-        }
 
         locationAdapter.clickListener = {
-            when(arguments?.getString(LocationFragment.SOME_KEY)) {
+            when(arguments?.getString(LocationFragment.SELECT_ACTION)) {
                 "country" -> {
                     requireActivity().supportFragmentManager.setFragmentResult(
                         COUNTRY_REQUEST_KEY,
                         bundleOf(SELECTED_COUNTRY_KEY to it.countryName)
                     )
-                    currentCountry = it.countryName
+                    currentCountry = it.countryName // todo currentCountry и прочие сложить в uiState
                 }
                 "city" -> {
                     requireActivity().supportFragmentManager.setFragmentResult(
@@ -76,18 +62,15 @@ class LocationDialogFragment : CountryCodesDialogFragment() {
 
                     locationAdapter.submitList(uiState.dataList)
                     binding.searchBarEt.addTextChangedListener {
-                        val userInput = it.toString()
-                        val filteredList = uiState.dataList.filter {
-                            it.countryName.contains(userInput, ignoreCase = true)
-                        }
-                        locationAdapter.submitList(filteredList)
+                        viewModel.onSearchInputChanged(it.toString())
                     }
                 }
-                LocationDialogUiState.Error -> {
+                is LocationDialogUiState.Error -> {
                     binding.errorLayout.visibility = View.VISIBLE
                     binding.tryAgainTv.paintFlags = Paint.UNDERLINE_TEXT_FLAG
                     binding.tryAgainTv.setOnClickListener {
-                        when (arguments?.getString(LocationFragment.SOME_KEY)) {
+                        // viewModel.onTryAgainClicked() todo
+                        when (arguments?.getString(LocationFragment.SELECT_ACTION)) { // todo within viewmodel
                             "country" -> {
                                 viewModel.loadCountriesList()
                             }
@@ -114,8 +97,5 @@ class LocationDialogFragment : CountryCodesDialogFragment() {
         const val SELECTED_CITY_KEY = "SELECTED_CITY_KEY"
         const val DISTRICT_REQUEST_KEY = "DISTRICT_KEY"
         const val SELECTED_DISTRICT_KEY = "SELECTED_DISTRICT_KEY"
-        var currentCountry = ""
-        var currentCity = ""
-        var currentDistrict = ""
     }
 }

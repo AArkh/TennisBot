@@ -10,6 +10,7 @@ class LocationDataMapper @Inject constructor() {
     fun getCountryList(responseData: List<Location>): List<CountryItem> {
         return responseData.map { return@map CountryItem(0, it.countryName, "") }
     }
+
     fun getCityList(responseData: List<Location>, selectedCountry: String): List<CountryItem> {
         val country = responseData.find { return@find it.countryName == selectedCountry }
         if (country?.cities?.isNotEmpty() == true) {
@@ -18,6 +19,7 @@ class LocationDataMapper @Inject constructor() {
             return emptyList()
         }
     }
+
     fun getDistrictList(
         responseData: List<Location>,
         selectedCountry: String,
