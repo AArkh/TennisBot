@@ -13,7 +13,6 @@
     <string name="error_text">Упс! Что-то пошло не так</string>
     <string name="error_try_again_text">Попробовать еще раз</string>
     <string name="location_title">Твое местоположение</string>
-    <string name="smscode_mockTitle">Введи код отправленный на +7 (977) 447 71-81</string>
     <string name="error_pincode_smscode">Неверный пин-код</string>
     <string name="smscode_repeat_timer">Повторить</string>
     <string name="smscode_repeat_timer_time">30</string>
