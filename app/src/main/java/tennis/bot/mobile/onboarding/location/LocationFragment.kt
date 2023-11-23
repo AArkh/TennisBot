@@ -17,7 +17,7 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
     override val bindingInflation: Inflation<FragmentLocationBinding> =
         FragmentLocationBinding::inflate
 
-    val viewModel: LocationViewModel by viewModels()
+    private val viewModel: LocationViewModel by viewModels()
 
     companion object {
         const val SELECT_ACTION_KEY = "somsdfadfg"
@@ -26,7 +26,6 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
         const val SELECT_DISTRICT = "SELECT_DISTRICT"
         const val SELECTED_COUNTRY_NAME_KEY = "SELECTED_COUNTRY_NAME_KEY"
         const val SELECTED_CITY_NAME_KEY = "SELECTED_CITY_NAME_KEY"
-        const val SELECTED_DISTRICT_NAME_KEY = "SELECTED_DISTRICT_NAME_KEY"
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -174,7 +173,6 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
                 }
 
                 LocationUiState.Loading -> {
-                    // loading screen, everything else is hidden
                     binding.countryPickLayout.visibility = View.GONE
                     binding.cityPickLayout.visibility = View.GONE
                     binding.districtPickLayout.visibility = View.GONE
@@ -182,9 +180,7 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
                     binding.buttonNext.visibility = View.GONE
                 }
 
-                LocationUiState.Error -> {
-
-                } // error logic
+                LocationUiState.Error -> {}
             }
         }
     }
