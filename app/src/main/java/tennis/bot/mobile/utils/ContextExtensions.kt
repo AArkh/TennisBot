@@ -6,6 +6,8 @@ import android.content.ContextWrapper
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.annotation.StringRes
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 fun Context.dpToPx(dp: Int): Int = dpToPx(dp.toFloat()).roundToInt()
@@ -13,7 +15,15 @@ fun Context.dpToPx(dp: Int): Int = dpToPx(dp.toFloat()).roundToInt()
 fun Context.dpToPx(dp: Float): Float = dp * resources.displayMetrics.density
 
 fun Context.showToast(message: String) {
-    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    AppCoroutineScopes.mainScope.launch {
+        Toast.makeText(this@showToast, message, Toast.LENGTH_SHORT).show()
+    }
+}
+
+fun Context.showToast(@StringRes messageRes: Int) {
+    AppCoroutineScopes.mainScope.launch {
+        Toast.makeText(this@showToast, messageRes, Toast.LENGTH_SHORT).show()
+    }
 }
 
 fun Context.toActivitySafe(): Activity? {

@@ -3,7 +3,6 @@ package tennis.bot.mobile.onboarding.phone
 import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.view.View
-import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -15,7 +14,6 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentPhoneInputBinding
-import tennis.bot.mobile.onboarding.location.LocationFragment
 import tennis.bot.mobile.utils.hideKeyboard
 import tennis.bot.mobile.utils.updateTextIfNeeded
 import javax.inject.Inject
@@ -41,6 +39,9 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
         }
         binding.clearButton.setOnClickListener {
             binding.phoneEt.setText("")
+        }
+        binding.backButton.setOnClickListener {
+            parentFragmentManager.popBackStack()
         }
 
         binding.openCountriesSheetLayout.setOnClickListener {

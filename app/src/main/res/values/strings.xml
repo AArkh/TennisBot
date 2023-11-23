@@ -25,4 +25,12 @@
     <string name="button_skip">Пропустить</string>
     <string name="photopick_title_second">Или выбери из базы</string>
 
+    <!-- sms code -->
+    <string name="onboarding_sms_input_title">Введи код отправленный на\n %s</string>
+    <string name="onboarding_sms_input_failed_to_request_sms">Не удалось отправить код подтверждения на номер %s</string>
+    <string name="onboarding_sms_input_failed_to_validate_sms">Не верный код подтверждения</string>
+
+    <!-- general messages -->
+    <string name="error_no_network_message">Ошибка, проверьте подключение в сети интернет</string>
+
 </resources>

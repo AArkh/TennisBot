@@ -78,8 +78,8 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginHorizontal="20dp"
-		android:layout_marginBottom="40dp"
-		android:text="Сразу во фрагмент с регионом"
+		android:layout_marginBottom="8dp"
+		android:text="@string/onboarding_login_button"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent" />

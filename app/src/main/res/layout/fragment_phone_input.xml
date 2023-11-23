@@ -64,6 +64,7 @@
 			android:cursorVisible="true"
 			android:maxLength="14"
 			android:paddingStart="60dp"
+			android:textCursorDrawable="@null"
 			android:textSize="15sp" />
 
 	</com.google.android.material.textfield.TextInputLayout>
@@ -72,6 +73,7 @@
 		android:id="@+id/open_countries_sheet_layout"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:layout_marginBottom="2sp"
 		android:gravity="center"
 		android:paddingHorizontal="12dp"
 		android:paddingTop="15dp"
@@ -95,21 +97,29 @@
 			android:src="@drawable/chevron_right_md" />
 	</LinearLayout>
 
-	<ImageView
+	<FrameLayout
 		android:id="@+id/clear_button"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_gravity="end"
-		android:layout_marginEnd="10dp"
-		android:layout_marginBottom="5dp"
-		android:background="@drawable/search_background"
-		android:backgroundTint="@color/tb_gray_border"
-		android:padding="2dp"
-		android:src="@drawable/x"
-		android:visibility="invisible"
+		android:padding="10dp"
 		app:layout_constraintBottom_toBottomOf="@+id/textInputLayout"
 		app:layout_constraintRight_toRightOf="@+id/textInputLayout"
-		app:layout_constraintTop_toTopOf="@+id/textInputLayout" />
+		app:layout_constraintTop_toTopOf="@+id/textInputLayout">
+
+		<ImageView
+			android:id="@+id/clear_button_image"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="end"
+			android:layout_marginEnd="2dp"
+			android:background="@drawable/search_background"
+			android:backgroundTint="@color/tb_gray_border"
+			android:padding="2dp"
+			android:src="@drawable/x"
+			app:layout_constraintBottom_toBottomOf="@+id/textInputLayout"
+			app:layout_constraintRight_toRightOf="@+id/textInputLayout"
+			app:layout_constraintTop_toTopOf="@+id/textInputLayout" />
+	</FrameLayout>
 
 	<Button
 		android:id="@+id/buttonNext"
@@ -118,8 +128,8 @@
 		android:layout_height="wrap_content"
 		android:layout_marginHorizontal="20dp"
 		android:layout_marginBottom="8dp"
-		android:text="@string/onboarding_continue_button"
 		android:enabled="false"
+		android:text="@string/onboarding_continue_button"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent" />
