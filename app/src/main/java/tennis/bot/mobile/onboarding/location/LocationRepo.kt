@@ -19,9 +19,7 @@ class LocationRepo @Inject constructor(
 
     @WorkerThread
     suspend fun getLocations() : List<Location> {
-        val cachedLocations = dao.getLocations()
-            // .sortedBy { it.cities != null } этот кусок кода наверное не сработает
-        // добавить сортировку, чтобы страны, в которых ЕСТЬ города были в начале списка
+        val cachedLocations = dao.getLocations().sortedWith(compareBy { -it.cities.size })
         if (cachedLocations.isNotEmpty()) {
             return cachedLocations
         }

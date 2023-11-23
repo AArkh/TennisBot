@@ -1,6 +1,7 @@
 package tennis.bot.mobile
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
@@ -11,6 +12,7 @@ import kotlinx.coroutines.withContext
 import tennis.bot.mobile.databinding.ActivityMainBinding
 import tennis.bot.mobile.onboarding.initial.LoginProposalFragment
 import tennis.bot.mobile.onboarding.location.LocationRepo
+import java.io.IOException
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -34,9 +36,12 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
-                locationRepo.precacheLocations() // todo if this throw exception app crashes
+                try{
+                    locationRepo.precacheLocations()
+                } catch (iOException: IOException) {
+                    Log.d("1234567", "Network error: ${iOException.message}")
+                }
             }
-
         }
     }
 }

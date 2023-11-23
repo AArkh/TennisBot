@@ -22,11 +22,4 @@ class LocationCityConverter {
 
     @TypeConverter
     fun CitytoList(value: String) = Json.decodeFromString<List<Location.LocationCity>>(value)
-
-    // todo why so black?? research
-    @TypeConverter
-    fun DistrictfromList(value: List<Location.LocationCity.LocationDistrict>) = Json.encodeToString(value)
-
-    @TypeConverter
-    fun DistricttoList(value: String) = Json.decodeFromString<List<Location.LocationCity.LocationDistrict>>(value)
 }

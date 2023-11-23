@@ -14,15 +14,19 @@ import tennis.bot.mobile.databinding.FragmentLocationBinding
 
 @AndroidEntryPoint
 class LocationFragment : CoreFragment<FragmentLocationBinding>() {
-    override val bindingInflation: Inflation<FragmentLocationBinding> = FragmentLocationBinding::inflate
+    override val bindingInflation: Inflation<FragmentLocationBinding> =
+        FragmentLocationBinding::inflate
 
-    val viewModel : LocationViewModel by viewModels()
+    val viewModel: LocationViewModel by viewModels()
 
     companion object {
-        const val SELECT_ACTION = "somsdfadfg"
+        const val SELECT_ACTION_KEY = "somsdfadfg"
         const val SELECT_COUNTRY = "SELECT_COUNTRY"
         const val SELECT_CITY = "SELECT_CITY"
         const val SELECT_DISTRICT = "SELECT_DISTRICT"
+        const val SELECTED_COUNTRY_NAME_KEY = "SELECTED_COUNTRY_NAME_KEY"
+        const val SELECTED_CITY_NAME_KEY = "SELECTED_CITY_NAME_KEY"
+        const val SELECTED_DISTRICT_NAME_KEY = "SELECTED_DISTRICT_NAME_KEY"
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -30,45 +34,71 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
 
         binding.countryPickLayout.setOnClickListener {
             val bottomSheet = LocationDialogFragment()
-            bottomSheet.arguments = bundleOf(SELECT_ACTION to SELECT_COUNTRY)
+            bottomSheet.arguments = bundleOf(SELECT_ACTION_KEY to SELECT_COUNTRY)
             bottomSheet.show(childFragmentManager, bottomSheet.tag)
         }
 
         binding.cityPickLayout.setOnClickListener {
             val bottomSheet = LocationDialogFragment()
+            val country = when(val location = viewModel.uiStateFlow.value) {
+                is LocationUiState.CountrySelected -> location.country
+                is LocationUiState.CitySelected -> location.country
+                is LocationUiState.DistrictSelected -> location.country
+                else -> return@setOnClickListener
+            }
             bottomSheet.arguments = bundleOf(
-                SELECT_ACTION to SELECT_CITY,
-                )
+                SELECT_ACTION_KEY to SELECT_CITY,
+                SELECTED_COUNTRY_NAME_KEY to country
+            )
             bottomSheet.show(childFragmentManager, bottomSheet.tag)
         }
 
         binding.districtPickLayout.setOnClickListener {
             val bottomSheet = LocationDialogFragment()
+            val country = when(val location = viewModel.uiStateFlow.value) {
+                is LocationUiState.CountrySelected -> location.country
+                is LocationUiState.CitySelected -> location.country
+                is LocationUiState.DistrictSelected -> location.country
+                else -> return@setOnClickListener
+            }
+            val city = when(val location = viewModel.uiStateFlow.value) {
+                is LocationUiState.CitySelected -> location.city
+                is LocationUiState.DistrictSelected -> location.city
+                else -> return@setOnClickListener
+            }
             bottomSheet.arguments = bundleOf(
-                SELECT_ACTION to SELECT_DISTRICT,
+                SELECT_ACTION_KEY to SELECT_DISTRICT,
+                SELECTED_COUNTRY_NAME_KEY to country,
+                SELECTED_CITY_NAME_KEY to city,
             )
             bottomSheet.show(childFragmentManager, bottomSheet.tag)
         }
 
         setFragmentResultListener(
-            LocationDialogFragment.COUNTRY_REQUEST_KEY
+            LocationDialogViewModel.COUNTRY_REQUEST_KEY
         ) { _, result ->
-            val countryResult = result.getString(LocationDialogFragment.SELECTED_COUNTRY_KEY, "Страна")
+            val countryResult =
+                result.getString(LocationDialogViewModel.SELECTED_COUNTRY_KEY, "Страна")
             viewModel.onCountrySelected(countryResult)
         }
 
         setFragmentResultListener(
-            LocationDialogFragment.CITY_REQUEST_KEY
+            LocationDialogViewModel.CITY_REQUEST_KEY
         ) { _, result ->
-            val cityResult = result.getString(LocationDialogFragment.SELECTED_CITY_KEY, "Город")
+            val cityResult = result.getString(LocationDialogViewModel.SELECTED_CITY_KEY, "Город")
             viewModel.onCitySelected(binding.countryTv.text.toString(), cityResult)
         }
 
         setFragmentResultListener(
-            LocationDialogFragment.DISTRICT_REQUEST_KEY
+            LocationDialogViewModel.DISTRICT_REQUEST_KEY
         ) { _, result ->
-            val districtResult = result.getString(LocationDialogFragment.SELECTED_DISTRICT_KEY, "Район")
-            viewModel.onDistrictSelected(binding.countryTv.text.toString(), binding.cityTv.text.toString(), districtResult)
+            val districtResult =
+                result.getString(LocationDialogViewModel.SELECTED_DISTRICT_KEY, "Район")
+            viewModel.onDistrictSelected(
+                binding.countryTv.text.toString(),
+                binding.cityTv.text.toString(),
+                districtResult
+            )
         }
 
         binding.buttonNext.setOnClickListener {
@@ -76,7 +106,7 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
         }
 
         subscribeToFlowOn(viewModel.uiStateFlow) { uiState: LocationUiState ->
-            when(uiState) {
+            when (uiState) {
                 LocationUiState.Initial -> {
                     binding.titleTv.visibility = View.VISIBLE
                     binding.countryPickLayout.visibility = View.VISIBLE
@@ -91,6 +121,7 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
                     binding.cityTv.text = "Город"
                     binding.districtTv.text = "Район"
                 }
+
                 is LocationUiState.CountrySelected -> {
                     binding.countryTv.text = uiState.country
                     binding.cityTv.text = "Город"
@@ -104,7 +135,7 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
                     binding.buttonNext.isEnabled = false
                     binding.buttonNext.setBackgroundResource(R.drawable.btn_bkg_disabled)
 
-                    if(!uiState.nextButtonEnabled) {
+                    if (!uiState.nextButtonEnabled) {
                         binding.cityPickLayout.visibility = View.VISIBLE
                         binding.districtPickLayout.visibility = View.INVISIBLE
                     } else {
@@ -112,6 +143,7 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
                         binding.buttonNext.setBackgroundResource(R.drawable.btn_bkg_enabled)
                     }
                 }
+
                 is LocationUiState.CitySelected -> {
                     binding.countryTv.text = uiState.country
                     binding.cityTv.text = uiState.city
@@ -123,13 +155,14 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
                     binding.buttonNext.isEnabled = false
                     binding.buttonNext.setBackgroundResource(R.drawable.btn_bkg_disabled)
 
-                    if(!uiState.nextButtonEnabled) {
+                    if (!uiState.nextButtonEnabled) {
                         binding.districtPickLayout.visibility = View.VISIBLE
                     } else {
                         binding.buttonNext.isEnabled = true
                         binding.buttonNext.setBackgroundResource(R.drawable.btn_bkg_enabled)
                     }
                 }
+
                 is LocationUiState.DistrictSelected -> {
                     binding.countryTv.text = uiState.country
                     binding.cityTv.text = uiState.city
@@ -139,6 +172,7 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
                     binding.buttonNext.isEnabled = true
                     binding.buttonNext.setBackgroundResource(R.drawable.btn_bkg_enabled)
                 }
+
                 LocationUiState.Loading -> {
                     // loading screen, everything else is hidden
                     binding.countryPickLayout.visibility = View.GONE
@@ -147,6 +181,7 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
                     binding.titleTv.visibility = View.GONE
                     binding.buttonNext.visibility = View.GONE
                 }
+
                 LocationUiState.Error -> {
 
                 } // error logic

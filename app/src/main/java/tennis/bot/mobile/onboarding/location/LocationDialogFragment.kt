@@ -3,7 +3,6 @@ package tennis.bot.mobile.onboarding.location
 import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
-import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,31 +22,17 @@ class LocationDialogFragment : CountryCodesDialogFragment() {
 
         binding.countriesListRv.adapter = locationAdapter
 
-        locationAdapter.clickListener = {
-            when(arguments?.getString(LocationFragment.SELECT_ACTION)) {
-                "country" -> {
-                    requireActivity().supportFragmentManager.setFragmentResult(
-                        COUNTRY_REQUEST_KEY,
-                        bundleOf(SELECTED_COUNTRY_KEY to it.countryName)
-                    )
-                    currentCountry = it.countryName // todo currentCountry и прочие сложить в uiState
-                }
-                "city" -> {
-                    requireActivity().supportFragmentManager.setFragmentResult(
-                        CITY_REQUEST_KEY,
-                        bundleOf(SELECTED_CITY_KEY to it.countryName)
-                    )
-                    currentCity = it.countryName
-                }
-                "district" -> {
-                    requireActivity().supportFragmentManager.setFragmentResult(
-                        DISTRICT_REQUEST_KEY,
-                        bundleOf(SELECTED_DISTRICT_KEY to it.countryName)
-                    )
-                    currentDistrict = it.countryName
-                }
-            }
+        locationAdapter.clickListener = {countryItem ->
+            viewModel.onPickedListItem(countryItem, requireActivity())
             dialog?.dismiss()
+        }
+
+        binding.tryAgainTv.setOnClickListener {
+            viewModel.onLoadingSelectedList()
+        }
+
+        binding.searchBarEt.addTextChangedListener {
+            viewModel.onSearchInputChanged(it.toString())
         }
 
         subscribeToFlowOn(viewModel.uiStateFlow) { uiState: LocationDialogUiState ->
@@ -61,41 +46,15 @@ class LocationDialogFragment : CountryCodesDialogFragment() {
                     binding.errorLayout.visibility = View.GONE
 
                     locationAdapter.submitList(uiState.dataList)
-                    binding.searchBarEt.addTextChangedListener {
-                        viewModel.onSearchInputChanged(it.toString())
-                    }
                 }
                 is LocationDialogUiState.Error -> {
                     binding.errorLayout.visibility = View.VISIBLE
                     binding.tryAgainTv.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-                    binding.tryAgainTv.setOnClickListener {
-                        // viewModel.onTryAgainClicked() todo
-                        when (arguments?.getString(LocationFragment.SELECT_ACTION)) { // todo within viewmodel
-                            "country" -> {
-                                viewModel.loadCountriesList()
-                            }
-                            "city" -> {
-                                // get selected country also
-                                viewModel.loadCitiesList(currentCountry)
-                            }
-                            "district" -> {
-                                // get selected country and city also
-                                viewModel.loadDistrictsList(currentCountry, currentCity)
-                            }
-                        }
-                    }
                     binding.loadingBar.visibility = View.GONE
                 }
             }
         }
     }
 
-    companion object {
-        const val COUNTRY_REQUEST_KEY = "COUNTRY_KEY"
-        const val SELECTED_COUNTRY_KEY = "SELECTED_COUNTRY_KEY"
-        const val CITY_REQUEST_KEY = "CITY_KEY"
-        const val SELECTED_CITY_KEY = "SELECTED_CITY_KEY"
-        const val DISTRICT_REQUEST_KEY = "DISTRICT_KEY"
-        const val SELECTED_DISTRICT_KEY = "SELECTED_DISTRICT_KEY"
-    }
+
 }
