@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import tennis.bot.mobile.onboarding.location.LocationFragment.Companion.SELECT_COUNTRY
 import tennis.bot.mobile.onboarding.phone.CountryItem
 import javax.inject.Inject
 
@@ -33,7 +34,7 @@ class LocationDialogViewModel @Inject constructor(
         uiStateFlow.value as LocationDialogUiState.Loading
 
         when (currentAction) {
-            "country" -> { // todo consts
+            SELECT_COUNTRY -> { // todo consts
                 loadCountriesList()
             }
             "city" -> {

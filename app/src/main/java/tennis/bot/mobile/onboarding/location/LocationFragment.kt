@@ -20,6 +20,9 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
 
     companion object {
         const val SELECT_ACTION = "somsdfadfg"
+        const val SELECT_COUNTRY = "SELECT_COUNTRY"
+        const val SELECT_CITY = "SELECT_CITY"
+        const val SELECT_DISTRICT = "SELECT_DISTRICT"
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -27,14 +30,14 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
 
         binding.countryPickLayout.setOnClickListener {
             val bottomSheet = LocationDialogFragment()
-            bottomSheet.arguments = bundleOf(SELECT_ACTION to "country")
+            bottomSheet.arguments = bundleOf(SELECT_ACTION to SELECT_COUNTRY)
             bottomSheet.show(childFragmentManager, bottomSheet.tag)
         }
 
         binding.cityPickLayout.setOnClickListener {
             val bottomSheet = LocationDialogFragment()
             bottomSheet.arguments = bundleOf(
-                SELECT_ACTION to "city",
+                SELECT_ACTION to SELECT_CITY,
                 )
             bottomSheet.show(childFragmentManager, bottomSheet.tag)
         }
@@ -42,8 +45,7 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
         binding.districtPickLayout.setOnClickListener {
             val bottomSheet = LocationDialogFragment()
             bottomSheet.arguments = bundleOf(
-                SELECT_ACTION to "district", // other keys
-                "selected_country" to "Russia", // итд
+                SELECT_ACTION to SELECT_DISTRICT,
             )
             bottomSheet.show(childFragmentManager, bottomSheet.tag)
         }
