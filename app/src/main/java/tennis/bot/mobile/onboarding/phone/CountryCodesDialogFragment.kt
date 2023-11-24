@@ -28,8 +28,10 @@ open class CountryCodesDialogFragment : CoreBottomSheetDialogFragment<FragmentCo
         FragmentCountryCodesBinding::inflate
 
     @Inject
-    lateinit var countryAdapter: PhoneInputAdapter
+    open lateinit var countryAdapter: CountryCodesAdapter
     private val viewModel: CountryCodesViewModel by viewModels()
+
+    protected open var hasFixedHeight = true
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -58,20 +60,22 @@ open class CountryCodesDialogFragment : CoreBottomSheetDialogFragment<FragmentCo
             }
         }
 
-        val listener = object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                binding.root.layoutParams.height = binding.root.height
-                binding.root.viewTreeObserver.removeOnGlobalLayoutListener(this)
+        if (hasFixedHeight) {
+            val listener = object : ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    binding.root.layoutParams.height = binding.root.height
+                    binding.root.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                }
             }
+            binding.root.viewTreeObserver.addOnGlobalLayoutListener(listener)
         }
-        binding.root.viewTreeObserver.addOnGlobalLayoutListener(listener)
 
         dialog?.setOnShowListener {
-            val d: BottomSheetDialog = dialog as BottomSheetDialog
+            val dialog: BottomSheetDialog = dialog as BottomSheetDialog
             val inputMethodManager = activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-            val v = d.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+            val bottomSheetView = dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
             if (inputMethodManager.isAcceptingText) {
-                BottomSheetBehavior.from(v as View).state = BottomSheetBehavior.STATE_EXPANDED
+                BottomSheetBehavior.from(bottomSheetView as View).state = BottomSheetBehavior.STATE_EXPANDED
             }
         }
     }

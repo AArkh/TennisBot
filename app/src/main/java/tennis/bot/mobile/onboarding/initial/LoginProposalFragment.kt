@@ -11,6 +11,7 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.databinding.FragmentLoginProposalBinding
+import tennis.bot.mobile.onboarding.location.LocationFragment
 import tennis.bot.mobile.onboarding.phone.PhoneInputFragment
 import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
@@ -49,7 +50,10 @@ class LoginProposalFragment : CoreFragment<FragmentLoginProposalBinding>() {
                 .commit()
         }
         binding.buttonLogin.setOnClickListener {
-            requireContext().showToast("To be implemented yet")
+            parentFragmentManager.beginTransaction()
+                .addToBackStack(this::class.java.name)
+                .replace(R.id.fragment_container_view, LocationFragment())
+                .commit()
         }
         binding.buttonWithoutRegistration.setOnClickListener {
             requireContext().showToast("To be implemented yet")

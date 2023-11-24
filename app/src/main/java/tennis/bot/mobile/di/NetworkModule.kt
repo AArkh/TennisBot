@@ -11,6 +11,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Converter
 import retrofit2.Retrofit
+import tennis.bot.mobile.onboarding.location.LocationApi
 import tennis.bot.mobile.onboarding.phone.SmsApi
 import tennis.bot.mobile.utils.LoggingInterceptor
 import java.util.concurrent.TimeUnit
@@ -69,4 +70,11 @@ class NetworkModule {
     fun provideBalancesAllowancesApiClient(
         @Named(SMS_CODES) retrofit: Retrofit
     ): SmsApi = retrofit.create(SmsApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideLocationsApiClient(
+        @Named(SMS_CODES) retrofit: Retrofit
+    ): LocationApi = retrofit.create(LocationApi::class.java)
 }
+

@@ -3,6 +3,7 @@ package tennis.bot.mobile.onboarding.phone
 import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -24,8 +25,12 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
     override var adjustToKeyboard: Boolean = true
     override val bindingInflation: Inflation<FragmentPhoneInputBinding> = FragmentPhoneInputBinding::inflate
     @Inject
-    lateinit var countryAdapter: PhoneInputAdapter
+    lateinit var countryAdapter: CountryCodesAdapter
     private val phoneInputViewModel: PhoneInputViewModel by viewModels()
+
+    companion object {
+        const val PHONE_NUMBER = "PHONE_NUMBER"
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,15 +43,6 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
         }
         binding.backButton.setOnClickListener {
             parentFragmentManager.popBackStack()
-        }
-
-        binding.buttonNext.setOnClickListener {
-            phoneInputViewModel.onNextClicked {
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container_view, SmsCodeFragment.newInstance(it))
-                    .addToBackStack(SmsCodeFragment::class.java.name)
-                    .commit()
-            }
         }
 
         binding.openCountriesSheetLayout.setOnClickListener {
@@ -80,6 +76,16 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
             binding.buttonNext.setBackgroundResource(buttonBackground)
             binding.textInputLayout.error = uiState.errorMessage
             binding.clearButton.visibility = if (uiState.clearButtonVisible) View.VISIBLE else View.INVISIBLE
+        }
+
+        binding.buttonNext.setOnClickListener {
+            parentFragment?.arguments = bundleOf(
+                PHONE_NUMBER to binding.phoneEt.text.toString()
+            )
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container_view, SmsCodeFragment())
+                .addToBackStack(SmsCodeFragment::class.java.name)
+                .commit()
         }
     }
 }

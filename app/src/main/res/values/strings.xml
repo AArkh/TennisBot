@@ -10,6 +10,20 @@
     <string name="onboarding_text_incorrect_phone_number">Введите действительный номер</string>
     <string name="onboarding_proceed_without_registration_button">Войти без регистрации</string>
     <string name="onboarding_continue_button">Далее</string>
+    <string name="error_text">Упс! Что-то пошло не так</string>
+    <string name="error_try_again_text">Попробовать еще раз</string>
+    <string name="location_title">Твое местоположение</string>
+    <string name="error_pincode_smscode">Неверный пин-код</string>
+    <string name="smscode_repeat_timer">Повторить</string>
+    <string name="smscode_repeat_timer_time">30</string>
+    <string name="location_district">Район</string>
+    <string name="location_city">Город</string>
+    <string name="location_country">Страна</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="photopick_title">Добавь фотографию</string>
+    <string name="button_skip">Пропустить</string>
+    <string name="photopick_title_second">Или выбери из базы</string>
 
     <!-- sms code -->
     <string name="onboarding_sms_input_title">Введи код отправленный на\n %s</string>
