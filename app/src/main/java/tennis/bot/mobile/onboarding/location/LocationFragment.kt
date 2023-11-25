@@ -11,6 +11,8 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentLocationBinding
+import tennis.bot.mobile.onboarding.phone.SmsCodeFragment
+import tennis.bot.mobile.onboarding.photopick.PhotoPickFragment
 
 @AndroidEntryPoint
 class LocationFragment : CoreFragment<FragmentLocationBinding>() {
@@ -101,7 +103,10 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
         }
 
         binding.buttonNext.setOnClickListener {
-            Toast.makeText(context, "We move onward", Toast.LENGTH_SHORT).show()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container_view, PhotoPickFragment())
+                .addToBackStack(PhotoPickFragment::class.java.name)
+                .commit()
         }
 
         subscribeToFlowOn(viewModel.uiStateFlow) { uiState: LocationUiState ->

@@ -1,14 +1,21 @@
 package tennis.bot.mobile.onboarding.photopick
 
-import tennis.bot.mobile.onboarding.location.LocationDialogUiState
-import tennis.bot.mobile.onboarding.phone.CountryItem
+import android.widget.ImageView
 
 sealed class PhotoPickUiState {
     object Loading : PhotoPickUiState()
 
     object Error : PhotoPickUiState()
 
-    data class DataPassed(
+    data class InitialWithIconList(
         val iconList: List<CircledImage>
+    ) : PhotoPickUiState()
+
+    data class PickedPreselectedImage(
+        val iconListWithSelection: List<CircledImage>
+    ) : PhotoPickUiState()
+
+    data class PickedUserImage(
+        val customSelectedImage: ImageView // choose the correct type
     ) : PhotoPickUiState()
 }
