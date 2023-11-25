@@ -14,7 +14,7 @@ import tennis.bot.mobile.databinding.FragmentPhotoPickBinding
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class PhotoPickFragment() : CoreFragment<FragmentPhotoPickBinding>() {
+class PhotoPickFragment : CoreFragment<FragmentPhotoPickBinding>() {
     override val bindingInflation: Inflation<FragmentPhotoPickBinding> = FragmentPhotoPickBinding::inflate
     @Inject
     lateinit var photoPickAdapter: PhotoPickAdapter
@@ -22,26 +22,25 @@ class PhotoPickFragment() : CoreFragment<FragmentPhotoPickBinding>() {
     lateinit var afterPhotoPickedAdapter: AfterPhotoPickedAdapter
     private val viewModel: PhotoPickViewModel by viewModels()
 
+    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) {
+            Log.d("PhotoPicker", "Selected URI: $uri")
+        } else {
+            Log.d("PhotoPicker", "No media selected")
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.iconsRecyclerView.adapter = photoPickAdapter
         binding.iconsRecyclerView.layoutManager = GridLayoutManager(requireContext(), 4)
 
-        binding.pickPhotoButton.setOnClickListener {
-            val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-                if (uri != null) {
-                    Log.d("PhotoPicker", "Selected URI: $uri")
-                } else {
-                    Log.d("PhotoPicker", "No media selected")
-                }
-            }
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }
-
-        photoPickAdapter.clickListener = {pickedCircledImage ->
+        photoPickAdapter.clickListener = { pickedCircledImage ->
             viewModel.onPickedCircledImage(pickedCircledImage)
-
+        }
+        binding.pickPhotoButton.setOnClickListener {
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
         subscribeToFlowOn(viewModel.uiStateFlow) { uiState: PhotoPickUiState ->
@@ -52,7 +51,10 @@ class PhotoPickFragment() : CoreFragment<FragmentPhotoPickBinding>() {
                 }
                 is PhotoPickUiState.PickedPreselectedImage -> {
                     binding.iconsRecyclerView.adapter = afterPhotoPickedAdapter
-                    photoPickAdapter.submitList(uiState.iconListWithSelection)
+                    afterPhotoPickedAdapter.submitList(uiState.iconListWithSelection)
+                    afterPhotoPickedAdapter.clickListener = { pickedCircledImage ->
+                        viewModel.onPickedCircledImage(pickedCircledImage)
+                    }
                 }
                 is PhotoPickUiState.PickedUserImage -> {}
                 is PhotoPickUiState.Error -> {}

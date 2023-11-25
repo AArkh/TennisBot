@@ -1,10 +1,8 @@
 package tennis.bot.mobile.onboarding.photopick
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.DrawableRes
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreAdapter
@@ -19,8 +17,6 @@ open class PhotoPickAdapter @Inject constructor(): CoreAdapter<RecyclerCircledPh
     override fun onBindViewHolder(holder: RecyclerCircledPhotoItemViewHolder, item: Any) {
         val circledImage = item as? CircledImage ?: throw IllegalArgumentException("Item must be LoginProposalImage")
         holder.binding.image.setImageResource(circledImage.imageRes)
-        if (item.isSelected) holder.itemView.setBackgroundResource(R.drawable.circle_photo_outline);
-        holder.binding.image.alpha = 0.4f
         holder.itemView.setOnClickListener {
             clickListener?.invoke(item)
 

@@ -7,7 +7,7 @@ class AfterPhotoPickedAdapter @Inject constructor(): PhotoPickAdapter() {
 
 	override fun onBindViewHolder(holder: RecyclerCircledPhotoItemViewHolder, item: Any) {
 		super.onBindViewHolder(holder, item)
-		if ((item as CircledImage).isSelected) holder.itemView.setBackgroundResource(R.drawable.circle_photo_outline);
-		holder.binding.image.alpha = 0.4f
+		if ((item as CircledImage).isSelected) holder.itemView.setBackgroundResource(R.drawable.circle_photo_outline)
+		else holder.binding.image.alpha = 0.4f
 	}
 }
