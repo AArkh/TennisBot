@@ -16,9 +16,8 @@ import tennis.bot.mobile.onboarding.photopick.PhotoPickFragment
 
 @AndroidEntryPoint
 class LocationFragment : CoreFragment<FragmentLocationBinding>() {
-    override val bindingInflation: Inflation<FragmentLocationBinding> =
-        FragmentLocationBinding::inflate
 
+    override val bindingInflation: Inflation<FragmentLocationBinding> = FragmentLocationBinding::inflate
     private val viewModel: LocationViewModel by viewModels()
 
     companion object {

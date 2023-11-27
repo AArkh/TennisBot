@@ -19,7 +19,6 @@ open class PhotoPickAdapter @Inject constructor(): CoreAdapter<RecyclerCircledPh
         holder.binding.image.setImageResource(circledImage.imageRes)
         holder.itemView.setOnClickListener {
             clickListener?.invoke(item)
-
         }
     }
 

@@ -11,6 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PhotoPickViewModel @Inject constructor() : ViewModel() {
+
     val imageList = listOf(
         CircledImage(R.drawable.photo_picker_1),
         CircledImage(R.drawable.photo_picker_2),
@@ -31,7 +32,11 @@ class PhotoPickViewModel @Inject constructor() : ViewModel() {
     val uiStateFlow = _uiStateFlow.asStateFlow()
 
     init {
-        _uiStateFlow.value = PhotoPickUiState.InitialWithIconList(imageList)
+        onInitial()
+    }
+
+    fun onInitial() {
+        _uiStateFlow.value = PhotoPickUiState.InitialWithIconList(imageList, false)
     }
 
     fun onPickedCircledImage(pickedCircledImage: CircledImage) {
@@ -44,6 +49,6 @@ class PhotoPickViewModel @Inject constructor() : ViewModel() {
                 return@map item
             }
         }
-        _uiStateFlow.value = PhotoPickUiState.PickedPreselectedImage(newList)
+        _uiStateFlow.value = PhotoPickUiState.PickedPreselectedImage(newList, true)
     }
 }

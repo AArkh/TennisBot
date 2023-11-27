@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/country_pick_layout"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_marginTop="10dp"
+	android:layout_marginEnd="10dp"
+	android:background="@drawable/survey_option_outline"
+	app:layout_constraintEnd_toEndOf="parent"
+	app:layout_constraintStart_toStartOf="parent"
+	app:layout_constraintTop_toBottomOf="@id/title_tv">
+
+	<TextView
+		android:id="@+id/title"
+		android:layout_width="140dp"
+		android:layout_height="30dp"
+		android:gravity="center"
+		android:layout_marginHorizontal="16dp"
+		android:layout_marginTop="14dp"
+		android:layout_marginBottom="13dp"
+		android:layout_weight="50"
+		android:ellipsize="end"
+		android:lines="1"
+		android:text="@string/survey_item_title"
+		android:textColor="@color/tb_black"
+		android:textSize="14sp"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
