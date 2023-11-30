@@ -4,42 +4,149 @@
 	android:layout_height="match_parent"
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 
-	<androidx.recyclerview.widget.RecyclerView
-		android:id="@+id/viewpager"
+	<LinearLayout
+		android:id="@+id/main_pager_layout_1"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="6dp"
-		android:layout_marginHorizontal="20dp"
-		app:layout_constraintTop_toTopOf="parent"
+		android:orientation="horizontal"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"/>
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent">
+
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:id="@+id/option1"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="10dp"
+			android:layout_weight="50"
+			android:background="@drawable/survey_option_outline"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/title_tv">
+		<TextView
+			android:id="@+id/option1_title"
+			android:layout_width="140dp"
+			android:layout_height="30dp"
+			android:gravity="center"
+			android:layout_marginHorizontal="16dp"
+			android:layout_marginTop="14dp"
+			android:layout_marginBottom="13dp"
+			android:layout_weight="50"
+			android:ellipsize="end"
+			android:lines="1"
+			android:text="@string/survey_item_title_1"
+			android:textColor="@color/tb_black"
+			android:textSize="14sp"
+			app:layout_constraintTop_toTopOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintBottom_toBottomOf="parent"/>
+		</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:id="@+id/option2"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="50"
+			android:background="@drawable/survey_option_outline"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/title_tv">
+
+		<TextView
+			android:id="@+id/option2_title"
+			android:layout_width="140dp"
+			android:layout_height="30dp"
+			android:gravity="center"
+			android:layout_marginHorizontal="16dp"
+			android:layout_marginTop="14dp"
+			android:layout_marginBottom="13dp"
+			android:layout_weight="50"
+			android:ellipsize="end"
+			android:lines="1"
+			android:text="@string/survey_item_title_2"
+			android:textColor="@color/tb_black"
+			android:textSize="14sp"
+			app:layout_constraintTop_toTopOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintBottom_toBottomOf="parent"/>
+		</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+	</LinearLayout>
 
 	<LinearLayout
-		android:id="@+id/side_note_layout"
+		android:id="@+id/main_pager_layout_2"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:orientation="vertical"
-		android:layout_marginTop="20dp"
-		android:layout_marginHorizontal="20dp"
-		android:padding="16dp"
-		android:background="@drawable/search_background"
-		app:layout_constraintTop_toBottomOf="@id/viewpager"
+		android:orientation="horizontal"
+		android:layout_marginTop="10dp"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent">
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/main_pager_layout_1">
 
-		<TextView
-			android:id="@+id/side_note_title"
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:id="@+id/option3"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="@string/survey_side_note_title_1"
-			android:textSize="16sp"
-			android:textColor="@color/tb_primary_green" />
-		<TextView
-			android:id="@+id/side_note_text"
+			android:layout_marginEnd="10dp"
+			android:layout_weight="50"
+			android:background="@drawable/survey_option_outline"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/title_tv">
+			<TextView
+				android:id="@+id/option3_title"
+				android:layout_width="140dp"
+				android:layout_height="30dp"
+				android:gravity="center"
+				android:layout_marginHorizontal="16dp"
+				android:layout_marginTop="14dp"
+				android:layout_marginBottom="13dp"
+				android:layout_weight="50"
+				android:ellipsize="end"
+				android:lines="1"
+				android:text="@string/survey_item_title_1"
+				android:textColor="@color/tb_black"
+				android:textSize="14sp"
+				app:layout_constraintTop_toTopOf="parent"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintBottom_toBottomOf="parent"/>
+		</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:id="@+id/option4"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="@string/survey_side_note_text_1"
-			android:textSize="12sp"/>
+			android:layout_weight="50"
+			android:background="@drawable/survey_option_outline"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/title_tv">
+
+			<TextView
+				android:id="@+id/option4_title"
+				android:layout_width="140dp"
+				android:layout_height="30dp"
+				android:gravity="center"
+				android:layout_marginHorizontal="16dp"
+				android:layout_marginTop="14dp"
+				android:layout_marginBottom="13dp"
+				android:layout_weight="50"
+				android:ellipsize="end"
+				android:lines="1"
+				android:text="@string/survey_item_title_2"
+				android:textColor="@color/tb_black"
+				android:textSize="14sp"
+				app:layout_constraintTop_toTopOf="parent"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintBottom_toBottomOf="parent"/>
+		</androidx.constraintlayout.widget.ConstraintLayout>
 
 
 	</LinearLayout>

@@ -23,7 +23,7 @@
 		android:layout_weight="50"
 		android:ellipsize="end"
 		android:lines="1"
-		android:text="@string/survey_item_title"
+		android:text="@string/survey_item_title_1"
 		android:textColor="@color/tb_black"
 		android:textSize="14sp"
 		app:layout_constraintTop_toTopOf="parent"

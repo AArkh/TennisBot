@@ -39,10 +39,56 @@
 	<string name="password_hint">Пароль должен содержать не менее 8 символов, включая как минимум одну букву и одну цифру</string>
 	<string name="password_agree_with_confidentiality">Нажимая кнопку вы соглашаетесь \n<a href="https://policies.google.com/privacy?hl=ru">с Политикой конфиденциальности</a></string>
 	<string name="password_edittext_hint">Пароль</string>
+
+	<!-- survey -->
 	<string name="survey_title_1">Твой уровень игры?</string>
 	<string name="survey_small_title">Опрос</string>
-	<string name="survey_side_note_text_1">Доброе пожаловать в самую большую и умную эко-систему. Пройдите анкетирование, чтобы начать играть. Отвечайте на вопросы честно. От этого будет зависеть ваша сила и будущий поиск равных партнеров.</string>
+	<string name="survey_item_title_1">Новичок</string>
+	<string name="survey_item_title_2">Любитель</string>
+
+	<string name="survey_options_item_set1_1">Новичок</string>
+	<string name="survey_options_item_set1_2">Любитель</string>
+	<string name="survey_options_item_set1_3">Продвинутый</string>
+	<string name="survey_options_item_set1_4">Профессионал</string>
+	<string name="survey_options_item_set2_1">Слабый</string>
+	<string name="survey_options_item_set2_2">Средний</string>
+	<string name="survey_options_item_set2_3">Сильный</string>
+	<string name="survey_options_item_set2_4">Очень сильный</string>
+	<string name="survey_options_item_set3_1">Слабая</string>
+	<string name="survey_options_item_set3_2">Средняя</string>
+	<string name="survey_options_item_set3_3">Сильная</string>
+	<string name="survey_options_item_set3_4">Очень сильная</string>
+	<string name="survey_options_item_set4_no">Нет</string>
+	<string name="survey_options_item_set4_yes">Да</string>
+
+	<string name="survey_questionsTitlesList_1">Твой уровень игры?</string>
+	<string name="survey_questionsTitlesList_2">Оцени уровень Форхенд?</string>
+	<string name="survey_questionsTitlesList_3">Оцени уровень Бэкхенд?</string>
+	<string name="survey_questionsTitlesList_4">Резаный удар?</string>
+	<string name="survey_questionsTitlesList_5">Подача?</string>
+	<string name="survey_questionsTitlesList_6">Игра у сетки?</string>
+	<string name="survey_questionsTitlesList_7">Скорость игры?</string>
+	<string name="survey_questionsTitlesList_8">Участовал в турнирах?</string>
+	<string name="survey_questionsTitlesList_9">Занимал призовые места в турнирах?</string>
+
 	<string name="survey_side_note_title_1">Теннис бот</string>
-	<string name="survey_item_title">Новичок</string>
+	<string name="survey_side_note_text_1">Доброе пожаловать в самую большую и умную эко-систему. Пройдите анкетирование, чтобы начать играть. Отвечайте на вопросы честно. От этого будет зависеть ваша сила и будущий поиск равных партнеров.</string>
+	<string name="survey_side_note_title_2">Форхенд (удар справа)</string>
+	<string name="survey_side_note_text_2">— является одним из основных ударов в теннисе и может быть выполнен справа или слева от корпуса игрока в зависимости от его ведущей руки [правша / левша]</string>
+	<string name="survey_side_note_title_3">Бекхенд (удар слева)</string>
+	<string name="survey_side_note_text_3">— является одним из основных ударов в теннисе и может быть выполнен справа или слева от корпуса игрока в зависимости от его ведущей руки [правша / левша]</string>
+	<string name="survey_side_note_title_4">Резаные или слайсы</string>
+	<string name="survey_side_note_text_4">— это удары при которых игрок придает мячу нижне-боковое или нижнее вращение</string>
+	<string name="survey_side_note_title_5">Сложный элемент</string>
+	<string name="survey_side_note_text_5">Укажите насколько легко и точно вы подаете подачу при игре на счет</string>
+	<string name="survey_side_note_title_6">Cкорость и точность</string>
+	<string name="survey_side_note_text_6">При выходе к сетке важно без промедления выставить правильно ракетку для точной атаки</string>
+	<string name="survey_side_note_title_7">Динамика игры</string>
+	<string name="survey_side_note_text_7">От скорости игры зависит ваша работа ног и реакция на качественные удары сопернику</string>
+	<string name="survey_side_note_title_8">Это важно</string>
+	<string name="survey_side_note_text_8">Ваш опыт в турнирах подскажет другим игрокам, как сильно вы готовились стать непобедимым при экстремальных нагрузках. Кстати, в «Теннис бот» есть онлайн-турниры.</string>
+	<string name="survey_side_note_title_9">Почти закончили</string>
+	<string name="survey_side_note_text_9">Последний вопрос перед определением вашей силы. Желаем вам хорошей игры и до встречи на корте!</string>
+
 
 </resources>
