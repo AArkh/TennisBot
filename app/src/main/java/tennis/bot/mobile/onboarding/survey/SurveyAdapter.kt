@@ -2,6 +2,7 @@ package tennis.bot.mobile.onboarding.survey
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import tennis.bot.mobile.R
@@ -14,11 +15,17 @@ class SurveyAdapter @Inject constructor(): CoreAdapter<SurveyItemViewHolder>() {
 	var clickListener: ((item: String) -> Unit)? = null
 
 	override fun onBindViewHolder(holder: SurveyItemViewHolder, item: Any) {
-		val surveyOptionsItem = item as? SurveyOptionsItem ?: throw IllegalArgumentException("Item must be LoginProposalImage")
-		holder.binding.option1Title.text = surveyOptionsItem.option1
-		holder.binding.option2Title.text = surveyOptionsItem.option2
-		holder.binding.option3Title.text = surveyOptionsItem.option3
-		holder.binding.option4Title.text = surveyOptionsItem.option4
+		val surveyItem = item as? SurveyItem ?: throw IllegalArgumentException("Item must be LoginProposalImage")
+		holder.binding.option1Title.text = surveyItem.option1
+		holder.binding.option2Title.text = surveyItem.option2
+		holder.binding.option3Title.text = surveyItem.option3
+		holder.binding.option4Title.text = surveyItem.option4
+		holder.binding.sideNoteTitle.text = surveyItem.sideNoteTitle
+		holder.binding.sideNoteText.text = surveyItem.sideNoteText
+
+		if (surveyItem.isTwoOptions) {
+			holder.binding.mainPagerLayout2.visibility = View.GONE
+		}
 		holder.binding.option1.setOnClickListener {
 			clickListener?.invoke(item.option1)
 			holder.binding.option1.setBackgroundResource(R.drawable.survey_option_outline_picked)
@@ -63,11 +70,13 @@ class SurveyItemViewHolder(
 	val binding: PagerSurveyItemBinding
 ) : RecyclerView.ViewHolder(binding.root)
 
-data class SurveyOptionsItem(
+data class SurveyItem(
 	val option1: String,
 	val option2: String,
 	val option3: String,
 	val option4: String,
-	var isSelected: Boolean = false
+	val sideNoteTitle: String,
+	val sideNoteText: String,
+	var isTwoOptions: Boolean = false
 ): CoreUtilsItem()
 

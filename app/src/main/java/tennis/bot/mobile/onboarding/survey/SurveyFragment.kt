@@ -24,12 +24,6 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 		binding.viewpager.adapter = surveyAdapter
 		binding.viewpager.isUserInputEnabled = false
 
-		surveyAdapter.clickListener = { pickedOption ->
-			// save the answer somewhere. find out which one is triggered
-		}
-
-
-
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: SurveyUiState ->
 			when(uiState) {
 				is SurveyUiState.Loading -> {
@@ -40,8 +34,6 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 
 					binding.title.text = uiState.questionTitle
 					binding.progressBar.progress = uiState.progressPercent
-					binding.sideNoteTitle.text = uiState.sideNoteTitle
-					binding.sideNoteText.text = uiState.sideNoteText
 
 					binding.backButton.setOnClickListener {
 						binding.viewpager.currentItem -= 1
@@ -56,9 +48,11 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 				is SurveyUiState.ForehandLevel -> {
 					binding.title.text = uiState.questionTitle
 					binding.progressBar.progress = uiState.progressPercent
-					binding.sideNoteTitle.text = uiState.sideNoteTitle
-					binding.sideNoteText.text = uiState.sideNoteText
 
+					binding.backButton.setOnClickListener {
+						binding.viewpager.currentItem -= 1
+						viewModel.onForehandLevel()
+					}
 					surveyAdapter.clickListener = { pickedOption ->
 						// save the answer somewhere. find out which one is triggered
 						binding.viewpager.currentItem = 2
@@ -68,9 +62,11 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 				is SurveyUiState.BackhandLevel -> {
 					binding.title.text = uiState.questionTitle
 					binding.progressBar.progress = uiState.progressPercent
-					binding.sideNoteTitle.text = uiState.sideNoteTitle
-					binding.sideNoteText.text = uiState.sideNoteText
 
+					binding.backButton.setOnClickListener {
+						binding.viewpager.currentItem -= 1
+						viewModel.onBackhandLevel()
+					}
 					surveyAdapter.clickListener = { pickedOption ->
 						// save the answer somewhere. find out which one is triggered
 						binding.viewpager.currentItem = 3
@@ -80,9 +76,11 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 				is SurveyUiState.SliceShotLevel -> {
 					binding.title.text = uiState.questionTitle
 					binding.progressBar.progress = uiState.progressPercent
-					binding.sideNoteTitle.text = uiState.sideNoteTitle
-					binding.sideNoteText.text = uiState.sideNoteText
 
+					binding.backButton.setOnClickListener {
+						binding.viewpager.currentItem -= 1
+						viewModel.onSliceShotLevel()
+					}
 					surveyAdapter.clickListener = { pickedOption ->
 						// save the answer somewhere. find out which one is triggered
 						binding.viewpager.currentItem = 4
@@ -92,9 +90,11 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 				is SurveyUiState.ServeLevel -> {
 					binding.title.text = uiState.questionTitle
 					binding.progressBar.progress = uiState.progressPercent
-					binding.sideNoteTitle.text = uiState.sideNoteTitle
-					binding.sideNoteText.text = uiState.sideNoteText
 
+					binding.backButton.setOnClickListener {
+						binding.viewpager.currentItem -= 1
+						viewModel.onServeLevel()
+					}
 					surveyAdapter.clickListener = { pickedOption ->
 						// save the answer somewhere. find out which one is triggered
 						binding.viewpager.currentItem = 5
@@ -104,9 +104,11 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 				is SurveyUiState.NetGameLevel -> {
 					binding.title.text = uiState.questionTitle
 					binding.progressBar.progress = uiState.progressPercent
-					binding.sideNoteTitle.text = uiState.sideNoteTitle
-					binding.sideNoteText.text = uiState.sideNoteText
 
+					binding.backButton.setOnClickListener {
+						binding.viewpager.currentItem -= 1
+						viewModel.onNetGameLevel()
+					}
 					surveyAdapter.clickListener = { pickedOption ->
 						// save the answer somewhere. find out which one is triggered
 						binding.viewpager.currentItem = 6
@@ -116,9 +118,11 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 				is SurveyUiState.GameSpeedLevel -> { // in this one and the next some option is pre-picked for some reason
 					binding.title.text = uiState.questionTitle
 					binding.progressBar.progress = uiState.progressPercent
-					binding.sideNoteTitle.text = uiState.sideNoteTitle
-					binding.sideNoteText.text = uiState.sideNoteText
 
+					binding.backButton.setOnClickListener {
+						binding.viewpager.currentItem -= 1
+						viewModel.onGameSpeedLevel()
+					}
 					surveyAdapter.clickListener = { pickedOption ->
 						// save the answer somewhere. find out which one is triggered
 						binding.viewpager.currentItem = 7
@@ -128,9 +132,11 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 				is SurveyUiState.TournamentParticipation -> {
 					binding.title.text = uiState.questionTitle
 					binding.progressBar.progress = uiState.progressPercent
-					binding.sideNoteTitle.text = uiState.sideNoteTitle
-					binding.sideNoteText.text = uiState.sideNoteText
 
+					binding.backButton.setOnClickListener {
+						binding.viewpager.currentItem -= 1
+						viewModel.onTournamentParticipation()
+					}
 					surveyAdapter.clickListener = { pickedOption ->
 						// save the answer somewhere
 						binding.viewpager.currentItem = 8
@@ -140,9 +146,11 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 				is SurveyUiState.TournamentTopPlaces -> {
 					binding.title.text = uiState.questionTitle
 					binding.progressBar.progress = uiState.progressPercent
-					binding.sideNoteTitle.text = uiState.sideNoteTitle
-					binding.sideNoteText.text = uiState.sideNoteText
 
+					binding.backButton.setOnClickListener {
+						binding.viewpager.currentItem -= 1
+						viewModel.onTournamentTopPlaces()
+					}
 					surveyAdapter.clickListener = { pickedOption ->
 						// save the answer somewhere.
 						binding.viewpager.currentItem = 0

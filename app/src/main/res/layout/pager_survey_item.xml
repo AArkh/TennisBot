@@ -117,7 +117,6 @@
 				app:layout_constraintBottom_toBottomOf="parent"/>
 		</androidx.constraintlayout.widget.ConstraintLayout>
 
-
 		<androidx.constraintlayout.widget.ConstraintLayout
 			android:id="@+id/option4"
 			android:layout_width="wrap_content"
@@ -148,6 +147,33 @@
 				app:layout_constraintBottom_toBottomOf="parent"/>
 		</androidx.constraintlayout.widget.ConstraintLayout>
 
+	</LinearLayout>
+
+	<LinearLayout
+		android:id="@+id/side_note_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:layout_marginTop="20dp"
+		android:padding="16dp"
+		android:background="@drawable/search_background"
+		app:layout_constraintTop_toBottomOf="@id/main_pager_layout_2"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent">
+
+		<TextView
+			android:id="@+id/side_note_title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/survey_side_note_title_1"
+			android:textSize="16sp"
+			android:textColor="@color/tb_primary_green" />
+		<TextView
+			android:id="@+id/side_note_text"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/survey_side_note_text_1"
+			android:textSize="12sp"/>
 
 	</LinearLayout>
 
