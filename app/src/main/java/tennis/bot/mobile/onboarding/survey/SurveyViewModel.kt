@@ -15,7 +15,6 @@ class SurveyViewModel @Inject constructor(
 		SurveyUiState.Loading(
 			progressPercent = 0,
 			repository.questionsTitlesList[0],
-//			repository.optionsList[0],
 			repository.sideNotesList[0].sideNoteTitle,
 			repository.sideNotesList[0].sideNoteText) // todo decide what shows in a Loading
 	)
@@ -36,7 +35,6 @@ class SurveyViewModel @Inject constructor(
 		_uiStateFlow.value = SurveyUiState.ForehandLevel(
 			progressPercent = 10,
 			repository.questionsTitlesList[1],
-//			repository.optionsList[0],
 			repository.sideNotesList[1].sideNoteTitle,
 			repository.sideNotesList[1].sideNoteText
 		)
@@ -46,7 +44,6 @@ class SurveyViewModel @Inject constructor(
 		_uiStateFlow.value = SurveyUiState.BackhandLevel(
 			progressPercent = 18,
 			repository.questionsTitlesList[2],
-//			repository.optionsList[1],
 			repository.sideNotesList[2].sideNoteTitle,
 			repository.sideNotesList[2].sideNoteText
 		)
@@ -56,7 +53,6 @@ class SurveyViewModel @Inject constructor(
 		_uiStateFlow.value = SurveyUiState.SliceShotLevel(
 			progressPercent = 32,
 			repository.questionsTitlesList[3],
-//			repository.optionsList[1],
 			repository.sideNotesList[3].sideNoteTitle,
 			repository.sideNotesList[3].sideNoteText
 		)
@@ -66,7 +62,6 @@ class SurveyViewModel @Inject constructor(
 		_uiStateFlow.value = SurveyUiState.ServeLevel(
 			progressPercent = 41,
 			repository.questionsTitlesList[4],
-//			repository.optionsList[2],
 			repository.sideNotesList[4].sideNoteTitle,
 			repository.sideNotesList[4].sideNoteText
 		)
@@ -76,7 +71,6 @@ class SurveyViewModel @Inject constructor(
 		_uiStateFlow.value = SurveyUiState.NetGameLevel(
 			progressPercent = 50,
 			repository.questionsTitlesList[5],
-//			repository.optionsList[2],
 			repository.sideNotesList[5].sideNoteTitle,
 			repository.sideNotesList[5].sideNoteText
 		)
@@ -86,7 +80,6 @@ class SurveyViewModel @Inject constructor(
 		_uiStateFlow.value = SurveyUiState.GameSpeedLevel(
 			progressPercent = 63,
 			repository.questionsTitlesList[6],
-//			repository.optionsList[2],
 			repository.sideNotesList[6].sideNoteTitle,
 			repository.sideNotesList[6].sideNoteText
 		)
@@ -96,7 +89,6 @@ class SurveyViewModel @Inject constructor(
 		_uiStateFlow.value = SurveyUiState.TournamentParticipation(
 			progressPercent = 78,
 			repository.questionsTitlesList[7],
-//			repository.optionsList[3],
 			repository.sideNotesList[7].sideNoteTitle,
 			repository.sideNotesList[7].sideNoteText
 		)
@@ -106,7 +98,6 @@ class SurveyViewModel @Inject constructor(
 		_uiStateFlow.value = SurveyUiState.TournamentTopPlaces(
 			progressPercent = 99,
 			repository.questionsTitlesList[8],
-//			repository.optionsList[3],
 			repository.sideNotesList[8].sideNoteTitle,
 			repository.sideNotesList[8].sideNoteText
 		)

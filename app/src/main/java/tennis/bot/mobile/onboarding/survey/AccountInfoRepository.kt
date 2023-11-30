@@ -70,13 +70,16 @@ class AccountInfoRepository @Inject constructor(
 		SurveyOptionsItem(
 			context.getString(R.string.survey_options_item_set4_no),
 			context.getString(R.string.survey_options_item_set4_yes),
-			"empty",
-			"empty"),
+			"",
+			"",
+			true
+		),
 		SurveyOptionsItem(
 			context.getString(R.string.survey_options_item_set4_no),
 			context.getString(R.string.survey_options_item_set4_yes),
-			"empty",
-			"empty"
+			"",
+			"",
+			true
 		)
 	)
 
