@@ -89,6 +89,9 @@
 	<string name="survey_side_note_text_8">Ваш опыт в турнирах подскажет другим игрокам, как сильно вы готовились стать непобедимым при экстремальных нагрузках. Кстати, в «Теннис бот» есть онлайн-турниры.</string>
 	<string name="survey_side_note_title_9">Почти закончили</string>
 	<string name="survey_side_note_text_9">Последний вопрос перед определением вашей силы. Желаем вам хорошей игры и до встречи на корте!</string>
+	<string name="survey_start_button">Начать</string>
+	<string name="survey_dialog_text">Сейчас система оценит ваш уровень \nсилы. Отвечайте на вопросы честно.</string>
+	<string name="survey_dialog_title">Теннис бот опрос</string>
 
 
 </resources>

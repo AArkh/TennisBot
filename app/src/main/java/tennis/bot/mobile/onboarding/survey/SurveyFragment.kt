@@ -1,13 +1,18 @@
 package tennis.bot.mobile.onboarding.survey
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentSurveyBinding
-import tennis.bot.mobile.onboarding.photopick.PhotoPickUiState
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -23,6 +28,13 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 
 		binding.viewpager.adapter = surveyAdapter
 		binding.viewpager.isUserInputEnabled = false
+
+		val dialog = Dialog(requireContext())
+
+		dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+		dialog.window?.setBackgroundDrawableResource(R.drawable.survey_dialog_rounded)
+		dialog.setContentView(R.layout.survey_welcome_dialog)
+		dialog.show()
 
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: SurveyUiState ->
 			when(uiState) {
