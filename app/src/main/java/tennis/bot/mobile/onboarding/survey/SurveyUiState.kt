@@ -1,13 +1,16 @@
 package tennis.bot.mobile.onboarding.survey
 
 sealed class SurveyUiState(
-	open val progressPercent: Int,
+	open val progressPercent: Int, // index
 	open val questionTitle: String,
+	open val title: List<SurveyItem>? = null,
+	open val options: List<SurveyItem>? = null,
+	open val isTwoOptions: Boolean = false,
 ) {
-	data class Loading(
+	data class Loading( // todo убрать?
 		override val progressPercent: Int,
 		override val questionTitle: String,
-	) : SurveyUiState(progressPercent, questionTitle)
+	) : SurveyUiState(progressPercent, questionTitle, "title", listOf(SurveyItem("option1", "option2")))
 
 	data class OverallGameSkill(
 		override val progressPercent: Int,
@@ -55,7 +58,7 @@ sealed class SurveyUiState(
 		override val questionTitle: String,
 	) : SurveyUiState(progressPercent, questionTitle)
 
-	data class Error(
+	data class Error( // todo убрать?
 		override val progressPercent: Int,
 		override val questionTitle: String,
 	) : SurveyUiState(progressPercent, questionTitle)

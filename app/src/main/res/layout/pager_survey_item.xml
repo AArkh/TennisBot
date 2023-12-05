@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	xmlns:app="http://schemas.android.com/apk/res-auto">
+	android:layout_height="match_parent">
 
+	<!-- fixme Переделать верстку -->
 	<LinearLayout
 		android:id="@+id/main_pager_layout_1"
 		android:layout_width="match_parent"
@@ -13,38 +15,31 @@
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent">
 
-		<androidx.constraintlayout.widget.ConstraintLayout
+		<FrameLayout
 			android:id="@+id/option1"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginEnd="10dp"
 			android:layout_weight="50"
 			android:background="@drawable/survey_option_outline"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toBottomOf="@id/title_tv">
-		<TextView
-			android:id="@+id/option1_title"
-			android:layout_width="140dp"
-			android:layout_height="30dp"
-			android:gravity="center"
-			android:layout_marginHorizontal="16dp"
-			android:layout_marginTop="14dp"
-			android:layout_marginBottom="13dp"
-			android:layout_weight="50"
-			android:ellipsize="end"
-			android:lines="1"
-			android:text="@string/survey_item_title_1"
-			android:textColor="@color/tb_black"
-			android:textSize="14sp"
-			app:layout_constraintTop_toTopOf="parent"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintBottom_toBottomOf="parent"/>
-		</androidx.constraintlayout.widget.ConstraintLayout>
 
+			<TextView
+				android:id="@+id/option1_title"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingHorizontal="16dp"
+				android:paddingVertical="20dp"
+				android:ellipsize="end"
+				android:gravity="center"
+				android:lines="1"
+				android:text="@string/survey_item_title_1"
+				android:textColor="@color/tb_black"
+				android:textSize="14sp" />
+		</FrameLayout>
 
-		<androidx.constraintlayout.widget.ConstraintLayout
+		<FrameLayout
 			android:id="@+id/option2"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -54,26 +49,20 @@
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toBottomOf="@id/title_tv">
 
-		<TextView
-			android:id="@+id/option2_title"
-			android:layout_width="140dp"
-			android:layout_height="30dp"
-			android:gravity="center"
-			android:layout_marginHorizontal="16dp"
-			android:layout_marginTop="14dp"
-			android:layout_marginBottom="13dp"
-			android:layout_weight="50"
-			android:ellipsize="end"
-			android:lines="1"
-			android:text="@string/survey_item_title_2"
-			android:textColor="@color/tb_black"
-			android:textSize="14sp"
-			app:layout_constraintTop_toTopOf="parent"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintBottom_toBottomOf="parent"/>
-		</androidx.constraintlayout.widget.ConstraintLayout>
-
+			<TextView
+				android:id="@+id/option2_title"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingHorizontal="16dp"
+				android:paddingVertical="20dp"
+				android:layout_weight="50"
+				android:ellipsize="end"
+				android:gravity="center"
+				android:lines="1"
+				android:text="@string/survey_item_title_2"
+				android:textColor="@color/tb_black"
+				android:textSize="14sp" />
+		</FrameLayout>
 
 	</LinearLayout>
 
@@ -81,8 +70,8 @@
 		android:id="@+id/main_pager_layout_2"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:orientation="horizontal"
 		android:layout_marginTop="10dp"
+		android:orientation="horizontal"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/main_pager_layout_1">
@@ -97,24 +86,25 @@
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toBottomOf="@id/title_tv">
+
 			<TextView
 				android:id="@+id/option3_title"
 				android:layout_width="140dp"
 				android:layout_height="30dp"
-				android:gravity="center"
 				android:layout_marginHorizontal="16dp"
 				android:layout_marginTop="14dp"
 				android:layout_marginBottom="13dp"
 				android:layout_weight="50"
 				android:ellipsize="end"
+				android:gravity="center"
 				android:lines="1"
 				android:text="@string/survey_item_title_1"
 				android:textColor="@color/tb_black"
 				android:textSize="14sp"
-				app:layout_constraintTop_toTopOf="parent"
+				app:layout_constraintBottom_toBottomOf="parent"
 				app:layout_constraintEnd_toEndOf="parent"
 				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintBottom_toBottomOf="parent"/>
+				app:layout_constraintTop_toTopOf="parent" />
 		</androidx.constraintlayout.widget.ConstraintLayout>
 
 		<androidx.constraintlayout.widget.ConstraintLayout
@@ -131,20 +121,20 @@
 				android:id="@+id/option4_title"
 				android:layout_width="140dp"
 				android:layout_height="30dp"
-				android:gravity="center"
 				android:layout_marginHorizontal="16dp"
 				android:layout_marginTop="14dp"
 				android:layout_marginBottom="13dp"
 				android:layout_weight="50"
 				android:ellipsize="end"
+				android:gravity="center"
 				android:lines="1"
 				android:text="@string/survey_item_title_2"
 				android:textColor="@color/tb_black"
 				android:textSize="14sp"
-				app:layout_constraintTop_toTopOf="parent"
+				app:layout_constraintBottom_toBottomOf="parent"
 				app:layout_constraintEnd_toEndOf="parent"
 				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintBottom_toBottomOf="parent"/>
+				app:layout_constraintTop_toTopOf="parent" />
 		</androidx.constraintlayout.widget.ConstraintLayout>
 
 	</LinearLayout>
@@ -153,27 +143,28 @@
 		android:id="@+id/side_note_layout"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:orientation="vertical"
 		android:layout_marginTop="20dp"
-		android:padding="16dp"
 		android:background="@drawable/search_background"
-		app:layout_constraintTop_toBottomOf="@id/main_pager_layout_2"
+		android:orientation="vertical"
+		android:padding="16dp"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent">
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/main_pager_layout_2">
 
 		<TextView
 			android:id="@+id/side_note_title"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="@string/survey_side_note_title_1"
-			android:textSize="16sp"
-			android:textColor="@color/tb_primary_green" />
+			android:textColor="@color/tb_primary_green"
+			android:textSize="16sp" />
+
 		<TextView
 			android:id="@+id/side_note_text"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="@string/survey_side_note_text_1"
-			android:textSize="12sp"/>
+			android:textSize="12sp" />
 
 	</LinearLayout>
 

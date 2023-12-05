@@ -16,7 +16,6 @@ class SurveyViewModel @Inject constructor(
 			progressPercent = 0,
 			repository.questionsTitlesList[0]
 	))
-
 	val uiStateFlow = _uiStateFlow.asStateFlow()
 
 	fun onOverallGameSkill() {
@@ -43,7 +42,7 @@ class SurveyViewModel @Inject constructor(
 
 	fun onSliceShotLevel() {
 		_uiStateFlow.value = SurveyUiState.SliceShotLevel(
-			progressPercent = 32,
+			progressPercent = (100 / repository.questionsTitlesList.size) * 3, // fixme автоматический пересчет
 			repository.questionsTitlesList[3],
 		)
 	}
@@ -83,5 +82,10 @@ class SurveyViewModel @Inject constructor(
 		)
 	}
 
-
+	fun onCurrentItemChange(currentItem: Int) {
+		val state = when (repository.optionsList.getOrNull(currentItem) ?: return) { // fixme works
+			// Forehand -> { set state }
+			// Backhand -> { set state }
+		}
+	}
 }

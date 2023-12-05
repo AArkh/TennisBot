@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -40,10 +39,7 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: SurveyUiState ->
 			when(uiState) {
 				is SurveyUiState.Loading -> {
-					Log.d("1234567", "is SurveyUiState.Loading")
 					viewModel.onOverallGameSkill()
-					Log.d("1234567", "viewModel.onOverallGameSkill() is triggered")
-					
 				}
 				is SurveyUiState.OverallGameSkill -> {
 					surveyAdapter.submitList(uiState.options)
@@ -52,41 +48,37 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 					binding.progressBar.progress = uiState.progressPercent
 
 					binding.backButton.setOnClickListener {
-						binding.viewpager.currentItem = 0
+						binding.viewpager.currentItem -= 1
 						viewModel.onOverallGameSkill()
-						Log.d("1234567", "OverallGameSkill's backButton is clickedListened")
 					}
 					surveyAdapter.clickListener = { pickedOption ->
 						// save the answer somewhere. find out which one is triggered
-						Log.d("1234567", "OverallGameSkill's option is picked")
-						binding.viewpager.currentItem = 1
+						binding.viewpager.currentItem += 1
 						viewModel.onForehandLevel()
-						Log.d("1234567", "OverallGameSkill's stuff is triggered")
 					}
 				}
 				is SurveyUiState.ForehandLevel -> {
 					binding.title.text = uiState.questionTitle
-					binding.progressBar.progress = uiState.progressPercent
+
+					binding.progressBar.setProgress(uiState.progressPercent, true) // fixme разобраться
+//					binding.progressBar.progress = uiState.progressPercent
 
 					binding.backButton.setOnClickListener {
-						Log.d("1234567", "ForehandLevel's backButton is clickedListened")
-						binding.viewpager.currentItem = 1
-						viewModel.onForehandLevel()
-					}
+						binding.viewpager.currentItem -= 1
+						viewModel.onCurrentItemChange(binding.viewpager.currentItem)
+					} //todo
 					surveyAdapter.clickListener = { pickedOption ->
-						Log.d("1234567", "ForehandLevel's option is picked")
 						// save the answer somewhere. find out which one is triggered
 						binding.viewpager.currentItem = 2
 						viewModel.onBackhandLevel()
-						Log.d("1234567", "ForehandLevel's stuff is triggered")
 					}
 				}
 				is SurveyUiState.BackhandLevel -> {
 					binding.title.text = uiState.questionTitle
-					binding.progressBar.progress = uiState.progressPercent
+					binding.progressBar.setProgress(uiState.progressPercent, true) // fixme разобраться
 
 					binding.backButton.setOnClickListener {
-						binding.viewpager.currentItem = 2
+						binding.viewpager.currentItem -= 1
 						viewModel.onBackhandLevel()
 					}
 					surveyAdapter.clickListener = { pickedOption ->
@@ -97,10 +89,10 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 				}
 				is SurveyUiState.SliceShotLevel -> {
 					binding.title.text = uiState.questionTitle
-					binding.progressBar.progress = uiState.progressPercent
+					binding.progressBar.setProgress(uiState.progressPercent, true) // fixme разобраться
 
 					binding.backButton.setOnClickListener {
-						binding.viewpager.currentItem = 3
+						binding.viewpager.currentItem -= 1
 						viewModel.onSliceShotLevel()
 					}
 					surveyAdapter.clickListener = { pickedOption ->
@@ -111,10 +103,10 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 				}
 				is SurveyUiState.ServeLevel -> {
 					binding.title.text = uiState.questionTitle
-					binding.progressBar.progress = uiState.progressPercent
+					binding.progressBar.setProgress(uiState.progressPercent, true) // fixme разобраться
 
 					binding.backButton.setOnClickListener {
-						binding.viewpager.currentItem = 4
+						binding.viewpager.currentItem -= 1
 						viewModel.onServeLevel()
 					}
 					surveyAdapter.clickListener = { pickedOption ->
@@ -125,10 +117,10 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 				}
 				is SurveyUiState.NetGameLevel -> {
 					binding.title.text = uiState.questionTitle
-					binding.progressBar.progress = uiState.progressPercent
+					binding.progressBar.setProgress(uiState.progressPercent, true) // fixme разобраться
 
 					binding.backButton.setOnClickListener {
-						binding.viewpager.currentItem = 5
+						binding.viewpager.currentItem -= 1
 						viewModel.onNetGameLevel()
 					}
 					surveyAdapter.clickListener = { pickedOption ->
@@ -139,10 +131,10 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 				}
 				is SurveyUiState.GameSpeedLevel -> { // in this one and the next some option is pre-picked for some reason
 					binding.title.text = uiState.questionTitle
-					binding.progressBar.progress = uiState.progressPercent
+					binding.progressBar.setProgress(uiState.progressPercent, true) // fixme разобраться
 
 					binding.backButton.setOnClickListener {
-						binding.viewpager.currentItem = 6
+						binding.viewpager.currentItem -= 1
 						viewModel.onGameSpeedLevel()
 					}
 					surveyAdapter.clickListener = { pickedOption ->
@@ -151,36 +143,33 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 						viewModel.onTournamentParticipation()
 					}
 				}
-				is SurveyUiState.TournamentParticipation -> {
-					binding.title.text = uiState.questionTitle
-					binding.progressBar.progress = uiState.progressPercent
-
-					binding.backButton.setOnClickListener {
-						binding.viewpager.currentItem = 7
-						viewModel.onTournamentParticipation()
-					}
-					surveyAdapter.clickListener = { pickedOption ->
+				is SurveyUiState.TournamentParticipation -> { // todo сделать как тут и ниже, только красиво
+					fertshjryukmn(uiState) { pickedOption ->
 						// save the answer somewhere
 						binding.viewpager.currentItem = 8
 						viewModel.onTournamentTopPlaces()
 					}
 				}
 				is SurveyUiState.TournamentTopPlaces -> {
-					binding.title.text = uiState.questionTitle
-					binding.progressBar.progress = uiState.progressPercent
-
-					binding.backButton.setOnClickListener {
-						binding.viewpager.currentItem -= 1
-						viewModel.onTournamentTopPlaces()
-					}
-					surveyAdapter.clickListener = { pickedOption ->
-						// save the answer somewhere.
+					fertshjryukmn(uiState) { pickedOption ->
+						// save the answer somewhere
 						binding.viewpager.currentItem = 0
-						viewModel.onOverallGameSkill() // temporary. supposed to lead to the results page
+						viewModel.onOverallGameSkill()
 					}
 				}
 				is SurveyUiState.Error -> {}
 			}
 		}
+	}
+
+	private fun fertshjryukmn(uiState: SurveyUiState, clickListener: (string: String) -> Unit) {
+		binding.title.text = uiState.questionTitle
+		binding.progressBar.setProgress(uiState.progressPercent, true) // fixme разобраться
+
+		binding.backButton.setOnClickListener {
+			binding.viewpager.currentItem -= 1
+			viewModel.onTournamentParticipation()
+		}
+		surveyAdapter.clickListener = clickListener
 	}
 }
