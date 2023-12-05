@@ -7,10 +7,13 @@ import tennis.bot.mobile.R
 import javax.inject.Inject
 import javax.inject.Singleton
 
+// todo можно удалить и слить данные с SurveyUiState
 @Singleton
 class AccountInfoRepository @Inject constructor(
 	@ApplicationContext context: Context
 ) { // for storing account info throughout the onboarding process
+
+	val surveyData = mutableMapOf<String, Int>() // experience to 4, forehand to 3, etc
 
 	val questionsTitlesList = listOf(
 		context.getString(R.string.survey_questionsTitlesList_1),
