@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
+import tennis.bot.mobile.core.CoreUtilsItem
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentSurveyBinding
 import javax.inject.Inject
@@ -43,6 +44,7 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 
 					updateUiData(uiState) { pickedOption ->
 						// save the answer somewhere. find out which one is triggered
+						surveyAdapter.submitList(viewModel.onPickedOption(0, pickedOption))
 						binding.viewpager.currentItem += 1
 						viewModel.onForehandLevel()
 					}
@@ -50,6 +52,7 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 				is SurveyUiState.ForehandLevel -> {
 					updateUiData(uiState) { pickedOption ->
 						// save the answer somewhere. find out which one is triggered
+						surveyAdapter.submitList(viewModel.onPickedOption(1, pickedOption))
 						binding.viewpager.currentItem = 2
 						viewModel.onBackhandLevel()
 					}
@@ -57,6 +60,7 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 				is SurveyUiState.BackhandLevel -> {
 					updateUiData(uiState) { pickedOption ->
 						// save the answer somewhere. find out which one is triggered
+						surveyAdapter.submitList(viewModel.onPickedOption(2, pickedOption))
 						binding.viewpager.currentItem = 3
 						viewModel.onSliceShotLevel()
 					}
@@ -64,6 +68,7 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 				is SurveyUiState.SliceShotLevel -> {
 					updateUiData(uiState) { pickedOption ->
 						// save the answer somewhere. find out which one is triggered
+						surveyAdapter.submitList(viewModel.onPickedOption(3, pickedOption))
 						binding.viewpager.currentItem = 4
 						viewModel.onServeLevel()
 					}
@@ -71,6 +76,7 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 				is SurveyUiState.ServeLevel -> {
 					updateUiData(uiState) { pickedOption ->
 						// save the answer somewhere. find out which one is triggered
+						surveyAdapter.submitList(viewModel.onPickedOption(4, pickedOption))
 						binding.viewpager.currentItem = 5
 						viewModel.onNetGameLevel()
 					}
@@ -78,6 +84,7 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 				is SurveyUiState.NetGameLevel -> {
 					updateUiData(uiState) { pickedOption ->
 						// save the answer somewhere. find out which one is triggered
+						surveyAdapter.submitList(viewModel.onPickedOption(5, pickedOption))
 						binding.viewpager.currentItem = 6
 						viewModel.onGameSpeedLevel()
 					}
@@ -85,6 +92,7 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 				is SurveyUiState.GameSpeedLevel -> { // in this one and the next some option is pre-picked for some reason
 					updateUiData(uiState) { pickedOption ->
 						// save the answer somewhere. find out which one is triggered
+						surveyAdapter.submitList(viewModel.onPickedOption(6, pickedOption))
 						binding.viewpager.currentItem = 7
 						viewModel.onTournamentParticipation()
 					}
@@ -92,6 +100,7 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 				is SurveyUiState.TournamentParticipation -> { // todo сделать как тут и ниже, только красиво
 					updateUiData(uiState) { pickedOption ->
 						// save the answer somewhere
+						surveyAdapter.submitList(viewModel.onPickedOption(7, pickedOption))
 						binding.viewpager.currentItem = 8
 						viewModel.onTournamentTopPlaces()
 					}
@@ -99,6 +108,7 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 				is SurveyUiState.TournamentTopPlaces -> {
 					updateUiData(uiState) { pickedOption ->
 						// save the answer somewhere
+						surveyAdapter.submitList(viewModel.onPickedOption(8, pickedOption))
 						binding.viewpager.currentItem = 0
 						viewModel.onOverallGameSkill()
 					}

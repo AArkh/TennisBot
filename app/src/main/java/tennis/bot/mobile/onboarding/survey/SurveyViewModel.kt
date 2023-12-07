@@ -8,7 +8,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import tennis.bot.mobile.R
-import tennis.bot.mobile.onboarding.photopick.CircledImage
 import tennis.bot.mobile.onboarding.photopick.PhotoPickUiState
 import javax.inject.Inject
 
@@ -19,7 +18,7 @@ class SurveyViewModel @Inject constructor(
 
 ): ViewModel() {
 
-	val questionsTitlesList = listOf(
+	private val questionsTitlesList = listOf(
 		context.getString(R.string.survey_questionsTitlesList_1),
 		context.getString(R.string.survey_questionsTitlesList_2),
 		context.getString(R.string.survey_questionsTitlesList_3),
@@ -31,7 +30,7 @@ class SurveyViewModel @Inject constructor(
 		context.getString(R.string.survey_questionsTitlesList_9)
 	)
 
-	val optionsList = listOf(
+	private val optionsList = listOf(
 		SurveyItem(
 			context.getString(R.string.survey_options_item_set1_1),
 			context.getString(R.string.survey_options_item_set1_2),
@@ -206,25 +205,18 @@ class SurveyViewModel @Inject constructor(
 		_uiStateFlow.value = uiState
 	}
 
-//	fun onPickedCircledImage(pickedCircledImage: CircledImage) {
-//		val newList = imageList.map { item ->
-//			if (item.isSelected) { // previously selected
-//				return@map item.copy(isSelected = false)
-//			} else if (item == pickedCircledImage) {
-//				return@map pickedCircledImage.copy(isSelected = true)
-//			} else {
-//				return@map item
-//			}
-//		}
-//		_uiStateFlow.value = PhotoPickUiState.PickedPreselectedImage(newList, true)
-//	}
+	fun onPickedOption(position: Int, pickedOptionId: Int): List<SurveyItem> {
+		val newList = optionsList.toMutableList()
+		newList[position] = newList[position].let { item ->
+			when (item.pickedOptionId) {
+				pickedOptionId -> item.copy(pickedOptionId = null)
+				null -> item.copy(pickedOptionId = pickedOptionId)
+				else -> item
+			}
+		}
 
-//	fun onCurrentItemChange(currentItem: Int) {
-//		val state = when (repository.optionsList.getOrNull(currentItem) ?: return) { // fixme works
-//			// Forehand -> { set state }
-//			// Backhand -> { set state }
-//		}
-//	}
+		return newList.toList()
+	}
 
 	private fun calculateProgressPercent(position: Int): Int {
 		return (100 / questionsTitlesList.size) * position

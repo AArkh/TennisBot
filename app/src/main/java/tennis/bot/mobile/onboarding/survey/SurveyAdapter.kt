@@ -27,12 +27,12 @@ class SurveyAdapter @Inject constructor(): CoreAdapter<SurveyItemViewHolder>() {
 		holder.binding.option2.setBackgroundResource(R.drawable.survey_option_outline)
 		holder.binding.option3.setBackgroundResource(R.drawable.survey_option_outline)
 		holder.binding.option4.setBackgroundResource(R.drawable.survey_option_outline)
-//		when (clickListener ) { // fixme тот же самый индекс, что и в clickListener кидаем
-//			1 -> holder.binding.option1.setBackgroundResource(R.drawable.survey_option_outline_picked)
-//			2 -> holder.binding.option2.setBackgroundResource(R.drawable.survey_option_outline_picked)
-//			3 -> holder.binding.option3.setBackgroundResource(R.drawable.survey_option_outline_picked)
-//			4 -> holder.binding.option4.setBackgroundResource(R.drawable.survey_option_outline_picked)
-//		}
+		when (surveyItem.pickedOptionId) { // fixme тот же самый индекс, что и в clickListener кидаем
+			1 -> holder.binding.option1.setBackgroundResource(R.drawable.survey_option_outline_picked)
+			2 -> holder.binding.option2.setBackgroundResource(R.drawable.survey_option_outline_picked)
+			3 -> holder.binding.option3.setBackgroundResource(R.drawable.survey_option_outline_picked)
+			4 -> holder.binding.option4.setBackgroundResource(R.drawable.survey_option_outline_picked)
+		}
 
 		if (surveyItem.isTwoOptions) {
 			holder.binding.mainPagerLayout2.visibility = View.GONE
@@ -74,7 +74,7 @@ data class SurveyItem(
 	val option4: String,
 	val sideNoteTitle: String,
 	val sideNoteText: String,
-	val pickedItemId: Int? = null,
+	val pickedOptionId: Int? = null,
 	var isTwoOptions: Boolean = false
 ): CoreUtilsItem()
 

@@ -3,7 +3,7 @@ package tennis.bot.mobile.onboarding.survey
 sealed class SurveyUiState(
 	open val progressPercent: Int,
 	open val questionTitle: String,
-	open val prevState: SurveyUiState?
+	open val prevState: SurveyUiState?,
 ) {
 
 	data class OverallGameSkill(
