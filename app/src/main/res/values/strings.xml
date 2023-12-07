@@ -92,6 +92,13 @@
 	<string name="survey_start_button">Начать</string>
 	<string name="survey_dialog_text">Сейчас система оценит ваш уровень \nсилы. Отвечайте на вопросы честно.</string>
 	<string name="survey_dialog_title">Теннис бот опрос</string>
+	<string name="sport_title">Теннис</string>
+	<string name="namegender_title">Расскажи о себе</string>
+	<string name="namesurname_female">Девушка</string>
+	<string name="namesurname_male">Мужчина</string>
+	<string name="namesurname_name">Имя</string>
+	<string name="namesurname_surname">Фамилия</string>
+	<string name="namesurname_error_text">Поле должно содержать не менее 3-х символов</string>
 
 
 </resources>
