@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	tools:context=".onboarding.sport.SportFragment">
+
+	<ImageView
+		android:id="@+id/back_button"
+		android:layout_width="36dp"
+		android:layout_height="36dp"
+		android:layout_marginStart="20dp"
+		android:layout_marginTop="10dp"
+		android:background="@drawable/search_background"
+		android:backgroundTint="@color/tb_gray_border"
+		android:padding="6dp"
+		android:src="@drawable/chevron_vertical"
+		android:visibility="visible"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:tint="@color/tb_gray_active" />
+
+	<TextView
+		android:id="@+id/title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Выбери спорт"
+		android:textSize="20sp"
+		android:textColor="@color/tb_black"
+		android:layout_marginStart="20dp"
+		android:layout_marginTop="26dp"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/back_button" />
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:id="@+id/item_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="16dp"
+		android:layout_marginHorizontal="20dp"
+		android:background="@drawable/country_button_outline_active"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/title">
+
+		<TextView
+			android:id="@+id/item_title"
+			android:layout_width="140dp"
+			android:layout_height="30dp"
+			android:gravity="center"
+			android:layout_marginHorizontal="16dp"
+			android:layout_marginTop="14dp"
+			android:layout_marginBottom="13dp"
+			android:layout_weight="50"
+			android:ellipsize="end"
+			android:lines="1"
+			android:text="Теннис"
+			android:textColor="@color/tb_black"
+			android:textSize="13sp"
+			app:layout_constraintTop_toTopOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintBottom_toBottomOf="parent"/>
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+	<TextView
+		android:id="@+id/title_others"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="В разработке"
+		android:textSize="18sp"
+		android:textColor="@color/tb_black"
+		android:layout_marginStart="20dp"
+		android:layout_marginTop="32dp"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/item_layout" />
+
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/in_development_rv"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_marginTop="16dp"
+		android:layout_marginHorizontal="20dp"
+		android:layout_marginBottom="8dp"
+		tools:listitem="@layout/recycler_sport_item"
+		app:layout_constraintTop_toBottomOf="@id/title_others"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintBottom_toTopOf="@id/buttonNext"/>
+
+
+	<Button
+		android:id="@+id/buttonNext"
+		style="@style/Widget.TennisBot.Button.Active"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginHorizontal="20dp"
+		android:layout_marginBottom="8dp"
+		android:enabled="true"
+		android:text="@string/onboarding_continue_button"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
