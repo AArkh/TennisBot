@@ -12,10 +12,10 @@ import tennis.bot.mobile.databinding.PagerSurveyItemBinding
 import javax.inject.Inject
 
 class SurveyAdapter @Inject constructor(): CoreAdapter<SurveyItemViewHolder>() {
-	var clickListener: ((id: Int) -> Unit)? = null // fixme вместо строк сразу передавать id: Int как для бэка нужно
+	var clickListener: ((id: Int) -> Unit)? = null
 
 	override fun onBindViewHolder(holder: SurveyItemViewHolder, item: Any) {
-		val surveyItem = item as? SurveyItem ?: throw IllegalArgumentException("Item must be SurveyItem")
+		val surveyItem = item as? NewRefreshedCoolSurveyItem ?: throw IllegalArgumentException("Item must be SurveyItem")
 		holder.binding.option1Title.text = surveyItem.option1
 		holder.binding.option2Title.text = surveyItem.option2
 		holder.binding.option3Title.text = surveyItem.option3
@@ -66,15 +66,4 @@ class SurveyAdapter @Inject constructor(): CoreAdapter<SurveyItemViewHolder>() {
 class SurveyItemViewHolder(
 	val binding: PagerSurveyItemBinding
 ) : RecyclerView.ViewHolder(binding.root)
-
-data class SurveyItem(
-	val option1: String,
-	val option2: String,
-	val option3: String,
-	val option4: String,
-	val sideNoteTitle: String,
-	val sideNoteText: String,
-	val pickedOptionId: Int? = null,
-	var isTwoOptions: Boolean = false
-): CoreUtilsItem()
 
