@@ -9,98 +9,10 @@ import javax.inject.Singleton
 
 // todo можно удалить и слить данные с SurveyUiState
 @Singleton
-class AccountInfoRepository @Inject constructor(
-	@ApplicationContext context: Context
-) { // for storing account info throughout the onboarding process
+class AccountInfoRepository @Inject constructor() { // for storing account info throughout the onboarding process
 
 	val surveyData = mutableMapOf<String, Int>() // experience to 4, forehand to 3, etc
 
-	val questionsTitlesList = listOf(
-		context.getString(R.string.survey_questionsTitlesList_1),
-		context.getString(R.string.survey_questionsTitlesList_2),
-		context.getString(R.string.survey_questionsTitlesList_3),
-		context.getString(R.string.survey_questionsTitlesList_4),
-		context.getString(R.string.survey_questionsTitlesList_5),
-		context.getString(R.string.survey_questionsTitlesList_6),
-		context.getString(R.string.survey_questionsTitlesList_7),
-		context.getString(R.string.survey_questionsTitlesList_8),
-		context.getString(R.string.survey_questionsTitlesList_9)
-	)
 
-	val optionsList = listOf(
-		SurveyItem(
-			context.getString(R.string.survey_options_item_set1_1),
-			context.getString(R.string.survey_options_item_set1_2),
-			context.getString(R.string.survey_options_item_set1_3),
-			context.getString(R.string.survey_options_item_set1_4),
-			getString(context, R.string.survey_side_note_title_1),
-			getString(context, R.string.survey_side_note_text_1)
-		),
-		SurveyItem(
-			context.getString(R.string.survey_options_item_set1_1),
-			context.getString(R.string.survey_options_item_set1_2),
-			context.getString(R.string.survey_options_item_set1_3),
-			context.getString(R.string.survey_options_item_set1_4),
-			getString(context, R.string.survey_side_note_title_2),
-			getString(context, R.string.survey_side_note_text_2)
-		),
-		SurveyItem(
-			context.getString(R.string.survey_options_item_set2_1),
-			context.getString(R.string.survey_options_item_set2_2),
-			context.getString(R.string.survey_options_item_set2_3),
-			context.getString(R.string.survey_options_item_set2_4),
-			getString(context, R.string.survey_side_note_title_3),
-			getString(context, R.string.survey_side_note_text_3)
-		),
-		SurveyItem(
-			context.getString(R.string.survey_options_item_set2_1),
-			context.getString(R.string.survey_options_item_set2_2),
-			context.getString(R.string.survey_options_item_set2_3),
-			context.getString(R.string.survey_options_item_set2_4),
-			getString(context, R.string.survey_side_note_title_4),
-			getString(context, R.string.survey_side_note_text_4)
-		),
-		SurveyItem(
-			context.getString(R.string.survey_options_item_set3_1),
-			context.getString(R.string.survey_options_item_set3_2),
-			context.getString(R.string.survey_options_item_set3_3),
-			context.getString(R.string.survey_options_item_set3_4),
-			getString(context, R.string.survey_side_note_title_5),
-			getString(context, R.string.survey_side_note_text_5)
-		),
-		SurveyItem(
-			context.getString(R.string.survey_options_item_set3_1),
-			context.getString(R.string.survey_options_item_set3_2),
-			context.getString(R.string.survey_options_item_set3_3),
-			context.getString(R.string.survey_options_item_set3_4),
-			getString(context, R.string.survey_side_note_title_6),
-			getString(context, R.string.survey_side_note_text_6)
-		),
-		SurveyItem(
-			context.getString(R.string.survey_options_item_set3_1),
-			context.getString(R.string.survey_options_item_set3_2),
-			context.getString(R.string.survey_options_item_set3_3),
-			context.getString(R.string.survey_options_item_set3_4),
-			getString(context, R.string.survey_side_note_title_7), getString(context, R.string.survey_side_note_text_7)
-		),
-		SurveyItem(
-			context.getString(R.string.survey_options_item_set4_no),
-			context.getString(R.string.survey_options_item_set4_yes),
-			"",
-			"",
-			getString(context, R.string.survey_side_note_title_8),
-			getString(context, R.string.survey_side_note_text_8),
-			true
-		),
-		SurveyItem(
-			context.getString(R.string.survey_options_item_set4_no),
-			context.getString(R.string.survey_options_item_set4_yes),
-			"",
-			"",
-			getString(context, R.string.survey_side_note_title_9),
-			getString(context, R.string.survey_side_note_text_9),
-			true
-		)
-	)
 
 }

@@ -27,6 +27,10 @@ class SportFragment : CoreFragment<FragmentSportBinding>() {
 		binding.inDevelopmentRv.layoutManager = LinearLayoutManager(requireContext())
 		sportAdapter.submitList(viewModel.sportItemsList)
 
+		binding.backButton.setOnClickListener {
+			parentFragmentManager.popBackStack()
+		}
+
 		binding.buttonNext.setOnClickListener {
 			parentFragmentManager.beginTransaction()
 				.replace(R.id.fragment_container_view, NameGenderFragment())

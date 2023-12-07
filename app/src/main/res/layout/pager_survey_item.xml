@@ -3,9 +3,9 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent">
+	android:layout_height="match_parent"
+	android:layout_marginHorizontal="20dp">
 
-	<!-- fixme Переделать верстку -->
 	<LinearLayout
 		android:id="@+id/main_pager_layout_1"
 		android:layout_width="match_parent"
@@ -17,9 +17,10 @@
 
 		<FrameLayout
 			android:id="@+id/option1"
-			android:layout_width="wrap_content"
+			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="50"
+			android:layout_marginEnd="10dp"
 			android:background="@drawable/survey_option_outline"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
@@ -29,11 +30,11 @@
 				android:id="@+id/option1_title"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:paddingHorizontal="16dp"
-				android:paddingVertical="20dp"
 				android:ellipsize="end"
 				android:gravity="center"
 				android:lines="1"
+				android:paddingHorizontal="16dp"
+				android:paddingVertical="20dp"
 				android:text="@string/survey_item_title_1"
 				android:textColor="@color/tb_black"
 				android:textSize="14sp" />
@@ -41,7 +42,7 @@
 
 		<FrameLayout
 			android:id="@+id/option2"
-			android:layout_width="wrap_content"
+			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="50"
 			android:background="@drawable/survey_option_outline"
@@ -55,7 +56,6 @@
 				android:layout_height="wrap_content"
 				android:paddingHorizontal="16dp"
 				android:paddingVertical="20dp"
-				android:layout_weight="50"
 				android:ellipsize="end"
 				android:gravity="center"
 				android:lines="1"
@@ -70,72 +70,54 @@
 		android:id="@+id/main_pager_layout_2"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="10dp"
 		android:orientation="horizontal"
+		android:layout_marginTop="10dp"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/main_pager_layout_1">
 
-		<androidx.constraintlayout.widget.ConstraintLayout
+		<FrameLayout
 			android:id="@+id/option3"
-			android:layout_width="wrap_content"
+			android:layout_width="0dp"
 			android:layout_height="wrap_content"
-			android:layout_marginEnd="10dp"
 			android:layout_weight="50"
-			android:background="@drawable/survey_option_outline"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/title_tv">
+			android:layout_marginEnd="10dp"
+			android:background="@drawable/survey_option_outline">
 
 			<TextView
 				android:id="@+id/option3_title"
-				android:layout_width="140dp"
-				android:layout_height="30dp"
-				android:layout_marginHorizontal="16dp"
-				android:layout_marginTop="14dp"
-				android:layout_marginBottom="13dp"
-				android:layout_weight="50"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
 				android:ellipsize="end"
 				android:gravity="center"
 				android:lines="1"
+				android:paddingHorizontal="16dp"
+				android:paddingVertical="20dp"
 				android:text="@string/survey_item_title_1"
 				android:textColor="@color/tb_black"
-				android:textSize="14sp"
-				app:layout_constraintBottom_toBottomOf="parent"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toTopOf="parent" />
-		</androidx.constraintlayout.widget.ConstraintLayout>
+				android:textSize="14sp" />
+		</FrameLayout>
 
-		<androidx.constraintlayout.widget.ConstraintLayout
+		<FrameLayout
 			android:id="@+id/option4"
-			android:layout_width="wrap_content"
+			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="50"
-			android:background="@drawable/survey_option_outline"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/title_tv">
+			android:background="@drawable/survey_option_outline">
 
 			<TextView
 				android:id="@+id/option4_title"
-				android:layout_width="140dp"
-				android:layout_height="30dp"
-				android:layout_marginHorizontal="16dp"
-				android:layout_marginTop="14dp"
-				android:layout_marginBottom="13dp"
-				android:layout_weight="50"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingHorizontal="16dp"
+				android:paddingVertical="20dp"
 				android:ellipsize="end"
 				android:gravity="center"
 				android:lines="1"
 				android:text="@string/survey_item_title_2"
 				android:textColor="@color/tb_black"
-				android:textSize="14sp"
-				app:layout_constraintBottom_toBottomOf="parent"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toTopOf="parent" />
-		</androidx.constraintlayout.widget.ConstraintLayout>
+				android:textSize="14sp" />
+		</FrameLayout>
 
 	</LinearLayout>
 

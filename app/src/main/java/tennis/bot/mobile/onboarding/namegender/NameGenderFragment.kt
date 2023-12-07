@@ -42,6 +42,10 @@ class NameGenderFragment : CoreFragment<FragmentNameGenderBinding>() {
 			viewModel.onGenderChosen(2)
 		}
 
+		binding.backButton.setOnClickListener {
+			parentFragmentManager.popBackStack()
+		}
+
 		binding.buttonNext.setOnClickListener {
 			parentFragmentManager.beginTransaction()
 				.replace(R.id.fragment_container_view, LocationFragment())

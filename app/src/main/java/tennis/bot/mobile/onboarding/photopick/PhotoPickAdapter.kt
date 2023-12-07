@@ -15,7 +15,7 @@ open class PhotoPickAdapter @Inject constructor(): CoreAdapter<RecyclerCircledPh
     var clickListener: ((item: CircledImage) -> Unit)? = null
 
     override fun onBindViewHolder(holder: RecyclerCircledPhotoItemViewHolder, item: Any) {
-        val circledImage = item as? CircledImage ?: throw IllegalArgumentException("Item must be LoginProposalImage")
+        val circledImage = item as? CircledImage ?: throw IllegalArgumentException("Item must be CircledImage")
         holder.binding.image.setImageResource(circledImage.imageRes)
         holder.itemView.setOnClickListener {
             clickListener?.invoke(item)

@@ -101,6 +101,10 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
             )
         }
 
+        binding.backButton.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+
         binding.buttonNext.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_view, PhotoPickFragment())
