@@ -101,6 +101,7 @@ class SurveyViewModel @Inject constructor(
 		context.getString(R.string.survey_questionsTitlesList_8),
 		context.getString(R.string.survey_questionsTitlesList_9)
 	)
+
 	val newRefreshedCoolSurveyUiState = MutableStateFlow(NewRefreshedCoolSurveyUiState(
 		progress = 0,
 		title = questionsTitlesList[0],
@@ -109,16 +110,28 @@ class SurveyViewModel @Inject constructor(
 	))
 
 	fun onBackClicked() {
-		newRefreshedCoolSurveyUiState.value = newRefreshedCoolSurveyUiState.value.copy(
-			selectedPage = newRefreshedCoolSurveyUiState.value.selectedPage - 1 // todo fixme для нулевого возвращаемся домой на предыдущий экран
-		)
+		if (newRefreshedCoolSurveyUiState.value.selectedPage in 1..8 ) {
+			val newPageIndex = newRefreshedCoolSurveyUiState.value.selectedPage - 1 // todo fixme для нулевого возвращаемся домой на предыдущий экран
+			val newProgress = calculateProgressPercent(newPageIndex)
+			val newTitle = questionsTitlesList[newPageIndex]
+			newRefreshedCoolSurveyUiState.value = newRefreshedCoolSurveyUiState.value.copy(
+				progress = newProgress,
+				title = newTitle,
+				selectedPage = newPageIndex,
+			)
+		}
+		return
 	}
 
 	fun onPickedOption(pickedOptionId: Int) {
 		val currentState: NewRefreshedCoolSurveyUiState = newRefreshedCoolSurveyUiState.value
 		val currentPage = currentState.surveyPages[currentState.selectedPage]
 		val updatePage = currentPage.copy(pickedOptionId = pickedOptionId)
-		val newPageIndex = currentState.selectedPage + 1 // fixme тут крэш почини, тут для последнего вперед идем
+		val newPageIndex = if (currentState.selectedPage in 0..7) {
+			currentState.selectedPage + 1
+		} else {
+			0
+		}
 		val newProgress = calculateProgressPercent(newPageIndex)
 		val newTitle = questionsTitlesList[newPageIndex]
 

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	android:id="@+id/result_layout"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:padding="16dp"
+	android:background="@drawable/country_button_outline"
+	>
+
+	<TextView
+		android:id="@+id/result_title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_weight="50"
+		android:text="Уровень игры"
+		android:textColor="@color/tb_gray_active"
+		android:textSize="18sp" />
+
+	<TextView
+		android:id="@+id/result_option"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_weight="50"
+		android:text="@string/survey_options_item_set1_1"
+		android:textColor="@color/tb_gray_dark"
+		android:textSize="19sp" />
+
+
+</LinearLayout>

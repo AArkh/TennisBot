@@ -26,17 +26,24 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 
 		binding.viewpager.adapter = surveyAdapter
 		binding.viewpager.isUserInputEnabled = false
-		binding.backButton.setOnClickListener {
-			viewModel.onBackClicked()
-		}
 
 		val dialog = Dialog(requireContext())
 		dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-		dialog.window?.setBackgroundDrawableResource(R.drawable.survey_dialog_rounded)
 		dialog.setContentView(R.layout.survey_welcome_dialog)
+		dialog.window?.setBackgroundDrawableResource(R.drawable.survey_dialog_rounded)
 		val dialogButton = dialog.findViewById<Button>(R.id.dialog_buttonStart)
 		dialog.show()
 		dialogButton.setOnClickListener { dialog.dismiss() }
+
+		binding.backButton.setOnClickListener {
+			if (viewModel.newRefreshedCoolSurveyUiState.value.selectedPage > 0) {
+				viewModel.onBackClicked()
+			} else {
+				binding.backButton.setOnClickListener {
+					parentFragmentManager.popBackStack()
+				}
+			}
+		}
 
 		surveyAdapter.clickListener = { selectedOptionId ->
 			viewModel.onPickedOption(selectedOptionId)

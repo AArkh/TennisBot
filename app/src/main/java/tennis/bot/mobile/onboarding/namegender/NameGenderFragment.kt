@@ -57,9 +57,6 @@ class NameGenderFragment : CoreFragment<FragmentNameGenderBinding>() {
 			binding.clearNameButton.visibility = if (uiState.clearNameButtonVisible) View.VISIBLE else View.INVISIBLE
 			binding.clearSurnameButton.visibility = if (uiState.clearSurnameButtonVisible) View.VISIBLE else View.INVISIBLE
 
-			binding.nameInputLayout.error = uiState.nameErrorMessage
-			binding.surnameInputLayout.error = uiState.surnameErrorMessage
-
 			binding.male.setBackgroundResource(R.drawable.survey_option_outline)
 			binding.female.setBackgroundResource(R.drawable.survey_option_outline)
 			when(uiState.gender) {

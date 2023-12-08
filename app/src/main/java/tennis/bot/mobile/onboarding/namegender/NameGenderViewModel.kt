@@ -13,15 +13,11 @@ import javax.inject.Inject
 class NameGenderViewModel @Inject constructor(@ApplicationContext private val context: Context): ViewModel(
 ) {
 
-	private val errorText = context.getString(R.string.namesurname_error_text)
-
 	private val _uiStateFlow = MutableStateFlow(
 		NameGenderUiState(
 			userNameInput = "",
 			userSurnameInput = "",
 			gender = 0,
-			nameErrorMessage = null,
-			surnameErrorMessage = null,
 			clearNameButtonVisible = false,
 			clearSurnameButtonVisible = false,
 			nextButtonEnabled = false
@@ -33,14 +29,9 @@ class NameGenderViewModel @Inject constructor(@ApplicationContext private val co
 	fun onNameInput(name: CharSequence) {
 		val prevState: NameGenderUiState = _uiStateFlow.value
 		val isClearNameButtonVisible = name.isNotEmpty()
-		val errorMessage = if (name.length <= 3 && name.isNotEmpty()) {
-			errorText
-		} else {
-			null
-		}
+
 		_uiStateFlow.value = prevState.copy(
 			userNameInput = name.toString(),
-			nameErrorMessage = errorMessage,
 			clearNameButtonVisible = isClearNameButtonVisible,
 		)
 	}
@@ -48,15 +39,9 @@ class NameGenderViewModel @Inject constructor(@ApplicationContext private val co
 	fun onSurnameInput(surname: CharSequence) {
 		val prevState: NameGenderUiState = _uiStateFlow.value
 		val isClearSurnameButtonVisible = surname.isNotEmpty()
-		val errorMessage = if (surname.length <= 3 && surname.isNotEmpty()) {
-			errorText
-		} else {
-			null
-		}
 
 		_uiStateFlow.value = prevState.copy(
 			userSurnameInput = surname.toString(),
-			surnameErrorMessage = errorMessage,
 			clearSurnameButtonVisible = isClearSurnameButtonVisible,
 		)
 	}
