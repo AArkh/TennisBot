@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreAdapter
-import tennis.bot.mobile.core.CoreUtilsItem
 import tennis.bot.mobile.databinding.PagerSurveyItemBinding
 import javax.inject.Inject
 
@@ -15,7 +14,7 @@ class SurveyAdapter @Inject constructor(): CoreAdapter<SurveyItemViewHolder>() {
 	var clickListener: ((id: Int) -> Unit)? = null
 
 	override fun onBindViewHolder(holder: SurveyItemViewHolder, item: Any) {
-		val surveyItem = item as? NewRefreshedCoolSurveyItem ?: throw IllegalArgumentException("Item must be SurveyItem")
+		val surveyItem = item as? SurveyItem ?: throw IllegalArgumentException("Item must be SurveyItem")
 		holder.binding.option1Title.text = surveyItem.option1
 		holder.binding.option2Title.text = surveyItem.option2
 		holder.binding.option3Title.text = surveyItem.option3

@@ -15,7 +15,7 @@ class SurveyViewModel @Inject constructor(
 ): ViewModel() {
 
 	private val optionsList = listOf(
-		NewRefreshedCoolSurveyItem(
+		SurveyItem(
 			context.getString(R.string.survey_options_item_set1_1),
 			context.getString(R.string.survey_options_item_set1_2),
 			context.getString(R.string.survey_options_item_set1_3),
@@ -23,7 +23,7 @@ class SurveyViewModel @Inject constructor(
 			ContextCompat.getString(context, R.string.survey_side_note_title_1),
 			ContextCompat.getString(context, R.string.survey_side_note_text_1)
 		),
-		NewRefreshedCoolSurveyItem(
+		SurveyItem(
 			context.getString(R.string.survey_options_item_set1_1),
 			context.getString(R.string.survey_options_item_set1_2),
 			context.getString(R.string.survey_options_item_set1_3),
@@ -31,7 +31,7 @@ class SurveyViewModel @Inject constructor(
 			ContextCompat.getString(context, R.string.survey_side_note_title_2),
 			ContextCompat.getString(context, R.string.survey_side_note_text_2)
 		),
-		NewRefreshedCoolSurveyItem(
+		SurveyItem(
 			context.getString(R.string.survey_options_item_set2_1),
 			context.getString(R.string.survey_options_item_set2_2),
 			context.getString(R.string.survey_options_item_set2_3),
@@ -39,7 +39,7 @@ class SurveyViewModel @Inject constructor(
 			ContextCompat.getString(context, R.string.survey_side_note_title_3),
 			ContextCompat.getString(context, R.string.survey_side_note_text_3)
 		),
-		NewRefreshedCoolSurveyItem(
+		SurveyItem(
 			context.getString(R.string.survey_options_item_set2_1),
 			context.getString(R.string.survey_options_item_set2_2),
 			context.getString(R.string.survey_options_item_set2_3),
@@ -47,7 +47,7 @@ class SurveyViewModel @Inject constructor(
 			ContextCompat.getString(context, R.string.survey_side_note_title_4),
 			ContextCompat.getString(context, R.string.survey_side_note_text_4)
 		),
-		NewRefreshedCoolSurveyItem(
+		SurveyItem(
 			context.getString(R.string.survey_options_item_set3_1),
 			context.getString(R.string.survey_options_item_set3_2),
 			context.getString(R.string.survey_options_item_set3_3),
@@ -55,7 +55,7 @@ class SurveyViewModel @Inject constructor(
 			ContextCompat.getString(context, R.string.survey_side_note_title_5),
 			ContextCompat.getString(context, R.string.survey_side_note_text_5)
 		),
-		NewRefreshedCoolSurveyItem(
+		SurveyItem(
 			context.getString(R.string.survey_options_item_set3_1),
 			context.getString(R.string.survey_options_item_set3_2),
 			context.getString(R.string.survey_options_item_set3_3),
@@ -63,7 +63,7 @@ class SurveyViewModel @Inject constructor(
 			ContextCompat.getString(context, R.string.survey_side_note_title_6),
 			ContextCompat.getString(context, R.string.survey_side_note_text_6)
 		),
-		NewRefreshedCoolSurveyItem(
+		SurveyItem(
 			context.getString(R.string.survey_options_item_set3_1),
 			context.getString(R.string.survey_options_item_set3_2),
 			context.getString(R.string.survey_options_item_set3_3),
@@ -71,7 +71,7 @@ class SurveyViewModel @Inject constructor(
 			ContextCompat.getString(context, R.string.survey_side_note_title_7),
 			ContextCompat.getString(context, R.string.survey_side_note_text_7)
 		),
-		NewRefreshedCoolSurveyItem(
+		SurveyItem(
 			context.getString(R.string.survey_options_item_set4_no),
 			context.getString(R.string.survey_options_item_set4_yes),
 			"",
@@ -80,7 +80,7 @@ class SurveyViewModel @Inject constructor(
 			ContextCompat.getString(context, R.string.survey_side_note_text_8),
 			true
 		),
-		NewRefreshedCoolSurveyItem(
+		SurveyItem(
 			context.getString(R.string.survey_options_item_set4_no),
 			context.getString(R.string.survey_options_item_set4_yes),
 			"",
@@ -102,7 +102,7 @@ class SurveyViewModel @Inject constructor(
 		context.getString(R.string.survey_questionsTitlesList_9)
 	)
 
-	val newRefreshedCoolSurveyUiState = MutableStateFlow(NewRefreshedCoolSurveyUiState(
+	val surveyUiState = MutableStateFlow(SurveyUiState(
 		progress = 0,
 		title = questionsTitlesList[0],
 		selectedPage = 0,
@@ -110,11 +110,11 @@ class SurveyViewModel @Inject constructor(
 	))
 
 	fun onBackClicked() {
-		if (newRefreshedCoolSurveyUiState.value.selectedPage in 1..8 ) {
-			val newPageIndex = newRefreshedCoolSurveyUiState.value.selectedPage - 1 // todo fixme для нулевого возвращаемся домой на предыдущий экран
+		if (surveyUiState.value.selectedPage in 1..8 ) {
+			val newPageIndex = surveyUiState.value.selectedPage - 1
 			val newProgress = calculateProgressPercent(newPageIndex)
 			val newTitle = questionsTitlesList[newPageIndex]
-			newRefreshedCoolSurveyUiState.value = newRefreshedCoolSurveyUiState.value.copy(
+			surveyUiState.value = surveyUiState.value.copy(
 				progress = newProgress,
 				title = newTitle,
 				selectedPage = newPageIndex,
@@ -124,21 +124,31 @@ class SurveyViewModel @Inject constructor(
 	}
 
 	fun onPickedOption(pickedOptionId: Int) {
-		val currentState: NewRefreshedCoolSurveyUiState = newRefreshedCoolSurveyUiState.value
+		val currentState: SurveyUiState = surveyUiState.value
 		val currentPage = currentState.surveyPages[currentState.selectedPage]
 		val updatePage = currentPage.copy(pickedOptionId = pickedOptionId)
 		val newPageIndex = if (currentState.selectedPage in 0..7) {
 			currentState.selectedPage + 1
-		} else {
-			0
-		}
+		} else return
 		val newProgress = calculateProgressPercent(newPageIndex)
 		val newTitle = questionsTitlesList[newPageIndex]
 
-		newRefreshedCoolSurveyUiState.value = currentState.copy(
+		surveyUiState.value = currentState.copy(
 			progress = newProgress,
 			title = newTitle,
 			selectedPage = newPageIndex,
+			surveyPages = currentState.surveyPages.toMutableList().apply {
+				set(currentState.selectedPage, updatePage)
+			}
+		)
+	}
+
+	fun onLastPickedOption(pickedOptionId: Int) {
+		val currentState: SurveyUiState = surveyUiState.value
+		val currentPage = currentState.surveyPages[currentState.selectedPage]
+		val updatePage = currentPage.copy(pickedOptionId = pickedOptionId)
+
+		surveyUiState.value = currentState.copy(
 			surveyPages = currentState.surveyPages.toMutableList().apply {
 				set(currentState.selectedPage, updatePage)
 			}

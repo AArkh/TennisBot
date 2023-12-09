@@ -2,14 +2,14 @@ package tennis.bot.mobile.onboarding.survey
 
 import tennis.bot.mobile.core.CoreUtilsItem
 
-data class NewRefreshedCoolSurveyUiState(
+data class SurveyUiState(
     val progress: Int,
     val title: String,
     val selectedPage: Int, // current shown index in surveyPages
-    val surveyPages: List<NewRefreshedCoolSurveyItem>
+    val surveyPages: List<SurveyItem>
 )
 
-data class NewRefreshedCoolSurveyItem(
+data class SurveyItem(
     val option1: String,
     val option2: String,
     val option3: String,

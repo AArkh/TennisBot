@@ -1,6 +1,7 @@
 package tennis.bot.mobile.onboarding.survey
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import tennis.bot.mobile.core.CoreAdapter
@@ -15,7 +16,7 @@ class SurveyResultsAdapter @Inject constructor(): CoreAdapter<SurveyResultItemVi
 		holder.binding.resultOption.text = surveyResultItem.resultOption
 
 		if(surveyResultItem.noUnderline) {
-			// no underline
+			holder.binding.underline.visibility = View.GONE
 		}
 	}
 
@@ -31,6 +32,6 @@ class SurveyResultItemViewHolder(
 
 data class SurveyResultItem(
 	val resultTitle: String,
-	val resultOption: String,
-	val noUnderline: Boolean
+	val resultOption: String = "",
+	val noUnderline: Boolean = false
 ): CoreUtilsItem()

@@ -36,7 +36,7 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 		dialogButton.setOnClickListener { dialog.dismiss() }
 
 		binding.backButton.setOnClickListener {
-			if (viewModel.newRefreshedCoolSurveyUiState.value.selectedPage > 0) {
+			if (viewModel.surveyUiState.value.selectedPage > 0) {
 				viewModel.onBackClicked()
 			} else {
 				binding.backButton.setOnClickListener {
@@ -46,10 +46,19 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 		}
 
 		surveyAdapter.clickListener = { selectedOptionId ->
-			viewModel.onPickedOption(selectedOptionId)
+			if (viewModel.surveyUiState.value.selectedPage in 0..7) {
+				viewModel.onPickedOption(selectedOptionId)
+			} else if (viewModel.surveyUiState.value.selectedPage == 8) {
+				viewModel.onLastPickedOption(selectedOptionId)
+				parentFragmentManager.beginTransaction()
+					.replace(R.id.fragment_container_view, SurveyResultsFragment())
+					.addToBackStack(SurveyResultsFragment::class.java.name)
+					.commit()
+			}
+
 		}
 
-		subscribeToFlowOn(viewModel.newRefreshedCoolSurveyUiState) { uiState: NewRefreshedCoolSurveyUiState ->
+		subscribeToFlowOn(viewModel.surveyUiState) { uiState: SurveyUiState ->
 			binding.title.text = uiState.title
 			binding.progressBar.setProgress(uiState.progress, true)
 			binding.viewpager.setCurrentItem(uiState.selectedPage, true)
