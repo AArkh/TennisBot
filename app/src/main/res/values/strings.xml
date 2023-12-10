@@ -110,7 +110,7 @@
 	<string name="survey_results_title_6">Игра у сетки</string>
 	<string name="survey_results_title_7">Скорость игры</string>
 	<string name="survey_results_title_8">Участовал в турнирах</string>
-	<string name="survey_results_title_9">Занимал призовые места</string>
+	<string name="survey_results_title_9">Занимал призовые \nместа</string>
 	<string name="survey_result_small_title">Опрос завершен</string>
 	<string name="survey_result_title">Все ли верно?</string>
 	<string name="button_continue">Продолжить</string>

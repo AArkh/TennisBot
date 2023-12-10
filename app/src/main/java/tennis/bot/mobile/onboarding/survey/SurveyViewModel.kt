@@ -11,6 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SurveyViewModel @Inject constructor(
+	private val accountInfo: AccountInfoRepository,
 	@ApplicationContext context: Context,
 ): ViewModel() {
 
@@ -123,7 +124,7 @@ class SurveyViewModel @Inject constructor(
 		return
 	}
 
-	fun onPickedOption(pickedOptionId: Int) {
+	fun onPickedOption(pickedOptionId: Int, pickedOptionTitle: String) {
 		val currentState: SurveyUiState = surveyUiState.value
 		val currentPage = currentState.surveyPages[currentState.selectedPage]
 		val updatePage = currentPage.copy(pickedOptionId = pickedOptionId)
@@ -132,6 +133,7 @@ class SurveyViewModel @Inject constructor(
 		} else return
 		val newProgress = calculateProgressPercent(newPageIndex)
 		val newTitle = questionsTitlesList[newPageIndex]
+		recordEntry(currentState.selectedPage, pickedOptionId, pickedOptionTitle)
 
 		surveyUiState.value = currentState.copy(
 			progress = newProgress,
@@ -143,16 +145,23 @@ class SurveyViewModel @Inject constructor(
 		)
 	}
 
-	fun onLastPickedOption(pickedOptionId: Int) {
+	fun onLastPickedOption(pickedOptionId: Int, pickedOptionTitle: String) {
 		val currentState: SurveyUiState = surveyUiState.value
 		val currentPage = currentState.surveyPages[currentState.selectedPage]
 		val updatePage = currentPage.copy(pickedOptionId = pickedOptionId)
+		recordEntry(currentState.selectedPage, pickedOptionId, pickedOptionTitle)
+		accountInfo.updateSurveyData()
 
 		surveyUiState.value = currentState.copy(
 			surveyPages = currentState.surveyPages.toMutableList().apply {
 				set(currentState.selectedPage, updatePage)
 			}
 		)
+	}
+
+	private fun recordEntry(position: Int, id: Int, answer: String) {
+		accountInfo.rawSurveyAnswers.add(position, id)
+		accountInfo.surveyAnswers.add(position, answer)
 	}
 
 	private fun calculateProgressPercent(position: Int): Int {

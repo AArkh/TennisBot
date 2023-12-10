@@ -3,16 +3,23 @@ package tennis.bot.mobile.onboarding.password
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import tennis.bot.mobile.R
+import tennis.bot.mobile.onboarding.survey.AccountInfoRepository
+import tennis.bot.mobile.onboarding.survey.AccountInfoRepository.Companion.PASSWORD_HEADER
 import javax.inject.Inject
 
 @HiltViewModel
 class PasswordViewModel @Inject constructor(
 	@ApplicationContext private val context: Context,
+	private val accountInfo: AccountInfoRepository
 ): ViewModel() {
 
 	private val errorText = context.getString(R.string.password_hint)
@@ -45,5 +52,21 @@ class PasswordViewModel @Inject constructor(
 			errorMessage = errorMessage,
 			nextButtonEnabled = passwordConditions
 		)
+	}
+
+	fun recordPassword() {
+		accountInfo.putStringInSharedPref(PASSWORD_HEADER, _uiStateFlow.value.userInput.toString())
+	}
+
+	fun onPostRegister() {
+		viewModelScope.launch {
+			withContext(Dispatchers.IO) {
+				kotlin.runCatching {
+					accountInfo.postRegister()
+				}.onFailure {
+					Log.d("1234567", "onPostRegister: Failure")
+				}
+			}
+		}
 	}
 }

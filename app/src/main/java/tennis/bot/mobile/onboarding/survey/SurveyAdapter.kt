@@ -11,7 +11,7 @@ import tennis.bot.mobile.databinding.PagerSurveyItemBinding
 import javax.inject.Inject
 
 class SurveyAdapter @Inject constructor(): CoreAdapter<SurveyItemViewHolder>() {
-	var clickListener: ((id: Int) -> Unit)? = null
+	var clickListener: ((id: Int, option: String) -> Unit)? = null
 
 	override fun onBindViewHolder(holder: SurveyItemViewHolder, item: Any) {
 		val surveyItem = item as? SurveyItem ?: throw IllegalArgumentException("Item must be SurveyItem")
@@ -39,19 +39,19 @@ class SurveyAdapter @Inject constructor(): CoreAdapter<SurveyItemViewHolder>() {
 			holder.binding.mainPagerLayout2.visibility = View.VISIBLE
 		}
 		holder.binding.option1.setOnClickListener {
-			clickListener?.invoke(1)
+			clickListener?.invoke(1, holder.binding.option1Title.text.toString())
 			Log.d("ViewPager", "option1 is picked")
 		}
 		holder.binding.option2.setOnClickListener {
-			clickListener?.invoke(2)
+			clickListener?.invoke(2, holder.binding.option2Title.text.toString())
 			Log.d("ViewPager", "option2 is picked")
 		}
 		holder.binding.option3.setOnClickListener {
-			clickListener?.invoke(3)
+			clickListener?.invoke(3, holder.binding.option3Title.text.toString())
 			Log.d("ViewPager", "option3 is picked")
 		}
 		holder.binding.option4.setOnClickListener {
-			clickListener?.invoke(4)
+			clickListener?.invoke(4, holder.binding.option4Title.text.toString())
 			Log.d("ViewPager", "option4 is picked")
 		}
 	}

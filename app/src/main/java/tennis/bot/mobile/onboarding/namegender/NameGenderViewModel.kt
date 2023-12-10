@@ -6,11 +6,16 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import tennis.bot.mobile.R
+import tennis.bot.mobile.onboarding.survey.AccountInfoRepository
+import tennis.bot.mobile.onboarding.survey.AccountInfoRepository.Companion.IS_MALE_HEADER
+import tennis.bot.mobile.onboarding.survey.AccountInfoRepository.Companion.NAME_HEADER
+import tennis.bot.mobile.onboarding.survey.AccountInfoRepository.Companion.SURNAME_HEADER
 import javax.inject.Inject
 
 @HiltViewModel
-class NameGenderViewModel @Inject constructor(@ApplicationContext private val context: Context): ViewModel(
+class NameGenderViewModel @Inject constructor(
+	@ApplicationContext private val context: Context,
+	private val accountInfo: AccountInfoRepository): ViewModel(
 ) {
 
 	private val _uiStateFlow = MutableStateFlow(
@@ -62,5 +67,11 @@ class NameGenderViewModel @Inject constructor(@ApplicationContext private val co
 		_uiStateFlow.value = prevState.copy(
 			nextButtonEnabled = isNameOk && isSurnameOk && isGenderPicked
 		)
+	}
+
+	fun recordAccountValues() {
+		accountInfo.putStringInSharedPref(NAME_HEADER, _uiStateFlow.value.userNameInput.toString())
+		accountInfo.putStringInSharedPref(SURNAME_HEADER, _uiStateFlow.value.userNameInput.toString())
+		accountInfo.putGenderInSharedPref(IS_MALE_HEADER, _uiStateFlow.value.gender)
 	}
 }
