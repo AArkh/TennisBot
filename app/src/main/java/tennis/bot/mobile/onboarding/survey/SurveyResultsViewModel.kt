@@ -7,43 +7,35 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import tennis.bot.mobile.R
-import tennis.bot.mobile.onboarding.photopick.PhotoPickUiState
 import javax.inject.Inject
 
 @HiltViewModel
 class SurveyResultsViewModel @Inject constructor(
 	private val accountInfo: AccountInfoRepository,
 	@ApplicationContext context: Context
-): ViewModel() {
+) : ViewModel() {
 
 	val surveyResultItemList = listOf(
-		SurveyResultItem(context.getString(R.string.survey_results_title_1)),
-		SurveyResultItem(context.getString(R.string.survey_results_title_2)),
-		SurveyResultItem(context.getString(R.string.survey_results_title_3)),
-		SurveyResultItem(context.getString(R.string.survey_results_title_4)),
-		SurveyResultItem(context.getString(R.string.survey_results_title_5)),
-		SurveyResultItem(context.getString(R.string.survey_results_title_6)),
-		SurveyResultItem(context.getString(R.string.survey_results_title_7)),
-		SurveyResultItem(context.getString(R.string.survey_results_title_8)),
-		SurveyResultItem(context.getString(R.string.survey_results_title_9), "", true),
+		SurveyResultItem(context.getString(R.string.survey_results_title_1), accountInfo.surveyAnswers[0]),
+		SurveyResultItem(context.getString(R.string.survey_results_title_2), accountInfo.surveyAnswers[1]),
+		SurveyResultItem(context.getString(R.string.survey_results_title_3), accountInfo.surveyAnswers[2]),
+		SurveyResultItem(context.getString(R.string.survey_results_title_4), accountInfo.surveyAnswers[3]),
+		SurveyResultItem(context.getString(R.string.survey_results_title_5), accountInfo.surveyAnswers[4]),
+		SurveyResultItem(context.getString(R.string.survey_results_title_6), accountInfo.surveyAnswers[5]),
+		SurveyResultItem(context.getString(R.string.survey_results_title_7), accountInfo.surveyAnswers[6]),
+		SurveyResultItem(context.getString(R.string.survey_results_title_8), accountInfo.surveyAnswers[7]),
+		SurveyResultItem(context.getString(R.string.survey_results_title_9), accountInfo.surveyAnswers[8], true),
 	)
 
-	private val _uiStateFlow = MutableStateFlow<SurveyResultsUiState>(SurveyResultsUiState.InitialWithAnswers(
-		answers = surveyResultItemList
-	))
+	private val _uiStateFlow = MutableStateFlow<SurveyResultsUiState>(
+		SurveyResultsUiState.InitialWithAnswers(
+			answers = surveyResultItemList
+		)
+	)
 
 	val uiStateFlow = _uiStateFlow.asStateFlow()
 
-	private fun set1AnswersConverter(id: Int): String {
-		var stringAnswer = ""
-		when(id) {
-			1 -> { stringAnswer = "Новичок"}
-			2 -> { stringAnswer = "Любитель"}
-			3 -> { stringAnswer = "Продвинутый"}
-			4 -> { stringAnswer = "Профессионал"}
-		}
 
-		return stringAnswer
-	}
+
 
 }

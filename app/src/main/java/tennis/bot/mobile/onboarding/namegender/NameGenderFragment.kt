@@ -47,6 +47,7 @@ class NameGenderFragment : CoreFragment<FragmentNameGenderBinding>() {
 		}
 
 		binding.buttonNext.setOnClickListener {
+			viewModel.recordAccountValues()
 			parentFragmentManager.beginTransaction()
 				.replace(R.id.fragment_container_view, LocationFragment())
 				.addToBackStack(LocationFragment::class.java.name)

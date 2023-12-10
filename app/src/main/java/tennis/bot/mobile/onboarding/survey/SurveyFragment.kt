@@ -45,11 +45,11 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 			}
 		}
 
-		surveyAdapter.clickListener = { selectedOptionId ->
+		surveyAdapter.clickListener = { selectedOptionId, selectedOptionTitle ->
 			if (viewModel.surveyUiState.value.selectedPage in 0..7) {
-				viewModel.onPickedOption(selectedOptionId)
+				viewModel.onPickedOption(selectedOptionId, selectedOptionTitle)
 			} else if (viewModel.surveyUiState.value.selectedPage == 8) {
-				viewModel.onLastPickedOption(selectedOptionId)
+				viewModel.onLastPickedOption(selectedOptionId, selectedOptionTitle)
 				parentFragmentManager.beginTransaction()
 					.replace(R.id.fragment_container_view, SurveyResultsFragment())
 					.addToBackStack(SurveyResultsFragment::class.java.name)

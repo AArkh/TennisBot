@@ -13,6 +13,7 @@ import retrofit2.Converter
 import retrofit2.Retrofit
 import tennis.bot.mobile.onboarding.location.LocationApi
 import tennis.bot.mobile.onboarding.phone.SmsApi
+import tennis.bot.mobile.onboarding.survey.AccountInfoApi
 import tennis.bot.mobile.utils.LoggingInterceptor
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
@@ -76,5 +77,11 @@ class NetworkModule {
     fun provideLocationsApiClient(
         @Named(SMS_CODES) retrofit: Retrofit
     ): LocationApi = retrofit.create(LocationApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideAccountInfoApiClient(
+        @Named(SMS_CODES) retrofit: Retrofit
+    ): AccountInfoApi = retrofit.create(AccountInfoApi::class.java)
 }
 
