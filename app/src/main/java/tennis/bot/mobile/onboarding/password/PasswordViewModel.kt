@@ -59,14 +59,7 @@ class PasswordViewModel @Inject constructor(
 	}
 
 	fun onPostRegister() {
-		viewModelScope.launch {
-			withContext(Dispatchers.IO) {
-				kotlin.runCatching {
-					accountInfo.postRegister()
-				}.onFailure {
-					Log.d("1234567", "onPostRegister: Failure")
-				}
-			}
-		}
+
+		accountInfo.postRegister()
 	}
 }

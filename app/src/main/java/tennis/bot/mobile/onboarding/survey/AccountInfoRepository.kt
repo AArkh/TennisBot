@@ -1,8 +1,14 @@
 package tennis.bot.mobile.onboarding.survey
 
 import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.annotation.WorkerThread
 import dagger.hilt.android.qualifiers.ApplicationContext
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import tennis.bot.mobile.App.Companion.ctx
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -41,14 +47,25 @@ class AccountInfoRepository @Inject constructor(
 
 	@WorkerThread
 	fun postRegister() {
-		val post = api.postRegister(
+		api.postRegister(
 			Register(
 				phoneNumber = sharedPreferences.getString(PHONE_NUMBER_HEADER, "79774477181"),
 				password = sharedPreferences.getString(PASSWORD_HEADER, "pass1234"),
 				smsVerifyCode = sharedPreferences.getString(SMS_VERIFY_CODE_HEADER, "1234")
 			)
-		).execute()
-		post.code()
+		).enqueue(object: Callback<RegisterResponseError> {
+			override fun onResponse(call: Call<RegisterResponseError>, response: Response<RegisterResponseError>) {
+				Toast.makeText(ctx, "Data posted to API", Toast.LENGTH_SHORT).show()
+				val body = response.body()
+				val responseHere = "Response Code: ${response.code()} \n Response Body: $body"
+				Log.d("1235467", responseHere)
+			}
+
+			override fun onFailure(call: Call<RegisterResponseError>, t: Throwable) {
+				Log.d("1235467", "Error: ${t.message}")
+			}
+
+		})
 	}
 
 	fun putStringInSharedPref(key: String, value: String) {
