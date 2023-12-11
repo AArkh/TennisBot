@@ -29,7 +29,7 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
     private val phoneInputViewModel: PhoneInputViewModel by viewModels()
 
     companion object {
-        const val PHONE_NUMBER = "PHONE_NUMBER"
+        const val PHONE_NUMBER = "SmsCodeFragment"
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -78,6 +78,7 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
         }
 
         binding.buttonNext.setOnClickListener {
+            //todo тут не отправляем смс, есть метод во view model
             parentFragment?.arguments = bundleOf(
                 PHONE_NUMBER to binding.phoneEt.text.toString()
             )

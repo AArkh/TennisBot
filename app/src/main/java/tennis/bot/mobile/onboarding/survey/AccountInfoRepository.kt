@@ -19,7 +19,7 @@ class AccountInfoRepository @Inject constructor(
 ) { // for storing account info throughout the onboarding process
 
 	val sharedPreferences = context.getSharedPreferences("AccountInfo", Context.MODE_PRIVATE)
-	val editor = sharedPreferences.edit()
+	val editor = sharedPreferences.edit() // todo delete me
 
 
 	val surveyData = mutableMapOf<String, Int>()
@@ -52,6 +52,7 @@ class AccountInfoRepository @Inject constructor(
 				phoneNumber = sharedPreferences.getString(PHONE_NUMBER_HEADER, "79774477181"),
 				password = sharedPreferences.getString(PASSWORD_HEADER, "pass1234"),
 				smsVerifyCode = sharedPreferences.getString(SMS_VERIFY_CODE_HEADER, "1234")
+				// https://gist.github.com/meowkameow/19d1750b1016437fa86f25968f3b9349
 			)
 		).enqueue(object: Callback<Register> {
 			override fun onResponse(call: Call<Register>, response: Response<Register>) {
@@ -68,7 +69,11 @@ class AccountInfoRepository @Inject constructor(
 		})
 	}
 
-	fun putStringInSharedPref(key: String, value: String) {
+	fun putStringInSharedPref(key: String, value: String) { // fixme нужно разбить этот метод на N методов для каждого бизнес-сценария, типа onPasswordEnterede, o
+		sharedPreferences.edit().putString(key, value).apply() //todo сделать так
+
+
+
 		editor.putString(key, value)
 	}
 

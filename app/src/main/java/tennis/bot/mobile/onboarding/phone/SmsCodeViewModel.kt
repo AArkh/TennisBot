@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
-import tennis.bot.mobile.onboarding.phone.SmsCodeFragment.Companion.PHONE_NUMBER_ARGUMENT
+import tennis.bot.mobile.onboarding.phone.PhoneInputFragment.Companion.PHONE_NUMBER
 import tennis.bot.mobile.onboarding.phone.SmsCodeUiState.Companion.RETRY_BUTTON_BLOCKED_NO_COUNTDOWN
 import tennis.bot.mobile.onboarding.phone.SmsCodeUiState.Companion.RETRY_BUTTON_UNBLOCKED
 import tennis.bot.mobile.onboarding.survey.AccountInfoRepository
@@ -31,7 +31,7 @@ class SmsCodeViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val phone = savedStateHandle.get<String>(PHONE_NUMBER_ARGUMENT) ?: ""
+    private val phone = savedStateHandle.get<String>(PHONE_NUMBER) ?: "" // todo тут не ловим
     private val _uiStateFlow = MutableStateFlow<SmsCodeUiState>(SmsCodeUiState.UserInput(
         title = context.getString(R.string.onboarding_sms_input_title, phone),
         input = "",

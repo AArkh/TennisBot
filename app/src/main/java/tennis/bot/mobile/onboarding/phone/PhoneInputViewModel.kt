@@ -61,7 +61,7 @@ class PhoneInputViewModel @Inject constructor(
         )
     }
 
-    fun onNextClicked(successCallback: (phoneNumber: String) -> Unit) {
+    fun onNextClicked(successCallback: (phoneNumber: String) -> Unit) { //fixme why not in use???
         AppCoroutineScopes.appWorkerScope.launch {
             val value = uiStateFlow.value
             val phoneNumber = value.prefix + " " + value.userInput

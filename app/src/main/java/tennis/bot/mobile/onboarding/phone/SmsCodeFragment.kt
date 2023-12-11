@@ -119,16 +119,4 @@ class SmsCodeFragment : CoreFragment<FragmentSmsCodeBinding>() {
             listLines[i].backgroundTintList = colorTint
         }
     }
-
-    companion object {
-        const val PHONE_NUMBER_ARGUMENT = "SmsCodeFragment"
-
-        fun newInstance(phoneNumber: String): SmsCodeFragment {
-            val fragment = SmsCodeFragment()
-            val args = Bundle()
-            args.putString(PHONE_NUMBER_ARGUMENT, phoneNumber)
-            fragment.arguments = args
-            return fragment
-        }
-    }
 }
