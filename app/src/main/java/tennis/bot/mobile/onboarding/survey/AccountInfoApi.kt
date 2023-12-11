@@ -3,7 +3,6 @@ package tennis.bot.mobile.onboarding.survey
 import androidx.annotation.IntDef
 import kotlinx.serialization.Serializable
 import retrofit2.Call
-import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 

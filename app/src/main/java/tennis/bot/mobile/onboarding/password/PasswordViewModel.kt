@@ -54,11 +54,8 @@ class PasswordViewModel @Inject constructor(
 		)
 	}
 
-	fun recordPassword() {
+	fun onNextButtonClicked() {
 		accountInfo.putStringInSharedPref(PASSWORD_HEADER, _uiStateFlow.value.userInput.toString())
-	}
-
-	fun onPostRegister() {
 
 		accountInfo.postRegister()
 	}

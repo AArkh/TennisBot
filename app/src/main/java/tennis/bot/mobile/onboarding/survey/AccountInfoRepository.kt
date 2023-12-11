@@ -53,15 +53,15 @@ class AccountInfoRepository @Inject constructor(
 				password = sharedPreferences.getString(PASSWORD_HEADER, "pass1234"),
 				smsVerifyCode = sharedPreferences.getString(SMS_VERIFY_CODE_HEADER, "1234")
 			)
-		).enqueue(object: Callback<RegisterResponseError> {
-			override fun onResponse(call: Call<RegisterResponseError>, response: Response<RegisterResponseError>) {
+		).enqueue(object: Callback<Register> {
+			override fun onResponse(call: Call<Register>, response: Response<Register>) {
 				Toast.makeText(ctx, "Data posted to API", Toast.LENGTH_SHORT).show()
 				val body = response.body()
 				val responseHere = "Response Code: ${response.code()} \n Response Body: $body"
 				Log.d("1235467", responseHere)
 			}
 
-			override fun onFailure(call: Call<RegisterResponseError>, t: Throwable) {
+			override fun onFailure(call: Call<Register>, t: Throwable) {
 				Log.d("1235467", "Error: ${t.message}")
 			}
 

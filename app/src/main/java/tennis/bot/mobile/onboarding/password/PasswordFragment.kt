@@ -40,8 +40,8 @@ class PasswordFragment : CoreFragment<FragmentPasswordBinding>() {
 		binding.confidentialityText.movementMethod = LinkMovementMethod.getInstance()
 
 		binding.buttonNext.setOnClickListener {
-			viewModel.recordPassword()
-			viewModel.onPostRegister()
+			viewModel.onNextButtonClicked()
+
 //			parentFragmentManager.beginTransaction()
 //				.replace(R.id.fragment_container_view, SurveyFragment())
 //				.addToBackStack(SurveyFragment::class.java.name)
