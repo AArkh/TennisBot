@@ -10,7 +10,7 @@ import retrofit2.http.POST
 interface AccountInfoApi {
 
 	@POST("api/core-account/register")
-	fun postRegister(@Body register: Register): Call<RegisterResponseError>
+	fun postRegister(@Body register: Register): Call<Register>
 
 	@POST("api/new-player")
 	fun postNewPlayer(@Body newPlayer: NewPlayer): Call<NewPlayer>
@@ -47,28 +47,6 @@ data class NewPlayer(
 		@SurveyOptions val speed: Int,
 		@SurveyOptions val tournaments: Int,
 		@SurveyOptions val prizes: Int
-	)
-}
-
-@Serializable
-data class RegisterResponseError(
-	val code: String,
-	val message: String,
-	val details: String,
-	val data: List<Data>,
-	val validationErrors: List<ValidationError>
-) {
-	@Serializable
-	data class Data(
-		val additionalProp1: String,
-		val additionalProp2: String,
-		val additionalProp3: String
-	)
-
-	@Serializable
-	data class ValidationError(
-		val message: String,
-		val member: String
 	)
 }
 
