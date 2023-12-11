@@ -27,7 +27,6 @@ class SurveyResultsFragment : CoreFragment<FragmentSurveyResultsBinding>() {
 		super.onViewCreated(view, savedInstanceState)
 
 		binding.answersRecycler.adapter = surveyResultsAdapter
-		binding.answersRecycler.layoutManager = LinearLayoutManager(requireContext())
 
 		binding.buttonTryAgain.setOnClickListener {
 			parentFragmentManager.beginTransaction()

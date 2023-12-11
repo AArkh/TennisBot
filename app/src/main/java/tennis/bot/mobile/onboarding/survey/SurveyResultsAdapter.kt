@@ -10,12 +10,13 @@ import tennis.bot.mobile.databinding.RecyclerSurveyResultsItemBinding
 import javax.inject.Inject
 
 class SurveyResultsAdapter @Inject constructor(): CoreAdapter<SurveyResultItemViewHolder>() {
+
 	override fun onBindViewHolder(holder: SurveyResultItemViewHolder, item: Any) {
 		val surveyResultItem = item as? SurveyResultItem ?: throw IllegalArgumentException("Item must be SurveyResultItem")
 		holder.binding.resultTitle.text = surveyResultItem.resultTitle
 		holder.binding.resultOption.text = surveyResultItem.resultOption
 
-		if(surveyResultItem.noUnderline) {
+		if (surveyResultItem.noUnderline) {
 			holder.binding.underline.visibility = View.GONE
 		}
 	}

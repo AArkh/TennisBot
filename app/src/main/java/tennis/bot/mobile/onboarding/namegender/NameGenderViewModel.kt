@@ -70,6 +70,12 @@ class NameGenderViewModel @Inject constructor(
 	}
 
 	fun recordAccountValues() {
+		repo.saveGender(true)
+		repo.saveUserName(_uiStateFlow.value.userNameInput.toString())
+
+		// в месте запроса
+		repo.getUserGender() // true
+
 		accountInfo.putStringInSharedPref(NAME_HEADER, _uiStateFlow.value.userNameInput.toString())
 		accountInfo.putStringInSharedPref(SURNAME_HEADER, _uiStateFlow.value.userNameInput.toString())
 		accountInfo.putGenderInSharedPref(IS_MALE_HEADER, _uiStateFlow.value.gender)

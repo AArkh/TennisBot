@@ -42,14 +42,16 @@
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/title">
 
+		<!--  todo убрать -->
 		<androidx.recyclerview.widget.RecyclerView
 			android:id="@+id/answers_recycler"
+			app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"/>
 
 	</FrameLayout>
 
-
+	<!-- fixme Убрать -->
 	<LinearLayout
 		android:id="@+id/bottom_buttons_layout"
 		android:layout_width="match_parent"
