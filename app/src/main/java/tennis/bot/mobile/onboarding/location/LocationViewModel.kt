@@ -85,21 +85,17 @@ class LocationViewModel @Inject constructor(
       viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 kotlin.runCatching {
-                    val countryInt =  repository.getLocations()
-                        .find { it.countryName == selectedCountry }!!.id
+                    val locations = repository.getLocations()
+                    val countryInt =  locations.find { it.countryName == selectedCountry }!!.id
 
-                    val cityInt = repository.getLocations()
-                    .find { it.countryName == selectedCountry }
+                    val cityInt = locations.find { it.countryName == selectedCountry }
                     ?.cities!!.find { it.name == selectedCity }!!.id
 
-                    val districtInt = repository.getLocations()
-                            .find { it.countryName == selectedCountry }
+                    val districtInt = locations.find { it.countryName == selectedCountry }
                             ?.cities!!.find { it.name == selectedCity }
                             ?.districts!!.find { it.title == selectedDistrict }!!.id
 
-                    accountInfo.putIntInSharedPref(COUNTRY_ID_HEADER, countryInt)
-                    accountInfo.putIntInSharedPref(CITY_ID_HEADER, cityInt)
-                    accountInfo.putIntInSharedPref(DISTRICT_ID_HEADER, districtInt)
+                    accountInfo.recordLocationData(countryInt, cityInt, districtInt)
                 }.onFailure {
                     Log.d("1234567", "recordLocationValues: error")
                 }

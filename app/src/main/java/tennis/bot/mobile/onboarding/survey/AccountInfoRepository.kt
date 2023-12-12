@@ -19,7 +19,6 @@ class AccountInfoRepository @Inject constructor(
 ) { // for storing account info throughout the onboarding process
 
 	val sharedPreferences = context.getSharedPreferences("AccountInfo", Context.MODE_PRIVATE)
-	val editor = sharedPreferences.edit() // todo delete me
 
 
 	val surveyData = mutableMapOf<String, Int>()
@@ -69,25 +68,30 @@ class AccountInfoRepository @Inject constructor(
 		})
 	}
 
-	fun putStringInSharedPref(key: String, value: String) { // fixme нужно разбить этот метод на N методов для каждого бизнес-сценария, типа onPasswordEnterede, o
-		sharedPreferences.edit().putString(key, value).apply() //todo сделать так
-
-
-
-		editor.putString(key, value)
+	fun recordPhoneNumberAndSmsCode(phoneNumber: String, smsVerifyCode: String) {
+		sharedPreferences.edit().putString(PHONE_NUMBER_HEADER, phoneNumber).apply()
+		sharedPreferences.edit().putString(SMS_VERIFY_CODE_HEADER, smsVerifyCode).apply()
 	}
 
-	fun putGenderInSharedPref(key: String, value: Int) {
-		val booleanValue: Boolean = when (value) {
+	fun recordNameSurnameAndGender(name: String, surname: String, gender: Int) {
+		val booleanValue: Boolean = when (gender) {
 			1 -> true
 			2 -> false
 			else -> return
 		}
-		editor.putBoolean(key, booleanValue)
+		sharedPreferences.edit().putString(NAME_HEADER, name).apply()
+		sharedPreferences.edit().putString(SURNAME_HEADER, surname).apply()
+		sharedPreferences.edit().putBoolean(IS_MALE_HEADER, booleanValue).apply()
 	}
 
-	fun putIntInSharedPref(key: String, value: Int) {
-		editor.putInt(key, value)
+	fun recordLocationData(countryId: Int, cityId: Int, districtId: Int) {
+		sharedPreferences.edit().putInt(COUNTRY_ID_HEADER, countryId).apply()
+		sharedPreferences.edit().putInt(CITY_ID_HEADER, cityId).apply()
+		sharedPreferences.edit().putInt(DISTRICT_ID_HEADER, districtId).apply()
+	}
+
+	fun recordPassword(password: String){
+		sharedPreferences.edit().putString(PASSWORD_HEADER, password).apply()
 	}
 
 	companion object {

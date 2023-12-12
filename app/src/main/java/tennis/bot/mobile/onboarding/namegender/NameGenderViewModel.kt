@@ -6,6 +6,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import tennis.bot.mobile.onboarding.namegender.Const.FEMALE
+import tennis.bot.mobile.onboarding.namegender.Const.MALE
 import tennis.bot.mobile.onboarding.survey.AccountInfoRepository
 import tennis.bot.mobile.onboarding.survey.AccountInfoRepository.Companion.IS_MALE_HEADER
 import tennis.bot.mobile.onboarding.survey.AccountInfoRepository.Companion.NAME_HEADER
@@ -62,22 +64,24 @@ class NameGenderViewModel @Inject constructor(
 		val prevState: NameGenderUiState = _uiStateFlow.value
 		val isNameOk = prevState.userNameInput.length >= 3
 		val isSurnameOk = prevState.userSurnameInput.length >= 3
-		val isGenderPicked = prevState.gender == 1 || prevState.gender == 2
+		val isGenderPicked = prevState.gender == MALE || prevState.gender == FEMALE
 
 		_uiStateFlow.value = prevState.copy(
 			nextButtonEnabled = isNameOk && isSurnameOk && isGenderPicked
 		)
 	}
 
-	fun recordAccountValues() {
-		repo.saveGender(true)
-		repo.saveUserName(_uiStateFlow.value.userNameInput.toString())
-
-		// в месте запроса
-		repo.getUserGender() // true
-
-		accountInfo.putStringInSharedPref(NAME_HEADER, _uiStateFlow.value.userNameInput.toString())
-		accountInfo.putStringInSharedPref(SURNAME_HEADER, _uiStateFlow.value.userNameInput.toString())
-		accountInfo.putGenderInSharedPref(IS_MALE_HEADER, _uiStateFlow.value.gender)
+	fun onNextButtonClicked() {
+		accountInfo.recordNameSurnameAndGender(
+			name = _uiStateFlow.value.userNameInput.toString(),
+			surname = _uiStateFlow.value.userNameInput.toString(),
+			gender = _uiStateFlow.value.gender
+		)
 	}
+
+}
+
+object Const {
+	const val MALE = 1
+	const val FEMALE = 2
 }

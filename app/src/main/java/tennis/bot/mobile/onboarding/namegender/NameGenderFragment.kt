@@ -10,6 +10,8 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentNameGenderBinding
 import tennis.bot.mobile.onboarding.location.LocationFragment
+import tennis.bot.mobile.onboarding.namegender.Const.FEMALE
+import tennis.bot.mobile.onboarding.namegender.Const.MALE
 
 @AndroidEntryPoint
 class NameGenderFragment : CoreFragment<FragmentNameGenderBinding>() {
@@ -47,7 +49,6 @@ class NameGenderFragment : CoreFragment<FragmentNameGenderBinding>() {
 		}
 
 		binding.buttonNext.setOnClickListener {
-			viewModel.recordAccountValues()
 			viewModel.onNextButtonClicked()
 			parentFragmentManager.beginTransaction()
 				.replace(R.id.fragment_container_view, LocationFragment())
@@ -62,8 +63,8 @@ class NameGenderFragment : CoreFragment<FragmentNameGenderBinding>() {
 			binding.male.setBackgroundResource(R.drawable.survey_option_outline)
 			binding.female.setBackgroundResource(R.drawable.survey_option_outline)
 			when(uiState.gender) {
-				1 -> binding.male.setBackgroundResource(R.drawable.survey_option_outline_picked)
-				2 -> binding.female.setBackgroundResource(R.drawable.survey_option_outline_picked)
+				MALE -> binding.male.setBackgroundResource(R.drawable.survey_option_outline_picked)
+				FEMALE -> binding.female.setBackgroundResource(R.drawable.survey_option_outline_picked)
 			}
 
 			viewModel.isNextButtonEnabled()

@@ -18,8 +18,6 @@ import tennis.bot.mobile.onboarding.phone.PhoneInputFragment.Companion.PHONE_NUM
 import tennis.bot.mobile.onboarding.phone.SmsCodeUiState.Companion.RETRY_BUTTON_BLOCKED_NO_COUNTDOWN
 import tennis.bot.mobile.onboarding.phone.SmsCodeUiState.Companion.RETRY_BUTTON_UNBLOCKED
 import tennis.bot.mobile.onboarding.survey.AccountInfoRepository
-import tennis.bot.mobile.onboarding.survey.AccountInfoRepository.Companion.PHONE_NUMBER_HEADER
-import tennis.bot.mobile.onboarding.survey.AccountInfoRepository.Companion.SMS_VERIFY_CODE_HEADER
 import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
@@ -102,16 +100,9 @@ class SmsCodeViewModel @Inject constructor(
                 }
             }.onSuccess {
                 navigationCallback.invoke()
-                recordPhoneAndSmsCode(
-                    phone = phone,
-                    smsCode = _uiStateFlow.value.input)
+                accountInfo.recordPhoneNumberAndSmsCode(phone, _uiStateFlow.value.input)
             }
         }
-    }
-
-    private fun recordPhoneAndSmsCode(phone: String, smsCode: String) {
-        accountInfo.putStringInSharedPref(PHONE_NUMBER_HEADER, phone)
-        accountInfo.putStringInSharedPref(SMS_VERIFY_CODE_HEADER, smsCode)
     }
 
     fun onResendSmsButtonClicked() {
