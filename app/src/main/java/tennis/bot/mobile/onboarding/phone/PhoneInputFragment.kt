@@ -85,16 +85,5 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
                     .commit()
             }
         }
-
-//        binding.buttonNext.setOnClickListener {
-//            //todo тут не отправляем смс, есть метод во view model
-//            parentFragment?.arguments = bundleOf(
-//                PHONE_NUMBER to binding.phoneEt.text.toString()
-//            )
-//            parentFragmentManager.beginTransaction()
-//                .replace(R.id.fragment_container_view, SmsCodeFragment())
-//                .addToBackStack(SmsCodeFragment::class.java.name)
-//                .commit()
-//        }
     }
 }

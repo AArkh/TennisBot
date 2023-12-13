@@ -86,7 +86,7 @@ class LocationDialogViewModel @Inject constructor(
         }
     }
 
-    fun loadCountriesList() {
+    private fun loadCountriesList() {
         val currentState: LocationDialogUiState = _uiStateFlow.value
         val newLoadingState = LocationDialogUiState.Loading(
             currentState.currentCountry,
@@ -111,7 +111,7 @@ class LocationDialogViewModel @Inject constructor(
         }
     }
 
-    fun loadCitiesList(pickedCountry: String) {
+    private fun loadCitiesList(pickedCountry: String) {
         val currentState: LocationDialogUiState = _uiStateFlow.value
         val newLoadingState = LocationDialogUiState.Loading(
             currentState.currentCountry,
@@ -135,7 +135,7 @@ class LocationDialogViewModel @Inject constructor(
         }
     }
 
-    fun loadDistrictsList(pickedCountry: String, pickedCity: String) {
+    private fun loadDistrictsList(pickedCountry: String, pickedCity: String) {
         val currentState: LocationDialogUiState = _uiStateFlow.value
         val newLoadingState = LocationDialogUiState.Loading(
             currentState.currentCountry,

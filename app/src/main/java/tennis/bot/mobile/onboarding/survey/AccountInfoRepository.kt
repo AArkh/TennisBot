@@ -19,7 +19,7 @@ class AccountInfoRepository @Inject constructor(
 	private val api: AccountInfoApi
 ) { // for storing account info throughout the onboarding process
 
-	val sharedPreferences = context.getSharedPreferences("AccountInfo", Context.MODE_PRIVATE)
+	private val sharedPreferences = context.getSharedPreferences("AccountInfo", Context.MODE_PRIVATE)
 
 
 	val surveyData = mutableMapOf<String, Int>()
@@ -46,27 +46,57 @@ class AccountInfoRepository @Inject constructor(
 	}
 
 	@WorkerThread
-	fun postRegister() {
-		api.postRegister(
-			Register(
-				phoneNumber = sharedPreferences.getString(PHONE_NUMBER_HEADER, "79774477181"),
-				password = sharedPreferences.getString(PASSWORD_HEADER, "pass1234"),
-				smsVerifyCode = sharedPreferences.getString(SMS_VERIFY_CODE_HEADER, "1234")
-				// https://gist.github.com/meowkameow/19d1750b1016437fa86f25968f3b9349
-			)
-		).enqueue(object: Callback<Register> {
-			override fun onResponse(call: Call<Register>, response: Response<Register>) {
-				Toast.makeText(ctx, "Data posted to API", Toast.LENGTH_SHORT).show()
-				val body = response.body()
-				val responseHere = "Response Code: ${response.code()} \n Response Body: $body"
-				Log.d("1235467", responseHere)
-			}
+	suspend fun postRegister(): Boolean {
+		val response = kotlin.runCatching {
+			api.postRegister(
+				Register(
+					phoneNumber = getPhoneNumber(),
+					password = getPassword(),
+					smsVerifyCode = getSmsVerifyCode()
+					// https://gist.github.com/meowkameow/19d1750b1016437fa86f25968f3b9349
+				))
+		}.getOrElse { return false }
+		return response.isSuccessful
+	}
 
-			override fun onFailure(call: Call<Register>, t: Throwable) {
-				Log.d("1235467", "Error: ${t.message}")
-			}
+	@WorkerThread
+	suspend fun postNewPlayer() {
+		val response = kotlin.runCatching {
+			api.postNewPlayer(
+				NewPlayer(
+					name = getName().toString(),
+					surName = getSurName().toString(),
+					phoneNumber = getPhoneNumber().toString(),
+					isMale = isMale(),
+					countryId = getCountryId(),
+					cityId = getCityId(),
+					districtId = getDistrictId(),
+					telegramId = getTelegramId().toString(),
+					surveyAnswers = NewPlayer.SurveyAnswers(
+						experience = surveyData["experience"] ?: 0,
+						forehand = surveyData["forehand"] ?: 0,
+						backhand = surveyData["backhand"] ?: 0,
+						slice = surveyData["slice"] ?: 0,
+						serve = surveyData["serve"] ?: 0,
+						net = surveyData["net"] ?: 0,
+						speed = surveyData["speed"] ?: 0,
+						tournaments = surveyData["tournaments"] ?: 0,
+						prizes = surveyData["prizes"] ?: 0
+					)
+				)
+			).enqueue(object: Callback<NewPlayerResponse> {
+				override fun onResponse(call: Call<NewPlayerResponse>, response: Response<NewPlayerResponse>) {
+					Toast.makeText(ctx, "Data posted to API", Toast.LENGTH_SHORT).show()
+					val body = response.body()
+					val responseHere = "Response Code: ${response.code()} \n Response Body: $body"
+					Log.d("1235467", responseHere)
+				}
 
-		})
+				override fun onFailure(call: Call<NewPlayerResponse>, t: Throwable) {
+					Log.d("1235467", "Error: ${t.message}")
+				}
+			})
+		}
 	}
 
 	fun recordPhoneNumberAndSmsCode(phoneNumber: String, smsVerifyCode: String) {
@@ -93,6 +123,46 @@ class AccountInfoRepository @Inject constructor(
 
 	fun recordPassword(password: String){
 		sharedPreferences.edit().putString(PASSWORD_HEADER, password).apply()
+	}
+
+	fun getPhoneNumber(): String? {
+		return sharedPreferences.getString(PHONE_NUMBER_HEADER, null)
+	}
+
+	fun getSmsVerifyCode(): String? {
+		return sharedPreferences.getString(SMS_VERIFY_CODE_HEADER, null)
+	}
+
+	fun getName(): String? {
+		return sharedPreferences.getString(NAME_HEADER, null)
+	}
+
+	fun getSurName(): String? {
+		return sharedPreferences.getString(SURNAME_HEADER, null)
+	}
+
+	fun isMale(): Boolean {
+		return sharedPreferences.getBoolean(IS_MALE_HEADER, false)
+	}
+
+	fun getCountryId(): Int {
+		return sharedPreferences.getInt(COUNTRY_ID_HEADER, -1)
+	}
+
+	fun getCityId(): Int {
+		return sharedPreferences.getInt(CITY_ID_HEADER, -1)
+	}
+
+	fun getDistrictId(): Int {
+		return sharedPreferences.getInt(DISTRICT_ID_HEADER, -1)
+	}
+
+	fun getTelegramId(): String? {
+		return sharedPreferences.getString(TELEGRAM_ID_HEADER, null)
+	}
+
+	fun getPassword(): String? {
+		return sharedPreferences.getString(PASSWORD_HEADER, null)
 	}
 
 	private fun String.toApiNumericFormat(): String {
