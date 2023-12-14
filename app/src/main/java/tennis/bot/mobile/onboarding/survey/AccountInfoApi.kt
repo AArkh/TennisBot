@@ -13,7 +13,7 @@ interface AccountInfoApi {
 	suspend fun postRegister(@Body register: Register): Response<RegisterResponse>
 
 	@POST("api/new-player")
-	suspend fun postNewPlayer(@Body newPlayer: NewPlayer): Call<NewPlayerResponse>
+	suspend fun postNewPlayer(@Body newPlayer: NewPlayer): Response<NewPlayerResponse>
 }
 
 @Serializable
@@ -24,23 +24,10 @@ data class Register(
 )
 
 @Serializable
-data class RegisterResponse(
+data class RegisterResponse( // почти ничего не нужно тут. основное берем из NewPlayerResponse
 	val userName: String,
 	val phoneNumber: String,
 	val phoneNumberConfirmed: Boolean,
-	val isActive: Boolean,
-	val lockoutEnabled: Boolean,
-	val lockoutEnd: String?,
-	val concurrencyStamp: String,
-	val entityVersion: Int,
-	val creationTime: String,
-	val creatorId: String,
-	val lastModificationTime: String,
-	val lastModifierId: String,
-	val isDeleted: Boolean,
-	val deletionTime: String?,
-	val deleterId: String,
-	val id: String
 )
 
 @Serializable
@@ -71,7 +58,7 @@ data class NewPlayer(
 }
 
 @Serializable
-data class NewPlayerResponse(
+data class NewPlayerResponse( // спросить как работает парсинг Data класса, использовать ли его для даты напрямую
 	val id: Long,
 	val name: String,
 	val surName: String,

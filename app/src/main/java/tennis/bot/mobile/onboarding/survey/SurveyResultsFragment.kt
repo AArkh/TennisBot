@@ -1,17 +1,12 @@
 package tennis.bot.mobile.onboarding.survey
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
-import tennis.bot.mobile.databinding.FragmentSurveyBinding
 import tennis.bot.mobile.databinding.FragmentSurveyResultsBinding
 import javax.inject.Inject
 
@@ -36,15 +31,22 @@ class SurveyResultsFragment : CoreFragment<FragmentSurveyResultsBinding>() {
 		}
 
 		binding.buttonContinue.setOnClickListener {
-			// endpoint logic + whatever we decide to do next
+			viewModel.onContinueButtonClicked {
+				// there will be next screen logic here
+			}
 		}
 
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: SurveyResultsUiState ->
 			when (uiState) {
 				is SurveyResultsUiState.InitialWithAnswers -> {
+					binding.buttonLoadingAnim.visibility = View.INVISIBLE
+					binding.buttonContinue.text = uiState.buttonContinueText
 					surveyResultsAdapter.submitList(uiState.answers)
 				}
-				SurveyResultsUiState.SendingPost -> {}
+				SurveyResultsUiState.Loading -> {
+					binding.buttonContinue.text = ""
+					binding.buttonLoadingAnim.visibility = View.VISIBLE
+				}
 				SurveyResultsUiState.Error -> {}
 			}
 		}

@@ -21,7 +21,6 @@ class AccountInfoRepository @Inject constructor(
 
 	private val sharedPreferences = context.getSharedPreferences("AccountInfo", Context.MODE_PRIVATE)
 
-
 	val surveyData = mutableMapOf<String, Int>()
 	val rawSurveyAnswers = mutableListOf<Int>()
 	val surveyAnswers = mutableListOf<String>()
@@ -60,7 +59,7 @@ class AccountInfoRepository @Inject constructor(
 	}
 
 	@WorkerThread
-	suspend fun postNewPlayer() {
+	suspend fun postNewPlayer(): Boolean {
 		val response = kotlin.runCatching {
 			api.postNewPlayer(
 				NewPlayer(
@@ -84,20 +83,11 @@ class AccountInfoRepository @Inject constructor(
 						prizes = surveyData["prizes"] ?: 0
 					)
 				)
-			).enqueue(object: Callback<NewPlayerResponse> {
-				override fun onResponse(call: Call<NewPlayerResponse>, response: Response<NewPlayerResponse>) {
-					Toast.makeText(ctx, "Data posted to API", Toast.LENGTH_SHORT).show()
-					val body = response.body()
-					val responseHere = "Response Code: ${response.code()} \n Response Body: $body"
-					Log.d("1235467", responseHere)
-				}
-
-				override fun onFailure(call: Call<NewPlayerResponse>, t: Throwable) {
-					Log.d("1235467", "Error: ${t.message}")
-				}
-			})
+			)
+		}.getOrElse { return false }
+		return response.isSuccessful
 		}
-	}
+
 
 	fun recordPhoneNumberAndSmsCode(phoneNumber: String, smsVerifyCode: String) {
 		sharedPreferences.edit().putString(PHONE_NUMBER_HEADER, phoneNumber.toApiNumericFormat()).apply()
@@ -146,15 +136,15 @@ class AccountInfoRepository @Inject constructor(
 	}
 
 	fun getCountryId(): Int {
-		return sharedPreferences.getInt(COUNTRY_ID_HEADER, -1)
+		return sharedPreferences.getInt(COUNTRY_ID_HEADER, 0)
 	}
 
 	fun getCityId(): Int {
-		return sharedPreferences.getInt(CITY_ID_HEADER, -1)
+		return sharedPreferences.getInt(CITY_ID_HEADER, 0)
 	}
 
 	fun getDistrictId(): Int {
-		return sharedPreferences.getInt(DISTRICT_ID_HEADER, -1)
+		return sharedPreferences.getInt(DISTRICT_ID_HEADER, 0)
 	}
 
 	fun getTelegramId(): String? {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	tools:context=".onboarding.survey.SurveyResultsFragment">
@@ -32,62 +32,52 @@
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/small_title" />
 
-	<FrameLayout
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/answers_recycler"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
-		android:layout_marginHorizontal="20dp"
 		android:layout_marginTop="12dp"
-		app:layout_constraintBottom_toTopOf="@+id/bottom_buttons_layout"
+		app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+		app:layout_constraintBottom_toTopOf="@+id/buttonTryAgain"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/title">
+		app:layout_constraintTop_toBottomOf="@id/title"
+		tools:listitem="@layout/recycler_survey_results_item" />
 
-		<!--  todo убрать -->
-		<androidx.recyclerview.widget.RecyclerView
-			android:id="@+id/answers_recycler"
-			app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"/>
-
-	</FrameLayout>
-
-	<!-- fixme Убрать -->
-	<LinearLayout
-		android:id="@+id/bottom_buttons_layout"
+	<Button
+		android:id="@+id/buttonTryAgain"
+		style="@style/Widget.TennisBot.Button.Secondary"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
+		android:layout_marginBottom="10dp"
 		android:layout_marginHorizontal="20dp"
+		android:text="@string/button_try_again"
+		app:layout_constraintBottom_toTopOf="@+id/buttonContinue"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent" />
+
+	<ProgressBar
+		android:id="@+id/button_loading_anim"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:indeterminate="true"
+		android:indeterminateTint="@color/tb_white"
+		android:visibility="gone"
+		app:layout_constraintBottom_toBottomOf="@id/buttonContinue"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="@id/buttonContinue" />
+
+	<Button
+		android:id="@+id/buttonContinue"
+		style="@style/Widget.TennisBot.Button.Active"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
 		android:layout_marginBottom="8dp"
-		android:orientation="vertical"
+		android:layout_marginHorizontal="20dp"
+		android:text="@string/button_continue"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent">
-
-		<Button
-			android:id="@+id/buttonTryAgain"
-			style="@style/Widget.TennisBot.Button.Secondary"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_marginEnd="10dp"
-			android:layout_weight="50"
-			android:text="@string/button_try_again"
-			app:layout_constraintBottom_toBottomOf="parent"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent" />
-
-		<Button
-			android:id="@+id/buttonContinue"
-			style="@style/Widget.TennisBot.Button.Active"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_weight="50"
-			android:text="@string/button_continue"
-			app:layout_constraintBottom_toBottomOf="parent"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent" />
-
-	</LinearLayout>
-
-
+		app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
