@@ -116,5 +116,10 @@
 	<string name="button_continue">Продолжить</string>
 	<string name="button_try_again">Пройти еще раз</string>
 
+	<string name="find">Найти</string>
+	<string name="location_choose_country">Выбери страну</string>
+	<string name="location_choose_city">Выбери город</string>
+	<string name="location_choose_district">Выбери район</string>
+
 
 </resources>

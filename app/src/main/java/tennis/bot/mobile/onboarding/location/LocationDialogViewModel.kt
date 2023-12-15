@@ -1,5 +1,6 @@
 package tennis.bot.mobile.onboarding.location
 
+import android.content.Context
 import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentActivity
@@ -7,10 +8,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import tennis.bot.mobile.R
 import tennis.bot.mobile.onboarding.phone.CountryItem
 import javax.inject.Inject
 
@@ -18,8 +21,8 @@ import javax.inject.Inject
 class LocationDialogViewModel @Inject constructor(
     private val repository: LocationRepo,
     private val dataMapper: LocationDataMapper,
-    private val
-    savedStateHandle: SavedStateHandle,
+    private val savedStateHandle: SavedStateHandle,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     private val currentAction = savedStateHandle.get<String>(LocationFragment.SELECT_ACTION_KEY) ?: ""
@@ -28,7 +31,7 @@ class LocationDialogViewModel @Inject constructor(
 
     private val _uiStateFlow = MutableStateFlow<LocationDialogUiState>(
         LocationDialogUiState.Loading(
-            currentCountry, currentCity
+            currentCountry, currentCity, context.getString(R.string.location_choose_country)
         )
     )
     val uiStateFlow = _uiStateFlow.asStateFlow()
@@ -91,6 +94,7 @@ class LocationDialogViewModel @Inject constructor(
         val newLoadingState = LocationDialogUiState.Loading(
             currentState.currentCountry,
             currentState.currentCity,
+            currentState.title
         )
         _uiStateFlow.value = newLoadingState
         viewModelScope.launch(Dispatchers.IO) {
@@ -100,11 +104,13 @@ class LocationDialogViewModel @Inject constructor(
                 _uiStateFlow.value = LocationDialogUiState.DataPassed(
                     currentState.currentCountry,
                     currentState.currentCity,
-                    dataList = formatted)
+                    dataList = formatted,
+                    title = context.getString(R.string.location_choose_country))
             }.onFailure {
                 _uiStateFlow.value = LocationDialogUiState.Error(
                     currentState.currentCountry,
                     currentState.currentCity,
+                    currentState.title
                 )
                 Log.d("1234567", "loadCountriesList: error")
             }
@@ -116,6 +122,7 @@ class LocationDialogViewModel @Inject constructor(
         val newLoadingState = LocationDialogUiState.Loading(
             currentState.currentCountry,
             currentState.currentCity,
+            currentState.title
         )
         _uiStateFlow.value = newLoadingState
         viewModelScope.launch(Dispatchers.IO) {
@@ -125,11 +132,13 @@ class LocationDialogViewModel @Inject constructor(
                 _uiStateFlow.value = LocationDialogUiState.DataPassed(
                     currentState.currentCountry,
                     currentState.currentCity,
-                    dataList = formatted)
+                    dataList = formatted,
+                    title = context.getString(R.string.location_choose_city))
             }.onFailure {
                 _uiStateFlow.value = LocationDialogUiState.Error(
                     currentState.currentCountry,
                     currentState.currentCity,
+                    currentState.title
                 )
             }
         }
@@ -140,6 +149,7 @@ class LocationDialogViewModel @Inject constructor(
         val newLoadingState = LocationDialogUiState.Loading(
             currentState.currentCountry,
             currentState.currentCity,
+            currentState.title
         )
         _uiStateFlow.value = newLoadingState
         viewModelScope.launch(Dispatchers.IO) {
@@ -153,11 +163,13 @@ class LocationDialogViewModel @Inject constructor(
                 _uiStateFlow.value = LocationDialogUiState.DataPassed(
                     currentState.currentCountry,
                     currentState.currentCity,
-                    dataList = formatted)
+                    dataList = formatted,
+                    title = context.getString(R.string.location_choose_district))
             }.onFailure {
                 _uiStateFlow.value = LocationDialogUiState.Error(
                     currentState.currentCountry,
                     currentState.currentCity,
+                    currentState.title
                 )
             }
         }
@@ -172,6 +184,7 @@ class LocationDialogViewModel @Inject constructor(
         _uiStateFlow.value = LocationDialogUiState.DataPassed(
             currentState.currentCountry,
             currentState.currentCity,
+            title = currentState.title,
             filteredList,
             userInput
         )

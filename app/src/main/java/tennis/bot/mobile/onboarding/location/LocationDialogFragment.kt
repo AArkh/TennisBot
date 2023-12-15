@@ -40,17 +40,20 @@ class LocationDialogFragment : CountryCodesDialogFragment() {
                 is LocationDialogUiState.Loading -> {
                     binding.loadingBar.visibility = View.VISIBLE
                     binding.errorLayout.visibility = View.GONE
+                    binding.title.text = uiState.title
                 }
                 is LocationDialogUiState.DataPassed -> {
                     binding.loadingBar.visibility = View.GONE
                     binding.errorLayout.visibility = View.GONE
 
                     locationAdapter.submitList(uiState.dataList)
+                    binding.title.text = uiState.title
                 }
                 is LocationDialogUiState.Error -> {
                     binding.errorLayout.visibility = View.VISIBLE
                     binding.tryAgainTv.paintFlags = Paint.UNDERLINE_TEXT_FLAG
                     binding.loadingBar.visibility = View.GONE
+                    binding.title.text = uiState.title
                 }
             }
         }

@@ -84,7 +84,7 @@ class LocationViewModel @Inject constructor(
 	fun recordLocationValues(selectedCountry: String, selectedCity: String, selectedDistrict: String) {
 		viewModelScope.launch {
 			withContext(Dispatchers.IO) {
-				var countryInt= 0
+				var countryInt = 0
 				var cityInt = 0
 				var districtInt = 0
 				kotlin.runCatching {

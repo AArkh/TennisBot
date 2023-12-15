@@ -28,6 +28,7 @@ data class RegisterResponse( // почти ничего не нужно тут. 
 	val userName: String,
 	val phoneNumber: String,
 	val phoneNumberConfirmed: Boolean,
+	val id: Int
 )
 
 @Serializable

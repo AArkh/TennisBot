@@ -2,6 +2,7 @@ package tennis.bot.mobile.onboarding.survey
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.addCallback
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import tennis.bot.mobile.R
@@ -24,6 +25,13 @@ class SurveyResultsFragment : CoreFragment<FragmentSurveyResultsBinding>() {
 		binding.answersRecycler.adapter = surveyResultsAdapter
 
 		binding.buttonTryAgain.setOnClickListener {
+			parentFragmentManager.beginTransaction()
+				.replace(R.id.fragment_container_view, SurveyFragment())
+				.addToBackStack(SurveyFragment::class.java.name)
+				.commit()
+		}
+
+		requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
 			parentFragmentManager.beginTransaction()
 				.replace(R.id.fragment_container_view, SurveyFragment())
 				.addToBackStack(SurveyFragment::class.java.name)
