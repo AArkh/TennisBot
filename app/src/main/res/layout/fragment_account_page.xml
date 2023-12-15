@@ -62,29 +62,11 @@
 
 	</FrameLayout>
 
-	<FrameLayout
-		android:id="@+id/rating_layout"
-		android:layout_width="0dp"
+	<tennis.bot.mobile.onboarding.account.RatingsInfoView
+		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="37.5dp"
-		android:layout_marginStart="24dp"
-		android:layout_marginEnd="20dp"
-		android:paddingHorizontal="8dp"
-		android:paddingTop="16dp"
-		android:paddingBottom="15dp"
-		android:background="@drawable/search_background"
-		android:orientation="vertical"
-		android:padding="16dp"
 		app:layout_constraintTop_toBottomOf="@id/options_button"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toEndOf="@id/account_photo_frame"
-		>
-
-
-	</FrameLayout>
-
-
-
-
+		app:layout_constraintStart_toEndOf="@id/account_photo_frame"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
