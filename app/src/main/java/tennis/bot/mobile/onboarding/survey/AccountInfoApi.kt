@@ -31,6 +31,17 @@ data class RegisterResponse( // почти ничего не нужно тут. 
 	val id: Int
 )
 
+// Для авторизации используется Нам надо перехватить эти токены после успешного запроса на регистрацию пользователя.
+// Возможно, они придут в ответе postRegister в body, возможно там же, но в setCookie хидере.
+// Надо реализовать кастомную имплементацию клиента okhttp с interceptor'ом, который будет перехватывать setCookie и
+// сохранять токены в отдельный репозиторий
+
+
+// auth_token = dsfghjklkjhtgf // (expires 30min)
+// refresh_token = sdfghjklkjhgfd // (expires 3 days)
+
+// Надо реализовать второй okhttp клиент для запросов, на которые требуется авторизация
+
 @Serializable
 data class NewPlayer(
 	val name: String,

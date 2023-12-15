@@ -11,6 +11,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Converter
 import retrofit2.Retrofit
+import tennis.bot.mobile.core.NewPlayerInterceptor
 import tennis.bot.mobile.onboarding.location.LocationApi
 import tennis.bot.mobile.onboarding.phone.SmsApi
 import tennis.bot.mobile.onboarding.survey.AccountInfoApi
@@ -25,6 +26,7 @@ class NetworkModule {
 
     companion object {
         const val SMS_CODES = "BALANCES_ALLOWANCES"
+        const val NEW_REGISTRATION = "NEW_REGISTRATION"
     }
 
     @Provides
@@ -32,6 +34,21 @@ class NetworkModule {
     fun provideOkHttpClient(loggingInterceptor: LoggingInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
+            .connectTimeout(15, TimeUnit.SECONDS)
+            .readTimeout(15, TimeUnit.SECONDS)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    @Named(NEW_REGISTRATION)
+    fun provideNewRegisrationOkHttpClient(
+        loggingInterceptor: LoggingInterceptor,
+        newPlayerInterceptor: NewPlayerInterceptor
+    ): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor)
+            .addInterceptor(newPlayerInterceptor)
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(15, TimeUnit.SECONDS)
             .build()
@@ -67,6 +84,20 @@ class NetworkModule {
     }
 
     @Provides
+    @Named(NEW_REGISTRATION)
+    @Singleton
+    fun provideNewPlayerRetrofit(
+        @Named(NEW_REGISTRATION) okHttpClient: OkHttpClient,
+        converterFactory: Converter.Factory
+    ): Retrofit {
+        return Retrofit.Builder()
+            .client(okHttpClient)
+            .baseUrl("https://bugz.su:8443/core/") //todo вынести debug && prod url в gradle build config
+            .addConverterFactory(converterFactory)
+            .build()
+    }
+
+    @Provides
     @Singleton
     fun provideBalancesAllowancesApiClient(
         @Named(SMS_CODES) retrofit: Retrofit
@@ -81,7 +112,7 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideAccountInfoApiClient(
-        @Named(SMS_CODES) retrofit: Retrofit
+        @Named(NEW_REGISTRATION) retrofit: Retrofit
     ): AccountInfoApi = retrofit.create(AccountInfoApi::class.java)
 }
 
