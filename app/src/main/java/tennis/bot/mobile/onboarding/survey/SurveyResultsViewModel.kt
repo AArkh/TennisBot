@@ -44,7 +44,6 @@ class SurveyResultsViewModel @Inject constructor(
 	val uiStateFlow = _uiStateFlow.asStateFlow()
 
 	private fun showLoading() {
-		val currentState = _uiStateFlow.value
 		_uiStateFlow.value = SurveyResultsUiState.Loading
 	}
 

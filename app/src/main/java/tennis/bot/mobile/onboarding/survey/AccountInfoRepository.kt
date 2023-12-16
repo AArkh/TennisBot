@@ -9,6 +9,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import tennis.bot.mobile.App.Companion.ctx
+import tennis.bot.mobile.core.AuthTokenRepository
 import java.lang.StringBuilder
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -16,7 +17,8 @@ import javax.inject.Singleton
 @Singleton
 class AccountInfoRepository @Inject constructor(
 	@ApplicationContext context: Context,
-	private val api: AccountInfoApi
+	private val api: AccountInfoApi,
+	private val tokenRepo: AuthTokenRepository
 ) { // for storing account info throughout the onboarding process
 
 	private val sharedPreferences = context.getSharedPreferences("AccountInfo", Context.MODE_PRIVATE)
@@ -53,9 +55,36 @@ class AccountInfoRepository @Inject constructor(
 					password = getPassword(),
 					smsVerifyCode = getSmsVerifyCode()
 					// https://gist.github.com/meowkameow/19d1750b1016437fa86f25968f3b9349
-				))
+				)
+			)
 		}.getOrElse { return false }
+
+		if (response.isSuccessful) {
+			postLogin(response.body()!!.phoneNumber)
+		}
+
 		return response.isSuccessful
+	}
+
+	private suspend fun postLogin(phoneNumber: String) {
+		val response = kotlin.runCatching {
+			api.postToken(
+				LoginToken(
+					username = phoneNumber,
+					password = getPassword().toString()
+				)
+			)
+		}.getOrNull()
+
+		if (response != null) {
+			tokenRepo.recordToken(TokenResponse(
+				accessToken = response.body()!!.accessToken,
+				tokenType = response.body()!!.tokenType,
+				expiresIn = response.body()!!.expiresIn,
+				refreshToken = response.body()!!.refreshToken
+			))
+		}
+
 	}
 
 	@WorkerThread
@@ -82,11 +111,11 @@ class AccountInfoRepository @Inject constructor(
 						tournaments = surveyData["tournaments"] ?: 0,
 						prizes = surveyData["prizes"] ?: 0
 					)
-				)
+				), tokenRepo.getAccessToken()
 			)
 		}.getOrElse { return false }
 		return response.isSuccessful
-		}
+	}
 
 
 	fun recordPhoneNumberAndSmsCode(phoneNumber: String, smsVerifyCode: String) {
@@ -111,7 +140,7 @@ class AccountInfoRepository @Inject constructor(
 		sharedPreferences.edit().putInt(DISTRICT_ID_HEADER, districtId).apply()
 	}
 
-	fun recordPassword(password: String){
+	fun recordPassword(password: String) {
 		sharedPreferences.edit().putString(PASSWORD_HEADER, password).apply()
 	}
 

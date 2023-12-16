@@ -1,20 +1,43 @@
 package tennis.bot.mobile.onboarding.survey
 
 import androidx.annotation.IntDef
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.Header
 import retrofit2.http.POST
+import tennis.bot.mobile.onboarding.password.PasswordViewModel
 
 interface AccountInfoApi {
 
 	@POST("api/core-account/register")
 	suspend fun postRegister(@Body register: Register): Response<RegisterResponse>
 
+	@POST("connect/token")
+	suspend fun postToken(@Body token: LoginToken): Response<TokenResponse>
+
 	@POST("api/new-player")
-	suspend fun postNewPlayer(@Body newPlayer: NewPlayer): Response<NewPlayerResponse>
+	suspend fun postNewPlayer(@Body newPlayer: NewPlayer, @Header("Authorization") authHeader: String): Response<NewPlayerResponse>
 }
+
+@Serializable
+data class LoginToken(
+	@SerialName("grant_type") val grantType: String = "password",
+	@SerialName("client_id") val clientId: String = "Core_Swagger",
+	val username: String,
+	val password: String,
+	val scope: String = "roles offline_access",
+	val audience: String = "Core"
+)
+
+data class TokenResponse(
+	@SerialName("access_token") val accessToken: String,
+	@SerialName("token_type") val tokenType: String,
+	@SerialName("expires_in") val expiresIn: String,
+	@SerialName("refresh_token") val refreshToken: String
+)
 
 @Serializable
 data class Register(
@@ -27,8 +50,7 @@ data class Register(
 data class RegisterResponse( // почти ничего не нужно тут. основное берем из NewPlayerResponse
 	val userName: String,
 	val phoneNumber: String,
-	val phoneNumberConfirmed: Boolean,
-	val id: Int
+	val phoneNumberConfirmed: Boolean
 )
 
 // Для авторизации используется Нам надо перехватить эти токены после успешного запроса на регистрацию пользователя.
