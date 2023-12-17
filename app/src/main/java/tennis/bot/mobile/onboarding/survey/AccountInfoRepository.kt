@@ -2,13 +2,9 @@ package tennis.bot.mobile.onboarding.survey
 
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.WorkerThread
 import dagger.hilt.android.qualifiers.ApplicationContext
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import tennis.bot.mobile.App.Companion.ctx
+import kotlinx.serialization.SerialName
 import tennis.bot.mobile.core.AuthTokenRepository
 import java.lang.StringBuilder
 import javax.inject.Inject
@@ -22,8 +18,8 @@ class AccountInfoRepository @Inject constructor(
 ) { // for storing account info throughout the onboarding process
 
 	private val sharedPreferences = context.getSharedPreferences("AccountInfo", Context.MODE_PRIVATE)
-
-	val surveyData = mutableMapOf<String, Int>()
+	private val surveyData = mutableMapOf<String, Int>()
+	var registerResponse: RegisterResponse = RegisterResponse("", "", false)
 	val rawSurveyAnswers = mutableListOf<Int>()
 	val surveyAnswers = mutableListOf<String>()
 
@@ -60,29 +56,36 @@ class AccountInfoRepository @Inject constructor(
 		}.getOrElse { return false }
 
 		if (response.isSuccessful) {
-			postLogin(response.body()!!.phoneNumber)
+			registerResponse = response.body()!!
 		}
 
 		return response.isSuccessful
 	}
 
-	private suspend fun postLogin(phoneNumber: String) {
-		val response = kotlin.runCatching {
-			api.postToken(
-				LoginToken(
-					username = phoneNumber,
-					password = getPassword().toString()
+	@WorkerThread
+	suspend fun postLogin() {
+		val response = api.postToken(
+			LoginToken( // idk how to handle default fields another way
+				grantType = "password",
+				clientId = "Core_Swagger",
+				username = getPhoneNumber().toString(),
+				password = getPassword().toString(),
+				scope = "roles offline_access",
+				audience = "Core"
+			), "application/x-www-form-urlencoded"
+		)
+
+
+		if (response.code() == 200) {
+			Log.d("1234567", "token has been recorded")
+			tokenRepo.recordToken(
+				TokenResponse(
+					accessToken = response.body()!!.accessToken,
+					tokenType = response.body()!!.tokenType,
+					expiresIn = response.body()!!.expiresIn,
+					refreshToken = response.body()!!.refreshToken
 				)
 			)
-		}.getOrNull()
-
-		if (response != null) {
-			tokenRepo.recordToken(TokenResponse(
-				accessToken = response.body()!!.accessToken,
-				tokenType = response.body()!!.tokenType,
-				expiresIn = response.body()!!.expiresIn,
-				refreshToken = response.body()!!.refreshToken
-			))
 		}
 
 	}
@@ -95,12 +98,13 @@ class AccountInfoRepository @Inject constructor(
 					name = getName().toString(),
 					surName = getSurName().toString(),
 					phoneNumber = getPhoneNumber().toString(),
+					birthday = registerResponse.creationTime,
 					isMale = isMale(),
 					countryId = getCountryId(),
 					cityId = getCityId(),
 					districtId = getDistrictId(),
 					telegramId = getTelegramId().toString(),
-					surveyAnswers = NewPlayer.SurveyAnswers(
+					surveyAnswer = NewPlayer.SurveyAnswers(
 						experience = surveyData["experience"] ?: 0,
 						forehand = surveyData["forehand"] ?: 0,
 						backhand = surveyData["backhand"] ?: 0,
@@ -116,7 +120,6 @@ class AccountInfoRepository @Inject constructor(
 		}.getOrElse { return false }
 		return response.isSuccessful
 	}
-
 
 	fun recordPhoneNumberAndSmsCode(phoneNumber: String, smsVerifyCode: String) {
 		sharedPreferences.edit().putString(PHONE_NUMBER_HEADER, phoneNumber.toApiNumericFormat()).apply()

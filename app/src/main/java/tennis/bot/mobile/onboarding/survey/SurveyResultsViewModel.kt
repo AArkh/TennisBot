@@ -50,6 +50,10 @@ class SurveyResultsViewModel @Inject constructor(
 	private fun onError() {
 		context.showToast("${context.getString(R.string.error_text)}. Попробуйте еще раз")
 
+		_uiStateFlow.value = SurveyResultsUiState.InitialWithAnswers(
+			answers = surveyResultItemList,
+			buttonContinueText = buttonContinueText
+		)
 	}
 
 	fun onContinueButtonClicked(navigationCallback: () -> Unit) {

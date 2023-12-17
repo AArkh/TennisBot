@@ -1,11 +1,15 @@
 package tennis.bot.mobile.onboarding.survey
 
 import android.content.Context
+import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
 import javax.inject.Inject
 
@@ -109,6 +113,18 @@ class SurveyViewModel @Inject constructor(
 		selectedPage = 0,
 		surveyPages = optionsList
 	))
+
+	init {
+		viewModelScope.launch(Dispatchers.IO) {
+			kotlin.runCatching {
+				accountInfo.postLogin()
+			}.onFailure {
+				Log.d("1234567", "postLogin in SurveyViewModel failed")
+			}.onSuccess {
+				Log.d("1234567", "postLogin in SurveyViewModel succeeded")
+			}
+		}
+	}
 
 	fun onBackClicked() {
 		if (surveyUiState.value.selectedPage in 1..8 ) {

@@ -3,12 +3,10 @@ package tennis.bot.mobile.onboarding.survey
 import androidx.annotation.IntDef
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Header
 import retrofit2.http.POST
-import tennis.bot.mobile.onboarding.password.PasswordViewModel
 
 interface AccountInfoApi {
 
@@ -16,7 +14,7 @@ interface AccountInfoApi {
 	suspend fun postRegister(@Body register: Register): Response<RegisterResponse>
 
 	@POST("connect/token")
-	suspend fun postToken(@Body token: LoginToken): Response<TokenResponse>
+	suspend fun postToken(@Body token: LoginToken, @Header("Content-Type") contentType: String): Response<TokenResponse>
 
 	@POST("api/new-player")
 	suspend fun postNewPlayer(@Body newPlayer: NewPlayer, @Header("Authorization") authHeader: String): Response<NewPlayerResponse>
@@ -24,14 +22,15 @@ interface AccountInfoApi {
 
 @Serializable
 data class LoginToken(
-	@SerialName("grant_type") val grantType: String = "password",
-	@SerialName("client_id") val clientId: String = "Core_Swagger",
+	@SerialName("grant_type") val grantType: String,
+	@SerialName("client_id") val clientId: String,
 	val username: String,
 	val password: String,
-	val scope: String = "roles offline_access",
-	val audience: String = "Core"
+	val scope: String,
+	val audience: String
 )
 
+@Serializable
 data class TokenResponse(
 	@SerialName("access_token") val accessToken: String,
 	@SerialName("token_type") val tokenType: String,
@@ -50,7 +49,8 @@ data class Register(
 data class RegisterResponse( // почти ничего не нужно тут. основное берем из NewPlayerResponse
 	val userName: String,
 	val phoneNumber: String,
-	val phoneNumberConfirmed: Boolean
+	val phoneNumberConfirmed: Boolean,
+	val creationTime: String = "2023-12-17T14:36:20.089Z"
 )
 
 // Для авторизации используется Нам надо перехватить эти токены после успешного запроса на регистрацию пользователя.
@@ -69,13 +69,13 @@ data class NewPlayer(
 	val name: String,
 	val surName: String,
 	val phoneNumber: String,
-	val birthday: String = "",
+	val birthday: String = "something",
 	val isMale: Boolean,
 	val countryId: Int,
 	val cityId: Int,
 	val districtId: Int,
 	val telegramId: String,
-	val surveyAnswers: SurveyAnswers
+	val surveyAnswer: SurveyAnswers
 ) {
 	@Serializable
 	data class SurveyAnswers(
