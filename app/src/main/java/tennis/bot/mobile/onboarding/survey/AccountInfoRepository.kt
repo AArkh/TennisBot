@@ -65,14 +65,12 @@ class AccountInfoRepository @Inject constructor(
 	@WorkerThread
 	suspend fun postLogin() {
 		val response = api.postToken(
-			LoginToken( // idk how to handle default fields another way
 				grantType = "password",
 				clientId = "Core_Swagger",
 				username = getPhoneNumber().toString(),
 				password = getPassword().toString(),
 				scope = "roles offline_access",
 				audience = "Core"
-			), "application/x-www-form-urlencoded"
 		)
 
 
@@ -87,7 +85,6 @@ class AccountInfoRepository @Inject constructor(
 				)
 			)
 		}
-
 	}
 
 	@WorkerThread
@@ -101,10 +98,10 @@ class AccountInfoRepository @Inject constructor(
 					birthday = registerResponse.creationTime,
 					isMale = isMale(),
 					countryId = getCountryId(),
-					cityId = getCityId(),
-					districtId = getDistrictId(),
+					cityId = if (getCityId() == 0) null else getCityId(),
+					districtId = if (getDistrictId() == 0) null else getDistrictId(),
 					telegramId = getTelegramId().toString(),
-					surveyAnswer = NewPlayer.SurveyAnswers(
+					surveyAnswer = NewPlayer.SurveyAnswers( // обратить внимание, может сделать nullable?
 						experience = surveyData["experience"] ?: 0,
 						forehand = surveyData["forehand"] ?: 0,
 						backhand = surveyData["backhand"] ?: 0,
