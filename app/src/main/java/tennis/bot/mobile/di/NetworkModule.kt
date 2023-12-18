@@ -16,6 +16,7 @@ import tennis.bot.mobile.core.NewPlayerInterceptor
 import tennis.bot.mobile.onboarding.location.LocationApi
 import tennis.bot.mobile.onboarding.phone.SmsApi
 import tennis.bot.mobile.onboarding.survey.AccountInfoApi
+import tennis.bot.mobile.onboarding.survey.NewPlayerApi
 import tennis.bot.mobile.utils.LoggingInterceptor
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
@@ -28,6 +29,7 @@ class NetworkModule {
     companion object {
         const val SMS_CODES = "BALANCES_ALLOWANCES"
         const val NEW_REGISTRATION = "NEW_REGISTRATION"
+        const val NEW_PLAYER = "NEW_PLAYER"
     }
 
     @Provides
@@ -42,7 +44,7 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    @Named(NEW_REGISTRATION)
+    @Named(NEW_PLAYER)
     fun provideNewRegisrationOkHttpClient(
         loggingInterceptor: LoggingInterceptor,
         authInterceptor: AuthInterceptor
@@ -87,8 +89,22 @@ class NetworkModule {
     @Provides
     @Named(NEW_REGISTRATION)
     @Singleton
+    fun provideAccountInfoRetrofit(
+        okHttpClient: OkHttpClient,
+        converterFactory: Converter.Factory
+    ): Retrofit {
+        return Retrofit.Builder()
+            .client(okHttpClient)
+            .baseUrl("https://bugz.su:8443/core/") //todo вынести debug && prod url в gradle build config
+            .addConverterFactory(converterFactory)
+            .build()
+    }
+
+    @Provides
+    @Named(NEW_PLAYER)
+    @Singleton
     fun provideNewPlayerRetrofit(
-        @Named(NEW_REGISTRATION) okHttpClient: OkHttpClient,
+        @Named(NEW_PLAYER) okHttpClient: OkHttpClient,
         converterFactory: Converter.Factory
     ): Retrofit {
         return Retrofit.Builder()
@@ -115,5 +131,11 @@ class NetworkModule {
     fun provideAccountInfoApiClient(
         @Named(NEW_REGISTRATION) retrofit: Retrofit
     ): AccountInfoApi = retrofit.create(AccountInfoApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideNewPlayerApiClient(
+        @Named(NEW_PLAYER) retrofit: Retrofit
+    ): NewPlayerApi = retrofit.create(NewPlayerApi::class.java)
 }
 

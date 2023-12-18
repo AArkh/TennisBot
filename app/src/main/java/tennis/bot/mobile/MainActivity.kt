@@ -7,8 +7,10 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import tennis.bot.mobile.core.AuthTokenRepository
 import tennis.bot.mobile.databinding.ActivityMainBinding
 import tennis.bot.mobile.onboarding.initial.LoginProposalFragment
 import tennis.bot.mobile.onboarding.location.LocationRepo
@@ -22,6 +24,8 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var locationRepo: LocationRepo
+    @Inject
+    lateinit var authTokenRepository: AuthTokenRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +45,16 @@ class MainActivity : AppCompatActivity() {
                 } catch (iOException: IOException) {
                     Log.d("1234567", "Network error: ${iOException.message}")
                 }
+            }
+        }
+        lifecycleScope.launch {
+            authTokenRepository.unAuthEventsFlow.collectLatest {
+                Log.e("1234567", "activtiy caulght an unauth event, trying to navigate back to login screen")
+                val transaction = supportFragmentManager.beginTransaction()
+                supportFragmentManager.fragments.forEach {
+                    transaction.remove(it)
+                }
+                transaction.add(binding.fragmentContainerView.id, LoginProposalFragment()).commit()
             }
         }
     }
