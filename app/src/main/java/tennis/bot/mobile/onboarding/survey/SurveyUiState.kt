@@ -17,5 +17,5 @@ data class SurveyItem(
     val sideNoteTitle: String,
     val sideNoteText: String,
     val isTwoOptions: Boolean = false,
-    val pickedOptionId: Int = 0 // unpicked by default
+    val pickedOptionId: Int? = null // unpicked by default
 ): CoreUtilsItem()

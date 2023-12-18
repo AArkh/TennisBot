@@ -14,8 +14,6 @@ class AuthTokenRepository @Inject constructor() {
 	}
 
 	fun getAccessToken(): String {
-		return currentToken.accessToken
+		return "Bearer ${currentToken.accessToken}"
 	}
-
-
 }

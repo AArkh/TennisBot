@@ -5,7 +5,10 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.POST
 
 interface AccountInfoApi {
@@ -13,22 +16,23 @@ interface AccountInfoApi {
 	@POST("api/core-account/register")
 	suspend fun postRegister(@Body register: Register): Response<RegisterResponse>
 
+	@FormUrlEncoded
+	@Headers("Content-Type:$CONTENT_TYPE_HEADER")
 	@POST("connect/token")
-	suspend fun postToken(@Body token: LoginToken, @Header("Content-Type") contentType: String): Response<TokenResponse>
+	suspend fun postToken(
+		@Field("grant_type") grantType: String,
+		@Field("client_id") clientId: String,
+		@Field("username") username: String,
+		@Field("password") password: String,
+		@Field("scope") scope: String,
+		@Field("audience") audience: String
+	): Response<TokenResponse>
 
 	@POST("api/new-player")
 	suspend fun postNewPlayer(@Body newPlayer: NewPlayer, @Header("Authorization") authHeader: String): Response<NewPlayerResponse>
 }
 
-@Serializable
-data class LoginToken(
-	@SerialName("grant_type") val grantType: String,
-	@SerialName("client_id") val clientId: String,
-	val username: String,
-	val password: String,
-	val scope: String,
-	val audience: String
-)
+const val CONTENT_TYPE_HEADER: String = "application/x-www-form-urlencoded"
 
 @Serializable
 data class TokenResponse(
@@ -68,12 +72,12 @@ data class RegisterResponse( // почти ничего не нужно тут. 
 data class NewPlayer(
 	val name: String,
 	val surName: String,
-	val phoneNumber: String,
-	val birthday: String = "something",
+	val phoneNumber: String?,
+	val birthday: String,
 	val isMale: Boolean,
 	val countryId: Int,
-	val cityId: Int,
-	val districtId: Int,
+	val cityId: Int?, //nullable
+	val districtId: Int?,
 	val telegramId: String,
 	val surveyAnswer: SurveyAnswers
 ) {

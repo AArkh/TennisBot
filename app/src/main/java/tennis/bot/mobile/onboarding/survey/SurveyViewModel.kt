@@ -116,13 +116,9 @@ class SurveyViewModel @Inject constructor(
 
 	init {
 		viewModelScope.launch(Dispatchers.IO) {
-			kotlin.runCatching {
+
 				accountInfo.postLogin()
-			}.onFailure {
-				Log.d("1234567", "postLogin in SurveyViewModel failed")
-			}.onSuccess {
-				Log.d("1234567", "postLogin in SurveyViewModel succeeded")
-			}
+
 		}
 	}
 

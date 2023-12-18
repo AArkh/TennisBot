@@ -11,6 +11,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Converter
 import retrofit2.Retrofit
+import tennis.bot.mobile.core.AuthInterceptor
 import tennis.bot.mobile.core.NewPlayerInterceptor
 import tennis.bot.mobile.onboarding.location.LocationApi
 import tennis.bot.mobile.onboarding.phone.SmsApi
@@ -44,11 +45,11 @@ class NetworkModule {
     @Named(NEW_REGISTRATION)
     fun provideNewRegisrationOkHttpClient(
         loggingInterceptor: LoggingInterceptor,
-        newPlayerInterceptor: NewPlayerInterceptor
+        authInterceptor: AuthInterceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
-            .addInterceptor(newPlayerInterceptor)
+            .addInterceptor(authInterceptor)
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(15, TimeUnit.SECONDS)
             .build()
