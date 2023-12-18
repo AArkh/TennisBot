@@ -33,6 +33,7 @@ class SurveyResultsFragment : CoreFragment<FragmentSurveyResultsBinding>() {
 
 		requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
 			parentFragmentManager.beginTransaction()
+				.remove(this@SurveyResultsFragment)
 				.replace(R.id.fragment_container_view, SurveyFragment())
 				.addToBackStack(SurveyFragment::class.java.name)
 				.commit()
