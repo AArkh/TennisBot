@@ -43,7 +43,7 @@ class NetworkModule {
     @Provides
     @Singleton
     @Named(NEW_PLAYER)
-    fun provideNewRegisrationOkHttpClient(
+    fun provideNewRegistrationOkHttpClient(
         loggingInterceptor: LoggingInterceptor,
         authInterceptor: AuthInterceptor
     ): OkHttpClient {
