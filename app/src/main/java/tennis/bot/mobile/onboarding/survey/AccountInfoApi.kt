@@ -1,6 +1,5 @@
 package tennis.bot.mobile.onboarding.survey
 
-import androidx.annotation.IntDef
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import retrofit2.Call
@@ -8,7 +7,6 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
-import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
@@ -59,9 +57,9 @@ data class Register(
 )
 
 @Serializable
-data class RegisterResponse( // почти ничего не нужно тут. основное берем из NewPlayerResponse
+data class RegisterResponse(
 	val userName: String,
 	val phoneNumber: String,
 	val phoneNumberConfirmed: Boolean,
-	val creationTime: String = "2023-12-17T14:36:20.089Z"
+	val creationTime: String
 )

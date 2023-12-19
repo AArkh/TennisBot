@@ -7,7 +7,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import tennis.bot.mobile.onboarding.location.Location
 import tennis.bot.mobile.onboarding.location.LocationCityConverter
 import tennis.bot.mobile.onboarding.location.LocationDao
 import tennis.bot.mobile.onboarding.location.LocationDatabase

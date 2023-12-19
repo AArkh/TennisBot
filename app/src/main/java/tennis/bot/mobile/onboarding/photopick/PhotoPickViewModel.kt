@@ -1,7 +1,5 @@
 package tennis.bot.mobile.onboarding.photopick
 
-import android.util.Log
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +10,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PhotoPickViewModel @Inject constructor() : ViewModel() {
 
-    val imageList = listOf(
+    private val imageList = listOf(
         CircledImage(R.drawable.photo_picker_1),
         CircledImage(R.drawable.photo_picker_2),
         CircledImage(R.drawable.photo_picker_3),
@@ -41,7 +39,7 @@ class PhotoPickViewModel @Inject constructor() : ViewModel() {
 
     fun onPickedCircledImage(pickedCircledImage: CircledImage) {
         val newList = imageList.map { item ->
-            if (item.isSelected) { // previously selected
+            if (item.isSelected) {
                 return@map item.copy(isSelected = false)
             } else if (item == pickedCircledImage) {
                 return@map pickedCircledImage.copy(isSelected = true)

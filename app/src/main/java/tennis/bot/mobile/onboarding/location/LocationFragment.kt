@@ -2,7 +2,6 @@ package tennis.bot.mobile.onboarding.location
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -11,7 +10,6 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentLocationBinding
-import tennis.bot.mobile.onboarding.phone.SmsCodeFragment
 import tennis.bot.mobile.onboarding.photopick.PhotoPickFragment
 
 @AndroidEntryPoint

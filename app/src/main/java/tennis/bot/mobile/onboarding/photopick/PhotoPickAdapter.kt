@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.RecyclerView
-import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreAdapter
 import tennis.bot.mobile.core.CoreUtilsItem
 import tennis.bot.mobile.databinding.RecyclerCircledPhotoItemBinding

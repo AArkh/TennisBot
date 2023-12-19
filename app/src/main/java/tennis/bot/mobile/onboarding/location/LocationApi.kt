@@ -8,7 +8,6 @@ import kotlinx.serialization.Serializable
 import retrofit2.Call
 import retrofit2.http.GET
 import tennis.bot.mobile.core.CoreUtilsItem
-import tennis.bot.mobile.onboarding.phone.CountryItem
 
 interface LocationApi {
     @GET("api/dictionaries/countries")

@@ -5,7 +5,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class LocationRepo @Inject constructor(
+class LocationRepository @Inject constructor(
     private val api: LocationApi,
     private val dao: LocationDao,
 ) {

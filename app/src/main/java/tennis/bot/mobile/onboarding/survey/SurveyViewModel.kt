@@ -1,7 +1,6 @@
 package tennis.bot.mobile.onboarding.survey
 
 import android.content.Context
-import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -116,9 +115,7 @@ class SurveyViewModel @Inject constructor(
 
 	init {
 		viewModelScope.launch(Dispatchers.IO) {
-
 				accountInfo.postLogin()
-
 		}
 	}
 

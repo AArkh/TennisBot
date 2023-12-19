@@ -1,8 +1,6 @@
 package tennis.bot.mobile.onboarding.password
 
 import android.content.Context
-import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,12 +9,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import tennis.bot.mobile.R
-import tennis.bot.mobile.onboarding.phone.SmsCodeUiState
-import tennis.bot.mobile.onboarding.phone.SmsCodeViewModel
 import tennis.bot.mobile.onboarding.survey.AccountInfoRepository
-import tennis.bot.mobile.onboarding.survey.AccountInfoRepository.Companion.PASSWORD_HEADER
 import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
@@ -83,7 +77,6 @@ class PasswordViewModel @Inject constructor(
 			nextButtonText = nextButtonText
 		)
 	}
-
 	fun onNextButtonClicked(navigationCallback: () -> Unit) {
 		accountInfo.recordPassword(_uiStateFlow.value.userInput.toString())
 		showLoading()

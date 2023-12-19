@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LocationDialogViewModel @Inject constructor(
-    private val repository: LocationRepo,
+    private val repository: LocationRepository,
     private val dataMapper: LocationDataMapper,
     private val savedStateHandle: SavedStateHandle,
     @ApplicationContext private val context: Context

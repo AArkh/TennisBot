@@ -9,9 +9,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import tennis.bot.mobile.onboarding.namegender.Const.FEMALE
 import tennis.bot.mobile.onboarding.namegender.Const.MALE
 import tennis.bot.mobile.onboarding.survey.AccountInfoRepository
-import tennis.bot.mobile.onboarding.survey.AccountInfoRepository.Companion.IS_MALE_HEADER
-import tennis.bot.mobile.onboarding.survey.AccountInfoRepository.Companion.NAME_HEADER
-import tennis.bot.mobile.onboarding.survey.AccountInfoRepository.Companion.SURNAME_HEADER
 import javax.inject.Inject
 
 @HiltViewModel

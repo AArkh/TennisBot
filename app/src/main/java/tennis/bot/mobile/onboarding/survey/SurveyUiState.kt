@@ -5,7 +5,7 @@ import tennis.bot.mobile.core.CoreUtilsItem
 data class SurveyUiState(
     val progress: Int,
     val title: String,
-    val selectedPage: Int, // current shown index in surveyPages
+    val selectedPage: Int,
     val surveyPages: List<SurveyItem>
 )
 
@@ -17,5 +17,5 @@ data class SurveyItem(
     val sideNoteTitle: String,
     val sideNoteText: String,
     val isTwoOptions: Boolean = false,
-    val pickedOptionId: Int? = null // unpicked by default
+    val pickedOptionId: Int? = null
 ): CoreUtilsItem()

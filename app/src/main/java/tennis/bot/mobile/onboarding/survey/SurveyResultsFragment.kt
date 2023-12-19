@@ -9,6 +9,7 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentSurveyResultsBinding
+import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -41,7 +42,7 @@ class SurveyResultsFragment : CoreFragment<FragmentSurveyResultsBinding>() {
 
 		binding.buttonContinue.setOnClickListener {
 			viewModel.onContinueButtonClicked {
-				// there will be next screen logic here
+				context?.showToast("To be continued")
 			}
 		}
 

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 
-// DiffUtils
 abstract class CoreAdapter<ViewHolder : RecyclerView.ViewHolder> : RecyclerView.Adapter<ViewHolder>() {
 
     protected var items: List<CoreUtilsItem> = listOf()

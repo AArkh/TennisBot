@@ -9,7 +9,6 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentSportBinding
-import tennis.bot.mobile.onboarding.location.LocationFragment
 import tennis.bot.mobile.onboarding.namegender.NameGenderFragment
 import javax.inject.Inject
 

@@ -4,11 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.annotation.WorkerThread
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import okio.IOException
 import tennis.bot.mobile.core.AuthTokenRepository
-import tennis.bot.mobile.utils.AppCoroutineScopes
 import java.lang.StringBuilder
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -19,11 +15,11 @@ class AccountInfoRepository @Inject constructor(
     private val api: AccountInfoApi,
     private val newPlayerApi: NewPlayerApi,
     private val tokenRepo: AuthTokenRepository,
-) { // for storing account info throughout the onboarding process
+) {
 
     private val sharedPreferences = context.getSharedPreferences("AccountInfo", Context.MODE_PRIVATE)
     private val surveyData = mutableMapOf<String, Int>()
-    var registerResponse: RegisterResponse = RegisterResponse("", "", false)
+    var registerResponse: RegisterResponse = RegisterResponse("", "", false, "")
     val rawSurveyAnswers = mutableListOf<Int>()
     val surveyAnswers = mutableListOf<String>()
 
@@ -104,7 +100,7 @@ class AccountInfoRepository @Inject constructor(
 					cityId = if (getCityId() == 0) null else getCityId(),
 					districtId = if (getDistrictId() == 0) null else getDistrictId(),
 					telegramId = getTelegramId().toString(),
-					surveyAnswer = NewPlayer.SurveyAnswers( // обратить внимание, может сделать nullable?
+					surveyAnswer = NewPlayer.SurveyAnswers(
 						experience = surveyData["experience"] ?: 0,
 						forehand = surveyData["forehand"] ?: 0,
 						backhand = surveyData["backhand"] ?: 0,
@@ -115,7 +111,7 @@ class AccountInfoRepository @Inject constructor(
 						tournaments = surveyData["tournaments"] ?: 0,
 						prizes = surveyData["prizes"] ?: 0
 					)
-				), tokenRepo.getAccessToken() ?: "" // todo
+				), tokenRepo.getAccessToken() ?: ""
 			)
 		}.getOrElse { return false }
 		return response.isSuccessful
@@ -209,7 +205,6 @@ class AccountInfoRepository @Inject constructor(
         const val DISTRICT_ID_HEADER = "districtId"
         const val TELEGRAM_ID_HEADER = "telegramId"
     }
-
 }
 
 

@@ -10,14 +10,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tennis.bot.mobile.onboarding.survey.AccountInfoRepository
-import tennis.bot.mobile.onboarding.survey.AccountInfoRepository.Companion.CITY_ID_HEADER
-import tennis.bot.mobile.onboarding.survey.AccountInfoRepository.Companion.COUNTRY_ID_HEADER
-import tennis.bot.mobile.onboarding.survey.AccountInfoRepository.Companion.DISTRICT_ID_HEADER
 import javax.inject.Inject
 
 @HiltViewModel
 class LocationViewModel @Inject constructor(
-	private val repository: LocationRepo,
+	private val repository: LocationRepository,
 	private val accountInfo: AccountInfoRepository
 ) : ViewModel() {
 

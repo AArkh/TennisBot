@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 import tennis.bot.mobile.core.AuthTokenRepository
 import tennis.bot.mobile.databinding.ActivityMainBinding
 import tennis.bot.mobile.onboarding.initial.LoginProposalFragment
-import tennis.bot.mobile.onboarding.location.LocationRepo
+import tennis.bot.mobile.onboarding.location.LocationRepository
 import java.io.IOException
 import javax.inject.Inject
 
@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
 
     @Inject
-    lateinit var locationRepo: LocationRepo
+    lateinit var locationRepository: LocationRepository
     @Inject
     lateinit var authTokenRepository: AuthTokenRepository
 
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 try{
-                    locationRepo.precacheLocations()
+                    locationRepository.precacheLocations()
                 } catch (iOException: IOException) {
                     Log.d("1234567", "Network error: ${iOException.message}")
                 }
@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         }
         lifecycleScope.launch {
             authTokenRepository.unAuthEventsFlow.collectLatest {
-                Log.e("1234567", "activtiy caulght an unauth event, trying to navigate back to login screen")
+                Log.e("1234567", "activity caught an unauth event, trying to navigate back to login screen")
                 val transaction = supportFragmentManager.beginTransaction()
                 supportFragmentManager.fragments.forEach {
                     transaction.remove(it)

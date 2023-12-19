@@ -14,7 +14,7 @@ interface NewPlayerApi {
 }
 
 @Serializable
-data class NewPlayerResponse( // спросить как работает парсинг Data класса, использовать ли его для даты напрямую
+data class NewPlayerResponse(
     val id: Long,
     val name: String,
     val surName: String,
@@ -48,17 +48,6 @@ data class NewPlayerResponse( // спросить как работает пар
     val premiumExpiration: String
 )
 
-// Для авторизации используется Нам надо перехватить эти токены после успешного запроса на регистрацию пользователя.
-// Возможно, они придут в ответе postRegister в body, возможно там же, но в setCookie хидере.
-// Надо реализовать кастомную имплементацию клиента okhttp с interceptor'ом, который будет перехватывать setCookie и
-// сохранять токены в отдельный репозиторий
-
-
-// auth_token = dsfghjklkjhtgf // (expires 30min)
-// refresh_token = sdfghjklkjhgfd // (expires 3 days)
-
-// Надо реализовать второй okhttp клиент для запросов, на которые требуется авторизация
-
 @Serializable
 data class NewPlayer(
     val name: String,
@@ -86,6 +75,6 @@ data class NewPlayer(
     )
 }
 
-@IntDef(0, 1, 2, 3, 4) // fixme added a 'null' value here.  ask Andrey if that a good practice
+@IntDef(0, 1, 2, 3, 4)
 @Retention(AnnotationRetention.SOURCE)
 annotation class SurveyOptions

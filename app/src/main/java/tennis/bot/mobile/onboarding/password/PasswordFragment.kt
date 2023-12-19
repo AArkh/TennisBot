@@ -2,11 +2,7 @@ package tennis.bot.mobile.onboarding.password
 
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
@@ -15,7 +11,6 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentPasswordBinding
 import tennis.bot.mobile.onboarding.survey.SurveyFragment
-import tennis.bot.mobile.utils.updateTextIfNeeded
 
 @AndroidEntryPoint
 class PasswordFragment : CoreFragment<FragmentPasswordBinding>() {
@@ -68,7 +63,7 @@ class PasswordFragment : CoreFragment<FragmentPasswordBinding>() {
 					binding.buttonNext.text = ""
 					binding.buttonLoadingAnim.visibility = View.VISIBLE
 				}
-				is PasswordUiState.Error -> { // currently unused. think of a way to utilize it or get rid of it
+				is PasswordUiState.Error -> {
 					viewModel.onError()
 				}
 			}
