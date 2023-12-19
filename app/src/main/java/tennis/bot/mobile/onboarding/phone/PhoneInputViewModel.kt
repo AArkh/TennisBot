@@ -64,13 +64,15 @@ class PhoneInputViewModel @Inject constructor(
         AppCoroutineScopes.appWorkerScope.launch {
             val value = uiStateFlow.value
             val phoneNumber = value.prefix + " " + value.userInput
-            successCallback.invoke(phoneNumber)
             kotlin.runCatching {
-                repository.requestSmsCode(phoneNumber)
+                if (!repository.requestSmsCode(phoneNumber))
+                    throw IllegalArgumentException("Failed to post Register")
             }.onFailure {
                 if (it !is CancellationException) {
                     context.showToast("Failed to request sms code")
                 }
+            }.onSuccess {
+                successCallback.invoke(phoneNumber)
             }
         }
     }

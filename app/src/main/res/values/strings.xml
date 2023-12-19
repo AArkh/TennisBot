@@ -120,6 +120,7 @@
 	<string name="location_choose_country">Выбери страну</string>
 	<string name="location_choose_city">Выбери город</string>
 	<string name="location_choose_district">Выбери район</string>
+	<string name="phone_is_registered">Этот номер уже зарегистрирован</string>
 
 
 </resources>

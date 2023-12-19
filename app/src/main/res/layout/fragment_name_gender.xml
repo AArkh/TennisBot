@@ -58,7 +58,10 @@
 			android:layout_height="wrap_content"
 			android:cursorVisible="true"
 			android:textCursorDrawable="@null"
-			android:textSize="15sp" />
+			android:textSize="15sp"
+			android:inputType="text"
+			android:maxLines="1"
+			android:imeOptions="actionNext"/>
 
 	</com.google.android.material.textfield.TextInputLayout>
 
@@ -109,7 +112,10 @@
 			android:layout_height="wrap_content"
 			android:cursorVisible="true"
 			android:textCursorDrawable="@null"
-			android:textSize="15sp" />
+			android:textSize="15sp"
+			android:inputType="text"
+			android:maxLines="1"
+			android:imeOptions="actionDone"/>
 
 	</com.google.android.material.textfield.TextInputLayout>
 
