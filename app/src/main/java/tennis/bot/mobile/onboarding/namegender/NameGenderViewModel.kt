@@ -57,14 +57,12 @@ class NameGenderViewModel @Inject constructor(
 		)
 	}
 
-	fun isNextButtonEnabled() { // gender type?
+	fun isNextButtonEnabled() {
 		val prevState: NameGenderUiState = _uiStateFlow.value
-		val isNameOk = prevState.userNameInput.length >= 3
-		val isSurnameOk = prevState.userSurnameInput.length >= 3
 		val isGenderPicked = prevState.gender == MALE || prevState.gender == FEMALE
 
 		_uiStateFlow.value = prevState.copy(
-			nextButtonEnabled = isNameOk && isSurnameOk && isGenderPicked
+			nextButtonEnabled = isGenderPicked
 		)
 	}
 

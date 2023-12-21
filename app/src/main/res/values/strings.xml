@@ -121,6 +121,9 @@
 	<string name="location_choose_city">Выбери город</string>
 	<string name="location_choose_district">Выбери район</string>
 	<string name="phone_is_registered">Этот номер уже зарегистрирован</string>
+	<string name="login_title">Войти</string>
+	<string name="enter_password">Введи пароль</string>
+	<string name="forgot_password">Забыл пароль</string>
 
 
 </resources>
