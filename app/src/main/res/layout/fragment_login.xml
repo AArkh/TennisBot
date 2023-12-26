@@ -138,7 +138,7 @@
 			android:id="@+id/passwordEt"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:inputType="textPassword"
+			android:inputType="textWebPassword"
 			android:cursorVisible="true"
 			android:textCursorDrawable="@null"
 			android:textSize="15sp" />
@@ -179,6 +179,18 @@
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/passwordInputLayout" />
+
+	<ProgressBar
+		android:id="@+id/button_loading_anim"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:indeterminate="true"
+		android:indeterminateTint="@color/tb_white"
+		android:visibility="gone"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="@id/buttonLogin"
+		app:layout_constraintBottom_toBottomOf="@id/buttonLogin"/>
 
 	<Button
 		android:id="@+id/buttonTryAgain"

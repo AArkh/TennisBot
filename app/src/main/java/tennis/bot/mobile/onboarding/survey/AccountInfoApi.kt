@@ -23,6 +23,7 @@ interface AccountInfoApi {
 		@Field("client_id") clientId: String,
 		@Field("username") username: String,
 		@Field("password") password: String,
+		@Field("client_secret") clientSecret: String,
 		@Field("scope") scope: String,
 		@Field("audience") audience: String
 	): Response<TokenResponse>

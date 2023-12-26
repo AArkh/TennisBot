@@ -63,9 +63,7 @@ class PasswordFragment : CoreFragment<FragmentPasswordBinding>() {
 					binding.buttonNext.text = ""
 					binding.buttonLoadingAnim.visibility = View.VISIBLE
 				}
-				is PasswordUiState.Error -> {
-					viewModel.onError()
-				}
+				is PasswordUiState.Error -> {}
 			}
 
 		}

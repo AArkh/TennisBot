@@ -11,6 +11,7 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.databinding.FragmentLoginProposalBinding
+import tennis.bot.mobile.onboarding.login.LoginFragment
 import tennis.bot.mobile.onboarding.phone.PhoneInputFragment
 import tennis.bot.mobile.onboarding.sport.SportFragment
 import tennis.bot.mobile.onboarding.survey.SurveyFragment
@@ -58,7 +59,7 @@ class LoginProposalFragment : CoreFragment<FragmentLoginProposalBinding>() {
         binding.buttonLogin.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .addToBackStack(this::class.java.name)
-                .replace(R.id.fragment_container_view, SurveyFragment())
+                .replace(R.id.fragment_container_view, LoginFragment())
                 .commit()
         }
 //        binding.buttonWithoutRegistration.setOnClickListener {

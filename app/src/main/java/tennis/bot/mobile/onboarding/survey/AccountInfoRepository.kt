@@ -66,9 +66,10 @@ class AccountInfoRepository @Inject constructor(
     suspend fun postLogin() {
         val response = api.loginUser(
             grantType = "password",
-            clientId = "Core_Swagger",
+            clientId = "Core_Android",
             username = getPhoneNumber().toString(),
             password = getPassword().toString(),
+            clientSecret = "Aitq2BWbQDR8pOiOwFS5SXGlss93xLlY",
             scope = "roles offline_access",
             audience = "Core"
         )
@@ -84,6 +85,33 @@ class AccountInfoRepository @Inject constructor(
                 )
             )
         }
+    }
+
+    @WorkerThread
+    suspend fun postLogin(username: String, password: String): Int {
+        val response = api.loginUser(
+            grantType = "password",
+            clientId = "Core_Android",
+            username = username.toApiNumericFormat(),
+            password = password,
+            clientSecret = "Aitq2BWbQDR8pOiOwFS5SXGlss93xLlY",
+            scope = "roles offline_access",
+            audience = "Core"
+        )
+
+        if (response.code() == 200) {
+            Log.d("1234567", "token has been recorded")
+            tokenRepo.recordToken(
+                TokenResponse(
+                    accessToken = response.body()!!.accessToken,
+                    tokenType = response.body()!!.tokenType,
+                    expiresIn = response.body()!!.expiresIn,
+                    refreshToken = response.body()!!.refreshToken
+                )
+            )
+        }
+
+        return response.code()
     }
 
 	@WorkerThread

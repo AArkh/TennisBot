@@ -1,17 +1,27 @@
 package tennis.bot.mobile.onboarding.login
 
 import android.content.Context
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
+import tennis.bot.mobile.onboarding.survey.AccountInfoRepository
+import tennis.bot.mobile.utils.hideKeyboard
+import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-	@ApplicationContext private val context: Context
+	@ApplicationContext private val context: Context,
+	private val accountInfo: AccountInfoRepository
 ): ViewModel() {
 
 	private val _uiStateFlow = MutableStateFlow<LoginUiState>(
@@ -31,6 +41,7 @@ class LoginViewModel @Inject constructor(
 
 	private val phoneErrorText = context.getString(R.string.onboarding_text_incorrect_phone_number)
 	private val passwordErrorText = context.getString(R.string.password_hint)
+	private val loginAndPasswordError = context.getString(R.string.wrong_pass_or_login)
 
 	fun onPhoneInput(phoneNumber: CharSequence) {
 		val prevState: LoginUiState = _uiStateFlow.value
@@ -92,13 +103,13 @@ class LoginViewModel @Inject constructor(
 
 	private fun isLoginButtonEnabled(): Boolean {
 		val currentState = _uiStateFlow.value
-		val isPhoneNumberOk = currentState.userPhoneInput.length == 14 //todo переработать для разных стран
+		val isPhoneNumberOk = currentState.userPhoneInput.length == 14
 		val isPasswordOk = Regex("^(?=.*[A-Za-z])(?=.*\\d).+\$").matches(currentState.userPasswordInput) && currentState.userPasswordInput.length >= 8
 
 		return isPhoneNumberOk && isPasswordOk
 	}
 
-	fun showLoading() {
+	private fun showInitial() {
 		val currentState = _uiStateFlow.value
 		_uiStateFlow.value = LoginUiState.Initial(
 			countryIconRes = currentState.countryIconRes,
@@ -111,5 +122,55 @@ class LoginViewModel @Inject constructor(
 			clearPhoneButtonVisible = currentState.clearPhoneButtonVisible,
 			clearPasswordButtonVisible = currentState.clearPasswordButtonVisible
 		)
+	}
+
+	private fun showLoading() {
+		val currentState = _uiStateFlow.value
+		_uiStateFlow.value = LoginUiState.Loading(
+			countryIconRes = currentState.countryIconRes,
+			phonePrefix = currentState.phonePrefix,
+			userPhoneInput = currentState.userPhoneInput,
+			userPasswordInput = currentState.userPasswordInput,
+			phoneErrorMessage = currentState.phoneErrorMessage,
+			passwordErrorMessage = currentState.passwordErrorMessage,
+			loginButtonEnabled = currentState.loginButtonEnabled,
+			clearPhoneButtonVisible = currentState.clearPhoneButtonVisible,
+			clearPasswordButtonVisible = currentState.clearPasswordButtonVisible
+		)
+	}
+
+	private fun onError(error: String) {
+		val currentState = _uiStateFlow.value
+		_uiStateFlow.value = LoginUiState.Error(
+			countryIconRes = currentState.countryIconRes,
+			phonePrefix = currentState.phonePrefix,
+			userPhoneInput = currentState.userPhoneInput,
+			userPasswordInput = currentState.userPasswordInput,
+			phoneErrorMessage = currentState.phoneErrorMessage,
+			passwordErrorMessage = error,
+			loginButtonEnabled = currentState.loginButtonEnabled,
+			clearPhoneButtonVisible = currentState.clearPhoneButtonVisible,
+			clearPasswordButtonVisible = currentState.clearPasswordButtonVisible
+		)
+	}
+
+	fun onLoginPressed(username: CharSequence, password: CharSequence, navigationCallback: () -> Unit) {
+		showLoading()
+
+		viewModelScope.launch(Dispatchers.IO) {
+			when (accountInfo.postLogin(uiStateFlow.value.phonePrefix + username.toString(), password.toString())) {
+				 200 -> {
+					 context.showToast("This would be a dialog cue")
+					 navigationCallback.invoke()
+					 showInitial()
+				 }
+				 400 -> {
+					 onError(loginAndPasswordError)
+				 }
+				 else -> {context.showToast(context.getString(R.string.error_text))}
+			 }
+		}
+
+
 	}
 }

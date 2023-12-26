@@ -124,6 +124,11 @@
 	<string name="login_title">Войти</string>
 	<string name="enter_password">Введи пароль</string>
 	<string name="forgot_password">Забыл пароль</string>
+	<string name="wrong_pass_or_login">Неправильный логин или пароль</string>
+	<string name="login_dialog_text">Приложение в разработке. Всеми функциями можно воспользоваться в телеграмм боте:</string>
+	<string name="login_dialog_title">Ваша заявка создана</string>
+	<string name="login_dialog_go_chat">Перейти в чат</string>
+	<string name="login_dialog_go_bot">Перейти в бот</string>
 
 
 </resources>

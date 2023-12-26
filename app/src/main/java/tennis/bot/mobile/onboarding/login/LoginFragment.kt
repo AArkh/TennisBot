@@ -3,6 +3,7 @@ package tennis.bot.mobile.onboarding.login
 import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.view.View
+import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -42,6 +43,16 @@ class LoginFragment : CoreFragment<FragmentLoginBinding>() {
 			binding.passwordEt.setText("")
 		}
 
+		binding.buttonLogin.setOnClickListener {
+			viewModel.onLoginPressed(
+				username = binding.phoneEt.text.toString(),
+				password = binding.passwordEt.text.toString()
+			){
+					val dialog = LoginDialogFragment()
+					dialog.show(childFragmentManager, dialog.tag)
+			}
+		}
+
 		binding.backButton.setOnClickListener {
 			parentFragmentManager.popBackStack()
 		}
@@ -73,7 +84,7 @@ class LoginFragment : CoreFragment<FragmentLoginBinding>() {
 					binding.clearPhoneButton.visibility = if (uiState.clearPhoneButtonVisible) View.VISIBLE else View.INVISIBLE
 					binding.clearPasswordButton.visibility = if (uiState.clearPasswordButtonVisible) View.VISIBLE else View.INVISIBLE
 
-
+					binding.buttonLogin.text = context?.getString(R.string.login_title)
 					binding.buttonLogin.isEnabled = uiState.loginButtonEnabled
 					val buttonBackground = if (uiState.loginButtonEnabled) {
 						R.drawable.btn_bkg_enabled
@@ -83,10 +94,16 @@ class LoginFragment : CoreFragment<FragmentLoginBinding>() {
 					binding.buttonLogin.setBackgroundResource(buttonBackground)
 
 				}
-				is LoginUiState.Loading -> {}
-				is LoginUiState.Error -> {}
+				is LoginUiState.Loading -> {
+					binding.buttonLogin.text = ""
+					binding.buttonLoadingAnim.visibility = View.VISIBLE
+				}
+				is LoginUiState.Error -> {
+					binding.buttonLoadingAnim.visibility = View.GONE
+					binding.buttonLogin.text = context?.getString(R.string.login_title)
+					binding.passwordInputLayout.error = uiState.passwordErrorMessage
+				}
 			}
-
 		}
 	}
 
