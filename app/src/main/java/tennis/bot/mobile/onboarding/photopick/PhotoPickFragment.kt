@@ -27,6 +27,7 @@ class PhotoPickFragment : CoreFragment<FragmentPhotoPickBinding>() {
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             Log.d("PhotoPicker", "Selected URI: $uri")
+
         } else {
             Log.d("PhotoPicker", "No media selected")
         }
@@ -43,13 +44,6 @@ class PhotoPickFragment : CoreFragment<FragmentPhotoPickBinding>() {
         }
         binding.pickPhotoButton.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }
-
-        binding.buttonSkip.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_view, PasswordFragment())
-                .addToBackStack(PasswordFragment::class.java.name)
-                .commit()
         }
 
         binding.buttonNext.setOnClickListener {

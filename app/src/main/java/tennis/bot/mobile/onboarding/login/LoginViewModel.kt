@@ -1,6 +1,8 @@
 package tennis.bot.mobile.onboarding.login
 
 import android.content.Context
+import android.text.InputFilter
+import android.text.Spanned
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
@@ -122,6 +124,22 @@ class LoginViewModel @Inject constructor(
 			clearPhoneButtonVisible = currentState.clearPhoneButtonVisible,
 			clearPasswordButtonVisible = currentState.clearPasswordButtonVisible
 		)
+	}
+
+	class NoSpaceInputFilter : InputFilter {
+		override fun filter(
+			source: CharSequence?,
+			start: Int,
+			end: Int,
+			dest: Spanned?,
+			dstart: Int,
+			dend: Int
+		): CharSequence? {
+			if (source?.contains(" ") == true) {
+				return ""
+			}
+			return null
+		}
 	}
 
 	private fun showLoading() {

@@ -3,7 +3,7 @@ package tennis.bot.mobile.onboarding.login
 import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.view.View
-import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -15,9 +15,7 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentLoginBinding
-import tennis.bot.mobile.onboarding.password.PasswordUiState
 import tennis.bot.mobile.onboarding.phone.CountryCodesDialogFragment
-import tennis.bot.mobile.onboarding.phone.SmsCodeFragment
 import tennis.bot.mobile.utils.hideKeyboard
 
 @AndroidEntryPoint
@@ -34,6 +32,10 @@ class LoginFragment : CoreFragment<FragmentLoginBinding>() {
 		}
 		binding.passwordEt.doOnTextChanged { password, _, _, _ ->
 			viewModel.onPasswordInput(password ?: "")
+		}
+		binding.passwordEt.filters = arrayOf(LoginViewModel.NoSpaceInputFilter())
+		binding.passwordEt.doAfterTextChanged {
+			it?.replace(Regex(" "), "")
 		}
 
 		binding.clearPhoneButton.setOnClickListener {
