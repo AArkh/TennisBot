@@ -84,7 +84,8 @@ class LoginViewModel @Inject constructor(
 	fun onPasswordInput(password: CharSequence) {
 		val prevState: LoginUiState = _uiStateFlow.value
 		val isClearPasswordButtonVisible = password.isNotEmpty()
-		val passwordConditions: Boolean = Regex("^(?=.*[A-Za-z])(?=.*\\d).+\$").matches(password) && password.length >= 8
+		// todo regex в поле класса
+		val passwordConditions: Boolean = Regex("^(?=.*[A-Za-z])(?=.*\\d).+\$").matches(password) && password.length >= 8 // todo волшебные символы в константы
 		val passwordErrorMessage = if (!passwordConditions && password.isNotEmpty()) {
 			passwordErrorText
 		} else {
@@ -105,7 +106,7 @@ class LoginViewModel @Inject constructor(
 
 	private fun isLoginButtonEnabled(): Boolean {
 		val currentState = _uiStateFlow.value
-		val isPhoneNumberOk = currentState.userPhoneInput.length == 14
+		val isPhoneNumberOk = currentState.userPhoneInput.length == 14 // todo волшебные символы в константы
 		val isPasswordOk = Regex("^(?=.*[A-Za-z])(?=.*\\d).+\$").matches(currentState.userPasswordInput) && currentState.userPasswordInput.length >= 8
 
 		return isPhoneNumberOk && isPasswordOk
@@ -182,13 +183,9 @@ class LoginViewModel @Inject constructor(
 					 navigationCallback.invoke()
 					 showInitial()
 				 }
-				 400 -> {
-					 onError(loginAndPasswordError)
-				 }
-				 else -> {context.showToast(context.getString(R.string.error_text))}
+				 400 -> onError(loginAndPasswordError)
+				 else -> { context.showToast(context.getString(R.string.error_text)) } // todo у юзера будет бесконечный лоадинг
 			 }
 		}
-
-
 	}
 }

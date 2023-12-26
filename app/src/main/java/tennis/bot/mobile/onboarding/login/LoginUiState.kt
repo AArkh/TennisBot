@@ -12,7 +12,7 @@ sealed class LoginUiState(
 	open val clearPasswordButtonVisible: Boolean
 ) {
 
-	data class Initial (
+	data class Initial(
 		override val countryIconRes: Int,
 		override val phonePrefix: String,
 		override val userPhoneInput: String,

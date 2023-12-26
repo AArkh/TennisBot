@@ -35,7 +35,7 @@ class LoginFragment : CoreFragment<FragmentLoginBinding>() {
 		}
 		binding.passwordEt.filters = arrayOf(LoginViewModel.NoSpaceInputFilter())
 		binding.passwordEt.doAfterTextChanged {
-			it?.replace(Regex(" "), "")
+			it.toString().replace(" ", "") // todo regex во вьюмодели всегда
 		}
 
 		binding.clearPhoneButton.setOnClickListener {
@@ -49,9 +49,9 @@ class LoginFragment : CoreFragment<FragmentLoginBinding>() {
 			viewModel.onLoginPressed(
 				username = binding.phoneEt.text.toString(),
 				password = binding.passwordEt.text.toString()
-			){
-					val dialog = LoginDialogFragment()
-					dialog.show(childFragmentManager, dialog.tag)
+			) {
+				val dialog = LoginDialogFragment()
+				dialog.show(childFragmentManager, dialog.tag)
 			}
 		}
 
@@ -94,7 +94,7 @@ class LoginFragment : CoreFragment<FragmentLoginBinding>() {
 						R.drawable.btn_bkg_disabled
 					}
 					binding.buttonLogin.setBackgroundResource(buttonBackground)
-
+					binding.buttonLoadingAnim.visibility = View.GONE // todo ??
 				}
 				is LoginUiState.Loading -> {
 					binding.buttonLogin.text = ""

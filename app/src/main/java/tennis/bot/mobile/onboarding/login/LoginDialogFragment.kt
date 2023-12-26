@@ -14,18 +14,16 @@ import tennis.bot.mobile.core.CoreDialogFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.LoginDialogBinding
 
-
 @AndroidEntryPoint
 class LoginDialogFragment: CoreDialogFragment<LoginDialogBinding>() {
+
 	override val bindingInflation: Inflation<LoginDialogBinding> = LoginDialogBinding::inflate
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
 		if (dialog != null && dialog!!.window != null) {
 			dialog!!.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 			dialog!!.window!!.requestFeature(Window.FEATURE_NO_TITLE)
 		}
-
 		return super.onCreateView(inflater, container, savedInstanceState)
 	}
 
@@ -39,7 +37,6 @@ class LoginDialogFragment: CoreDialogFragment<LoginDialogBinding>() {
 		binding.buttonChat.setOnClickListener {
 			openLink(CHAT_URL)
 		}
-
 	}
 
 	private fun openLink(url: String) {
