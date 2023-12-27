@@ -46,9 +46,9 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 		}
 
 		surveyAdapter.clickListener = { selectedOptionId, selectedOptionTitle ->
-			if (viewModel.surveyUiState.value.selectedPage in 0..7) {
+			if (viewModel.surveyUiState.value.selectedPage in 0..6 || (viewModel.surveyUiState.value.selectedPage == 7 && selectedOptionId == 1)) {
 				viewModel.onPickedOption(selectedOptionId, selectedOptionTitle)
-			} else if (viewModel.surveyUiState.value.selectedPage == 8) {
+			} else if ((viewModel.surveyUiState.value.selectedPage == 7 && selectedOptionId == 0) || viewModel.surveyUiState.value.selectedPage == 8) {
 				viewModel.onLastPickedOption(selectedOptionId, selectedOptionTitle)
 				parentFragmentManager.beginTransaction()
 					.replace(R.id.fragment_container_view, SurveyResultsFragment())

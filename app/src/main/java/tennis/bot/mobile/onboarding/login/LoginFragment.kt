@@ -35,7 +35,7 @@ class LoginFragment : CoreFragment<FragmentLoginBinding>() {
 		}
 		binding.passwordEt.filters = arrayOf(LoginViewModel.NoSpaceInputFilter())
 		binding.passwordEt.doAfterTextChanged {
-			it.toString().replace(" ", "") // todo regex во вьюмодели всегда
+			it.toString().replace(" ", "")
 		}
 
 		binding.clearPhoneButton.setOnClickListener {
@@ -77,37 +77,28 @@ class LoginFragment : CoreFragment<FragmentLoginBinding>() {
 		}
 
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState ->
-			when(uiState) {
-				is LoginUiState.Initial -> {
-					binding.countryIv.setImageResource(uiState.countryIconRes)
-					binding.phoneInputLayout.prefixText = uiState.phonePrefix
-					binding.phoneInputLayout.error = uiState.phoneErrorMessage
-					binding.passwordInputLayout.error = uiState.passwordErrorMessage
-					binding.clearPhoneButton.visibility = if (uiState.clearPhoneButtonVisible) View.VISIBLE else View.INVISIBLE
-					binding.clearPasswordButton.visibility = if (uiState.clearPasswordButtonVisible) View.VISIBLE else View.INVISIBLE
+			binding.countryIv.setImageResource(uiState.countryIconRes)
+			binding.phoneInputLayout.prefixText = uiState.phonePrefix
+			binding.phoneInputLayout.error = uiState.phoneErrorMessage
+			binding.passwordInputLayout.error = uiState.passwordErrorMessage
+			binding.clearPhoneButton.visibility = if (uiState.clearPhoneButtonVisible) View.VISIBLE else View.INVISIBLE
+			binding.clearPasswordButton.visibility = if (uiState.clearPasswordButtonVisible) View.VISIBLE else View.INVISIBLE
 
-					binding.buttonLogin.text = context?.getString(R.string.login_title)
-					binding.buttonLogin.isEnabled = uiState.loginButtonEnabled
-					val buttonBackground = if (uiState.loginButtonEnabled) {
-						R.drawable.btn_bkg_enabled
-					} else {
-						R.drawable.btn_bkg_disabled
-					}
-					binding.buttonLogin.setBackgroundResource(buttonBackground)
-					binding.buttonLoadingAnim.visibility = View.GONE // todo ??
-				}
-				is LoginUiState.Loading -> {
-					binding.buttonLogin.text = ""
-					binding.buttonLoadingAnim.visibility = View.VISIBLE
-				}
-				is LoginUiState.Error -> {
-					binding.buttonLoadingAnim.visibility = View.GONE
-					binding.buttonLogin.text = context?.getString(R.string.login_title)
-					binding.passwordInputLayout.error = uiState.passwordErrorMessage
-				}
+			viewModel.isLoginButtonEnabled()
+			binding.buttonLogin.isEnabled = uiState.loginButtonEnabled
+			val buttonBackground = if (uiState.loginButtonEnabled) {
+				R.drawable.btn_bkg_enabled
+			} else {
+				R.drawable.btn_bkg_disabled
+			}
+			binding.buttonLogin.setBackgroundResource(buttonBackground)
+			if (uiState.isLoading) {
+				binding.buttonLogin.text = ""
+				binding.buttonLoadingAnim.visibility = View.VISIBLE
+			} else {
+				binding.buttonLogin.text = context?.getString(R.string.login_title)
+				binding.buttonLoadingAnim.visibility = View.GONE
 			}
 		}
 	}
-
-
 }

@@ -53,7 +53,7 @@ class LoginProposalFragment : CoreFragment<FragmentLoginProposalBinding>() {
         binding.buttonWithoutRegistration.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .addToBackStack(this::class.java.name)
-                .replace(R.id.fragment_container_view, SportFragment())
+                .replace(R.id.fragment_container_view, SurveyFragment())
                 .commit()
         }
         binding.buttonLogin.setOnClickListener {

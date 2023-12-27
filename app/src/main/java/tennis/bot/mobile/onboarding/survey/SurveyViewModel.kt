@@ -138,7 +138,12 @@ class SurveyViewModel @Inject constructor(
 		val currentPage = currentState.surveyPages[currentState.selectedPage]
 		val updatePage = currentPage.copy(pickedOptionId = pickedOptionId)
 		val newPageIndex = if (currentState.selectedPage in 0..7) {
-			currentState.selectedPage + 1
+			if(currentState.selectedPage == 7 && pickedOptionId == 0) {
+				recordEntry(currentState.selectedPage + 1, pickedOptionId, pickedOptionTitle)
+				return
+			} else {
+				currentState.selectedPage + 1
+			}
 		} else return
 		val newProgress = calculateProgressPercent(newPageIndex)
 		val newTitle = questionsTitlesList[newPageIndex]

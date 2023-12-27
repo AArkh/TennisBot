@@ -39,34 +39,31 @@
 
 	<FrameLayout
 		android:id="@+id/account_photo_frame"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
+		android:layout_width="93dp"
+		android:layout_height="93dp"
 		android:padding="3dp"
-		android:background="@drawable/circle_account_photo_outline"
+		android:background="@drawable/circle_background"
+		android:backgroundTint="@color/tb_gray_border"
 		android:layout_marginTop="26dp"
 		android:layout_marginStart="20dp"
 		android:elevation="10dp"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/back_button">
 
-		<ImageView
+		<com.google.android.material.imageview.ShapeableImageView
 			android:id="@+id/account_photo"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:background="@drawable/circle_background"
 			android:backgroundTint="@color/tb_gray_border"
-			android:padding="29.5dp"
 			android:src="@drawable/user"
 			android:visibility="visible"
+			app:contentPadding="27dp"
+			app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+			app:strokeColor="@android:color/white"
+			app:strokeWidth="3dp"
 			app:tint="@color/tb_gray_active" />
 
 	</FrameLayout>
-
-	<tennis.bot.mobile.onboarding.account.RatingsInfoView
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		app:layout_constraintTop_toBottomOf="@id/options_button"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toEndOf="@id/account_photo_frame"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
