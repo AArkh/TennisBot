@@ -4,6 +4,7 @@ import android.net.Uri
 import android.widget.ImageView
 import androidx.lifecycle.ViewModel
 import coil.load
+import coil.request.Disposable
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -53,14 +54,10 @@ class PhotoPickViewModel @Inject constructor() : ViewModel() {
         _uiStateFlow.value = PhotoPickUiState.PickedPreselectedImage(newList, true)
     }
 
-    fun onPickedUserImage(imageView: ImageView, pickedImageUri: Uri) {
-        imageView.load(pickedImageUri) {
-            // Additional options can be set here
-            crossfade(true) // todo разобраться как это правильно реализовать (можно попробовать проверить механизм, а потом уже красиво описать)
-        }
-
-//        _uiStateFlow.value = PhotoPickUiState.PickedUserImage(
-//            customSelectedImage =
-//        )
+    fun onPickedUserImage(pickedImageUri: Uri) {
+        _uiStateFlow.value = PhotoPickUiState.PickedUserImage(
+            userPickedImage = pickedImageUri,
+            nextButtonEnabled = true
+        )
     }
 }

@@ -1,12 +1,16 @@
 package tennis.bot.mobile.onboarding.photopick
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.setPadding
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import coil.load
 import dagger.hilt.android.AndroidEntryPoint
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
@@ -27,7 +31,7 @@ class PhotoPickFragment : CoreFragment<FragmentPhotoPickBinding>() {
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             Log.d("PhotoPicker", "Selected URI: $uri")
-
+            viewModel.onPickedUserImage(pickedImageUri = uri)
         } else {
             Log.d("PhotoPicker", "No media selected")
         }
@@ -89,6 +93,11 @@ class PhotoPickFragment : CoreFragment<FragmentPhotoPickBinding>() {
                     } else viewModel.onInitial()
                 }
                 is PhotoPickUiState.PickedUserImage -> {
+                    binding.pickPhotoImage.load(uiState.userPickedImage) {
+                        crossfade(true)
+                    }
+                    binding.pickPhotoButton.setBackgroundColor(Color.TRANSPARENT)
+                    binding.pickPhotoButton.setPadding(0)
                     binding.buttonNext.isEnabled = uiState.nextButtonEnabled
                     binding.buttonNext.setBackgroundResource(R.drawable.btn_bkg_enabled)
                 }
