@@ -37,33 +37,14 @@
 		app:layout_constraintTop_toTopOf="parent"
 		app:tint="@color/tb_gray_active" />
 
-	<FrameLayout
-		android:id="@+id/account_photo_frame"
-		android:layout_width="93dp"
-		android:layout_height="93dp"
-		android:padding="3dp"
-		android:background="@drawable/circle_background"
-		android:backgroundTint="@color/tb_gray_border"
-		android:layout_marginTop="26dp"
-		android:layout_marginStart="20dp"
-		android:elevation="10dp"
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/container"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_marginTop="16dp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/back_button">
-
-		<com.google.android.material.imageview.ShapeableImageView
-			android:id="@+id/account_photo"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:background="@drawable/circle_background"
-			android:backgroundTint="@color/tb_gray_border"
-			android:src="@drawable/user"
-			android:visibility="visible"
-			app:contentPadding="27dp"
-			app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
-			app:strokeColor="@android:color/white"
-			app:strokeWidth="3dp"
-			app:tint="@color/tb_gray_active" />
-
-	</FrameLayout>
+		app:layout_constraintTop_toBottomOf="@id/back_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
