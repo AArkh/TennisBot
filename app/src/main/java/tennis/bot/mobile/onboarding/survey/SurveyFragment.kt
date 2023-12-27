@@ -11,6 +11,7 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentSurveyBinding
+import tennis.bot.mobile.onboarding.initial.LoginProposalFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint

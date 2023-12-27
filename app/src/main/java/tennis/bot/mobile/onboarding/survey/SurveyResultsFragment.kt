@@ -9,6 +9,7 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentSurveyResultsBinding
+import tennis.bot.mobile.onboarding.login.LoginDialogFragment
 import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
@@ -42,7 +43,8 @@ class SurveyResultsFragment : CoreFragment<FragmentSurveyResultsBinding>() {
 
 		binding.buttonContinue.setOnClickListener {
 			viewModel.onContinueButtonClicked {
-				context?.showToast("To be continued")
+				val dialog = LoginDialogFragment()
+				dialog.show(childFragmentManager, dialog.tag)
 			}
 		}
 
