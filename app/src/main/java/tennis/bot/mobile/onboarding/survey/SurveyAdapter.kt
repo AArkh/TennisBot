@@ -52,7 +52,7 @@ class SurveyAdapter @Inject constructor(): CoreAdapter<SurveyItemViewHolder>() {
 		}
 		holder.binding.option2.setOnClickListener {
 			if (surveyItem.isTwoOptions){
-				clickListener?.invoke(1, holder.binding.option1Title.text.toString())
+				clickListener?.invoke(1, holder.binding.option2Title.text.toString())
 			} else {
 				clickListener?.invoke(2, holder.binding.option2Title.text.toString())
 			}

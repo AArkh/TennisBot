@@ -12,6 +12,7 @@
 
     <color name="tb_primary_green">#57D26A</color>
     <color name="tb_primary_green_disabled">#6657D26A</color>
+    <color name="tb_bland_green">#EBFBED</color>
 
     <color name="tb_light_orange">#FFEDE1</color>
     <color name="tb_orange">#FF793F</color>

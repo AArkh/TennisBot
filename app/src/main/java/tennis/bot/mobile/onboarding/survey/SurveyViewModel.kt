@@ -28,12 +28,12 @@ class SurveyViewModel @Inject constructor(
 			ContextCompat.getString(context, R.string.survey_side_note_text_1)
 		),
 		SurveyItem(
-			context.getString(R.string.survey_options_item_set1_1),
-			context.getString(R.string.survey_options_item_set1_2),
-			context.getString(R.string.survey_options_item_set1_3),
-			context.getString(R.string.survey_options_item_set1_4),
-			ContextCompat.getString(context, R.string.survey_side_note_title_2),
-			ContextCompat.getString(context, R.string.survey_side_note_text_2)
+			context.getString(R.string.survey_options_item_set2_1),
+			context.getString(R.string.survey_options_item_set2_2),
+			context.getString(R.string.survey_options_item_set2_3),
+			context.getString(R.string.survey_options_item_set2_4),
+			ContextCompat.getString(context, R.string.survey_side_note_title_3),
+			ContextCompat.getString(context, R.string.survey_side_note_text_3)
 		),
 		SurveyItem(
 			context.getString(R.string.survey_options_item_set2_1),
