@@ -129,6 +129,10 @@
 	<string name="login_dialog_title">Ваша заявка создана</string>
 	<string name="login_dialog_go_chat">Перейти в чат</string>
 	<string name="login_dialog_go_bot">Перейти в бот</string>
+	<string name="calibration_rounds_remain_text">Сыграй еще n матчей для завершения калибровки</string>
+	<string name="calibration_title">Требуется калибровка</string>
+	<string name="buypro_sub_title">Используй все возможности</string>
+	<string name="buypro_title">Подключи PRO</string>
 
 
 </resources>

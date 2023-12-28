@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:background="@drawable/pro_background">
+
+	<TextView
+		android:id="@+id/title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:layout_marginTop="20dp"
+		android:text="@string/buypro_title"
+		android:textColor="@color/tb_white"
+		android:textSize="16sp"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintStart_toStartOf="parent"/>
+
+	<TextView
+		android:id="@+id/sub_title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:layout_marginBottom="20dp"
+		android:fontFamily="@font/roboto"
+		android:text="@string/buypro_sub_title"
+		android:textColor="@color/tb_gray_light"
+		android:textSize="12sp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/title" />
+
+	<com.airbnb.lottie.LottieAnimationView
+		android:id="@+id/pro_animation"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_marginEnd="16dp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:lottie_autoPlay="true"
+		app:lottie_loop="false"
+		app:lottie_rawRes="@raw/pro" />
+
+	<ImageView
+		android:id="@+id/close_button_iv"
+		android:layout_width="24dp"
+		android:layout_height="24dp"
+		android:layout_marginTop="10dp"
+		android:layout_marginEnd="10dp"
+		android:padding="3dp"
+		android:background="@drawable/search_background"
+		android:backgroundTint="@color/tb_semi_transparent_black"
+		android:src="@drawable/x"
+		app:tint="@color/tb_white"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toTopOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

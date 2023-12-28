@@ -25,4 +25,5 @@
     <color name="state_ripple_2">#292F8AF5</color>
 
     <color name="invisible">#00000000</color>
+    <color name="tb_semi_transparent_black">#33262729</color>
 </resources>
