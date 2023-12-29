@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:background="@drawable/search_background"
+	android:padding="4dp">
+
+	<TextView
+		android:id="@+id/game_data"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_weight="50"
+		android:gravity="center"
+		android:padding="6dp"
+		android:background="@drawable/search_background"
+		android:backgroundTint="@color/tb_primary_green"
+		android:text="@string/game_data"
+		android:textColor="@color/tb_white"/>
+
+	<TextView
+		android:id="@+id/contacts"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_weight="50"
+		android:gravity="center"
+		android:padding="6dp"
+		android:background="@drawable/search_background"
+		android:backgroundTint="@color/invisible"
+		android:text="@string/contacts"
+		android:textColor="@color/tb_gray_active"/>
+
+</LinearLayout>
