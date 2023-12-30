@@ -6,6 +6,7 @@ import android.content.ContextWrapper
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.annotation.DimenRes
 import androidx.annotation.StringRes
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
@@ -43,3 +44,9 @@ fun Context.hideKeyboard(focusView: View? = null) {
     imm.hideSoftInputFromWindow(view.windowToken, 0)
     view.clearFocus()
 }
+
+fun Context.dimenInt(@DimenRes dimenRes: Int) = dimen(dimenRes).toInt()
+
+fun Context.dimenInt(@DimenRes dimenRes: Int?) = if (dimenRes == null) null else dimen(dimenRes).toInt()
+
+fun Context.dimen(@DimenRes dimenRes: Int) = resources.getDimension(dimenRes)

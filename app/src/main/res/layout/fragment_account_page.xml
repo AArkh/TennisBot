@@ -7,6 +7,16 @@
 	tools:context=".onboarding.account.AccountPageFragment"
 	android:backgroundTint="@color/tb_gray_border">
 
+	<tennis.bot.mobile.utils.view.ImageSeriesView
+		android:id="@+id/asdasd"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:withBorder="true"
+		app:imageOffsetFactor="0.66"
+		/>
+
 	<ImageView
 		android:id="@+id/back_button"
 		android:layout_width="36dp"
