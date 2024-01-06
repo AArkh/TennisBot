@@ -129,16 +129,21 @@
 	<string name="login_dialog_title">Ваша заявка создана</string>
 	<string name="login_dialog_go_chat">Перейти в чат</string>
 	<string name="login_dialog_go_bot">Перейти в бот</string>
-	<string name="calibration_rounds_remain_text">Сыграй еще n матчей для завершения калибровки</string>
+	<string name="calibration_rounds_remain_text">Сыграй еще %d матчей для завершения калибровки</string>
 	<string name="calibration_title">Требуется калибровка</string>
 	<string name="buypro_sub_title">Используй все возможности</string>
 	<string name="buypro_title">Подключи PRO</string>
-	<string name="account_matches_played">n матчей сыграно</string>
+	<string name="account_matches_played">%d матчей сыграно</string>
 	<string name="tournament_title">В погоне за ракеткой</string>
 	<string name="my_tournaments">Мои турниры</string>
 	<string name="invite_friend">Пригласи друга</string>
 	<string name="contacts">Контакты</string>
 	<string name="game_data">Игровые данные</string>
+	<string name="position">Позиция</string>
+	<string name="calibration_matches_remain">%d/10</string>
+	<string name="last_game_date">Последняя игра %s</string>
+	<string name="account_tournament_points">%d Баллов</string>
+	<string name="position_number">%d</string>
 
 
 </resources>

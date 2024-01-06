@@ -81,29 +81,30 @@
 		app:contentPaddingEnd="18dp"
 		app:contentPaddingStart="18dp"
 		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintEnd_toStartOf="@+id/message_button"
+		app:layout_constraintEnd_toStartOf="@+id/faq_button"
 		app:layout_constraintTop_toBottomOf="@id/rating_layout"
 		app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
 		app:strokeColor="@color/tb_bland_green"
 		app:strokeWidth="2dp" />
 
-	<com.google.android.material.imageview.ShapeableImageView
-		android:id="@+id/message_button"
+	<TextView
+		android:id="@+id/faq_button"
 		android:layout_width="wrap_content"
-		android:layout_height="0dp"
+		android:layout_height="wrap_content"
 		android:layout_marginEnd="20dp"
 		android:layout_marginTop="27.5dp"
 		android:layout_marginBottom="4dp"
-		android:background="@drawable/search_background"
+		android:background="@drawable/background_corners_100dp"
 		android:backgroundTint="@color/tb_bland_green"
-		android:src="@drawable/telegram"
-		app:contentPadding="10dp"
-		app:contentPaddingEnd="20dp"
-		app:contentPaddingStart="20dp"
+		android:text="FAQ"
+		android:textSize="14sp"
+		android:textColor="@color/tb_primary_green"
+		android:padding="12dp"
+		android:paddingEnd="15.5dp"
+		android:paddingStart="15.5dp"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/rating_layout"
-		app:shapeAppearanceOverlay="@style/roundedImageViewRounded" />
+		app:layout_constraintTop_toBottomOf="@id/rating_layout" />
 
 
 

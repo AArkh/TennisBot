@@ -2,6 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
+	android:layout_marginTop="16dp"
+	android:layout_marginHorizontal="20dp"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:background="@drawable/search_background">
 
@@ -11,14 +13,14 @@
 		android:layout_height="wrap_content"
 		android:layout_marginTop="16dp"
 		android:layout_marginStart="16dp"
-		android:text="n Баллов"
+		android:text="@string/account_tournament_points"
 		android:textColor="@color/tb_black"
 		android:textSize="16sp"
 		app:layout_constraintTop_toTopOf="parent"
 		app:layout_constraintStart_toStartOf="parent"/>
 
 	<TextView
-		android:id="@+id/points_explanation"
+		android:id="@+id/tournament_title"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginStart="16dp"
@@ -37,7 +39,7 @@
 		android:layout_marginEnd="8dp"
 		android:paddingVertical="3dp"
 		android:paddingHorizontal="14dp"
-		android:text="2"
+		android:text="@string/position_number"
 		android:textSize="14sp"
 		android:textColor="@color/tb_gray_border"
 		android:background="@drawable/search_background"
@@ -51,7 +53,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginEnd="27dp"
-		android:text="Позиция"
+		android:text="@string/position"
 		android:textColor="@color/tb_black"
 		android:textSize="16sp"
 		app:layout_constraintTop_toTopOf="parent"
