@@ -18,6 +18,8 @@ class SurveyResultsAdapter @Inject constructor(): CoreAdapter<SurveyResultItemVi
 
 		if (surveyResultItem.noUnderline) {
 			holder.binding.underline.visibility = View.GONE
+		} else {
+			holder.binding.underline.visibility = View.VISIBLE
 		}
 	}
 

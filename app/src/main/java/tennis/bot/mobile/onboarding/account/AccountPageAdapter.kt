@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import tennis.bot.mobile.R
@@ -18,12 +19,13 @@ import tennis.bot.mobile.databinding.AccountMatchesPlayedBinding
 import tennis.bot.mobile.databinding.AccountPointsAndPositionBinding
 import tennis.bot.mobile.databinding.AccountTournamentsBinding
 import tennis.bot.mobile.databinding.RecyclerEmptyItemBinding
-import tennis.bot.mobile.onboarding.photopick.CircledImage
+import tennis.bot.mobile.onboarding.survey.SurveyResultsAdapter
 import javax.inject.Inject
 
 class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>(){
 
-	var clickListener: ((item: CircledImage) -> Unit)? = null // todo remake for different use cases
+	var clickListener: ((item: String) -> Unit)? = null // todo remake for different use cases
+	val childAdapter = SurveyResultsAdapter()
 
 	companion object { // todo there should be a place for PRO item
 		private const val BASIC_INFO_AND_RATING = 0
@@ -88,26 +90,27 @@ class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHol
 			}
 			is AccountButtonSwitchViewHolder -> {
 				val buttonSwitch = item as? ButtonSwitch ?: throw IllegalArgumentException("Item must be MatchesPlayed")
-				if (buttonSwitch.isGameData){
-					// inflate gamedata recyclerview
-				} else {
-					// inflate contacts recyclerview
-				}
 
-				holder.binding.contacts.setOnClickListener { //todo works perfect - add animation
-					holder.binding.contacts.setBackgroundResource(R.drawable.btn_bkg_enabled)
-					holder.binding.contacts.setTextColor(ContextCompat.getColor(holder.binding.contacts.context, R.color.tb_white))
-					holder.binding.gameData.setBackgroundResource(R.drawable.search_background)
-					holder.binding.gameData.setTextColor(ContextCompat.getColor(holder.binding.gameData.context, R.color.tb_gray_active))
-				}
+				holder.binding.recyclerView.adapter = childAdapter
+				holder.binding.recyclerView.layoutManager = LinearLayoutManager(holder.binding.recyclerView.context)
+
 				holder.binding.gameData.setOnClickListener {
+					clickListener?.invoke(AccountPageFragment.INFLATE_GAMEDATA)
+
 					holder.binding.gameData.setBackgroundResource(R.drawable.btn_bkg_enabled)
 					holder.binding.gameData.setTextColor(ContextCompat.getColor(holder.binding.gameData.context, R.color.tb_white))
 					holder.binding.contacts.setBackgroundResource(R.drawable.search_background)
 					holder.binding.contacts.setTextColor(ContextCompat.getColor(holder.binding.contacts.context, R.color.tb_gray_active))
 				}
-			}
+				holder.binding.contacts.setOnClickListener { //todo add animation
+					clickListener?.invoke(AccountPageFragment.INFLATE_CONTACTS)
 
+					holder.binding.contacts.setBackgroundResource(R.drawable.btn_bkg_enabled)
+					holder.binding.contacts.setTextColor(ContextCompat.getColor(holder.binding.contacts.context, R.color.tb_white))
+					holder.binding.gameData.setBackgroundResource(R.drawable.search_background)
+					holder.binding.gameData.setTextColor(ContextCompat.getColor(holder.binding.gameData.context, R.color.tb_gray_active))
+				}
+			}
 		}
 	}
 
@@ -163,6 +166,8 @@ class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHol
 		}
 	}
 }
+
+
 
 class AccountBasicInfoAndRatingItemViewHolder(
 	val binding: AccountBasicInfoAndRatingItemBinding

@@ -144,6 +144,7 @@
 	<string name="last_game_date">Последняя игра %s</string>
 	<string name="account_tournament_points">%d Баллов</string>
 	<string name="position_number">%d</string>
+	<string name="faq">FAQ</string>
 
 
 </resources>

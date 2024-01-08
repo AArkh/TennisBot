@@ -96,7 +96,7 @@
 		android:layout_marginBottom="4dp"
 		android:background="@drawable/background_corners_100dp"
 		android:backgroundTint="@color/tb_bland_green"
-		android:text="FAQ"
+		android:text="@string/faq"
 		android:textSize="14sp"
 		android:textColor="@color/tb_primary_green"
 		android:padding="12dp"
