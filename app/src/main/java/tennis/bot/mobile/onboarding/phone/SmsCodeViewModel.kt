@@ -17,16 +17,16 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.onboarding.phone.SmsCodeFragment.Companion.PHONE_NUMBER_ARGUMENT
 import tennis.bot.mobile.onboarding.phone.SmsCodeUiState.Companion.RETRY_BUTTON_BLOCKED_NO_COUNTDOWN
 import tennis.bot.mobile.onboarding.phone.SmsCodeUiState.Companion.RETRY_BUTTON_UNBLOCKED
-import tennis.bot.mobile.onboarding.survey.AccountInfoRepository
+import tennis.bot.mobile.onboarding.survey.OnboardingRepository
 import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
 @HiltViewModel
 class SmsCodeViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
-    private val repository: PhoneInputRepository,
-    private val accountInfo: AccountInfoRepository,
-    savedStateHandle: SavedStateHandle
+	@ApplicationContext private val context: Context,
+	private val repository: PhoneInputRepository,
+	private val accountInfo: OnboardingRepository,
+	savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val phone = savedStateHandle.get<String>(PHONE_NUMBER_ARGUMENT) ?: ""

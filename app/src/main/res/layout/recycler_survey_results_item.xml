@@ -30,7 +30,7 @@
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:layout_weight="50"
-		android:text="@string/survey_options_item_set1_1"
+		android:text="@string/survey_option_null"
 		android:textColor="@color/tb_gray_dark"
 		android:textSize="14sp" />
 

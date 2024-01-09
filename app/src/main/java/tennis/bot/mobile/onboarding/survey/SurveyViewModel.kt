@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SurveyViewModel @Inject constructor(
-	private val accountInfo: AccountInfoRepository,
+	private val accountInfo: OnboardingRepository,
 	@ApplicationContext context: Context,
 ): ViewModel() {
 

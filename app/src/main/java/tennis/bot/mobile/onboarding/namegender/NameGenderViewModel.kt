@@ -8,13 +8,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import tennis.bot.mobile.onboarding.namegender.Const.FEMALE
 import tennis.bot.mobile.onboarding.namegender.Const.MALE
-import tennis.bot.mobile.onboarding.survey.AccountInfoRepository
+import tennis.bot.mobile.onboarding.survey.OnboardingRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class NameGenderViewModel @Inject constructor(
 	@ApplicationContext private val context: Context,
-	private val accountInfo: AccountInfoRepository): ViewModel(
+	private val accountInfo: OnboardingRepository): ViewModel(
 ) {
 
 	private val _uiStateFlow = MutableStateFlow(

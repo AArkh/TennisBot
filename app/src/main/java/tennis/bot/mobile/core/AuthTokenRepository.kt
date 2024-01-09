@@ -5,7 +5,7 @@ import androidx.annotation.WorkerThread
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import tennis.bot.mobile.onboarding.survey.AccountInfoApi
+import tennis.bot.mobile.onboarding.survey.RegisterAndLoginApi
 import tennis.bot.mobile.onboarding.survey.TokenResponse
 import java.io.IOException
 import javax.inject.Inject
@@ -13,7 +13,7 @@ import javax.inject.Singleton
 
 @Singleton
 class AuthTokenRepository @Inject constructor(
-	private val api: AccountInfoApi,
+	private val api: RegisterAndLoginApi,
 ) {
 
 	@Volatile

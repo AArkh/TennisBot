@@ -1,5 +1,6 @@
 package tennis.bot.mobile.onboarding.account
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -24,17 +25,28 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 		binding.container.adapter = accountPageAdapter
 		binding.container.layoutManager = LinearLayoutManager(requireContext())
 
-		accountPageAdapter.submitList(viewModel.basicLayout)
-		accountPageAdapter.childAdapter.submitList(viewModel.dummyGameDataForButtons)
-		accountPageAdapter.clickListener = { command ->
-			when(command) {
-				INFLATE_GAMEDATA -> {
+		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: AccountPageUiState ->
+			when(uiState){
+				is AccountPageUiState.Loading -> {
+					viewModel.onFetchingProfileData()
+				}
+				is AccountPageUiState.ProfileDataReceived -> {
+					accountPageAdapter.submitList(uiState.receivedDataItems)
 					accountPageAdapter.childAdapter.submitList(viewModel.dummyGameDataForButtons)
+					accountPageAdapter.clickListener = { command ->
+						when(command) {
+							INFLATE_GAMEDATA -> {
+								accountPageAdapter.childAdapter.submitList(viewModel.dummyGameDataForButtons)
+							}
+							INFLATE_CONTACTS -> {
+								accountPageAdapter.childAdapter.submitList(viewModel.dummyContactsForButtons)
+							}
+						}
+					}
 				}
-				INFLATE_CONTACTS -> {
-					accountPageAdapter.childAdapter.submitList(viewModel.dummyContactsForButtons)
-				}
+				is AccountPageUiState.Error -> {}
 			}
+
 		}
 	}
 

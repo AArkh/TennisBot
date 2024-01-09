@@ -2,16 +2,13 @@ package tennis.bot.mobile.onboarding.phone
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
-import tennis.bot.mobile.onboarding.survey.AccountInfoRepository
 import tennis.bot.mobile.utils.AppCoroutineScopes
 import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject

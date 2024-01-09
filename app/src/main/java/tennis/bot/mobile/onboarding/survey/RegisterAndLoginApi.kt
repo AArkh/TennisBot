@@ -10,7 +10,7 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
-interface AccountInfoApi {
+interface RegisterAndLoginApi {
 
 	@POST("api/core-account/register")
 	suspend fun postRegister(@Body register: Register): Response<RegisterResponse>

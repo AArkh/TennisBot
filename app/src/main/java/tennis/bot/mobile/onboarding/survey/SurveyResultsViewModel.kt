@@ -15,20 +15,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SurveyResultsViewModel @Inject constructor(
-	private val accountInfoRepository: AccountInfoRepository,
+	private val onboardingRepository: OnboardingRepository,
 	@ApplicationContext private val context: Context
 ) : ViewModel() {
 
 	private val surveyResultItemList = listOf(
-		SurveyResultItem(context.getString(R.string.survey_results_title_1), accountInfoRepository.surveyAnswers[0]),
-		SurveyResultItem(context.getString(R.string.survey_results_title_2), accountInfoRepository.surveyAnswers[1]),
-		SurveyResultItem(context.getString(R.string.survey_results_title_3), accountInfoRepository.surveyAnswers[2]),
-		SurveyResultItem(context.getString(R.string.survey_results_title_4), accountInfoRepository.surveyAnswers[3]),
-		SurveyResultItem(context.getString(R.string.survey_results_title_5), accountInfoRepository.surveyAnswers[4]),
-		SurveyResultItem(context.getString(R.string.survey_results_title_6), accountInfoRepository.surveyAnswers[5]),
-		SurveyResultItem(context.getString(R.string.survey_results_title_7), accountInfoRepository.surveyAnswers[6]),
-		SurveyResultItem(context.getString(R.string.survey_results_title_8), accountInfoRepository.surveyAnswers[7]),
-		SurveyResultItem(context.getString(R.string.survey_results_title_9), accountInfoRepository.surveyAnswers[8], true),
+		SurveyResultItem(context.getString(R.string.survey_results_title_1), onboardingRepository.surveyAnswers[0]),
+		SurveyResultItem(context.getString(R.string.survey_results_title_2), onboardingRepository.surveyAnswers[1]),
+		SurveyResultItem(context.getString(R.string.survey_results_title_3), onboardingRepository.surveyAnswers[2]),
+		SurveyResultItem(context.getString(R.string.survey_results_title_4), onboardingRepository.surveyAnswers[3]),
+		SurveyResultItem(context.getString(R.string.survey_results_title_5), onboardingRepository.surveyAnswers[4]),
+		SurveyResultItem(context.getString(R.string.survey_results_title_6), onboardingRepository.surveyAnswers[5]),
+		SurveyResultItem(context.getString(R.string.survey_results_title_7), onboardingRepository.surveyAnswers[6]),
+		SurveyResultItem(context.getString(R.string.survey_results_title_8), onboardingRepository.surveyAnswers[7]),
+		SurveyResultItem(context.getString(R.string.survey_results_title_9), onboardingRepository.surveyAnswers[8], true),
 	)
 	private val buttonContinueText = context.getString(R.string.button_continue)
 
@@ -59,7 +59,7 @@ class SurveyResultsViewModel @Inject constructor(
 		showLoading()
 		viewModelScope.launch(Dispatchers.IO) {
 			kotlin.runCatching {
-				if (!accountInfoRepository.postNewPlayer())
+				if (!onboardingRepository.postNewPlayer())
 					throw IllegalArgumentException("Failed to post NewPlayer")
 			}.onFailure {
 				onError()

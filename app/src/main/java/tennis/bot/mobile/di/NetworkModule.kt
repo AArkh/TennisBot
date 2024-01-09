@@ -12,9 +12,11 @@ import okhttp3.OkHttpClient
 import retrofit2.Converter
 import retrofit2.Retrofit
 import tennis.bot.mobile.core.AuthInterceptor
+import tennis.bot.mobile.onboarding.account.EnumsApi
+import tennis.bot.mobile.onboarding.account.UserProfileApi
 import tennis.bot.mobile.onboarding.location.LocationApi
 import tennis.bot.mobile.onboarding.phone.SmsApi
-import tennis.bot.mobile.onboarding.survey.AccountInfoApi
+import tennis.bot.mobile.onboarding.survey.RegisterAndLoginApi
 import tennis.bot.mobile.onboarding.survey.NewPlayerApi
 import tennis.bot.mobile.utils.LoggingInterceptor
 import java.util.concurrent.TimeUnit
@@ -29,6 +31,7 @@ class NetworkModule {
         const val SMS_CODES = "BALANCES_ALLOWANCES"
         const val NEW_REGISTRATION = "NEW_REGISTRATION"
         const val NEW_PLAYER = "NEW_PLAYER"
+        const val USER_PROFILE = "USER_PROFILE"
     }
 
     @Provides
@@ -114,6 +117,20 @@ class NetworkModule {
     }
 
     @Provides
+    @Named(USER_PROFILE)
+    @Singleton
+    fun provideUserProfileRetrofit(
+        @Named(NEW_PLAYER) okHttpClient: OkHttpClient,
+        converterFactory: Converter.Factory
+    ): Retrofit {
+        return Retrofit.Builder()
+            .client(okHttpClient)
+            .baseUrl("https://bugz.su:8443/core/") //todo вынести debug && prod url в gradle build config
+            .addConverterFactory(converterFactory)
+            .build()
+    }
+
+    @Provides
     @Singleton
     fun provideBalancesAllowancesApiClient(
         @Named(SMS_CODES) retrofit: Retrofit
@@ -129,12 +146,24 @@ class NetworkModule {
     @Singleton
     fun provideAccountInfoApiClient(
         @Named(NEW_REGISTRATION) retrofit: Retrofit
-    ): AccountInfoApi = retrofit.create(AccountInfoApi::class.java)
+    ): RegisterAndLoginApi = retrofit.create(RegisterAndLoginApi::class.java)
 
     @Provides
     @Singleton
     fun provideNewPlayerApiClient(
         @Named(NEW_PLAYER) retrofit: Retrofit
     ): NewPlayerApi = retrofit.create(NewPlayerApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideUserProfileApiClient(
+        @Named(USER_PROFILE) retrofit: Retrofit
+    ): UserProfileApi = retrofit.create(UserProfileApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideEnumsApiClient(
+        @Named(NEW_REGISTRATION) retrofit: Retrofit
+    ): EnumsApi = retrofit.create(EnumsApi::class.java)
 }
 

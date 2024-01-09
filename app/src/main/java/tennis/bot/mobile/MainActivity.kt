@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tennis.bot.mobile.core.AuthTokenRepository
 import tennis.bot.mobile.databinding.ActivityMainBinding
+import tennis.bot.mobile.onboarding.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.onboarding.initial.LoginProposalFragment
 import tennis.bot.mobile.onboarding.location.LocationRepository
 import java.io.IOException
@@ -26,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var locationRepository: LocationRepository
     @Inject
     lateinit var authTokenRepository: AuthTokenRepository
+    @Inject
+    lateinit var userProfileAndEnumsRepository: UserProfileAndEnumsRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +45,15 @@ class MainActivity : AppCompatActivity() {
             withContext(Dispatchers.IO) {
                 try{
                     locationRepository.precacheLocations()
+                } catch (iOException: IOException) {
+                    Log.d("1234567", "Network error: ${iOException.message}")
+                }
+            }
+        }
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                try{
+                    userProfileAndEnumsRepository.precacheEnums()
                 } catch (iOException: IOException) {
                     Log.d("1234567", "Network error: ${iOException.message}")
                 }

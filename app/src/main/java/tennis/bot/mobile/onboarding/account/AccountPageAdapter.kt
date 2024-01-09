@@ -1,9 +1,11 @@
 package tennis.bot.mobile.onboarding.account
 
+import android.animation.ObjectAnimator
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -42,11 +44,22 @@ class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHol
 		when(holder){
 			is AccountBasicInfoAndRatingItemViewHolder -> {
 				val basicInfoAndRating = item as? BasicInfoAndRating ?: throw IllegalArgumentException("Item must be BasicInfoAndRating")
-				holder.binding.accountPhoto // todo
 				holder.binding.nameSurname.text = basicInfoAndRating.nameSurname
-				holder.binding.telegramId.text = basicInfoAndRating.telegramId
 				holder.binding.ratingLayout.singleRatingValue.text = basicInfoAndRating.singleRating
-				holder.binding.ratingLayout.doublesRatingValue.text = basicInfoAndRating.doublesRating
+				if(basicInfoAndRating.profileImageUrl != null) {
+					holder.binding.accountPhoto.load(basicInfoAndRating.profileImageUrl) { crossfade(true) }
+				}
+				if (basicInfoAndRating.telegramId != null) {
+					holder.binding.telegramId.text = basicInfoAndRating.telegramId
+				} else {
+					holder.binding.telegramId.visibility = View.GONE
+				}
+				if (basicInfoAndRating.doublesRating != null) {
+					holder.binding.ratingLayout.doublesRatingValue.text = basicInfoAndRating.doublesRating
+				} else {
+					holder.binding.ratingLayout.doublesRatingValue.text = basicInfoAndRating.singleRating
+				}
+
 				holder.binding.chartButton.setOnClickListener {
 					// todo going to Chart
 				}
@@ -202,11 +215,11 @@ class EmptyItemViewHolder(
 ) : RecyclerView.ViewHolder(binding.root)
 
 data class BasicInfoAndRating(
-	val profileImageUrl: String,
+	val profileImageUrl: String?,
 	val nameSurname: String,
-	val telegramId: String,
+	val telegramId: String?,
 	val singleRating: String,
-	val doublesRating: String
+	val doublesRating: String?
 ) : CoreUtilsItem()
 
 data class Calibration(

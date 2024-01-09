@@ -9,13 +9,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import tennis.bot.mobile.onboarding.survey.AccountInfoRepository
+import tennis.bot.mobile.onboarding.survey.OnboardingRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class LocationViewModel @Inject constructor(
 	private val repository: LocationRepository,
-	private val accountInfo: AccountInfoRepository
+	private val accountInfo: OnboardingRepository
 ) : ViewModel() {
 
 	private val _uiStateFlow = MutableStateFlow<LocationUiState>(LocationUiState.Initial)

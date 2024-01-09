@@ -10,14 +10,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
-import tennis.bot.mobile.onboarding.survey.AccountInfoRepository
+import tennis.bot.mobile.onboarding.survey.OnboardingRepository
 import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
 @HiltViewModel
 class PasswordViewModel @Inject constructor(
 	@ApplicationContext private val context: Context,
-	private val accountInfo: AccountInfoRepository
+	private val accountInfo: OnboardingRepository
 ) : ViewModel() {
 
 	private val errorText = context.getString(R.string.password_hint)

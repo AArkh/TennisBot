@@ -10,9 +10,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AccountInfoRepository @Inject constructor(
+class OnboardingRepository @Inject constructor(
     @ApplicationContext context: Context,
-    private val api: AccountInfoApi,
+    private val api: RegisterAndLoginApi,
     private val newPlayerApi: NewPlayerApi,
     private val tokenRepo: AuthTokenRepository,
 ) {
