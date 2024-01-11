@@ -19,6 +19,7 @@ import tennis.bot.mobile.databinding.AccountMatchesPlayedBinding
 import tennis.bot.mobile.databinding.AccountPointsAndPositionBinding
 import tennis.bot.mobile.databinding.AccountTournamentsBinding
 import tennis.bot.mobile.databinding.RecyclerEmptyItemBinding
+import tennis.bot.mobile.onboarding.account.AccountPageViewModel.Companion.ZERO
 import tennis.bot.mobile.onboarding.survey.SurveyResultsAdapter
 import javax.inject.Inject
 

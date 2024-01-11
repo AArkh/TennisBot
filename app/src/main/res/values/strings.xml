@@ -143,7 +143,7 @@
 	<string name="calibration_matches_remain">%d/10</string>
 	<string name="last_game_date">Последняя игра %s</string>
 	<string name="account_tournament_points">%d Баллов</string>
-	<string name="position_number">%d</string>
+	<string name="position_number">%s</string>
 	<string name="faq">FAQ</string>
 	<string name="survey_option_null">Не указано</string>
 

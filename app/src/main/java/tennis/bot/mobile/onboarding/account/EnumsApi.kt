@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import retrofit2.Call
 import retrofit2.http.GET
 
@@ -17,7 +18,8 @@ interface EnumsApi {
 @Entity(tableName = "enumType")
 @Serializable
 data class EnumType(
-	@PrimaryKey @ColumnInfo(name = "type") val type: String,
+	@PrimaryKey(autoGenerate = true) @Transient val id: Int = 0,
+	@ColumnInfo(name = "type") val type: String,
 	@ColumnInfo(name = "enums") val enums: List<EnumData>
 )
 

@@ -20,15 +20,7 @@ class UserProfileAndEnumsRepository @Inject constructor(
 ) {
 	private lateinit var cachedProfileData: ProfileData
 	private lateinit var cachedGameData: List<SurveyResultItem>
-	val defaultGameData = listOf(
-		SurveyResultItem("Стиль игры", getString(context, R.string.survey_option_null)),
-		SurveyResultItem("Ведущая рука", getString(context, R.string.survey_option_null)),
-		SurveyResultItem("Бэкхенд", getString(context, R.string.survey_option_null)),
-		SurveyResultItem("Основное покрытие", getString(context, R.string.survey_option_null)),
-		SurveyResultItem("Обувь", getString(context, R.string.survey_option_null)),
-		SurveyResultItem("Ракетка", getString(context, R.string.survey_option_null)),
-		SurveyResultItem("Струны", getString(context, R.string.survey_option_null), noUnderline = true),
-	)
+
 
 	@WorkerThread
 	suspend fun precacheProfile(): ProfileData {

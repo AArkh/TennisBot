@@ -1,6 +1,7 @@
 package tennis.bot.mobile.onboarding.account
 
 import android.content.Context
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
+import tennis.bot.mobile.onboarding.account.AccountPageViewModel.Companion.ZERO
 import tennis.bot.mobile.onboarding.survey.SurveyResultItem
 import javax.inject.Inject
 
@@ -44,7 +46,7 @@ class AccountPageViewModel @Inject constructor(
 					),
 					Calibration(
 						progressBarProgress(profileData.games),
-						context.getString(R.string.calibration_matches_remain, profileData.games),
+						context.getString(R.string.calibration_matches_remain, profileData.games ?: ZERO),
 						context.getString(R.string.calibration_rounds_remain_text, gamesRemain)
 					),
 					MatchesPlayed(
@@ -54,7 +56,7 @@ class AccountPageViewModel @Inject constructor(
 					PointsAndPosition(
 						context.getString(R.string.account_tournament_points, profileData.bonus ?: ZERO),
 						context.getString(R.string.tournament_title),
-						profileData.bonusRank.toString()
+						(profileData.bonusRank ?: ZERO).toString()
 					),
 					Tournaments(context.getString(R.string.tournament_title)),
 					Friends(
@@ -68,44 +70,54 @@ class AccountPageViewModel @Inject constructor(
 				val contactsList: List<SurveyResultItem>
 
 				_uiStateFlow.value =
-					AccountPageUiState.ProfileDataReceived(basicLayout, repository.defaultGameData, dummyContactsForButtons)
+					AccountPageUiState.ProfileDataReceived(basicLayout, defaultGameData, dummyContactsForButtons)
 			}.onFailure {
 				AccountPageUiState.Error( isError = true )
 			}
 		}
 	}
 
-	fun onProvidingGameData(profileData: ProfileData): List<SurveyResultItem> {
+//	fun onProvidingGameData(profileData: ProfileData): List<SurveyResultItem> {
+//
+//		viewModelScope.launch(Dispatchers.IO) {
+//			val enumTypesList = repository.getEnums()
+//			val hand = if (profileData.isRightHand == true) "Правая" else "Левая"
+//			val backhand = if (profileData.isOneBackhand == true) "Одноручный" else "Двуручный"
+//			val decodedIds = repository.getEnumsById(enumTypesList, listOf(
+//				Pair("surface", profileData.surface),
+//				Pair("shoes", profileData.shoes),
+//				Pair("racquet", profileData.racquet),
+//				Pair("racquetStrings", profileData.racquetStrings))
+//			)
+//
+//			val modifiedValues = listOf( // all needed for mapping next
+//				Pair("isRightHand", if (profileData.isRightHand != null) hand else context.getString(R.string.survey_option_null)),
+//				Pair("isOnebackhand", if (profileData.isOneBackhand != null) backhand else context.getString(R.string.survey_option_null)),
+//				decodedIds[0],
+//				decodedIds[1],
+//				decodedIds[2],
+//				decodedIds[3],
+//
+//			)
+//			val defaultGameData = repository.defaultGameData
+//
+////			val modifiedGameData = defaultGameData.map { gameDataItem ->
+////				SurveyResultItem(gameDataItem.resultTitle, modifiedValues)
+////
+////			}
+//
+//		}
+//	}
 
-		viewModelScope.launch(Dispatchers.IO) {
-			val enumTypesList = repository.getEnums()
-			val hand = if (profileData.isRightHand == true) "Правая" else "Левая"
-			val backhand = if (profileData.isOneBackhand == true) "Одноручный" else "Двуручный"
-			val decodedIds = repository.getEnumsById(enumTypesList, listOf(
-				Pair("surface", profileData.surface),
-				Pair("shoes", profileData.shoes),
-				Pair("racquet", profileData.racquet),
-				Pair("racquetStrings", profileData.racquetStrings))
-			)
-
-			val modifiedValues = listOf( // all needed for mapping next
-				Pair("isRightHand", if (profileData.isRightHand != null) hand else context.getString(R.string.survey_option_null)),
-				Pair("isOnebackhand", if (profileData.isOneBackhand != null) backhand else context.getString(R.string.survey_option_null)),
-				decodedIds[0],
-				decodedIds[1],
-				decodedIds[2],
-				decodedIds[3],
-
-			)
-			val defaultGameData = repository.defaultGameData
-
-			val modifiedGameData = defaultGameData.map { gameDataItem ->
-				SurveyResultItem(gameDataItem.resultTitle, modifiedValues)
-
-			}
-
-		}
-	}
+	val defaultGameData = listOf(
+		SurveyResultItem("Стиль игры", ContextCompat.getString(context, R.string.survey_option_null)),
+		SurveyResultItem("Ведущая рука", ContextCompat.getString(context, R.string.survey_option_null)),
+		SurveyResultItem("Бэкхенд", ContextCompat.getString(context, R.string.survey_option_null)),
+		SurveyResultItem("Основное покрытие", ContextCompat.getString(context, R.string.survey_option_null)),
+		SurveyResultItem("Обувь", ContextCompat.getString(context, R.string.survey_option_null)),
+		SurveyResultItem("Ракетка", ContextCompat.getString(context, R.string.survey_option_null)),
+		SurveyResultItem("Струны", ContextCompat.getString(context, R.string.survey_option_null), noUnderline = true),
+	)
 
 
 
