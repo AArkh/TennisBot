@@ -32,11 +32,11 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 				}
 				is AccountPageUiState.ProfileDataReceived -> {
 					accountPageAdapter.submitList(uiState.receivedDataItems)
-					accountPageAdapter.childAdapter.submitList(viewModel.defaultGameData)
+					accountPageAdapter.childAdapter.submitList(uiState.gameDataList)
 					accountPageAdapter.clickListener = { command ->
 						when(command) {
 							INFLATE_GAMEDATA -> {
-								accountPageAdapter.childAdapter.submitList(viewModel.defaultGameData)
+								accountPageAdapter.childAdapter.submitList(uiState.gameDataList)
 							}
 							INFLATE_CONTACTS -> {
 								accountPageAdapter.childAdapter.submitList(viewModel.dummyContactsForButtons)

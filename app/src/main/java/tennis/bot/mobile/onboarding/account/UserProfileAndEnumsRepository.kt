@@ -2,6 +2,7 @@ package tennis.bot.mobile.onboarding.account
 
 import android.content.Context
 import androidx.annotation.WorkerThread
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getString
 import dagger.hilt.android.qualifiers.ApplicationContext
 import tennis.bot.mobile.R
@@ -19,7 +20,15 @@ class UserProfileAndEnumsRepository @Inject constructor(
 	@ApplicationContext private val context: Context
 ) {
 	private lateinit var cachedProfileData: ProfileData
-	private lateinit var cachedGameData: List<SurveyResultItem>
+
+	val defaultGameData = listOf(
+		SurveyResultItem("Ведущая рука", getString(context, R.string.survey_option_null)),
+		SurveyResultItem("Бэкхенд", getString(context, R.string.survey_option_null)),
+		SurveyResultItem("Основное покрытие", getString(context, R.string.survey_option_null)),
+		SurveyResultItem("Обувь", getString(context, R.string.survey_option_null)),
+		SurveyResultItem("Ракетка", getString(context, R.string.survey_option_null)),
+		SurveyResultItem("Струны", getString(context, R.string.survey_option_null), noUnderline = true),
+	)
 
 
 	@WorkerThread
@@ -43,11 +52,21 @@ class UserProfileAndEnumsRepository @Inject constructor(
 	suspend fun precacheEnums(): List<EnumType> {
 		val response = enumsApi.getAllEnums().execute().body()
 		enumsDao.insert(response!!)
+		enumsDao.insert(listOf(
+			EnumType("isRightHand", listOf(
+				EnumData(0, "левая", "left"),
+				EnumData(1, "правая", "right")
+			)),
+			EnumType("isOneBackhand", listOf(
+				EnumData(0, "двуручный", "two-handed"),
+				EnumData(1, "одноручный", "one-handed")
+			)),
+		))
 		return response
 	}
 
 	@WorkerThread
-	suspend fun getEnums() : List<EnumType> {
+	suspend fun getEnums(): List<EnumType> {
 		val cachedAllEnums = enumsDao.getAllEnumTypes()
 		if (cachedAllEnums.isNotEmpty()) {
 			return cachedAllEnums
@@ -55,13 +74,18 @@ class UserProfileAndEnumsRepository @Inject constructor(
 		return precacheEnums()
 	}
 
-	fun getEnumsById(allEnums: List<EnumType>, selectedEnumTypesAndIds: List<Pair<String, Int?>>): List<String?> {
-		val decodedList = mutableListOf<String?>()
+	fun getEnumsById(allEnums: List<EnumType>, selectedEnumTypesAndIds: List<Pair<String, Int?>>): List<String> {
+		val decodedList = mutableListOf<String>()
 
 		for ((type, id) in selectedEnumTypesAndIds){
 			val enumType = allEnums.find { return@find it.type == type }
-			val enum = enumType?.enums?.find {return@find it.id == id}
-			decodedList.add(enum?.name)
+
+			if (id != null) {
+				val enum = enumType?.enums?.find {return@find it.id == id}
+				if (enum != null) decodedList.add(enum.name.replaceFirstChar { it.uppercase() })
+			} else {
+				decodedList.add(context.getString(R.string.survey_option_null))
+			}
 		}
 
 		return if (decodedList.isNotEmpty()) {

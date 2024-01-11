@@ -18,8 +18,7 @@ interface EnumsApi {
 @Entity(tableName = "enumType")
 @Serializable
 data class EnumType(
-	@PrimaryKey(autoGenerate = true) @Transient val id: Int = 0,
-	@ColumnInfo(name = "type") val type: String,
+	@PrimaryKey @ColumnInfo(name = "type") val type: String,
 	@ColumnInfo(name = "enums") val enums: List<EnumData>
 )
 

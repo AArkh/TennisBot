@@ -19,7 +19,6 @@ import tennis.bot.mobile.databinding.AccountMatchesPlayedBinding
 import tennis.bot.mobile.databinding.AccountPointsAndPositionBinding
 import tennis.bot.mobile.databinding.AccountTournamentsBinding
 import tennis.bot.mobile.databinding.RecyclerEmptyItemBinding
-import tennis.bot.mobile.onboarding.account.AccountPageViewModel.Companion.ZERO
 import tennis.bot.mobile.onboarding.survey.SurveyResultsAdapter
 import javax.inject.Inject
 
@@ -37,7 +36,7 @@ class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHol
 		private const val FRIENDS = 5
 		private const val BUTTON_SWITCH = 6
 		private const val OTHER = 7
-		private const val NULL_STRING = "null"
+		const val NULL_STRING = "null"
 	}
 
 	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: Any) {
