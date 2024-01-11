@@ -1,12 +1,10 @@
 package tennis.bot.mobile.onboarding.account
 
-import android.animation.ObjectAnimator
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
-import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getColor
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -38,6 +36,7 @@ class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHol
 		private const val FRIENDS = 5
 		private const val BUTTON_SWITCH = 6
 		private const val OTHER = 7
+		private const val NULL_STRING = "null"
 	}
 
 	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: Any) {
@@ -49,12 +48,12 @@ class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHol
 				if(basicInfoAndRating.profileImageUrl != null) {
 					holder.binding.accountPhoto.load(basicInfoAndRating.profileImageUrl) { crossfade(true) }
 				}
-				if (basicInfoAndRating.telegramId != null) {
+				if (basicInfoAndRating.telegramId != NULL_STRING) {
 					holder.binding.telegramId.text = basicInfoAndRating.telegramId
 				} else {
 					holder.binding.telegramId.visibility = View.GONE
 				}
-				if (basicInfoAndRating.doublesRating != null) {
+				if (basicInfoAndRating.doublesRating != NULL_STRING) {
 					holder.binding.ratingLayout.doublesRatingValue.text = basicInfoAndRating.doublesRating
 				} else {
 					holder.binding.ratingLayout.doublesRatingValue.text = basicInfoAndRating.singleRating
@@ -97,7 +96,7 @@ class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHol
 				if (friends.isMoreThanThree){
 					holder.binding.friendsElse.setBackgroundColor(Color.WHITE)
 				} else {
-					holder.binding.friendsElse.setBackgroundColor(Color.TRANSPARENT)
+					holder.binding.friendsElse.setBackgroundColor(getColor(holder.binding.friendsElse.context, R.color.tb_bg_card))
 				}
 				holder.binding.friendsElseNumber.text = friends.friendsElseNumber
 			}
@@ -111,17 +110,17 @@ class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHol
 					clickListener?.invoke(AccountPageFragment.INFLATE_GAMEDATA)
 
 					holder.binding.gameData.setBackgroundResource(R.drawable.btn_bkg_enabled)
-					holder.binding.gameData.setTextColor(ContextCompat.getColor(holder.binding.gameData.context, R.color.tb_white))
+					holder.binding.gameData.setTextColor(getColor(holder.binding.gameData.context, R.color.tb_white))
 					holder.binding.contacts.setBackgroundResource(R.drawable.search_background)
-					holder.binding.contacts.setTextColor(ContextCompat.getColor(holder.binding.contacts.context, R.color.tb_gray_active))
+					holder.binding.contacts.setTextColor(getColor(holder.binding.contacts.context, R.color.tb_gray_active))
 				}
 				holder.binding.contacts.setOnClickListener { //todo add animation
 					clickListener?.invoke(AccountPageFragment.INFLATE_CONTACTS)
 
 					holder.binding.contacts.setBackgroundResource(R.drawable.btn_bkg_enabled)
-					holder.binding.contacts.setTextColor(ContextCompat.getColor(holder.binding.contacts.context, R.color.tb_white))
+					holder.binding.contacts.setTextColor(getColor(holder.binding.contacts.context, R.color.tb_white))
 					holder.binding.gameData.setBackgroundResource(R.drawable.search_background)
-					holder.binding.gameData.setTextColor(ContextCompat.getColor(holder.binding.gameData.context, R.color.tb_gray_active))
+					holder.binding.gameData.setTextColor(getColor(holder.binding.gameData.context, R.color.tb_gray_active))
 				}
 			}
 		}
@@ -179,8 +178,6 @@ class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHol
 		}
 	}
 }
-
-
 
 class AccountBasicInfoAndRatingItemViewHolder(
 	val binding: AccountBasicInfoAndRatingItemBinding

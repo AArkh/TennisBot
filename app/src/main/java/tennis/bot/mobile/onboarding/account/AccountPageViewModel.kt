@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
-import tennis.bot.mobile.onboarding.location.LocationDialogUiState
 import tennis.bot.mobile.onboarding.survey.SurveyResultItem
 import javax.inject.Inject
 
@@ -19,6 +18,11 @@ class AccountPageViewModel @Inject constructor(
 	@ApplicationContext private val context: Context,
 	private val repository: UserProfileAndEnumsRepository
 ): ViewModel() {
+
+	companion object {
+		const val EMPTY_STRING = ""
+		const val ZERO = 0
+	}
 
 	private val _uiStateFlow = MutableStateFlow<AccountPageUiState>(
 		AccountPageUiState.Loading( isLoading = true )
@@ -29,63 +33,81 @@ class AccountPageViewModel @Inject constructor(
 		viewModelScope.launch(Dispatchers.IO) {
 			kotlin.runCatching {
 				val profileData = repository.getProfile()
-				val gamesRemain = 10 - (profileData.games ?: 0)
-				val basicLayout = listOf( // todo replace int's with const or whatever suitable
+				val gamesRemain = 10 - (profileData.games ?: ZERO)
+				val basicLayout = listOf(
 					BasicInfoAndRating(
 						profileData.photo,
 						profileData.name,
 						profileData.telegram,
 						profileData.rating.toString(),
-						profileData.doublesRating.toString() ),
+						profileData.doublesRating.toString()
+					),
 					Calibration(
 						progressBarProgress(profileData.games),
 						context.getString(R.string.calibration_matches_remain, profileData.games),
-						context.getString(R.string.calibration_rounds_remain_text, gamesRemain)),
+						context.getString(R.string.calibration_rounds_remain_text, gamesRemain)
+					),
 					MatchesPlayed(
-						context.getString(R.string.account_matches_played, profileData.games),
-						context.getString(R.string.last_game_date, "6 Января 2024") ),
+						context.getString(R.string.account_matches_played, profileData.games ?: ZERO),
+						context.getString(R.string.last_game_date, profileData.lastGame ?: EMPTY_STRING)
+					),
 					PointsAndPosition(
-						context.getString(R.string.account_tournament_points, profileData.bonus),
-						context.getString(R.string.tournament_title), // should get it elsewhere
+						context.getString(R.string.account_tournament_points, profileData.bonus ?: ZERO),
+						context.getString(R.string.tournament_title),
 						profileData.bonusRank.toString()
 					),
-					Tournaments(context.getString(R.string.tournament_title) ),
+					Tournaments(context.getString(R.string.tournament_title)),
 					Friends(
 						context.getString(R.string.tournament_title),
 						null, null, null, null, // not implemented yet
-						false),
+						false
+					),
 					ButtonSwitch(true)
 				)
 				val gameDataList: List<SurveyResultItem>
 				val contactsList: List<SurveyResultItem>
 
-				_uiStateFlow.value = AccountPageUiState.ProfileDataReceived(basicLayout, dummyGameDataForButtons, dummyContactsForButtons)
+				_uiStateFlow.value =
+					AccountPageUiState.ProfileDataReceived(basicLayout, repository.defaultGameData, dummyContactsForButtons)
+			}.onFailure {
+				AccountPageUiState.Error( isError = true )
 			}
 		}
 	}
 
-	fun onFetchingGamedataAndContacts(){
-		val currentState = uiStateFlow.value as AccountPageUiState.ProfileDataReceived
+	fun onProvidingGameData(profileData: ProfileData): List<SurveyResultItem> {
 
 		viewModelScope.launch(Dispatchers.IO) {
-			kotlin.runCatching {
-				val profileData = repository.getProfile()
+			val enumTypesList = repository.getEnums()
+			val hand = if (profileData.isRightHand == true) "Правая" else "Левая"
+			val backhand = if (profileData.isOneBackhand == true) "Одноручный" else "Двуручный"
+			val decodedIds = repository.getEnumsById(enumTypesList, listOf(
+				Pair("surface", profileData.surface),
+				Pair("shoes", profileData.shoes),
+				Pair("racquet", profileData.racquet),
+				Pair("racquetStrings", profileData.racquetStrings))
+			)
+
+			val modifiedValues = listOf( // all needed for mapping next
+				Pair("isRightHand", if (profileData.isRightHand != null) hand else context.getString(R.string.survey_option_null)),
+				Pair("isOnebackhand", if (profileData.isOneBackhand != null) backhand else context.getString(R.string.survey_option_null)),
+				decodedIds[0],
+				decodedIds[1],
+				decodedIds[2],
+				decodedIds[3],
+
+			)
+			val defaultGameData = repository.defaultGameData
+
+			val modifiedGameData = defaultGameData.map { gameDataItem ->
+				SurveyResultItem(gameDataItem.resultTitle, modifiedValues)
 
 			}
-		}
-//		currentState.copy{
-//
-//		}
 
+		}
 	}
 
-	val dummyGameDataForButtons = listOf(
-		SurveyResultItem("something", "something's value"),
-		SurveyResultItem("something", "something's value"),
-		SurveyResultItem("something", "something's value"),
-		SurveyResultItem("something", "something's value"),
-		SurveyResultItem("something", "something's value", noUnderline = true),
-	)
+
 
 	val dummyContactsForButtons = listOf(
 		SurveyResultItem("something else", "something else's value"),
@@ -107,7 +129,7 @@ class AccountPageViewModel @Inject constructor(
 			8 -> 79
 			9 -> 89
 			10 -> 99
-			else -> 0
+			else -> ZERO
 		}
 
 		return percentage

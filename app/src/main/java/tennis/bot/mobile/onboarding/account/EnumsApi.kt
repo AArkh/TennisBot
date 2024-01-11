@@ -1,5 +1,8 @@
 package tennis.bot.mobile.onboarding.account
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import retrofit2.Call
@@ -11,10 +14,11 @@ interface EnumsApi {
 	fun getAllEnums(): Call<List<EnumType>>
 }
 
+@Entity(tableName = "enumType")
 @Serializable
 data class EnumType(
-	val type: String,
-	val enums: List<EnumData>
+	@PrimaryKey @ColumnInfo(name = "type") val type: String,
+	@ColumnInfo(name = "enums") val enums: List<EnumData>
 )
 
 @Serializable

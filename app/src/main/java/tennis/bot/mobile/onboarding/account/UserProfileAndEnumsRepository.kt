@@ -1,6 +1,10 @@
 package tennis.bot.mobile.onboarding.account
 
+import android.content.Context
 import androidx.annotation.WorkerThread
+import androidx.core.content.ContextCompat.getString
+import dagger.hilt.android.qualifiers.ApplicationContext
+import tennis.bot.mobile.R
 import tennis.bot.mobile.core.AuthTokenRepository
 import tennis.bot.mobile.onboarding.survey.SurveyResultItem
 import javax.inject.Inject
@@ -9,12 +13,22 @@ import javax.inject.Singleton
 @Singleton
 class UserProfileAndEnumsRepository @Inject constructor(
 	private val api: UserProfileApi,
+	private val enumsDao: AllEnumsDao,
 	private val enumsApi: EnumsApi,
 	private val tokenRepo: AuthTokenRepository,
+	@ApplicationContext private val context: Context
 ) {
 	private lateinit var cachedProfileData: ProfileData
-	private lateinit var cachedAllEnums: List<EnumType>
 	private lateinit var cachedGameData: List<SurveyResultItem>
+	val defaultGameData = listOf(
+		SurveyResultItem("Стиль игры", getString(context, R.string.survey_option_null)),
+		SurveyResultItem("Ведущая рука", getString(context, R.string.survey_option_null)),
+		SurveyResultItem("Бэкхенд", getString(context, R.string.survey_option_null)),
+		SurveyResultItem("Основное покрытие", getString(context, R.string.survey_option_null)),
+		SurveyResultItem("Обувь", getString(context, R.string.survey_option_null)),
+		SurveyResultItem("Ракетка", getString(context, R.string.survey_option_null)),
+		SurveyResultItem("Струны", getString(context, R.string.survey_option_null), noUnderline = true),
+	)
 
 	@WorkerThread
 	suspend fun precacheProfile(): ProfileData {
@@ -27,7 +41,7 @@ class UserProfileAndEnumsRepository @Inject constructor(
 
 	@WorkerThread
 	suspend fun getProfile() : ProfileData {
-		if (cachedProfileData != null) {
+		if (::cachedProfileData.isInitialized) {
 			return cachedProfileData
 		}
 		return precacheProfile()
@@ -36,24 +50,32 @@ class UserProfileAndEnumsRepository @Inject constructor(
 	@WorkerThread
 	suspend fun precacheEnums(): List<EnumType> {
 		val response = enumsApi.getAllEnums().execute().body()
-		cachedAllEnums = response!!
+		enumsDao.insert(response!!)
 		return response
 	}
 
 	@WorkerThread
 	suspend fun getEnums() : List<EnumType> {
+		val cachedAllEnums = enumsDao.getAllEnumTypes()
 		if (cachedAllEnums.isNotEmpty()) {
 			return cachedAllEnums
 		}
 		return precacheEnums()
 	}
 
-	fun getEnumTypeList(allEnums: List<EnumType>, selectedEnumType: String): List<EnumData> {
-		val enumType = allEnums.find { return@find it.type == selectedEnumType }
-		if (enumType?.enums?.isNotEmpty() == true) {
-			return enumType.enums.map { return@map EnumData(it.id, it.name, it.nameEnglish) }
+	fun getEnumsById(allEnums: List<EnumType>, selectedEnumTypesAndIds: List<Pair<String, Int?>>): List<String?> {
+		val decodedList = mutableListOf<String?>()
+
+		for ((type, id) in selectedEnumTypesAndIds){
+			val enumType = allEnums.find { return@find it.type == type }
+			val enum = enumType?.enums?.find {return@find it.id == id}
+			decodedList.add(enum?.name)
+		}
+
+		return if (decodedList.isNotEmpty()) {
+			decodedList.toList()
 		} else {
-			return emptyList()
+			emptyList()
 		}
 	}
 }
