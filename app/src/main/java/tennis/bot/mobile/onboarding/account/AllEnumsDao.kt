@@ -18,8 +18,8 @@ interface AllEnumsDao {
 	@Delete
 	suspend fun delete(item: EnumType)
 
-	@Query("SELECT * from enumType WHERE id = :id")
-	fun getEnumType(id: Int): EnumType
+	@Query("SELECT * from enumType WHERE type = :type")
+	fun getEnumType(type: String): EnumType
 
 	@Query("SELECT * from enumType")
 	fun getAllEnumTypes(): List<EnumType>

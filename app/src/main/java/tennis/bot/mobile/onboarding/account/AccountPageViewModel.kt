@@ -51,7 +51,11 @@ class AccountPageViewModel @Inject constructor(
 					),
 					MatchesPlayed(
 						context.getString(R.string.account_matches_played, profileData.games ?: ZERO),
-						context.getString(R.string.last_game_date, profileData.lastGame ?: EMPTY_STRING)
+						if (profileData.lastGame != null) {
+							context.getString(R.string.last_game_date, profileData.lastGame)
+						} else {
+							EMPTY_STRING
+						}
 					),
 					PointsAndPosition(
 						context.getString(R.string.account_tournament_points, profileData.bonus ?: ZERO),
@@ -66,58 +70,44 @@ class AccountPageViewModel @Inject constructor(
 					),
 					ButtonSwitch(true)
 				)
-				val gameDataList: List<SurveyResultItem>
+				val gameDataList = onProvidingGameData(profileData)
 				val contactsList: List<SurveyResultItem>
 
 				_uiStateFlow.value =
-					AccountPageUiState.ProfileDataReceived(basicLayout, defaultGameData, dummyContactsForButtons)
+					AccountPageUiState.ProfileDataReceived(basicLayout, gameDataList, dummyContactsForButtons)
 			}.onFailure {
 				AccountPageUiState.Error( isError = true )
 			}
 		}
 	}
 
-//	fun onProvidingGameData(profileData: ProfileData): List<SurveyResultItem> {
-//
-//		viewModelScope.launch(Dispatchers.IO) {
-//			val enumTypesList = repository.getEnums()
-//			val hand = if (profileData.isRightHand == true) "Правая" else "Левая"
-//			val backhand = if (profileData.isOneBackhand == true) "Одноручный" else "Двуручный"
-//			val decodedIds = repository.getEnumsById(enumTypesList, listOf(
-//				Pair("surface", profileData.surface),
-//				Pair("shoes", profileData.shoes),
-//				Pair("racquet", profileData.racquet),
-//				Pair("racquetStrings", profileData.racquetStrings))
-//			)
-//
-//			val modifiedValues = listOf( // all needed for mapping next
-//				Pair("isRightHand", if (profileData.isRightHand != null) hand else context.getString(R.string.survey_option_null)),
-//				Pair("isOnebackhand", if (profileData.isOneBackhand != null) backhand else context.getString(R.string.survey_option_null)),
-//				decodedIds[0],
-//				decodedIds[1],
-//				decodedIds[2],
-//				decodedIds[3],
-//
-//			)
-//			val defaultGameData = repository.defaultGameData
-//
-////			val modifiedGameData = defaultGameData.map { gameDataItem ->
-////				SurveyResultItem(gameDataItem.resultTitle, modifiedValues)
-////
-////			}
-//
-//		}
-//	}
+	private suspend fun onProvidingGameData(profileData: ProfileData): List<SurveyResultItem> {
+		val enumTypesList = repository.getEnums()
+		val defaultGameData = repository.defaultGameData
+		val decodedIds = repository.getEnumsById(enumTypesList, listOf(
+			Pair("isRightHand",profileData.isRightHand),
+			Pair("isOneBackhand", profileData.isOneBackhand),
+			Pair("surface", profileData.surface),
+			Pair("shoes", profileData.shoes),
+			Pair("racquet", profileData.racquet),
+			Pair("racquetStrings", profileData.racquetStrings))
+		)
 
-	val defaultGameData = listOf(
-		SurveyResultItem("Стиль игры", ContextCompat.getString(context, R.string.survey_option_null)),
-		SurveyResultItem("Ведущая рука", ContextCompat.getString(context, R.string.survey_option_null)),
-		SurveyResultItem("Бэкхенд", ContextCompat.getString(context, R.string.survey_option_null)),
-		SurveyResultItem("Основное покрытие", ContextCompat.getString(context, R.string.survey_option_null)),
-		SurveyResultItem("Обувь", ContextCompat.getString(context, R.string.survey_option_null)),
-		SurveyResultItem("Ракетка", ContextCompat.getString(context, R.string.survey_option_null)),
-		SurveyResultItem("Струны", ContextCompat.getString(context, R.string.survey_option_null), noUnderline = true),
-	)
+		val modifiedValues = listOf(
+			decodedIds[0],
+			decodedIds[1],
+			decodedIds[2],
+			decodedIds[3],
+			decodedIds[4],
+			decodedIds[5],
+		)
+
+		val modifiedGameData = defaultGameData.mapIndexed { index, gameDataItem ->
+			gameDataItem.copy(resultOption = modifiedValues.getOrElse(index) { gameDataItem.resultOption })
+		}
+
+		return modifiedGameData
+	}
 
 
 

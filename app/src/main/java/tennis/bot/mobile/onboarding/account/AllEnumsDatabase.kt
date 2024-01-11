@@ -9,7 +9,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 
-@Database(entities = [EnumType::class], version = 1, exportSchema = false)
+@Database(entities = [EnumType::class], version = 2, exportSchema = false)
 @TypeConverters(EnumTypeConverter::class)
 abstract class AllEnumsDatabase : RoomDatabase() {
 	abstract fun allEnumsDao() : AllEnumsDao
