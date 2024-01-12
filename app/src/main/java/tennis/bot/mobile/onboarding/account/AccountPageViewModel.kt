@@ -24,6 +24,12 @@ class AccountPageViewModel @Inject constructor(
 	companion object {
 		const val EMPTY_STRING = ""
 		const val ZERO = 0
+		const val IS_RIGHTHAND_TITLE = "isRightHand"
+		const val IS_ONE_BACKHAND_TITLE = "isOneBackhand"
+		const val SURFACE_TITLE = "surface"
+		const val SHOES_TITLE = "shoes"
+		const val RACQUET_TITLE = "racquet"
+		const val RACQUET_STRINGS_TITLE = "racquetStrings"
 	}
 
 	private val _uiStateFlow = MutableStateFlow<AccountPageUiState>(
@@ -85,13 +91,13 @@ class AccountPageViewModel @Inject constructor(
 		val enumTypesList = repository.getEnums()
 		val defaultGameData = repository.defaultGameData
 		val decodedIds = repository.getEnumsById(enumTypesList, listOf(
-			Pair("isRightHand",profileData.isRightHand),
-			Pair("isOneBackhand", profileData.isOneBackhand),
-			Pair("surface", profileData.surface),
-			Pair("shoes", profileData.shoes),
-			Pair("racquet", profileData.racquet),
-			Pair("racquetStrings", profileData.racquetStrings))
-		)
+			Pair(IS_RIGHTHAND_TITLE, profileData.isRightHand),
+			Pair(IS_ONE_BACKHAND_TITLE, profileData.isOneBackhand),
+			Pair(SURFACE_TITLE, profileData.surface),
+			Pair(SHOES_TITLE, profileData.shoes),
+			Pair(RACQUET_TITLE, profileData.racquet),
+			Pair(RACQUET_STRINGS_TITLE, profileData.racquetStrings)
+		))
 
 		val modifiedValues = listOf(
 			decodedIds[0],

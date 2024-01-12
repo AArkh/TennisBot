@@ -146,6 +146,12 @@
 	<string name="position_number">%s</string>
 	<string name="faq">FAQ</string>
 	<string name="survey_option_null">Не указано</string>
+	<string name="accountpage_gamedata_hand">Ведущая рука</string>
+	<string name="accountpage_gamedata_backhand">Бэкхенд</string>
+	<string name="accountpage_gamedata_surface">Основное покрытие</string>
+	<string name="accountpage_gamedata_shoes">Обувь</string>
+	<string name="accountpage_gamedata_racquet">Ракетка</string>
+	<string name="accountpage_gamedata_racquetStrings">Струны</string>
 
 
 </resources>

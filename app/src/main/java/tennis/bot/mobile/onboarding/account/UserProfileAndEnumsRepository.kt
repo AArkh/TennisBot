@@ -2,11 +2,12 @@ package tennis.bot.mobile.onboarding.account
 
 import android.content.Context
 import androidx.annotation.WorkerThread
-import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getString
 import dagger.hilt.android.qualifiers.ApplicationContext
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.AuthTokenRepository
+import tennis.bot.mobile.onboarding.account.AccountPageViewModel.Companion.IS_ONE_BACKHAND_TITLE
+import tennis.bot.mobile.onboarding.account.AccountPageViewModel.Companion.IS_RIGHTHAND_TITLE
 import tennis.bot.mobile.onboarding.survey.SurveyResultItem
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -22,12 +23,12 @@ class UserProfileAndEnumsRepository @Inject constructor(
 	private lateinit var cachedProfileData: ProfileData
 
 	val defaultGameData = listOf(
-		SurveyResultItem("Ведущая рука", getString(context, R.string.survey_option_null)),
-		SurveyResultItem("Бэкхенд", getString(context, R.string.survey_option_null)),
-		SurveyResultItem("Основное покрытие", getString(context, R.string.survey_option_null)),
-		SurveyResultItem("Обувь", getString(context, R.string.survey_option_null)),
-		SurveyResultItem("Ракетка", getString(context, R.string.survey_option_null)),
-		SurveyResultItem("Струны", getString(context, R.string.survey_option_null), noUnderline = true),
+		SurveyResultItem(context.getString(R.string.accountpage_gamedata_hand), getString(context, R.string.survey_option_null)),
+		SurveyResultItem(context.getString(R.string.accountpage_gamedata_backhand), getString(context, R.string.survey_option_null)),
+		SurveyResultItem(context.getString(R.string.accountpage_gamedata_surface), getString(context, R.string.survey_option_null)),
+		SurveyResultItem(context.getString(R.string.accountpage_gamedata_shoes), getString(context, R.string.survey_option_null)),
+		SurveyResultItem(context.getString(R.string.accountpage_gamedata_racquet), getString(context, R.string.survey_option_null)),
+		SurveyResultItem(context.getString(R.string.accountpage_gamedata_racquetStrings), getString(context, R.string.survey_option_null), noUnderline = true),
 	)
 
 
@@ -53,11 +54,11 @@ class UserProfileAndEnumsRepository @Inject constructor(
 		val response = enumsApi.getAllEnums().execute().body()
 		enumsDao.insert(response!!)
 		enumsDao.insert(listOf(
-			EnumType("isRightHand", listOf(
+			EnumType(IS_RIGHTHAND_TITLE, listOf(
 				EnumData(0, "левая", "left"),
 				EnumData(1, "правая", "right")
 			)),
-			EnumType("isOneBackhand", listOf(
+			EnumType(IS_ONE_BACKHAND_TITLE, listOf(
 				EnumData(0, "двуручный", "two-handed"),
 				EnumData(1, "одноручный", "one-handed")
 			)),

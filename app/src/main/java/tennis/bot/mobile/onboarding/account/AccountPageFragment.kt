@@ -1,6 +1,5 @@
 package tennis.bot.mobile.onboarding.account
 
-import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -39,7 +38,7 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 								accountPageAdapter.childAdapter.submitList(uiState.gameDataList)
 							}
 							INFLATE_CONTACTS -> {
-								accountPageAdapter.childAdapter.submitList(viewModel.dummyContactsForButtons)
+								accountPageAdapter.childAdapter.submitList(uiState.contactsList)
 							}
 						}
 					}

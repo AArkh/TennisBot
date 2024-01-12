@@ -1,5 +1,7 @@
 package tennis.bot.mobile.onboarding.account
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +22,7 @@ import tennis.bot.mobile.databinding.AccountPointsAndPositionBinding
 import tennis.bot.mobile.databinding.AccountTournamentsBinding
 import tennis.bot.mobile.databinding.RecyclerEmptyItemBinding
 import tennis.bot.mobile.onboarding.survey.SurveyResultsAdapter
+import tennis.bot.mobile.utils.animateButtonTransition
 import javax.inject.Inject
 
 class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>(){
@@ -109,17 +112,15 @@ class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHol
 				holder.binding.gameData.setOnClickListener {
 					clickListener?.invoke(AccountPageFragment.INFLATE_GAMEDATA)
 
-					holder.binding.gameData.setBackgroundResource(R.drawable.btn_bkg_enabled)
+					animateButtonTransition(holder.binding.buttonsBackground, holder.binding.gameData)
 					holder.binding.gameData.setTextColor(getColor(holder.binding.gameData.context, R.color.tb_white))
-					holder.binding.contacts.setBackgroundResource(R.drawable.search_background)
 					holder.binding.contacts.setTextColor(getColor(holder.binding.contacts.context, R.color.tb_gray_active))
 				}
-				holder.binding.contacts.setOnClickListener { //todo add animation
+				holder.binding.contacts.setOnClickListener {
 					clickListener?.invoke(AccountPageFragment.INFLATE_CONTACTS)
 
-					holder.binding.contacts.setBackgroundResource(R.drawable.btn_bkg_enabled)
+					animateButtonTransition(holder.binding.buttonsBackground, holder.binding.contacts)
 					holder.binding.contacts.setTextColor(getColor(holder.binding.contacts.context, R.color.tb_white))
-					holder.binding.gameData.setBackgroundResource(R.drawable.search_background)
 					holder.binding.gameData.setTextColor(getColor(holder.binding.gameData.context, R.color.tb_gray_active))
 				}
 			}
