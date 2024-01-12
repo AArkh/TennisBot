@@ -152,6 +152,11 @@
 	<string name="accountpage_gamedata_shoes">Обувь</string>
 	<string name="accountpage_gamedata_racquet">Ракетка</string>
 	<string name="accountpage_gamedata_racquetStrings">Струны</string>
+	<string name="update_contacts">Редактировать контакты</string>
+	<string name="update_gameData">Изменить игровые данные</string>
+	<string name="settings">Настройки</string>
+	<string name="exit">Выйти</string>
+	<string name="cancel">Отменить</string>
 
 
 </resources>

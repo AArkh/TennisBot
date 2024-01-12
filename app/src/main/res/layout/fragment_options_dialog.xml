@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:background="@drawable/bottomsheet_rounded"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	tools:context=".onboarding.account.OptionsDialogFragment">
+
+	<TextView
+		android:id="@+id/update_contacts"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingTop="20dp"
+		android:paddingBottom="12dp"
+		android:gravity="center"
+		android:text="@string/update_contacts"
+		android:textColor="@color/tb_black"
+		android:textSize="15sp"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"/>
+
+	<TextView
+		android:id="@+id/update_gameData"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingTop="12dp"
+		android:paddingBottom="12dp"
+		android:gravity="center"
+		android:text="@string/update_gameData"
+		android:textColor="@color/tb_black"
+		android:textSize="15sp"
+		app:layout_constraintTop_toBottomOf="@id/update_contacts"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"/>
+
+	<TextView
+		android:id="@+id/settings"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingTop="12dp"
+		android:paddingBottom="12dp"
+		android:gravity="center"
+		android:text="@string/settings"
+		android:textColor="@color/tb_black"
+		android:textSize="15sp"
+		app:layout_constraintTop_toBottomOf="@id/update_gameData"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"/>
+
+	<TextView
+		android:id="@+id/logout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingTop="12dp"
+		android:paddingBottom="20dp"
+		android:gravity="center"
+		android:text="@string/exit"
+		android:textColor="@color/tb_red"
+		android:textSize="15sp"
+		app:layout_constraintTop_toBottomOf="@id/settings"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"/>
+
+	<TextView
+		android:id="@+id/cancel_dialog"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@color/tb_bg_card"
+		android:gravity="center"
+		android:paddingTop="16dp"
+		android:paddingBottom="20dp"
+		android:text="@string/cancel"
+		android:textColor="@color/tb_gray_active"
+		android:textSize="15sp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/logout" />
+</androidx.constraintlayout.widget.ConstraintLayout>

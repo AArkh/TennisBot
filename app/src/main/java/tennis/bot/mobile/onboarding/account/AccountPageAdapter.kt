@@ -89,6 +89,9 @@ class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHol
 			is AccountTournamentsItemViewHolder -> {
 				val tournaments = item as? Tournaments ?: throw IllegalArgumentException("Item must be MatchesPlayed")
 				holder.binding.tournamentTitle.text = tournaments.tournamentTitle
+				holder.binding.root.setOnClickListener {
+					clickListener?.invoke(AccountPageFragment.GO_TO_TOURNAMENTS)
+				}
 			}
 			is AccountFriendsItemViewHolder -> {
 				val friends = item as? Friends ?: throw IllegalArgumentException("Item must be Friends")

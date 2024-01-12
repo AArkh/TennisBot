@@ -125,7 +125,6 @@ class LoginViewModel @Inject constructor(
 		viewModelScope.launch(Dispatchers.IO) {
 			when (accountInfo.postLogin(uiStateFlow.value.phonePrefix + username.toString(), password.toString())) {
 				200 -> {
-					context.showToast("This would be a dialog cue")
 					navigationCallback.invoke()
 				}
 

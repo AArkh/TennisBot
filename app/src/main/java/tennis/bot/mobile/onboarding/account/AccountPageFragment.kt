@@ -3,11 +3,16 @@ package tennis.bot.mobile.onboarding.account
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentAccountPageBinding
+import tennis.bot.mobile.onboarding.login.LoginDialogFragment
+import tennis.bot.mobile.onboarding.phone.CountryCodesDialogFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -23,6 +28,13 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 
 		binding.container.adapter = accountPageAdapter
 		binding.container.layoutManager = LinearLayoutManager(requireContext())
+		binding.optionsButton.setOnClickListener {
+			lifecycleScope.launch {
+				delay(180L) // wait for keyboard to hide
+				val bottomSheet = OptionsDialogFragment()
+				bottomSheet.show(childFragmentManager, bottomSheet.tag)
+			}
+		}
 
 		binding.tryAgainTv.setOnClickListener {
 			viewModel.onFetchingProfileData()
@@ -47,6 +59,10 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 							INFLATE_CONTACTS -> {
 								accountPageAdapter.childAdapter.submitList(uiState.contactsList)
 							}
+							GO_TO_TOURNAMENTS -> {
+								val dialog = LoginDialogFragment()
+								dialog.show(childFragmentManager, dialog.tag)
+							}
 						}
 					}
 				}
@@ -54,12 +70,12 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 					binding.errorLayout.visibility = View.VISIBLE
 				}
 			}
-
 		}
 	}
 
 	companion object {
 		const val INFLATE_CONTACTS = "INFLATE_CONTACTS"
 		const val INFLATE_GAMEDATA = "INFLATE_GAMEDATA"
+		const val GO_TO_TOURNAMENTS = "GO_TO_TOURNAMENTS"
 	}
 }
