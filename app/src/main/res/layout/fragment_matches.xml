@@ -70,7 +70,6 @@
 		android:background="@drawable/search_background"
 		android:layout_marginTop="16dp"
 		app:layout_constraintTop_toBottomOf="@id/search_bar_layout"
-
 		app:layout_constraintStart_toStartOf="parent"/>
 
 	<TextView
@@ -79,6 +78,8 @@
 		android:layout_height="wrap_content"
 		android:paddingHorizontal="12dp"
 		android:paddingVertical="6dp"
+		android:background="@drawable/search_background"
+		android:backgroundTint="@color/invisible"
 		android:text="@string/won_matches"
 		android:textColor="@color/tb_gray_active"
 		android:layout_marginTop="16dp"
@@ -91,6 +92,8 @@
 		android:layout_height="wrap_content"
 		android:paddingHorizontal="12dp"
 		android:paddingVertical="6dp"
+		android:background="@drawable/search_background"
+		android:backgroundTint="@color/invisible"
 		android:text="@string/lost_matches"
 		android:textColor="@color/tb_gray_active"
 		android:layout_marginTop="16dp"
@@ -113,9 +116,55 @@
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		android:layout_marginTop="16dp"
+		android:background="@color/tb_bg"
 		app:layout_constraintTop_toBottomOf="@id/all_matches_button"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintBottom_toBottomOf="parent"/>
+		app:layout_constraintBottom_toBottomOf="parent"
+		tools:listitem="@layout/recycler_match_item"/>
+
+	<ProgressBar
+		android:id="@+id/loadingBar"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:padding="150dp"
+		android:visibility="gone"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
+
+	<LinearLayout
+		android:id="@+id/error_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:padding="80dp"
+		android:gravity="center"
+		android:orientation="vertical"
+		android:visibility="gone"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent">
+
+		<ImageView
+			android:layout_width="100dp"
+			android:layout_height="100dp"
+			android:src="@android:drawable/stat_notify_error"
+			android:tintMode="multiply"
+			tools:layout_editor_absoluteX="182dp"
+			tools:layout_editor_absoluteY="354dp"
+			app:tint="@color/tb_gray_light" />
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/error_text"/>
+		<TextView
+			android:id="@+id/tryAgainTv"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/error_try_again_text" />
+
+	</LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

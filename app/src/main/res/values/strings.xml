@@ -161,6 +161,8 @@
 	<string name="all_matches">Все</string>
 	<string name="won_matches">Выигранные</string>
 	<string name="lost_matches">Проигранные</string>
+	<string name="name_surname_default">Name Surname</string>
+	<string name="telegramid_default">telegramId</string>
 
 
 </resources>

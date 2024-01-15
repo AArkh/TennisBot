@@ -44,9 +44,13 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 				is AccountPageUiState.Loading -> {
 					viewModel.onFetchingProfileData()
 					binding.loadingBar.visibility = View.VISIBLE
+					binding.errorLayout.visibility = View.GONE
+					binding.container.visibility = View.GONE
 				}
 				is AccountPageUiState.ProfileDataReceived -> {
 					binding.loadingBar.visibility = View.GONE
+					binding.errorLayout.visibility = View.GONE
+					binding.container.visibility = View.VISIBLE
 
 					accountPageAdapter.submitList(uiState.receivedDataItems)
 					accountPageAdapter.childAdapter.submitList(uiState.gameDataList)
@@ -67,6 +71,7 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 				}
 				is AccountPageUiState.Error -> {
 					binding.errorLayout.visibility = View.VISIBLE
+					binding.container.visibility = View.GONE
 				}
 			}
 		}
