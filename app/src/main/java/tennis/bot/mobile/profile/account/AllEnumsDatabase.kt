@@ -1,4 +1,4 @@
-package tennis.bot.mobile.onboarding.account
+package tennis.bot.mobile.profile.account
 
 import androidx.room.Database
 import androidx.room.ProvidedTypeConverter

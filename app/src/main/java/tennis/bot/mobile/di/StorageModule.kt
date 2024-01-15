@@ -7,9 +7,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import tennis.bot.mobile.onboarding.account.AllEnumsDao
-import tennis.bot.mobile.onboarding.account.AllEnumsDatabase
-import tennis.bot.mobile.onboarding.account.EnumTypeConverter
+import tennis.bot.mobile.profile.account.AllEnumsDao
+import tennis.bot.mobile.profile.account.AllEnumsDatabase
+import tennis.bot.mobile.profile.account.EnumTypeConverter
 import tennis.bot.mobile.onboarding.location.LocationCityConverter
 import tennis.bot.mobile.onboarding.location.LocationDao
 import tennis.bot.mobile.onboarding.location.LocationDatabase

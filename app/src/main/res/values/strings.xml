@@ -157,6 +157,10 @@
 	<string name="settings">Настройки</string>
 	<string name="exit">Выйти</string>
 	<string name="cancel">Отменить</string>
+	<string name="matches">Матчи</string>
+	<string name="all_matches">Все</string>
+	<string name="won_matches">Выигранные</string>
+	<string name="lost_matches">Проигранные</string>
 
 
 </resources>

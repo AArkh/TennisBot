@@ -1,4 +1,4 @@
-package tennis.bot.mobile.onboarding.account
+package tennis.bot.mobile.profile.account
 
 import tennis.bot.mobile.core.CoreUtilsItem
 import tennis.bot.mobile.onboarding.survey.SurveyResultItem

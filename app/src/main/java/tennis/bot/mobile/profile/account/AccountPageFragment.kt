@@ -1,4 +1,4 @@
-package tennis.bot.mobile.onboarding.account
+package tennis.bot.mobile.profile.account
 
 import android.os.Bundle
 import android.view.View
@@ -12,7 +12,6 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentAccountPageBinding
 import tennis.bot.mobile.onboarding.login.LoginDialogFragment
-import tennis.bot.mobile.onboarding.phone.CountryCodesDialogFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint

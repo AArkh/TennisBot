@@ -5,7 +5,7 @@
 	android:layout_height="wrap_content"
 	android:background="@drawable/bottomsheet_rounded"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	tools:context=".onboarding.account.OptionsDialogFragment">
+	tools:context=".profile.account.OptionsDialogFragment">
 
 	<TextView
 		android:id="@+id/update_contacts"

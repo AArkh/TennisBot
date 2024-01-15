@@ -1,4 +1,4 @@
-package tennis.bot.mobile.onboarding.account
+package tennis.bot.mobile.profile.account
 
 import kotlinx.serialization.Serializable
 import retrofit2.Call

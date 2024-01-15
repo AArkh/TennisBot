@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tennis.bot.mobile.core.AuthTokenRepository
 import tennis.bot.mobile.databinding.ActivityMainBinding
-import tennis.bot.mobile.onboarding.account.UserProfileAndEnumsRepository
+import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.onboarding.initial.LoginProposalFragment
 import tennis.bot.mobile.onboarding.location.LocationRepository
 import java.io.IOException

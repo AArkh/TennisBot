@@ -1,7 +1,5 @@
-package tennis.bot.mobile.onboarding.account
+package tennis.bot.mobile.profile.account
 
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View

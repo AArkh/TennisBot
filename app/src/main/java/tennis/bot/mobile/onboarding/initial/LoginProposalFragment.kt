@@ -11,11 +11,9 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.databinding.FragmentLoginProposalBinding
-import tennis.bot.mobile.onboarding.account.AccountPageFragment
+import tennis.bot.mobile.profile.account.AccountPageFragment
 import tennis.bot.mobile.onboarding.login.LoginFragment
 import tennis.bot.mobile.onboarding.phone.PhoneInputFragment
-import tennis.bot.mobile.onboarding.sport.SportFragment
-import tennis.bot.mobile.onboarding.survey.SurveyFragment
 import javax.inject.Inject
 
 @SuppressLint("ClickableViewAccessibility")

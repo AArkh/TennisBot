@@ -1,4 +1,4 @@
-package tennis.bot.mobile.onboarding.account
+package tennis.bot.mobile.profile.account
 
 import android.content.Context
 import androidx.annotation.WorkerThread
@@ -6,8 +6,8 @@ import androidx.core.content.ContextCompat.getString
 import dagger.hilt.android.qualifiers.ApplicationContext
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.AuthTokenRepository
-import tennis.bot.mobile.onboarding.account.AccountPageViewModel.Companion.IS_ONE_BACKHAND_TITLE
-import tennis.bot.mobile.onboarding.account.AccountPageViewModel.Companion.IS_RIGHTHAND_TITLE
+import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.IS_ONE_BACKHAND_TITLE
+import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.IS_RIGHTHAND_TITLE
 import tennis.bot.mobile.onboarding.survey.SurveyResultItem
 import javax.inject.Inject
 import javax.inject.Singleton

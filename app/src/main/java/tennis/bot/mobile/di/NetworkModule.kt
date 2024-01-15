@@ -12,8 +12,8 @@ import okhttp3.OkHttpClient
 import retrofit2.Converter
 import retrofit2.Retrofit
 import tennis.bot.mobile.core.AuthInterceptor
-import tennis.bot.mobile.onboarding.account.EnumsApi
-import tennis.bot.mobile.onboarding.account.UserProfileApi
+import tennis.bot.mobile.profile.account.EnumsApi
+import tennis.bot.mobile.profile.account.UserProfileApi
 import tennis.bot.mobile.onboarding.location.LocationApi
 import tennis.bot.mobile.onboarding.phone.SmsApi
 import tennis.bot.mobile.onboarding.survey.RegisterAndLoginApi

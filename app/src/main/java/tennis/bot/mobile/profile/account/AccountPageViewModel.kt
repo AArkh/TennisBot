@@ -1,7 +1,6 @@
-package tennis.bot.mobile.onboarding.account
+package tennis.bot.mobile.profile.account
 
 import android.content.Context
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,7 +10,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
-import tennis.bot.mobile.onboarding.account.AccountPageViewModel.Companion.ZERO
 import tennis.bot.mobile.onboarding.survey.SurveyResultItem
 import javax.inject.Inject
 
