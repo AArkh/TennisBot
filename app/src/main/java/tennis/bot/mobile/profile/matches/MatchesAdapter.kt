@@ -20,6 +20,7 @@ import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
 import javax.inject.Inject
 
 class MatchesAdapter @Inject constructor(): CoreAdapter<MatchItemViewHolder>() {
+
 	override fun onBindViewHolder(holder: MatchItemViewHolder, item: Any) {
 		val match = item as? MatchItem ?: throw IllegalArgumentException("Item must be MatchItem")
 

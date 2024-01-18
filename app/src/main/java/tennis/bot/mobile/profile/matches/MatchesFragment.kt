@@ -67,7 +67,5 @@ class MatchesFragment : CoreFragment<FragmentMatchesBinding>() {
 				}
 			}
 		}
-
 	}
-
 }

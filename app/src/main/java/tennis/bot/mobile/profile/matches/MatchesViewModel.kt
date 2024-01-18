@@ -23,6 +23,7 @@ class MatchesViewModel  @Inject constructor(): ViewModel() {
 
 	val mockData = listOf(
 		MatchItem(
+			false, false,
 			playerOneProfilePic = "url_player_one",
 			playerOneName = "Player One",
 			playerOneCurrentRating = "1200",
@@ -38,8 +39,10 @@ class MatchesViewModel  @Inject constructor(): ViewModel() {
 			set21 = "3",
 			set22 = "6",
 			set23 = "5",
-			dateTime = "2022-01-01"),
+			dateTime = "2022-01-01",
+		),
 		MatchItem(
+			false, false,
 			playerOneProfilePic = "url_player_one_1",
 			playerOneName = "Player One 1",
 			playerOneCurrentRating = "1180",
@@ -57,6 +60,7 @@ class MatchesViewModel  @Inject constructor(): ViewModel() {
 			set23 = " ",
 			dateTime = "2022-01-02"),
 		MatchItem(
+			false, false,
 			playerOneProfilePic = "url_player_one_2",
 			playerOneName = "Player One 2",
 			playerOneCurrentRating = "1250",
@@ -77,11 +81,8 @@ class MatchesViewModel  @Inject constructor(): ViewModel() {
 
 	private val _uiStateFlow = MutableStateFlow<MatchesUiState>(
 		MatchesUiState.MatchesDataReceived(
-			mockData
+			mockData + mockData
 		)
 	)
 	val uiStateFlow = _uiStateFlow.asStateFlow()
-
-
-
 }

@@ -92,6 +92,10 @@ fun getRealPathFromUri(context: Context, uri: Uri): String? {
     val projection = arrayOf(MediaStore.Images.Media.DATA)
     val cursor: Cursor? = context.contentResolver.query(uri, projection, null, null, null)
 
+    // url - сетевая хуйня
+    // ip/path
+    // uri - локальная хуйня
+
     cursor?.use {
         val columnIndex: Int = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
         it.moveToFirst()
