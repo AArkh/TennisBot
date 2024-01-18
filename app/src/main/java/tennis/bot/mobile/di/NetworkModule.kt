@@ -153,7 +153,7 @@ class NetworkModule {
     @Named(SCORES)
     @Singleton
     fun provideScoresRetrofit(
-        okHttpClient: OkHttpClient,
+        @Named(WITH_AUTHENTICATION) okHttpClient: OkHttpClient,
         converterFactory: Converter.Factory
     ): Retrofit {
         return Retrofit.Builder()

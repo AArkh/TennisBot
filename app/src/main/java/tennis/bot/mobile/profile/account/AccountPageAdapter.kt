@@ -6,9 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat.getColor
-import androidx.core.view.setPadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -25,7 +23,6 @@ import tennis.bot.mobile.databinding.AccountTournamentsBinding
 import tennis.bot.mobile.databinding.RecyclerEmptyItemBinding
 import tennis.bot.mobile.onboarding.survey.SurveyResultsAdapter
 import tennis.bot.mobile.utils.animateButtonTransition
-import tennis.bot.mobile.utils.dpToPx
 import javax.inject.Inject
 
 class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>(){
@@ -48,44 +45,7 @@ class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHol
 
 	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: Any) {
 		when(holder){
-			is AccountBasicInfoAndRatingItemViewHolder -> {
-				val basicInfoAndRating = item as? BasicInfoAndRating ?: throw IllegalArgumentException("Item must be BasicInfoAndRating")
-				holder.binding.nameSurname.text = basicInfoAndRating.nameSurname
-				holder.binding.ratingLayout.singleRatingValue.text = basicInfoAndRating.singleRating
-				if(basicInfoAndRating.profileImageUrl != null) {
-					if (basicInfoAndRating.profileImageUrl.contains("default")) {
-						Log.d("123456", "default image case was triggered")
-						val resourceId = getDefaultDrawableResourceId(holder.binding.accountPhoto.context, basicInfoAndRating.profileImageUrl.removeSuffix(".png"))
-						holder.binding.accountPhoto.visibility = View.VISIBLE
-						if (resourceId != null) holder.binding.accountPhoto.setImageResource(resourceId)
-						holder.binding.placeholderPhoto.visibility = View.GONE
-					} else {
-						holder.binding.accountPhoto.visibility = View.VISIBLE
-						holder.binding.accountPhoto.load(IMAGES_LINK + basicInfoAndRating.profileImageUrl) { crossfade(true) }
-						holder.binding.placeholderPhoto.visibility = View.GONE
-					}
-				}
-				if (basicInfoAndRating.telegramId != NULL_STRING) {
-					holder.binding.telegramId.text = basicInfoAndRating.telegramId
-				} else {
-					holder.binding.telegramId.visibility = View.GONE
-				}
-				if (basicInfoAndRating.doublesRating != NULL_STRING) {
-					holder.binding.ratingLayout.doublesRatingValue.text = basicInfoAndRating.doublesRating
-				} else {
-					holder.binding.ratingLayout.doublesRatingValue.text = basicInfoAndRating.singleRating
-				}
-
-				holder.binding.chartButton.setOnClickListener {
-					// todo going to Chart
-				}
-				holder.binding.faqButton.setOnClickListener {
-					// todo going to FAQ
-				}
-				holder.binding.accountPhotoFrame.setOnClickListener {
-					clickListener?.invoke(AccountPageFragment.PICK_IMAGE)
-				}
-			}
+			is AccountBasicInfoAndRatingItemViewHolder -> bindAccountBasicInfoAndRating(item, holder)
 			is AccountCalibrationViewHolder -> {
 				val calibration = item as? Calibration ?: throw IllegalArgumentException("Item must be Calibration")
 				holder.binding.progressBar.progress = calibration.progressBarValue
@@ -144,6 +104,53 @@ class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHol
 					holder.binding.gameData.setTextColor(getColor(holder.binding.gameData.context, R.color.tb_gray_active))
 				}
 			}
+		}
+	}
+
+	private fun bindAccountBasicInfoAndRating(item: Any, holder: AccountBasicInfoAndRatingItemViewHolder) {
+		val basicInfoAndRating = item as? BasicInfoAndRating ?: throw IllegalArgumentException("Item must be BasicInfoAndRating")
+
+		holder.binding.nameSurname.text = basicInfoAndRating.nameSurname
+		holder.binding.ratingLayout.singleRatingValue.text = basicInfoAndRating.singleRating
+		holder.showImage(basicInfoAndRating.profileImageUrl)
+		if (basicInfoAndRating.telegramId != NULL_STRING) {
+			holder.binding.telegramId.text = basicInfoAndRating.telegramId
+		} else {
+			holder.binding.telegramId.visibility = View.GONE
+		}
+		if (basicInfoAndRating.doublesRating != NULL_STRING) {
+			holder.binding.ratingLayout.doublesRatingValue.text = basicInfoAndRating.doublesRating
+		} else {
+			holder.binding.ratingLayout.doublesRatingValue.text = basicInfoAndRating.singleRating
+		}
+
+		holder.binding.chartButton.setOnClickListener {
+			// todo going to Chart
+		}
+		holder.binding.faqButton.setOnClickListener {
+			// todo going to FAQ
+		}
+		holder.binding.accountPhotoFrame.setOnClickListener {
+			clickListener?.invoke(AccountPageFragment.PICK_IMAGE)
+		}
+	}
+
+	private fun AccountBasicInfoAndRatingItemViewHolder.showImage(profileImageUrl: String?) {
+		if (profileImageUrl == null) return
+
+		if (profileImageUrl.contains("default")) {
+			Log.d("123456", "default image case was triggered")
+			val resourceId = getDefaultDrawableResourceId(
+				binding.accountPhoto.context,
+				profileImageUrl.removeSuffix(".png")
+			)
+			binding.accountPhoto.visibility = View.VISIBLE
+			if (resourceId != null) binding.accountPhoto.setImageResource(resourceId)
+			binding.placeholderPhoto.visibility = View.GONE
+		} else {
+			binding.accountPhoto.visibility = View.VISIBLE
+			binding.accountPhoto.load(IMAGES_LINK + profileImageUrl) { crossfade(true) }
+			binding.placeholderPhoto.visibility = View.GONE
 		}
 	}
 

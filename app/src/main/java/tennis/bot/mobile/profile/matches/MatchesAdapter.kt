@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.content.ContextCompat.getColor
+import androidx.core.content.ContextCompat.getColorStateList
 import androidx.core.view.setPadding
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -23,7 +24,6 @@ class MatchesAdapter @Inject constructor(): CoreAdapter<MatchItemViewHolder>() {
 	override fun onBindViewHolder(holder: MatchItemViewHolder, item: Any) {
 		val match = item as? MatchItem ?: throw IllegalArgumentException("Item must be MatchItem")
 
-		// Bind player one data
 		if(match.playerOneProfilePic != null) {
 			if (match.playerOneProfilePic.contains("default")) {
 				val resourceId = getDefaultDrawableResourceId(holder.binding.player1Image.context, match.playerOneProfilePic.removeSuffix(".png"))
@@ -39,19 +39,18 @@ class MatchesAdapter @Inject constructor(): CoreAdapter<MatchItemViewHolder>() {
 		holder.binding.player1RatingValue.text = match.playerOneCurrentRating
 		val differenceP1 = ratingChange(match.playerOneCurrentRating, match.playerOnePreviousRating)
 		if(differenceP1.contains("-")) {
-			holder.binding.player1ScoreChange.setBackgroundColor(getColor(holder.binding.player1ScoreChange.context, R.color.tb_bland_red))
+			holder.binding.player1ScoreChange.backgroundTintList = getColorStateList(holder.binding.player1ScoreChange.context, R.color.tb_bland_red)
 			holder.binding.player1ScoreChange.setTextColor(getColor(holder.binding.player1ScoreChange.context, R.color.tb_red))
 			val drawable: Drawable? = getDrawable(holder.binding.player1ScoreChange.context, R.drawable.vector_down)
 			holder.binding.player1ScoreChange.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
 		} else {
-			holder.binding.player1ScoreChange.setBackgroundColor(getColor(holder.binding.player1ScoreChange.context, R.color.tb_bland_green))
+			holder.binding.player1ScoreChange.backgroundTintList = getColorStateList(holder.binding.player1ScoreChange.context, R.color.tb_bland_green)
 			holder.binding.player1ScoreChange.setTextColor(getColor(holder.binding.player1ScoreChange.context, R.color.tb_primary_green))
 			val drawable: Drawable? = getDrawable(holder.binding.player1ScoreChange.context, R.drawable.vector_up)
 			holder.binding.player1ScoreChange.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
 		}
-		holder.binding.player1ScoreChange.text = differenceP1
+		holder.binding.player1ScoreChange.text = differenceP1.trimStart('-')
 
-		// Bind player two data
 		if(match.playerTwoProfilePic != null) {
 			if (match.playerTwoProfilePic.contains("default")) {
 				val resourceId = getDefaultDrawableResourceId(holder.binding.player1Image.context, match.playerTwoProfilePic.removeSuffix(".png"))
@@ -67,19 +66,18 @@ class MatchesAdapter @Inject constructor(): CoreAdapter<MatchItemViewHolder>() {
 		holder.binding.player2RatingValue.text = match.playerTwoCurrentRating
 		val differenceP2 = ratingChange(match.playerTwoCurrentRating, match.playerTwoPreviousRating)
 		if(differenceP2.contains("-")) {
-			holder.binding.player2ScoreChange.setBackgroundColor(getColor(holder.binding.player2ScoreChange.context, R.color.tb_bland_red))
+			holder.binding.player2ScoreChange.backgroundTintList = getColorStateList(holder.binding.player2ScoreChange.context, R.color.tb_bland_red)
 			holder.binding.player2ScoreChange.setTextColor(getColor(holder.binding.player2ScoreChange.context, R.color.tb_red))
 			val drawable: Drawable? = getDrawable(holder.binding.player2ScoreChange.context, R.drawable.vector_down)
 			holder.binding.player2ScoreChange.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
 		} else {
-			holder.binding.player2ScoreChange.setBackgroundColor(getColor(holder.binding.player2ScoreChange.context, R.color.tb_bland_green))
+			holder.binding.player2ScoreChange.backgroundTintList = getColorStateList(holder.binding.player2ScoreChange.context, R.color.tb_bland_green)
 			holder.binding.player2ScoreChange.setTextColor(getColor(holder.binding.player2ScoreChange.context, R.color.tb_primary_green))
 			val drawable: Drawable? = getDrawable(holder.binding.player2ScoreChange.context, R.drawable.vector_up)
 			holder.binding.player2ScoreChange.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
 		}
-		holder.binding.player2ScoreChange.text = differenceP2
+		holder.binding.player2ScoreChange.text = differenceP2.trimStart('-')
 
-		// Bind other data
 		holder.binding.score.text = match.score
 		holder.binding.set11.text = match.set11
 		holder.binding.set12.text = match.set12

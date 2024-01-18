@@ -1,24 +1,13 @@
 package tennis.bot.mobile.profile.matches
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
-import tennis.bot.mobile.databinding.FragmentAccountPageBinding
 import tennis.bot.mobile.databinding.FragmentMatchesBinding
-import tennis.bot.mobile.onboarding.login.LoginDialogFragment
-import tennis.bot.mobile.profile.account.AccountPageAdapter
-import tennis.bot.mobile.profile.account.AccountPageFragment
-import tennis.bot.mobile.profile.account.AccountPageUiState
-import tennis.bot.mobile.profile.account.AccountPageViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -46,12 +35,13 @@ class MatchesFragment : CoreFragment<FragmentMatchesBinding>() {
 			viewModel.onOptionClicked(buttonClicked = binding.lostMatchesButton, binding.wonMatchesButton, binding.allMatchesButton)
 		}
 
-
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: MatchesUiState ->
 			when(uiState){
 				is MatchesUiState.Loading -> {
 					binding.errorLayout.visibility = View.GONE
+					binding.matchesContainer.visibility = View.VISIBLE
 					binding.loadingBar.visibility = View.VISIBLE
+					viewModel.onFetchingMatches()
 
 				}
 				is MatchesUiState.MatchesDataReceived -> {
@@ -62,12 +52,12 @@ class MatchesFragment : CoreFragment<FragmentMatchesBinding>() {
 
 				}
 				is MatchesUiState.Error -> {
+					binding.loadingBar.visibility = View.GONE
 					binding.matchesContainer.visibility = View.GONE
 					binding.errorLayout.visibility = View.VISIBLE
 				}
 			}
 		}
-
 	}
 
 }

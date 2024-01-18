@@ -2,22 +2,27 @@ package tennis.bot.mobile.profile.matches
 
 import android.widget.TextView
 import androidx.core.content.ContextCompat.getColor
+import androidx.core.content.ContextCompat.getColorStateList
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
 import javax.inject.Inject
 
 @HiltViewModel
-class MatchesViewModel  @Inject constructor(): ViewModel() {
+class MatchesViewModel  @Inject constructor(
+	private val repository: MatchesRepository
+): ViewModel() {
 	fun onOptionClicked(buttonClicked: TextView, buttonNotClicked1: TextView, buttonNotClicked2: TextView) {
-		buttonClicked.setBackgroundColor(getColor(buttonClicked.context, R.color.tb_bg_card))
+		buttonClicked.backgroundTintList = getColorStateList(buttonClicked.context, R.color.tb_bg_card)
 		buttonClicked.setTextColor(getColor(buttonClicked.context, R.color.tb_gray_dark))
 
-		buttonNotClicked1.setBackgroundColor(getColor(buttonNotClicked1.context, R.color.invisible))
+		buttonNotClicked1.backgroundTintList = getColorStateList(buttonNotClicked1.context, R.color.invisible)
 		buttonNotClicked1.setTextColor(getColor(buttonNotClicked1.context, R.color.tb_gray_active))
-		buttonNotClicked2.setBackgroundColor(getColor(buttonNotClicked2.context, R.color.invisible))
+		buttonNotClicked2.backgroundTintList = getColorStateList(buttonNotClicked2.context, R.color.invisible)
 		buttonNotClicked2.setTextColor(getColor(buttonNotClicked2.context, R.color.tb_gray_active))
 	}
 
@@ -82,12 +87,15 @@ class MatchesViewModel  @Inject constructor(): ViewModel() {
 	)
 
 	private val _uiStateFlow = MutableStateFlow<MatchesUiState>(
-		MatchesUiState.MatchesDataReceived(
-			mockData
-		)
+		MatchesUiState.Loading
 	)
 	val uiStateFlow = _uiStateFlow.asStateFlow()
 
-
+	fun onFetchingMatches(){
+		viewModelScope.launch {
+			val matches = repository.getMatchItems()
+			_uiStateFlow.value = MatchesUiState.MatchesDataReceived( matches )
+		}
+	}
 
 }

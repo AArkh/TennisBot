@@ -12,6 +12,10 @@ class MatchesRepository @Inject constructor(
 	private val api: MatchesApi,
 	private val tokenRepo: AuthTokenRepository
 ) {
+
+	private val dateTimeFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+	private val someOtherFormatter = SimpleDateFormat("d MMMM, HH:mm", Locale("ru", "RU"))
+
 	@WorkerThread
 	suspend fun getMatches() : List<MatchResponseItem> {
 		return api.getScores().execute().body() ?: emptyList()
@@ -22,27 +26,26 @@ class MatchesRepository @Inject constructor(
 		return api.getTestScores().execute().body() ?: emptyList()
 	}
 
-	fun List<MatchResponseItem>.convertToMatchItemList(): List<MatchItem> {
+	@WorkerThread
+	suspend fun getMatchItems(): List<MatchItem> {
+		val networkMatches = getTestMatches()
+		return networkMatches.convertToMatchItemList()
+	}
+
+	private fun List<MatchResponseItem>.convertToMatchItemList(): List<MatchItem> {
 		return map { matchResponseItem ->
-			// Convert the photo URL to the appropriate format if needed
 			val playerOneProfilePic = matchResponseItem.players.getOrNull(0)?.photo
 			val playerTwoProfilePic = matchResponseItem.players.getOrNull(1)?.photo
 
-			// Example: Format the date and time
-			val dateTime = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-				.parse(matchResponseItem.playedAt)?.let {
-					SimpleDateFormat("d MMMM, HH:mm", Locale("ru", "RU")).format(it)
-				} ?: ""
+			val timeStampMs = dateTimeFormatter.parse(matchResponseItem.playedAt)
+			val dateTime = someOtherFormatter.format(timeStampMs) ?: ""
 
-			// Example: Calculate the scores for sets
 			val set11 = matchResponseItem.gameSets.getOrNull(0)?.score1.toString() ?: ""
 			val set12 = matchResponseItem.gameSets.getOrNull(1)?.score1.toString() ?: ""
 			val set13 = matchResponseItem.gameSets.getOrNull(2)?.score1.toString() ?: ""
 			val set21 = matchResponseItem.gameSets.getOrNull(0)?.score2.toString() ?: ""
 			val set22 = matchResponseItem.gameSets.getOrNull(1)?.score2.toString() ?: ""
 			val set23 = matchResponseItem.gameSets.getOrNull(2)?.score2.toString() ?: ""
-
-			// Example: Calculate other values similarly
 
 			MatchItem(
 				matchResponseItem.win,

@@ -14,10 +14,11 @@ interface MatchesApi {
 	): Call<List<MatchResponseItem>>
 
 	@Headers(
+		"Authorization: Bearer 123",
 		"secretTelegramToken: superSecret",
 		"playerId: 23392545"
 	)
-	@GET("/api/games/scores")
+	@GET("/api/games/scores/477452566")
 	suspend fun getTestScores(
 		@Query("skip") skip:Int = DEFAULT_SKIP,
 		@Query("limit") limit:Int = DEFAULT_LIMIT
