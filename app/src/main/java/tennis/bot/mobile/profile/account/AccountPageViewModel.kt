@@ -126,8 +126,6 @@ class AccountPageViewModel @Inject constructor(
 		onFetchingProfileData()
 	}
 
-
-
 	val dummyContactsForButtons = listOf(
 		SurveyResultItem("something else", "something else's value"),
 		SurveyResultItem("something else", "something else's value"),
@@ -154,12 +152,12 @@ class AccountPageViewModel @Inject constructor(
 		return percentage
 	}
 
-	fun onPickedProfilePic(uri: Uri) {
-		onboardingRepository.recordUserPickedPictureUri( uri.toString() )
-		Log.d("123456", "$uri Uri is successfully recorded as a String")
-		viewModelScope.launch(Dispatchers.IO) {
-			onboardingRepository.postProfilePicture()
-			Log.d("123456", "$uri Url is being posted")
-		}
-	}
+//	fun onPickedProfilePic(uri: Uri) {
+//		onboardingRepository.recordUserPickedPictureUri( uri.toString() )
+//		Log.d("123456", "$uri Uri is successfully recorded as a String")
+//		viewModelScope.launch(Dispatchers.IO) {
+//			onboardingRepository.postProfilePicture()
+//			Log.d("123456", "$uri Url is being posted")
+//		}
+//	}
 }

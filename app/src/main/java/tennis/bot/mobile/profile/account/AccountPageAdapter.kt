@@ -1,10 +1,14 @@
 package tennis.bot.mobile.profile.account
 
+import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat.getColor
+import androidx.core.view.setPadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -21,6 +25,7 @@ import tennis.bot.mobile.databinding.AccountTournamentsBinding
 import tennis.bot.mobile.databinding.RecyclerEmptyItemBinding
 import tennis.bot.mobile.onboarding.survey.SurveyResultsAdapter
 import tennis.bot.mobile.utils.animateButtonTransition
+import tennis.bot.mobile.utils.dpToPx
 import javax.inject.Inject
 
 class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>(){
@@ -37,6 +42,7 @@ class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHol
 		private const val FRIENDS = 5
 		private const val BUTTON_SWITCH = 6
 		private const val OTHER = 7
+		const val IMAGES_LINK = "http://bugz.su:9000/profilepictures/"
 		const val NULL_STRING = "null"
 	}
 
@@ -47,7 +53,17 @@ class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHol
 				holder.binding.nameSurname.text = basicInfoAndRating.nameSurname
 				holder.binding.ratingLayout.singleRatingValue.text = basicInfoAndRating.singleRating
 				if(basicInfoAndRating.profileImageUrl != null) {
-					holder.binding.accountPhoto.load(basicInfoAndRating.profileImageUrl) { crossfade(true) }
+					if (basicInfoAndRating.profileImageUrl.contains("default")) {
+						Log.d("123456", "default image case was triggered")
+						val resourceId = getDefaultDrawableResourceId(holder.binding.accountPhoto.context, basicInfoAndRating.profileImageUrl.removeSuffix(".png"))
+						holder.binding.accountPhoto.visibility = View.VISIBLE
+						if (resourceId != null) holder.binding.accountPhoto.setImageResource(resourceId)
+						holder.binding.placeholderPhoto.visibility = View.GONE
+					} else {
+						holder.binding.accountPhoto.visibility = View.VISIBLE
+						holder.binding.accountPhoto.load(IMAGES_LINK + basicInfoAndRating.profileImageUrl) { crossfade(true) }
+						holder.binding.placeholderPhoto.visibility = View.GONE
+					}
 				}
 				if (basicInfoAndRating.telegramId != NULL_STRING) {
 					holder.binding.telegramId.text = basicInfoAndRating.telegramId
@@ -181,6 +197,17 @@ class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHol
 			6 -> BUTTON_SWITCH
 			else -> OTHER
 		}
+	}
+}
+
+fun getDefaultDrawableResourceId(context: Context, drawableName: String): Int? {
+	val resourceId = context.resources.getIdentifier(drawableName, "drawable", context.packageName)
+
+	return if (resourceId != 0) {
+		resourceId
+	} else {
+		Log.d("123456", "couldn't find the drawable")
+		null
 	}
 }
 

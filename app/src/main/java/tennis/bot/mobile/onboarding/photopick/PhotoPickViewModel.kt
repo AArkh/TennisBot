@@ -5,10 +5,7 @@ import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
-import android.widget.ImageView
 import androidx.lifecycle.ViewModel
-import coil.load
-import coil.request.Disposable
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +13,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import tennis.bot.mobile.R
 import tennis.bot.mobile.onboarding.survey.OnboardingRepository
 import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
 
 @HiltViewModel
 class PhotoPickViewModel @Inject constructor(
@@ -25,16 +21,16 @@ class PhotoPickViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val imageList = listOf(
-        CircledImage(1, R.drawable.photo_picker_1),
-        CircledImage(2,R.drawable.photo_picker_2),
-        CircledImage(3,R.drawable.photo_picker_3),
-        CircledImage(4,R.drawable.photo_picker_4),
-        CircledImage(5,R.drawable.photo_picker_5),
-        CircledImage(6,R.drawable.photo_picker_6),
-        CircledImage(7,R.drawable.photo_picker_7),
-        CircledImage(8,R.drawable.photo_picker_8),
-        CircledImage(9,R.drawable.photo_picker_9),
-        CircledImage(10,R.drawable.photo_picker_10),
+        CircledImage(1, R.drawable.default1),
+        CircledImage(2,R.drawable.default2),
+        CircledImage(3,R.drawable.default3),
+        CircledImage(4,R.drawable.default4),
+        CircledImage(5,R.drawable.default5),
+        CircledImage(6,R.drawable.default6),
+        CircledImage(7,R.drawable.default7),
+        CircledImage(8,R.drawable.default8),
+        CircledImage(9,R.drawable.default9),
+        CircledImage(10,R.drawable.default10),
         CircledImage(11,R.drawable.photo_picker_11),
         CircledImage(12,R.drawable.photo_picker_12)
     )

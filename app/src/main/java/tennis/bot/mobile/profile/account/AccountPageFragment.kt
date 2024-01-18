@@ -25,7 +25,7 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 	private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
 		if (uri != null) {
 			Log.d("PhotoPicker", "Selected URI: $uri")
-			viewModel.onPickedProfilePic(uri)
+//			viewModel.onPickedProfilePic(uri)
 		} else {
 			Log.d("PhotoPicker", "No media selected")
 		}
@@ -51,7 +51,7 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 		}
 
 		binding.tryAgainTv.setOnClickListener {
-			viewModel.onFetchingProfileData()
+			viewModel.onTryAgainPressed()
 		}
 
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: AccountPageUiState ->
