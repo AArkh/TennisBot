@@ -17,6 +17,11 @@ class MatchesRepository @Inject constructor(
 		return api.getScores().execute().body() ?: emptyList()
 	}
 
+	@WorkerThread
+	suspend fun getTestMatches(): List<MatchResponseItem> {
+		return api.getTestScores().execute().body() ?: emptyList()
+	}
+
 	fun List<MatchResponseItem>.convertToMatchItemList(): List<MatchItem> {
 		return map { matchResponseItem ->
 			// Convert the photo URL to the appropriate format if needed
