@@ -66,6 +66,9 @@ class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHol
 				holder.binding.faqButton.setOnClickListener {
 					// todo going to FAQ
 				}
+				holder.binding.accountPhotoFrame.setOnClickListener {
+					clickListener?.invoke(AccountPageFragment.PICK_IMAGE)
+				}
 			}
 			is AccountCalibrationViewHolder -> {
 				val calibration = item as? Calibration ?: throw IllegalArgumentException("Item must be Calibration")

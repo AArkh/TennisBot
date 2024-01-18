@@ -14,6 +14,7 @@ import tennis.bot.mobile.databinding.FragmentLoginProposalBinding
 import tennis.bot.mobile.profile.account.AccountPageFragment
 import tennis.bot.mobile.onboarding.login.LoginFragment
 import tennis.bot.mobile.onboarding.phone.PhoneInputFragment
+import tennis.bot.mobile.onboarding.photopick.PhotoPickFragment
 import tennis.bot.mobile.profile.matches.MatchesFragment
 import javax.inject.Inject
 
@@ -53,7 +54,7 @@ class LoginProposalFragment : CoreFragment<FragmentLoginProposalBinding>() {
         binding.buttonWithoutRegistration.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .addToBackStack(this::class.java.name)
-                .replace(R.id.fragment_container_view, MatchesFragment())
+                .replace(R.id.fragment_container_view, PhotoPickFragment())
                 .commit()
         }
         binding.buttonLogin.setOnClickListener {

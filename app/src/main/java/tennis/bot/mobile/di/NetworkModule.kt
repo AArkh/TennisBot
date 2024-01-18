@@ -16,8 +16,10 @@ import tennis.bot.mobile.profile.account.EnumsApi
 import tennis.bot.mobile.profile.account.UserProfileApi
 import tennis.bot.mobile.onboarding.location.LocationApi
 import tennis.bot.mobile.onboarding.phone.SmsApi
+import tennis.bot.mobile.onboarding.photopick.PhotoPickApi
 import tennis.bot.mobile.onboarding.survey.RegisterAndLoginApi
 import tennis.bot.mobile.onboarding.survey.NewPlayerApi
+import tennis.bot.mobile.profile.matches.MatchesApi
 import tennis.bot.mobile.utils.LoggingInterceptor
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
@@ -28,10 +30,13 @@ import javax.inject.Singleton
 class NetworkModule {
 
     companion object {
+        const val WITH_AUTHENTICATION = "WITH_AUTHENTICATION"
         const val SMS_CODES = "BALANCES_ALLOWANCES"
         const val NEW_REGISTRATION = "NEW_REGISTRATION"
         const val NEW_PLAYER = "NEW_PLAYER"
         const val USER_PROFILE = "USER_PROFILE"
+        const val PROFILE_PICTURE = "PROFILE_PICTURE"
+        const val SCORES = "SCORES"
     }
 
     @Provides
@@ -46,7 +51,7 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    @Named(NEW_PLAYER)
+    @Named(WITH_AUTHENTICATION)
     fun provideNewRegistrationOkHttpClient(
         loggingInterceptor: LoggingInterceptor,
         authInterceptor: AuthInterceptor
@@ -106,7 +111,7 @@ class NetworkModule {
     @Named(NEW_PLAYER)
     @Singleton
     fun provideNewPlayerRetrofit(
-        @Named(NEW_PLAYER) okHttpClient: OkHttpClient,
+        @Named(WITH_AUTHENTICATION) okHttpClient: OkHttpClient,
         converterFactory: Converter.Factory
     ): Retrofit {
         return Retrofit.Builder()
@@ -120,7 +125,35 @@ class NetworkModule {
     @Named(USER_PROFILE)
     @Singleton
     fun provideUserProfileRetrofit(
-        @Named(NEW_PLAYER) okHttpClient: OkHttpClient,
+        @Named(WITH_AUTHENTICATION) okHttpClient: OkHttpClient,
+        converterFactory: Converter.Factory
+    ): Retrofit {
+        return Retrofit.Builder()
+            .client(okHttpClient)
+            .baseUrl("https://bugz.su:8443/core/") //todo вынести debug && prod url в gradle build config
+            .addConverterFactory(converterFactory)
+            .build()
+    }
+
+    @Provides
+    @Named(PROFILE_PICTURE)
+    @Singleton
+    fun provideProfilePictureRetrofit(
+        @Named(WITH_AUTHENTICATION) okHttpClient: OkHttpClient,
+        converterFactory: Converter.Factory
+    ): Retrofit {
+        return Retrofit.Builder()
+            .client(okHttpClient)
+            .baseUrl("https://bugz.su:8443/core/") //todo вынести debug && prod url в gradle build config
+            .addConverterFactory(converterFactory)
+            .build()
+    }
+
+    @Provides
+    @Named(SCORES)
+    @Singleton
+    fun provideScoresRetrofit(
+        okHttpClient: OkHttpClient,
         converterFactory: Converter.Factory
     ): Retrofit {
         return Retrofit.Builder()
@@ -162,8 +195,20 @@ class NetworkModule {
 
     @Provides
     @Singleton
+    fun providePhotoPickApiClient(
+        @Named(PROFILE_PICTURE) retrofit: Retrofit
+    ): PhotoPickApi = retrofit.create(PhotoPickApi::class.java)
+
+    @Provides
+    @Singleton
     fun provideEnumsApiClient(
         @Named(NEW_REGISTRATION) retrofit: Retrofit
     ): EnumsApi = retrofit.create(EnumsApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideMatchesApiClient(
+        @Named(SCORES) retrofit: Retrofit
+    ): MatchesApi = retrofit.create(MatchesApi::class.java)
 }
 

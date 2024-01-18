@@ -32,6 +32,7 @@ class RecyclerCircledPhotoItemViewHolder(
 ) : RecyclerView.ViewHolder(binding.root)
 
 data class CircledImage(
+    val id: Int,
     @DrawableRes val imageRes: Int,
     val isSelected: Boolean = false
 ): CoreUtilsItem()

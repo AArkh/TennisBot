@@ -1,5 +1,6 @@
 package tennis.bot.mobile.onboarding.photopick
 
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -7,6 +8,8 @@ import android.util.Log
 import android.view.View
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.setPadding
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -17,6 +20,7 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentPhotoPickBinding
 import tennis.bot.mobile.onboarding.password.PasswordFragment
+import tennis.bot.mobile.utils.dpToPx
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -55,10 +59,12 @@ class PhotoPickFragment : CoreFragment<FragmentPhotoPickBinding>() {
         }
 
         binding.buttonNext.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_view, PasswordFragment())
-                .addToBackStack(PasswordFragment::class.java.name)
-                .commit()
+            viewModel.onButtonNextClicked {
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_view, PasswordFragment())
+                    .addToBackStack(PasswordFragment::class.java.name)
+                    .commit()
+            }
         }
 
         subscribeToFlowOn(viewModel.uiStateFlow) { uiState: PhotoPickUiState ->
@@ -97,11 +103,11 @@ class PhotoPickFragment : CoreFragment<FragmentPhotoPickBinding>() {
                     } else viewModel.onInitial()
                 }
                 is PhotoPickUiState.PickedUserImage -> {
-                    binding.pickPhotoImage.load(uiState.userPickedImage) {
-                        crossfade(true)
-                    }
+                    binding.pickPhotoImage.load(uiState.userPickedImage) { crossfade(true) }
                     binding.pickPhotoButton.setBackgroundColor(Color.TRANSPARENT)
-                    binding.pickPhotoButton.setPadding(0)
+                    binding.pickPhotoButton.setPadding(requireContext().dpToPx(4))
+                    binding.pickPhotoImage.strokeColor = ColorStateList.valueOf(getColor(requireContext(), R.color.tb_primary_green))
+
                     binding.buttonNext.isEnabled = uiState.nextButtonEnabled
                     binding.buttonNext.setBackgroundResource(R.drawable.btn_bkg_enabled)
                 }

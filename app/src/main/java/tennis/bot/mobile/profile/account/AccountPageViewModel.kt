@@ -1,6 +1,10 @@
 package tennis.bot.mobile.profile.account
 
 import android.content.Context
+import android.database.Cursor
+import android.net.Uri
+import android.provider.MediaStore
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,13 +14,17 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
+import tennis.bot.mobile.onboarding.photopick.getRealPathFromUri
+import tennis.bot.mobile.onboarding.survey.OnboardingRepository
 import tennis.bot.mobile.onboarding.survey.SurveyResultItem
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
 class AccountPageViewModel @Inject constructor(
 	@ApplicationContext private val context: Context,
-	private val repository: UserProfileAndEnumsRepository
+	private val repository: UserProfileAndEnumsRepository,
+	private val onboardingRepository: OnboardingRepository
 ): ViewModel() {
 
 	companion object {
@@ -144,5 +152,14 @@ class AccountPageViewModel @Inject constructor(
 		}
 
 		return percentage
+	}
+
+	fun onPickedProfilePic(uri: Uri) {
+		onboardingRepository.recordUserPickedPictureUri( uri.toString() )
+		Log.d("123456", "$uri Uri is successfully recorded as a String")
+		viewModelScope.launch(Dispatchers.IO) {
+			onboardingRepository.postProfilePicture()
+			Log.d("123456", "$uri Url is being posted")
+		}
 	}
 }

@@ -1,7 +1,9 @@
 package tennis.bot.mobile.profile.matches
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.setPadding
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import tennis.bot.mobile.core.CoreAdapter
@@ -13,12 +15,16 @@ class MatchesAdapter @Inject constructor(): CoreAdapter<MatchItemViewHolder>() {
 	override fun onBindViewHolder(holder: MatchItemViewHolder, item: Any) {
 		val match = item as? MatchItem ?: throw IllegalArgumentException("Item must be MatchItem")
 		holder.binding.player1Image.load(match.playerOneProfilePic) { crossfade(true) }
+		holder.binding.player1Image.setBackgroundColor(Color.TRANSPARENT)
+		holder.binding.player1Image.setPadding(0)
 		holder.binding.player1Name.text = match.playerOneName
 		holder.binding.player1RatingValue.text = match.playerOneCurrentRating
 		holder.binding.player1ScoreChange.text = match.playerOnePreviousRating // todo
 
 		// Bind player two data
 		holder.binding.player2Image.load(match.playerTwoProfilePic) { crossfade(true) }
+		holder.binding.player2Image.setBackgroundColor(Color.TRANSPARENT)
+		holder.binding.player2Image.setPadding(0)
 		holder.binding.player2Name.text = match.playerTwoName
 		holder.binding.player2RatingValue.text = match.playerTwoCurrentRating
 		holder.binding.player2ScoreChange.text = match.playerTwoPreviousRating // todo

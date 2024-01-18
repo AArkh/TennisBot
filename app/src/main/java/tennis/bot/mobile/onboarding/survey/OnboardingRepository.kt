@@ -1,19 +1,30 @@
 package tennis.bot.mobile.onboarding.survey
 
 import android.content.Context
+import android.database.Cursor
+import android.net.Uri
+import android.provider.MediaStore
+import android.util.Base64
 import android.util.Log
 import androidx.annotation.WorkerThread
+import androidx.core.net.toUri
 import dagger.hilt.android.qualifiers.ApplicationContext
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import tennis.bot.mobile.core.AuthTokenRepository
-import java.lang.StringBuilder
+import tennis.bot.mobile.onboarding.photopick.PhotoPickApi
+import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
 
+
 @Singleton
 class OnboardingRepository @Inject constructor(
-    @ApplicationContext context: Context,
-    private val api: RegisterAndLoginApi,
+    @ApplicationContext private val context: Context,
+    private val registerAndLoginApi: RegisterAndLoginApi,
     private val newPlayerApi: NewPlayerApi,
+    private val photoPickApi: PhotoPickApi,
     private val tokenRepo: AuthTokenRepository,
 ) {
 
@@ -45,7 +56,7 @@ class OnboardingRepository @Inject constructor(
     @WorkerThread
     suspend fun postRegister(): Boolean {
         val response = kotlin.runCatching {
-            api.postRegister(
+            registerAndLoginApi.postRegister(
                 Register(
                     phoneNumber = getPhoneNumber(),
                     password = getPassword(),
@@ -64,18 +75,17 @@ class OnboardingRepository @Inject constructor(
 
     @WorkerThread
     suspend fun postLogin() {
-        val response = api.loginUser(
-            grantType = "password",
-            clientId = "Core_Android",
+        val response = registerAndLoginApi.loginUser(
+            grantType = GRANT_TYPE,
+            clientId = CLIENT_ID,
             username = getPhoneNumber().toString(),
             password = getPassword().toString(),
-            clientSecret = "Aitq2BWbQDR8pOiOwFS5SXGlss93xLlY",
-            scope = "roles offline_access",
-            audience = "Core"
+            clientSecret = CLIENT_SECRET,
+            scope = SCOPE,
+            audience = AUDIENCE
         )
 
         if (response.code() == 200) {
-            Log.d("1234567", "token has been recorded")
             tokenRepo.recordToken(
                 TokenResponse(
                     accessToken = response.body()!!.accessToken,
@@ -84,19 +94,20 @@ class OnboardingRepository @Inject constructor(
                     refreshToken = response.body()!!.refreshToken
                 )
             )
+            Log.d("1234567", "token has been recorded")
         }
     }
 
     @WorkerThread
     suspend fun postLogin(username: String, password: String): Int {
-        val response = api.loginUser(
-            grantType = "password",
-            clientId = "Core_Android",
+        val response = registerAndLoginApi.loginUser(
+            grantType = GRANT_TYPE,
+            clientId = CLIENT_ID,
             username = username.toApiNumericFormat(),
             password = password,
-            clientSecret = "Aitq2BWbQDR8pOiOwFS5SXGlss93xLlY",
-            scope = "roles offline_access",
-            audience = "Core"
+            clientSecret = CLIENT_SECRET,
+            scope = SCOPE,
+            audience = AUDIENCE
         )
 
         if (response.code() == 200) {
@@ -145,10 +156,59 @@ class OnboardingRepository @Inject constructor(
 		return response.isSuccessful
 	}
 
+    @WorkerThread
+    suspend fun postProfilePicture(): Int {
+        val file = uriToFile(context, getUserPickedPictureUri()!!.toUri())
+        val requestFile = file?.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+        val imagePart = MultipartBody.Part.createFormData("Content", file?.name, requestFile!!)
+
+        val response = photoPickApi.postProfilePicture(
+            registerPhoto = true,
+            Content = imagePart,
+            name = "",
+            authHeader = tokenRepo.getAccessToken() ?: ""
+        )
+
+        if (response.code() == 204) {
+            Log.d("123456", "profilePic was posted")
+        } else if (response.code() == 400) {
+            Log.d("123456", "profilePic has crashed and burned")
+        }
+
+        return response.code()
+    }
+
+    @WorkerThread
+    suspend fun postDefaultProfilePictureId(): Int {
+        val response = photoPickApi.postDefaultProfilePictureId(
+            registerPhoto = true,
+            defaultPhotoId = getPreselectedProfilePictureId(),
+            authHeader = tokenRepo.getAccessToken() ?: ""
+        )
+
+        if (response.code() == 204) {
+            Log.d("123456", "profilePic was posted")
+        } else if (response.code() == 400) {
+            Log.d("123456", "profilePic has crashed and burned")
+        }
+
+        return response.code()
+    }
+
 	fun recordPhoneNumberAndSmsCode(phoneNumber: String, smsVerifyCode: String) {
 		sharedPreferences.edit().putString(PHONE_NUMBER_HEADER, phoneNumber.toApiNumericFormat()).apply()
 		sharedPreferences.edit().putString(SMS_VERIFY_CODE_HEADER, smsVerifyCode).apply()
 	}
+
+    fun recordPreselectedPictureId(pictureId: Int?) {
+        if (pictureId != null) {
+            sharedPreferences.edit().putInt(PRESELECTED_PROFILE_PICTURE_ID, pictureId).apply()
+        }
+    }
+
+    fun recordUserPickedPictureUri(userPictureUri: String) {
+        sharedPreferences.edit().putString(USER_PROFILE_PICTURE, userPictureUri).apply()
+    }
 
     fun recordNameSurnameAndGender(name: String, surname: String, gender: Int) {
         val booleanValue: Boolean = when (gender) {
@@ -207,8 +267,26 @@ class OnboardingRepository @Inject constructor(
         return sharedPreferences.getString(TELEGRAM_ID_HEADER, null)
     }
 
+    fun getPreselectedProfilePictureId(): Int {
+        return sharedPreferences.getInt(PRESELECTED_PROFILE_PICTURE_ID, 0)
+    }
+
+    fun getUserPickedPictureUri(): String? {
+        return sharedPreferences.getString(USER_PROFILE_PICTURE, null)
+    }
+
     fun getPassword(): String? {
         return sharedPreferences.getString(PASSWORD_HEADER, null)
+    }
+
+    private fun uriToFile(context: Context, uri: Uri): File? {
+        val projection = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor: Cursor? = context.contentResolver.query(uri, projection, null, null, null)
+        val columnIndex: Int? = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        cursor?.moveToFirst()
+        val filePath: String? = columnIndex?.let { cursor.getString(it) }
+        cursor?.close()
+        return filePath?.let { File(it) }
     }
 
     private fun String.toApiNumericFormat(): String {
@@ -232,6 +310,14 @@ class OnboardingRepository @Inject constructor(
         const val CITY_ID_HEADER = "cityId"
         const val DISTRICT_ID_HEADER = "districtId"
         const val TELEGRAM_ID_HEADER = "telegramId"
+        const val PRESELECTED_PROFILE_PICTURE_ID = "profilePictureId"
+        const val USER_PROFILE_PICTURE = "userProfilePicture"
+
+        private const val CLIENT_SECRET = "Aitq2BWbQDR8pOiOwFS5SXGlss93xLlY"
+        private const val GRANT_TYPE = "password"
+        private const val CLIENT_ID = "Core_Android"
+        private const val SCOPE = "roles offline_access"
+        private const val AUDIENCE = "Core"
     }
 }
 

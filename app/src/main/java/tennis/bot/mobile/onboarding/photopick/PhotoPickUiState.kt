@@ -19,6 +19,7 @@ sealed class PhotoPickUiState {
 
     data class PickedUserImage(
         val userPickedImage: Uri, // choose the correct type
+        val iconList: List<CircledImage>,
         val nextButtonEnabled: Boolean
     ) : PhotoPickUiState()
 }
