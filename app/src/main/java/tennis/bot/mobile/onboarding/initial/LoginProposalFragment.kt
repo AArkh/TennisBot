@@ -54,7 +54,7 @@ class LoginProposalFragment : CoreFragment<FragmentLoginProposalBinding>() {
         binding.buttonWithoutRegistration.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .addToBackStack(this::class.java.name)
-                .replace(R.id.fragment_container_view, PhotoPickFragment())
+                .replace(R.id.fragment_container_view, MatchesFragment())
                 .commit()
         }
         binding.buttonLogin.setOnClickListener {

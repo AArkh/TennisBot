@@ -3,6 +3,7 @@ package tennis.bot.mobile.profile.matches
 import kotlinx.serialization.Serializable
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.Query
 
 interface MatchesApi {
@@ -12,9 +13,19 @@ interface MatchesApi {
 		@Query("limit") limit:Int = DEFAULT_LIMIT
 	): Call<List<MatchResponseItem>>
 
+	@Headers(
+		"secretTelegramToken: superSecret",
+		"playerId: 23392545"
+	)
+	@GET("/api/games/scores")
+	suspend fun getTestScores(
+		@Query("skip") skip:Int = DEFAULT_SKIP,
+		@Query("limit") limit:Int = DEFAULT_LIMIT
+	)
+
 	companion object{
 		const val DEFAULT_SKIP = 0
-		const val DEFAULT_LIMIT = 10
+		const val DEFAULT_LIMIT = 20
 	}
 }
 
