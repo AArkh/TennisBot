@@ -152,7 +152,10 @@ class OnboardingRepository @Inject constructor(
 					)
 				), tokenRepo.getAccessToken() ?: ""
 			)
-		}.getOrElse { return false }
+		}.onSuccess {
+            postLogin()
+            postDefaultProfilePictureId()
+        }.getOrElse { return false }
 		return response.isSuccessful
 	}
 
@@ -181,7 +184,6 @@ class OnboardingRepository @Inject constructor(
     @WorkerThread
     suspend fun postDefaultProfilePictureId(): Int {
         val response = photoPickApi.postDefaultProfilePictureId(
-            registerPhoto = true,
             defaultPhotoId = getPreselectedProfilePictureId(),
             authHeader = tokenRepo.getAccessToken() ?: ""
         )
