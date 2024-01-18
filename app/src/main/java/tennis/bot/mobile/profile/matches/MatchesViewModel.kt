@@ -23,6 +23,8 @@ class MatchesViewModel  @Inject constructor(): ViewModel() {
 
 	val mockData = listOf(
 		MatchItem(
+			isWin = true,
+			isDouble = false,
 			playerOneProfilePic = "url_player_one",
 			playerOneName = "Player One",
 			playerOneCurrentRating = "1200",
@@ -40,6 +42,8 @@ class MatchesViewModel  @Inject constructor(): ViewModel() {
 			set23 = "5",
 			dateTime = "2022-01-01"),
 		MatchItem(
+			isWin = true,
+			isDouble = false,
 			playerOneProfilePic = "url_player_one_1",
 			playerOneName = "Player One 1",
 			playerOneCurrentRating = "1180",
@@ -57,6 +61,8 @@ class MatchesViewModel  @Inject constructor(): ViewModel() {
 			set23 = " ",
 			dateTime = "2022-01-02"),
 		MatchItem(
+			isWin = true,
+			isDouble = false,
 			playerOneProfilePic = "url_player_one_2",
 			playerOneName = "Player One 2",
 			playerOneCurrentRating = "1250",

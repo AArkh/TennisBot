@@ -22,6 +22,8 @@ import javax.inject.Inject
 class MatchesAdapter @Inject constructor(): CoreAdapter<MatchItemViewHolder>() {
 	override fun onBindViewHolder(holder: MatchItemViewHolder, item: Any) {
 		val match = item as? MatchItem ?: throw IllegalArgumentException("Item must be MatchItem")
+
+		// Bind player one data
 		if(match.playerOneProfilePic != null) {
 			if (match.playerOneProfilePic.contains("default")) {
 				val resourceId = getDefaultDrawableResourceId(holder.binding.player1Image.context, match.playerOneProfilePic.removeSuffix(".png"))
@@ -33,6 +35,7 @@ class MatchesAdapter @Inject constructor(): CoreAdapter<MatchItemViewHolder>() {
 			}
 		}
 		holder.binding.player1Name.text = match.playerOneName.substringBefore(" ")
+		holder.binding.player1NameSurname.text = match.playerOneName
 		holder.binding.player1RatingValue.text = match.playerOneCurrentRating
 		val differenceP1 = ratingChange(match.playerOneCurrentRating, match.playerOnePreviousRating)
 		if(differenceP1.contains("-")) {
@@ -60,6 +63,7 @@ class MatchesAdapter @Inject constructor(): CoreAdapter<MatchItemViewHolder>() {
 			}
 		}
 		holder.binding.player2Name.text = match.playerTwoName.substringBefore(" ")
+		holder.binding.player2NameSurname.text = match.playerTwoName
 		holder.binding.player2RatingValue.text = match.playerTwoCurrentRating
 		val differenceP2 = ratingChange(match.playerTwoCurrentRating, match.playerTwoPreviousRating)
 		if(differenceP2.contains("-")) {

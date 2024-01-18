@@ -21,7 +21,7 @@ interface MatchesApi {
 	suspend fun getTestScores(
 		@Query("skip") skip:Int = DEFAULT_SKIP,
 		@Query("limit") limit:Int = DEFAULT_LIMIT
-	)
+	): Call<List<MatchResponseItem>>
 
 	companion object{
 		const val DEFAULT_SKIP = 0
