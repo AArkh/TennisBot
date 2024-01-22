@@ -38,23 +38,23 @@ class MatchesFragment : CoreFragment<FragmentMatchesBinding>() {
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: MatchesUiState ->
 			when(uiState){
 				is MatchesUiState.Loading -> {
-					binding.errorLayout.visibility = View.GONE
+//					binding.errorLayout.visibility = View.GONE
+//					binding.loadingBar.visibility = View.VISIBLE
 					binding.matchesContainer.visibility = View.VISIBLE
-					binding.loadingBar.visibility = View.VISIBLE
 					viewModel.onFetchingMatches()
 
 				}
 				is MatchesUiState.MatchesDataReceived -> {
-					binding.loadingBar.visibility = View.GONE
-					binding.errorLayout.visibility = View.GONE
+//					binding.loadingBar.visibility = View.GONE
+//					binding.errorLayout.visibility = View.GONE
 					binding.matchesContainer.visibility = View.VISIBLE
 					matchesAdapter.submitList(uiState.matchesList)
 
 				}
 				is MatchesUiState.Error -> {
-					binding.loadingBar.visibility = View.GONE
+//					binding.loadingBar.visibility = View.GONE
+//					binding.errorLayout.visibility = View.VISIBLE
 					binding.matchesContainer.visibility = View.GONE
-					binding.errorLayout.visibility = View.VISIBLE
 				}
 			}
 		}

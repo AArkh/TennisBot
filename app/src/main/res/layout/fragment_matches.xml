@@ -1,170 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	tools:context=".profile.matches.MatchesFragment">
+	android:layout_height="match_parent">
 
-	<ImageView
-		android:id="@+id/back_button"
-		android:layout_width="36dp"
-		android:layout_height="36dp"
-		android:layout_marginStart="20dp"
-		android:layout_marginTop="10dp"
-		android:background="@drawable/search_background"
-		android:backgroundTint="@color/tb_gray_border"
-		android:padding="6dp"
-		android:src="@drawable/chevron_vertical"
-		android:visibility="visible"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent"
-		app:tint="@color/tb_gray_active" />
-
-	<TextView
-		android:id="@+id/title"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="15dp"
-		android:text="@string/matches"
-		android:textSize="17sp"
-		android:textColor="@color/tb_black"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent" />
-
-	<com.google.android.material.textfield.TextInputLayout
-		android:id="@+id/search_bar_layout"
+	<com.google.android.material.appbar.AppBarLayout
+		android:id="@+id/appbar_layout"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginHorizontal="20dp"
-		android:layout_marginTop="22dp"
-		android:hint="@string/find"
-		android:textColorHint="@color/tb_gray_active"
-		app:boxStrokeWidth="-1dp"
-		app:boxStrokeWidthFocused="-1dp"
-		app:endIconDrawable="@drawable/x"
-		app:endIconMode="clear_text"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/title"
-		app:startIconDrawable="@drawable/search_lg"
-		app:startIconTint="@color/tb_gray_active">
+		android:background="@android:color/transparent"
+		app:elevation="0dp">
 
-	<com.google.android.material.textfield.TextInputEditText
-		android:id="@+id/search_bar_et"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:background="@drawable/search_background" />
-	</com.google.android.material.textfield.TextInputLayout>
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			app:layout_scrollFlags="scroll|enterAlways">
 
-	<TextView
-		android:id="@+id/all_matches_button"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="@string/all_matches"
-		android:textColor="@color/tb_gray_dark"
-		android:layout_marginStart="20dp"
-		android:paddingHorizontal="12dp"
-		android:paddingVertical="6dp"
-		android:background="@drawable/search_background"
-		android:layout_marginTop="16dp"
-		app:layout_constraintTop_toBottomOf="@id/search_bar_layout"
-		app:layout_constraintStart_toStartOf="parent"/>
+			<ImageView
+				android:id="@+id/back_button"
+				android:layout_width="36dp"
+				android:layout_height="36dp"
+				android:layout_marginStart="20dp"
+				android:layout_marginTop="10dp"
+				android:background="@drawable/search_background"
+				android:backgroundTint="@color/tb_gray_border"
+				android:padding="6dp"
+				android:src="@drawable/chevron_vertical"
+				android:visibility="visible"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="parent"
+				app:tint="@color/tb_gray_active" />
 
-	<TextView
-		android:id="@+id/won_matches_button"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:paddingHorizontal="12dp"
-		android:paddingVertical="6dp"
-		android:background="@drawable/search_background"
-		android:backgroundTint="@color/invisible"
-		android:text="@string/won_matches"
-		android:textColor="@color/tb_gray_active"
-		android:layout_marginTop="16dp"
-		app:layout_constraintTop_toBottomOf="@id/search_bar_layout"
-		app:layout_constraintStart_toEndOf="@id/all_matches_button"/>
+			<TextView
+				android:id="@+id/title"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="15dp"
+				android:text="@string/matches"
+				android:textColor="@color/tb_black"
+				android:textSize="17sp"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="parent" />
 
-	<TextView
-		android:id="@+id/lost_matches_button"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:paddingHorizontal="12dp"
-		android:paddingVertical="6dp"
-		android:background="@drawable/search_background"
-		android:backgroundTint="@color/invisible"
-		android:text="@string/lost_matches"
-		android:textColor="@color/tb_gray_active"
-		android:layout_marginTop="16dp"
-		app:layout_constraintTop_toBottomOf="@id/search_bar_layout"
-		app:layout_constraintStart_toEndOf="@id/won_matches_button"/>
+			<com.google.android.material.textfield.TextInputLayout
+				android:id="@+id/search_bar_layout"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginHorizontal="20dp"
+				android:layout_marginTop="22dp"
+				android:hint="@string/find"
+				android:textColorHint="@color/tb_gray_active"
+				app:boxStrokeWidth="-1dp"
+				app:boxStrokeWidthFocused="-1dp"
+				app:endIconDrawable="@drawable/x"
+				app:endIconMode="clear_text"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@id/title"
+				app:startIconDrawable="@drawable/search_lg"
+				app:startIconTint="@color/tb_gray_active">
 
-	<ImageView
-		android:id="@+id/date"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:src="@drawable/date"
-		android:padding="10dp"
-		android:layout_marginTop="9dp"
-		android:layout_marginEnd="10dp"
-		app:layout_constraintTop_toBottomOf="@id/search_bar_layout"
-		app:layout_constraintEnd_toEndOf="parent"/>
+				<com.google.android.material.textfield.TextInputEditText
+					android:id="@+id/search_bar_et"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:background="@drawable/search_background" />
+			</com.google.android.material.textfield.TextInputLayout>
+		</androidx.constraintlayout.widget.ConstraintLayout>
+
+		<com.google.android.material.appbar.CollapsingToolbarLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<LinearLayout
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:paddingTop="16dp"
+				android:paddingHorizontal="16dp"
+				app:layout_collapseMode="pin">
+
+				<TextView
+					android:id="@+id/all_matches_button"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="4dp"
+					android:background="@drawable/search_background"
+					android:paddingHorizontal="12dp"
+					android:paddingVertical="6dp"
+					android:text="@string/all_matches"
+					android:textColor="@color/tb_gray_dark" />
+
+				<TextView
+					android:id="@+id/won_matches_button"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:background="@drawable/search_background"
+					android:backgroundTint="@color/invisible"
+					android:paddingHorizontal="12dp"
+					android:paddingVertical="6dp"
+					android:text="@string/won_matches"
+					android:textColor="@color/tb_gray_active" />
+
+				<TextView
+					android:id="@+id/lost_matches_button"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:background="@drawable/search_background"
+					android:backgroundTint="@color/invisible"
+					android:paddingHorizontal="12dp"
+					android:paddingVertical="6dp"
+					android:text="@string/lost_matches"
+					android:textColor="@color/tb_gray_active" />
+
+			</LinearLayout>
+
+			<ImageView
+				android:id="@+id/date"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="end"
+				android:layout_marginEnd="2dp"
+				android:paddingTop="18dp"
+				android:paddingHorizontal="18dp"
+				android:src="@drawable/date" />
+
+		</com.google.android.material.appbar.CollapsingToolbarLayout>
+	</com.google.android.material.appbar.AppBarLayout>
 
 	<androidx.recyclerview.widget.RecyclerView
 		android:id="@+id/matches_container"
 		android:layout_width="match_parent"
-		android:layout_height="0dp"
+		android:layout_height="wrap_content"
 		android:layout_marginTop="16dp"
 		android:background="@color/tb_bg"
-		app:layout_constraintTop_toBottomOf="@id/all_matches_button"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintBottom_toBottomOf="parent"
-		tools:listitem="@layout/recycler_match_item"/>
+		app:layout_behavior="@string/appbar_scrolling_view_behavior"
+		tools:listitem="@layout/recycler_match_item" />
 
-	<ProgressBar
-		android:id="@+id/loadingBar"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:padding="150dp"
-		android:visibility="gone"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent" />
-
-	<LinearLayout
-		android:id="@+id/error_layout"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:padding="80dp"
-		android:gravity="center"
-		android:orientation="vertical"
-		android:visibility="gone"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent">
-
-		<ImageView
-			android:layout_width="100dp"
-			android:layout_height="100dp"
-			android:src="@android:drawable/stat_notify_error"
-			android:tintMode="multiply"
-			tools:layout_editor_absoluteX="182dp"
-			tools:layout_editor_absoluteY="354dp"
-			app:tint="@color/tb_gray_light" />
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/error_text"/>
-		<TextView
-			android:id="@+id/tryAgainTv"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/error_try_again_text" />
-
-	</LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
