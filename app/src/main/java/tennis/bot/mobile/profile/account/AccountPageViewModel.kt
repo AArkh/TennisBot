@@ -23,8 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AccountPageViewModel @Inject constructor(
 	@ApplicationContext private val context: Context,
-	private val repository: UserProfileAndEnumsRepository,
-	private val onboardingRepository: OnboardingRepository
+	private val repository: UserProfileAndEnumsRepository
 ): ViewModel() {
 
 	companion object {
@@ -45,7 +44,7 @@ class AccountPageViewModel @Inject constructor(
 
 	fun onFetchingProfileData(){
 		viewModelScope.launch(Dispatchers.IO) {
-			kotlin.runCatching {
+
 				val profileData = repository.getProfile()
 				val gamesRemain = 10 - (profileData.games ?: ZERO)
 				val basicLayout = listOf(
@@ -86,33 +85,26 @@ class AccountPageViewModel @Inject constructor(
 				val contactsList: List<SurveyResultItem>
 
 				_uiStateFlow.value =
-					AccountPageUiState.ProfileDataReceived(basicLayout, gameDataList, dummyContactsForButtons)
-			}.onFailure {
-				AccountPageUiState.Error
-			}
+					AccountPageUiState.ProfileDataReceived(basicLayout, gameDataList, emptyList())
+
 		}
 	}
 
 	private suspend fun onProvidingGameData(profileData: ProfileData): List<SurveyResultItem> {
 		val enumTypesList = repository.getEnums()
 		val defaultGameData = repository.defaultGameData
+		val isRightHandInt = if (profileData.isRightHand == true) 1 else if (profileData.isRightHand == false) 0 else null
+		val isOneBackhandInt = if (profileData.isOneBackhand == true) 1 else if (profileData.isOneBackhand == false) 0 else null
 		val decodedIds = repository.getEnumsById(enumTypesList, listOf(
-			Pair(IS_RIGHTHAND_TITLE, profileData.isRightHand),
-			Pair(IS_ONE_BACKHAND_TITLE, profileData.isOneBackhand),
+			Pair(IS_RIGHTHAND_TITLE, isRightHandInt),
+			Pair(IS_ONE_BACKHAND_TITLE, isOneBackhandInt),
 			Pair(SURFACE_TITLE, profileData.surface),
 			Pair(SHOES_TITLE, profileData.shoes),
 			Pair(RACQUET_TITLE, profileData.racquet),
 			Pair(RACQUET_STRINGS_TITLE, profileData.racquetStrings)
 		))
 
-		val modifiedValues = listOf(
-			decodedIds[0],
-			decodedIds[1],
-			decodedIds[2],
-			decodedIds[3],
-			decodedIds[4],
-			decodedIds[5],
-		)
+		val modifiedValues = emptyList<String>() + decodedIds
 
 		val modifiedGameData = defaultGameData.mapIndexed { index, gameDataItem ->
 			gameDataItem.copy(resultOption = modifiedValues.getOrElse(index) { gameDataItem.resultOption })
@@ -125,14 +117,6 @@ class AccountPageViewModel @Inject constructor(
 		_uiStateFlow.value = AccountPageUiState.Loading
 		onFetchingProfileData()
 	}
-
-	val dummyContactsForButtons = listOf(
-		SurveyResultItem("something else", "something else's value"),
-		SurveyResultItem("something else", "something else's value"),
-		SurveyResultItem("something else", "something else's value"),
-		SurveyResultItem("something else", "something else's value"),
-		SurveyResultItem("something else", "something else's value", noUnderline = true),
-	)
 
 	private fun progressBarProgress(matchesRemain: Int?): Int {
 		val percentage = when(matchesRemain){

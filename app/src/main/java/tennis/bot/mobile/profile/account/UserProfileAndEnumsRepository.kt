@@ -81,8 +81,8 @@ class UserProfileAndEnumsRepository @Inject constructor(
 		for ((type, id) in selectedEnumTypesAndIds){
 			val enumType = allEnums.find { return@find it.type == type }
 
-			if (id != null) {
-				val enum = enumType?.enums?.find {return@find it.id == id}
+			if (id != null && id != 0) {
+				val enum = enumType?.enums?.find { return@find it.id == id }
 				if (enum != null) decodedList.add(enum.name.replaceFirstChar { it.uppercase() })
 			} else {
 				decodedList.add(context.getString(R.string.survey_option_null))

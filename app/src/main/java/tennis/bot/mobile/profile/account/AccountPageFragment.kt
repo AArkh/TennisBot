@@ -11,10 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentAccountPageBinding
 import tennis.bot.mobile.onboarding.login.LoginDialogFragment
+import tennis.bot.mobile.profile.matches.MatchesFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -80,6 +82,12 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 							INFLATE_CONTACTS -> {
 								accountPageAdapter.childAdapter.submitList(uiState.contactsList)
 							}
+							GO_TO_MATCHES -> {
+								parentFragmentManager.beginTransaction()
+									.replace(R.id.fragment_container_view, MatchesFragment())
+									.addToBackStack(MatchesFragment::class.java.name)
+									.commit()
+							}
 							GO_TO_TOURNAMENTS -> {
 								val dialog = LoginDialogFragment()
 								dialog.show(childFragmentManager, dialog.tag)
@@ -90,12 +98,14 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 				is AccountPageUiState.Error -> {
 					binding.errorLayout.visibility = View.VISIBLE
 					binding.container.visibility = View.GONE
+					binding.loadingBar.visibility = View.GONE
 				}
 			}
 		}
 	}
 
 	companion object {
+		const val GO_TO_MATCHES = "GO_TO_MATCHES"
 		const val INFLATE_CONTACTS = "INFLATE_CONTACTS"
 		const val INFLATE_GAMEDATA = "INFLATE_GAMEDATA"
 		const val GO_TO_TOURNAMENTS = "GO_TO_TOURNAMENTS"

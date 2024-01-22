@@ -30,8 +30,8 @@ data class ProfileData(
 	val doublesRating: Int?,
 	val games: Int?,
 	val gamesWin: Int?,
-	val isRightHand: Int?, // originally a Boolean? // keep an eye on
-	val isOneBackhand: Int?, // originally a Boolean? // keep an eye on
+	val isRightHand: Boolean?,
+	val isOneBackhand: Boolean?,
 	val mixedRating: Int?,
 	val universalDoublesRating: Int?,
 	val bonus: Int?,

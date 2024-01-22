@@ -74,7 +74,6 @@ class LoginViewModel @Inject constructor(
 	fun onPasswordInput(password: CharSequence) {
 		val prevState: LoginUiState = _uiStateFlow.value
 		val isClearPasswordButtonVisible = password.isNotEmpty()
-		// todo regex в поле класса
 		val passwordConditions: Boolean = passwordConditionsRegex.matches(password) && password.length >= PASSWORD_MIN_LENGTH
 		val passwordErrorMessage = if (!passwordConditions && password.isNotEmpty()) {
 			passwordErrorText

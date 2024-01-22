@@ -1,34 +1,30 @@
 package tennis.bot.mobile.profile.matches
 
 import kotlinx.serialization.Serializable
-import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.GET
-import retrofit2.http.Headers
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MatchesApi {
-	@GET("/api/games/scores")
+	@GET("api/games/scores/{playerId}")
 	suspend fun getScores(
+		@Path("playerId") playerId: Long,
 		@Query("skip") skip:Int = DEFAULT_SKIP,
 		@Query("limit") limit:Int = DEFAULT_LIMIT
-	): Call<List<MatchResponseItem>>
-
-	@Headers(
-		"Authorization: Bearer 123",
-		"secretTelegramToken: superSecret",
-		"playerId: 23392545"
-	)
-	@GET("/api/games/scores/477452566")
-	suspend fun getTestScores(
-		@Query("skip") skip:Int = DEFAULT_SKIP,
-		@Query("limit") limit:Int = DEFAULT_LIMIT
-	): Call<List<MatchResponseItem>>
+	): Response<MatchBasicResponse>
 
 	companion object{
 		const val DEFAULT_SKIP = 0
 		const val DEFAULT_LIMIT = 20
 	}
 }
+
+@Serializable
+data class MatchBasicResponse(
+	val totalCount: Int,
+	val items: List<MatchResponseItem>
+)
 
 @Serializable
 data class MatchResponseItem(

@@ -28,10 +28,10 @@ class MatchesAdapter @Inject constructor(): CoreAdapter<MatchItemViewHolder>() {
 			if (match.playerOneProfilePic.contains("default")) {
 				val resourceId = getDefaultDrawableResourceId(holder.binding.player1Image.context, match.playerOneProfilePic.removeSuffix(".png"))
 				if (resourceId != null) holder.binding.player1Image.setImageResource(resourceId)
-				holder.binding.player1Image.setPadding(0)
+				holder.binding.player1Photo.setPadding(0)
 			} else {
 				holder.binding.player1Image.load(AccountPageAdapter.IMAGES_LINK + match.playerOneProfilePic) { crossfade(true) }
-				holder.binding.player1Image.setPadding(0)
+				holder.binding.player1Photo.setPadding(0)
 			}
 		}
 		holder.binding.player1Name.text = match.playerOneName.substringBefore(" ")
@@ -55,10 +55,10 @@ class MatchesAdapter @Inject constructor(): CoreAdapter<MatchItemViewHolder>() {
 			if (match.playerTwoProfilePic.contains("default")) {
 				val resourceId = getDefaultDrawableResourceId(holder.binding.player1Image.context, match.playerTwoProfilePic.removeSuffix(".png"))
 				if (resourceId != null) holder.binding.player2Image.setImageResource(resourceId)
-				holder.binding.player2Image.setPadding(0)
+				holder.binding.player2Photo.setPadding(0)
 			} else {
 				holder.binding.player2Image.load(AccountPageAdapter.IMAGES_LINK + match.playerTwoProfilePic) { crossfade(true) }
-				holder.binding.player2Image.setPadding(0)
+				holder.binding.player2Photo.setPadding(0)
 			}
 		}
 		holder.binding.player2Name.text = match.playerTwoName.substringBefore(" ")

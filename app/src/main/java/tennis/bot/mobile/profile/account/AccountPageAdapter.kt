@@ -56,6 +56,10 @@ class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHol
 				val matchesPlayed = item as? MatchesPlayed ?: throw IllegalArgumentException("Item must be MatchesPlayed")
 				holder.binding.matchesPlayedWithNumber.text = matchesPlayed.numberOfMatchesPlayed
 				holder.binding.lastGameDate.text = matchesPlayed.lastGameDate
+
+				holder.binding.root.setOnClickListener {
+					clickListener?.invoke(AccountPageFragment.GO_TO_MATCHES)
+				}
 			}
 			is AccountPointsAndPositionViewHolder -> {
 				val pointsAndPosition = item as? PointsAndPosition ?: throw IllegalArgumentException("Item must be MatchesPlayed")
