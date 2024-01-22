@@ -1,10 +1,7 @@
 package tennis.bot.mobile.profile.account
 
 import android.content.Context
-import android.database.Cursor
-import android.net.Uri
-import android.provider.MediaStore
-import android.util.Log
+import android.icu.text.SimpleDateFormat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,10 +11,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
-import tennis.bot.mobile.onboarding.photopick.getRealPathFromUri
-import tennis.bot.mobile.onboarding.survey.OnboardingRepository
 import tennis.bot.mobile.onboarding.survey.SurveyResultItem
-import java.io.File
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -46,7 +41,9 @@ class AccountPageViewModel @Inject constructor(
 		viewModelScope.launch(Dispatchers.IO) {
 
 				val profileData = repository.getProfile()
-				val gamesRemain = 10 - (profileData.games ?: ZERO)
+				val difference = (10 - (profileData.games ?: 10))
+				val gamesRemain = if (difference in 0..9) difference else 10
+
 				val basicLayout = listOf(
 					BasicInfoAndRating(
 						profileData.photo,
@@ -56,14 +53,19 @@ class AccountPageViewModel @Inject constructor(
 						profileData.doublesRating.toString()
 					),
 					Calibration(
-						progressBarProgress(profileData.games),
-						context.getString(R.string.calibration_matches_remain, profileData.games ?: ZERO),
-						context.getString(R.string.calibration_rounds_remain_text, gamesRemain)
+						if (gamesRemain < 10) context.getString(R.string.calibration_title) else context.getString(R.string.calibration_finished_title),
+						progressBarProgress(gamesRemain),
+						context.getString(R.string.calibration_matches_remain, gamesRemain),
+						when(gamesRemain){
+							0 -> context.getString(R.string.calibration_start)
+							in 1..9 -> context.getString(R.string.calibration_rounds_remain_text, gamesRemain)
+							else -> context.getString(R.string.calibration_finished)
+						}
 					),
 					MatchesPlayed(
 						context.getString(R.string.account_matches_played, profileData.games ?: ZERO),
 						if (profileData.lastGame != null) {
-							context.getString(R.string.last_game_date, profileData.lastGame)
+							context.getString(R.string.last_game_date, convertDateAndTime(profileData.lastGame))
 						} else {
 							EMPTY_STRING
 						}
@@ -129,11 +131,31 @@ class AccountPageViewModel @Inject constructor(
 			7 -> 69
 			8 -> 79
 			9 -> 89
-			10 -> 99
+			10 -> 100
 			else -> ZERO
 		}
 
 		return percentage
+	}
+
+	fun convertDateAndTime(dateString: String): String {
+		val formats = listOf(
+			"yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ",
+			"yyyy-MM-dd'T'hh:mm:ss'Z'"
+		)
+
+		for (format in formats) {
+			try {
+				val dateTimeFormatter = SimpleDateFormat(format, Locale.getDefault())
+				val timeStampMs = dateTimeFormatter.parse(dateString)
+				val someOtherFormatter = SimpleDateFormat("d MMMM yyyy", Locale("ru", "RU"))
+				return someOtherFormatter.format(timeStampMs) ?: ""
+			} catch (e: Exception) {
+				// If parsing fails, try the next format
+			}
+		}
+
+		return ""
 	}
 
 //	fun onPickedProfilePic(uri: Uri) {

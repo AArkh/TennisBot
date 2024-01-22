@@ -34,8 +34,8 @@ class MatchesRepository @Inject constructor(
 	@WorkerThread
 	suspend fun getMatchItems(): List<MatchItem> {
 		val networkMatches = getMatches()
-		val matchItems = networkMatches?.items
-		return if (!matchItems.isNullOrEmpty()) matchItems.convertToMatchItemList()
+		val matchResponseItems = networkMatches?.items
+		return if (!matchResponseItems.isNullOrEmpty()) matchResponseItems.convertToMatchItemList()
 		else emptyList()
 	}
 
@@ -47,12 +47,12 @@ class MatchesRepository @Inject constructor(
 			val timeStampMs = dateTimeFormatter.parse(matchResponseItem.playedAt)
 			val dateTime = someOtherFormatter.format(timeStampMs) ?: ""
 
-			val set11 = matchResponseItem.gameSets.getOrNull(0)?.score1.toString() ?: ""
-			val set12 = matchResponseItem.gameSets.getOrNull(1)?.score1.toString() ?: ""
-			val set13 = matchResponseItem.gameSets.getOrNull(2)?.score1.toString() ?: ""
-			val set21 = matchResponseItem.gameSets.getOrNull(0)?.score2.toString() ?: ""
-			val set22 = matchResponseItem.gameSets.getOrNull(1)?.score2.toString() ?: ""
-			val set23 = matchResponseItem.gameSets.getOrNull(2)?.score2.toString() ?: ""
+			val set11 = matchResponseItem.gameSets.getOrNull(0)?.score1.toString()
+			val set12 = matchResponseItem.gameSets.getOrNull(1)?.score1.toString()
+			val set13 = matchResponseItem.gameSets.getOrNull(2)?.score1.toString()
+			val set21 = matchResponseItem.gameSets.getOrNull(0)?.score2.toString()
+			val set22 = matchResponseItem.gameSets.getOrNull(1)?.score2.toString()
+			val set23 = matchResponseItem.gameSets.getOrNull(2)?.score2.toString()
 
 			MatchItem(
 				matchResponseItem.win,

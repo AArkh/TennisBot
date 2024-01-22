@@ -48,6 +48,7 @@ class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHol
 			is AccountBasicInfoAndRatingItemViewHolder -> bindAccountBasicInfoAndRating(item, holder)
 			is AccountCalibrationViewHolder -> {
 				val calibration = item as? Calibration ?: throw IllegalArgumentException("Item must be Calibration")
+				holder.binding.title.text = calibration.title
 				holder.binding.progressBar.progress = calibration.progressBarValue
 				holder.binding.calibrationProgressNumber.text = calibration.matchesRemains
 				holder.binding.calibrationRoundsRemainText.text = calibration.matchesRemainsText
@@ -263,6 +264,7 @@ data class BasicInfoAndRating(
 ) : CoreUtilsItem()
 
 data class Calibration(
+	val title: String,
 	val progressBarValue: Int,
 	val matchesRemains: String,
 	val matchesRemainsText: String
