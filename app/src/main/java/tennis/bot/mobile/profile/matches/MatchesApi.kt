@@ -5,6 +5,7 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import tennis.bot.mobile.core.CoreUtilsItem
 
 interface MatchesApi {
 	@GET("api/games/scores/{playerId}")
@@ -46,7 +47,7 @@ data class GameSet(
 	val score2: Int,
 	val scoreTie1: Int?,
 	val scoreTie2: Int?
-)
+): CoreUtilsItem()
 
 @Serializable
 data class Player(

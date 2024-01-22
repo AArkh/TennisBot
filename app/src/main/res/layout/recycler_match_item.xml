@@ -250,52 +250,8 @@
 		app:layout_constraintTop_toTopOf="@id/score_board"
 		app:layout_constraintBottom_toTopOf="@id/player2_name_surname"
 		app:layout_constraintStart_toStartOf="@id/score_board"
-		app:layout_constraintEnd_toStartOf="@id/set1_1"
+
 		app:layout_constraintVertical_chainStyle="packed"/>
-
-	<TextView
-		android:id="@+id/set1_1"
-		android:layout_width="0dp"
-		android:layout_height="wrap_content"
-		android:layout_marginStart="36dp"
-		android:gravity="center"
-		android:text="6"
-		android:textColor="@color/tb_black"
-		android:textSize="14sp"
-		app:layout_constraintTop_toTopOf="@id/player1_name_surname"
-		app:layout_constraintBottom_toBottomOf="@id/player1_name_surname"
-		app:layout_constraintEnd_toStartOf="@id/set1_2"
-		app:layout_constraintStart_toStartOf="@id/player2_guideline1"
-		app:layout_constraintHorizontal_chainStyle="packed"/>
-
-	<TextView
-		android:id="@+id/set1_2"
-		android:layout_width="0dp"
-		android:layout_height="wrap_content"
-
-		android:gravity="center"
-		android:text="5"
-		android:textColor="@color/tb_black"
-		android:textSize="14sp"
-		app:layout_constraintTop_toTopOf="@id/player1_name_surname"
-		app:layout_constraintBottom_toBottomOf="@id/player1_name_surname"
-		app:layout_constraintEnd_toStartOf="@id/set1_3"
-		app:layout_constraintStart_toEndOf="@id/set1_1"/>
-
-	<TextView
-		android:id="@+id/set1_3"
-		android:layout_width="0dp"
-		android:layout_height="wrap_content"
-
-		android:layout_marginEnd="16dp"
-		android:gravity="center"
-		android:text="6"
-		android:textColor="@color/tb_black"
-		android:textSize="14sp"
-		app:layout_constraintTop_toTopOf="@id/player1_name_surname"
-		app:layout_constraintBottom_toBottomOf="@id/player1_name_surname"
-		app:layout_constraintEnd_toEndOf="@id/score_board"
-		app:layout_constraintStart_toEndOf="@id/set1_2" />
 
 	<TextView
 		android:id="@+id/player2_name_surname"
@@ -309,50 +265,16 @@
 		android:textSize="15sp"
 		app:layout_constraintTop_toBottomOf="@id/player1_name_surname"
 		app:layout_constraintBottom_toBottomOf="@id/score_board"
-		app:layout_constraintStart_toStartOf="@id/score_board"
-		app:layout_constraintEnd_toStartOf="@id/set2_1"/>
+		app:layout_constraintStart_toStartOf="@id/score_board" />
 
-	<TextView
-		android:id="@+id/set2_1"
-		android:layout_width="0dp"
-		android:layout_height="wrap_content"
-		android:layout_marginStart="36dp"
-		android:gravity="center"
-		android:text="6"
-		android:textColor="@color/tb_black"
-		android:textSize="14sp"
-		app:layout_constraintTop_toTopOf="@id/player2_name_surname"
-		app:layout_constraintBottom_toBottomOf="@id/player2_name_surname"
-		app:layout_constraintEnd_toStartOf="@id/set2_2"
-		app:layout_constraintStart_toStartOf="@id/player2_guideline1"
-		app:layout_constraintHorizontal_chainStyle="packed"/>
-
-	<TextView
-		android:id="@+id/set2_2"
-		android:layout_width="0dp"
-		android:layout_height="wrap_content"
-		android:gravity="center"
-		android:text="5"
-		android:textColor="@color/tb_black"
-		android:textSize="14sp"
-		app:layout_constraintTop_toTopOf="@id/player2_name_surname"
-		app:layout_constraintBottom_toBottomOf="@id/player2_name_surname"
-		app:layout_constraintEnd_toStartOf="@id/set2_3"
-		app:layout_constraintStart_toEndOf="@id/set2_1"/>
-
-	<TextView
-		android:id="@+id/set2_3"
-		android:layout_width="0dp"
-		android:layout_height="wrap_content"
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/game_sets_container"
+		android:layout_width="wrap_content"
+		android:layout_height="0dp"
 		android:layout_marginEnd="16dp"
-		android:gravity="center"
-		android:text="6"
-		android:textColor="@color/tb_black"
-		android:textSize="14sp"
-		app:layout_constraintTop_toTopOf="@id/player2_name_surname"
+		app:layout_constraintTop_toTopOf="@id/player1_name_surname"
 		app:layout_constraintBottom_toBottomOf="@id/player2_name_surname"
-		app:layout_constraintEnd_toEndOf="@id/score_board"
-		app:layout_constraintStart_toEndOf="@id/set2_2" />
+		app:layout_constraintEnd_toEndOf="@id/score_board"/>
 
 	<TextView
 		android:id="@+id/date_time"

@@ -10,6 +10,7 @@ import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.content.ContextCompat.getColorStateList
 import androidx.core.view.setPadding
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import tennis.bot.mobile.R
@@ -21,6 +22,8 @@ import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
 import javax.inject.Inject
 
 class MatchesAdapter @Inject constructor(): CoreAdapter<MatchItemViewHolder>() {
+
+	private val gameSetsAdapter = GameSetsAdapter()
 	override fun onBindViewHolder(holder: MatchItemViewHolder, item: Any) {
 		val match = item as? MatchItem ?: throw IllegalArgumentException("Item must be MatchItem")
 
@@ -78,13 +81,15 @@ class MatchesAdapter @Inject constructor(): CoreAdapter<MatchItemViewHolder>() {
 		}
 		holder.binding.player2ScoreChange.text = differenceP2.trimStart('-')
 
+		holder.binding.gameSetsContainer.adapter = gameSetsAdapter // decide whether to keep this pattern or come up with a new one
+		holder.binding.gameSetsContainer.layoutManager = LinearLayoutManager(
+			holder.binding.gameSetsContainer.context, LinearLayoutManager.HORIZONTAL, true)
+		gameSetsAdapter.submitList(match.gameSets)
+		val recycledViewPool = RecyclerView.RecycledViewPool()
+		recycledViewPool.setMaxRecycledViews(0,10)
+		holder.binding.gameSetsContainer.setRecycledViewPool(recycledViewPool)
+
 		holder.binding.score.text = match.score
-		holder.binding.set11.text = match.set11
-		holder.binding.set12.text = match.set12
-		holder.binding.set13.text = match.set13
-		holder.binding.set21.text = match.set21
-		holder.binding.set22.text = match.set22
-		holder.binding.set23.text = match.set23
 		holder.binding.dateTime.text = match.dateTime
 	}
 
@@ -115,11 +120,6 @@ data class MatchItem(
 	val playerTwoCurrentRating: String,
 	val playerTwoPreviousRating:String,
 	val score: String,
-	val set11: String,
-	val set12: String,
-	val set13: String,
-	val set21: String,
-	val set22: String,
-	val set23: String,
+	val gameSets: List<GameSet>,
 	val dateTime: String
 ): CoreUtilsItem()

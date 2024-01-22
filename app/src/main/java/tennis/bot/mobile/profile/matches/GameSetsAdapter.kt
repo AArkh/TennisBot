@@ -1,0 +1,27 @@
+package tennis.bot.mobile.profile.matches
+
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import tennis.bot.mobile.core.CoreAdapter
+import tennis.bot.mobile.databinding.RecyclerGameSetItemBinding
+import javax.inject.Inject
+
+class GameSetsAdapter @Inject constructor(): CoreAdapter<GameSetItemViewHolder>() {
+	override fun onBindViewHolder(holder: GameSetItemViewHolder, item: Any) {
+		val set = item as? GameSet ?: throw IllegalArgumentException("Item must be GameSet")
+
+		holder.binding.player1Score.text = set.score1.toString()
+		holder.binding.player2Score.text = set.score2.toString()
+	}
+
+	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GameSetItemViewHolder {
+		val binding = RecyclerGameSetItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+		return GameSetItemViewHolder(binding)
+	}
+}
+
+class GameSetItemViewHolder (
+	val binding: RecyclerGameSetItemBinding
+) : RecyclerView.ViewHolder(binding.root)
+

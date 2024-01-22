@@ -47,13 +47,6 @@ class MatchesRepository @Inject constructor(
 			val timeStampMs = dateTimeFormatter.parse(matchResponseItem.playedAt)
 			val dateTime = someOtherFormatter.format(timeStampMs) ?: ""
 
-			val set11 = matchResponseItem.gameSets.getOrNull(0)?.score1.toString()
-			val set12 = matchResponseItem.gameSets.getOrNull(1)?.score1.toString()
-			val set13 = matchResponseItem.gameSets.getOrNull(2)?.score1.toString()
-			val set21 = matchResponseItem.gameSets.getOrNull(0)?.score2.toString()
-			val set22 = matchResponseItem.gameSets.getOrNull(1)?.score2.toString()
-			val set23 = matchResponseItem.gameSets.getOrNull(2)?.score2.toString()
-
 			MatchItem(
 				matchResponseItem.win,
 				matchResponseItem.isDouble,
@@ -66,12 +59,7 @@ class MatchesRepository @Inject constructor(
 				matchResponseItem.players.getOrNull(1)?.rating.toString(),
 				matchResponseItem.players.getOrNull(1)?.oldRating.toString(),
 				"${matchResponseItem.headToHead1} - ${matchResponseItem.headToHead2}",
-				set11,
-				set12,
-				set13,
-				set21,
-				set22,
-				set23,
+				matchResponseItem.gameSets,
 				dateTime
 			)
 		}

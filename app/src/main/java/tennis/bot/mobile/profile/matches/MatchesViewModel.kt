@@ -39,12 +39,7 @@ class MatchesViewModel  @Inject constructor(
 			playerTwoCurrentRating = "1100",
 			playerTwoPreviousRating = "1050",
 			score = "2-1",
-			set11 = "6",
-			set12 = "4",
-			set13 = "7",
-			set21 = "3",
-			set22 = "6",
-			set23 = "5",
+			gameSets = emptyList(),
 			dateTime = "2022-01-01"),
 		MatchItem(
 			isWin = true,
@@ -58,12 +53,7 @@ class MatchesViewModel  @Inject constructor(
 			playerTwoCurrentRating = "1120",
 			playerTwoPreviousRating = "1080",
 			score = "2-0",
-			set11 = "6",
-			set12 = "4",
-			set13 = " ",
-			set21 = "6",
-			set22 = "3",
-			set23 = " ",
+			gameSets = emptyList(),
 			dateTime = "2022-01-02"),
 		MatchItem(
 			isWin = true,
@@ -77,12 +67,7 @@ class MatchesViewModel  @Inject constructor(
 			playerTwoCurrentRating = "1050",
 			playerTwoPreviousRating = "1000",
 			score = "0-2",
-			set11 = "3",
-			set12 = "6",
-			set13 = " ",
-			set21 = "4",
-			set22 = "6",
-			set23 = " ",
+			gameSets = emptyList(),
 			dateTime = "2022-01-03")
 	)
 
