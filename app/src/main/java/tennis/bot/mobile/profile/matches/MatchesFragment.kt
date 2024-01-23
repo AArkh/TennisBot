@@ -3,8 +3,11 @@ package tennis.bot.mobile.profile.matches
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentMatchesBinding
@@ -35,6 +38,12 @@ class MatchesFragment : CoreFragment<FragmentMatchesBinding>() {
 			viewModel.onOptionClicked(buttonClicked = binding.lostMatchesButton, binding.wonMatchesButton, binding.allMatchesButton)
 		}
 
+		lifecycleScope.launch {
+			viewModel.getMatchesNew().collectLatest {
+				matchesAdapter.submitData(it)
+			}
+		}
+
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: MatchesUiState ->
 			when(uiState){
 				is MatchesUiState.Loading -> {
@@ -48,7 +57,7 @@ class MatchesFragment : CoreFragment<FragmentMatchesBinding>() {
 //					binding.loadingBar.visibility = View.GONE
 //					binding.errorLayout.visibility = View.GONE
 					binding.matchesContainer.visibility = View.VISIBLE
-					matchesAdapter.submitList(uiState.matchesList)
+//					matchesAdapter.submitList(uiState.matchesList)
 
 				}
 				is MatchesUiState.Error -> {

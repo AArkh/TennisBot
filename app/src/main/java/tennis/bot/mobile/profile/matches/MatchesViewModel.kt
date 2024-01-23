@@ -1,15 +1,25 @@
 package tennis.bot.mobile.profile.matches
 
+import android.util.Log
 import android.widget.TextView
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.content.ContextCompat.getColorStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.ItemKeyedDataSource
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.PagingSource
+import androidx.paging.PagingState
+import androidx.paging.PositionalDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
+import tennis.bot.mobile.profile.matches.MatchesRepository.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -81,6 +91,17 @@ class MatchesViewModel  @Inject constructor(
 			val matches = repository.getMatchItems()
 			_uiStateFlow.value = MatchesUiState.MatchesDataReceived( matches )
 		}
+	}
+
+	fun getMatchesNew(): Flow<PagingData<MatchItem>> {
+		Log.d("1234567", "New page")
+		return Pager(
+			config = PagingConfig(
+				pageSize = 20,
+				enablePlaceholders = true
+			),
+			pagingSourceFactory = { repository.MyDataSource() }
+		).flow
 	}
 
 }

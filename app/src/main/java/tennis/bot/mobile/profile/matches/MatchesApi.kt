@@ -51,7 +51,7 @@ data class GameSet(
 
 @Serializable
 data class Player(
-	val id: Int,
+	val id: Long,
 	val name: String,
 	val photo: String?,
 	val oldRating: Int,

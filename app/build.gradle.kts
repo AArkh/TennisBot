@@ -93,6 +93,9 @@ dependencies {
     // Ui
     implementation("com.airbnb.android:lottie:6.2.0")
 
+    //Paging
+    implementation ("androidx.paging:paging-runtime-ktx:3.2.1")
+
     // DI
     val hiltVersion = "2.48"
     implementation("com.google.dagger:hilt-android:$hiltVersion")
