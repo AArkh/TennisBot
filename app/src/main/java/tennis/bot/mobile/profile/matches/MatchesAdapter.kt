@@ -20,6 +20,7 @@ import tennis.bot.mobile.core.CoreAdapter
 import tennis.bot.mobile.core.CoreUtilsItem
 import tennis.bot.mobile.databinding.RecyclerMatchItemBinding
 import tennis.bot.mobile.profile.account.AccountPageAdapter
+import tennis.bot.mobile.profile.account.AccountPageAdapter.Companion.NULL_STRING
 import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
 import javax.inject.Inject
 
@@ -39,7 +40,7 @@ class MatchesAdapter @Inject constructor(): PagingDataAdapter<MatchItem, MatchIt
 	override fun onBindViewHolder(holder: MatchItemViewHolder, position: Int) {
 		getItem(position)?.let {match ->
 
-			if(match.playerOneProfilePic != null) {
+			if(match.playerOneProfilePic != null && match.playerOneProfilePic != NULL_STRING) {
 				if (match.playerOneProfilePic.contains("default")) {
 					val resourceId = getDefaultDrawableResourceId(holder.binding.player1Image.context, match.playerOneProfilePic.removeSuffix(".png"))
 					if (resourceId != null) holder.binding.player1Image.setImageResource(resourceId)
@@ -48,6 +49,8 @@ class MatchesAdapter @Inject constructor(): PagingDataAdapter<MatchItem, MatchIt
 					holder.binding.player1Image.load(AccountPageAdapter.IMAGES_LINK + match.playerOneProfilePic) { crossfade(true) }
 					holder.binding.player1Photo.setPadding(0)
 				}
+			} else {
+				holder.binding.player1Image.setImageResource(R.drawable.user)
 			}
 			holder.binding.player1Name.text = match.playerOneName.substringBefore(" ")
 			holder.binding.player1NameSurname.text = match.playerOneName
@@ -66,7 +69,7 @@ class MatchesAdapter @Inject constructor(): PagingDataAdapter<MatchItem, MatchIt
 			}
 			holder.binding.player1ScoreChange.text = differenceP1.trimStart('-')
 
-			if(match.playerTwoProfilePic != null) {
+			if(match.playerTwoProfilePic != null && match.playerOneProfilePic != NULL_STRING) {
 				if (match.playerTwoProfilePic.contains("default")) {
 					val resourceId = getDefaultDrawableResourceId(holder.binding.player1Image.context, match.playerTwoProfilePic.removeSuffix(".png"))
 					if (resourceId != null) holder.binding.player2Image.setImageResource(resourceId)
@@ -75,6 +78,8 @@ class MatchesAdapter @Inject constructor(): PagingDataAdapter<MatchItem, MatchIt
 					holder.binding.player2Image.load(AccountPageAdapter.IMAGES_LINK + match.playerTwoProfilePic) { crossfade(true) }
 					holder.binding.player2Photo.setPadding(0)
 				}
+			} else {
+				holder.binding.player1Image.setImageResource(R.drawable.user)
 			}
 			holder.binding.player2Name.text = match.playerTwoName.substringBefore(" ")
 			holder.binding.player2NameSurname.text = match.playerTwoName

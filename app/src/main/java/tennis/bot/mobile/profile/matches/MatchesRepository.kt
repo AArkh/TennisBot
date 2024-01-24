@@ -30,6 +30,10 @@ class MatchesRepository @Inject constructor(
 
 	private val dateTimeFormatter = SimpleDateFormat( "yyyy-MM-dd'T'hh:mm:ss'Z'", Locale.getDefault())
 	private val someOtherFormatter = SimpleDateFormat("d MMMM, HH:mm", Locale("ru", "RU"))
+	private val formats = listOf(
+		"yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ",
+		"yyyy-MM-dd'T'hh:mm:ss'Z'"
+	)
 
 	@WorkerThread
 	suspend fun getMatches() : MatchBasicResponse? {
@@ -53,8 +57,8 @@ class MatchesRepository @Inject constructor(
 			val playerOneProfilePic = matchResponseItem.players.getOrNull(0)?.photo
 			val playerTwoProfilePic = matchResponseItem.players.getOrNull(1)?.photo
 
-			val timeStampMs = dateTimeFormatter.parse(matchResponseItem.playedAt)
-			val dateTime = someOtherFormatter.format(timeStampMs) ?: ""
+			val dateTime = convertDateAndTime(matchResponseItem.playedAt)
+
 
 			MatchItem(
 				matchResponseItem.win,
@@ -74,6 +78,18 @@ class MatchesRepository @Inject constructor(
 		}
 	}
 
+	private fun convertDateAndTime(dateString: String): String {
+		for (format in formats) {
+			try {
+				val dateTimeFormatter = SimpleDateFormat(format, Locale.getDefault())
+				val timeStampMs = dateTimeFormatter.parse(dateString)
+				return someOtherFormatter.format(timeStampMs) ?: ""
+			} catch (_: Exception) { }
+		}
+
+		return ""
+	}
+
 	inner class MyDataSource : PagingSource<Int, MatchItem>() {
 
 		override fun getRefreshKey(state: PagingState<Int, MatchItem>): Int? {
@@ -85,15 +101,21 @@ class MatchesRepository @Inject constructor(
 			return try {
 				val response = api.getScores(userProfileAndEnumsRepository.getProfile().id, position)
 				val matchItemsList = response.body()?.items?.convertToMatchItemList()
-				if (position >= response.body()!!.totalCount) {
+				val nextPosition = position + 20
+				if (position >= (response.body()?.totalCount ?: 0)) {
+					Log.d("MyDataSource", "Reached the end of data")
 					return LoadResult.Page(emptyList(), prevKey = null, nextKey = null)
 				} else {
+
+					Log.d("MyDataSource", "Loading page starting from position: $nextPosition")
 					LoadResult.Page(
 						data = matchItemsList!!,
-						prevKey = if (position == 0) null else position,
-						nextKey = if (response.body()?.totalCount == 0) null else position + 1
+						prevKey = if (position == 0) null else position - params.loadSize,
+						nextKey = if (nextPosition >= (response.body()?.totalCount ?: 0)) null else nextPosition
 					)
 				}
+
+
 			} catch (exception: IOException) {
 				return LoadResult.Error(exception)
 			} catch (exception: HttpException) {
