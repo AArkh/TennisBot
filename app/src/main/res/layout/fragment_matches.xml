@@ -87,6 +87,7 @@
 					android:layout_height="wrap_content"
 					android:layout_marginStart="4dp"
 					android:background="@drawable/search_background"
+					android:backgroundTint="@color/tb_gray_choose"
 					android:paddingHorizontal="12dp"
 					android:paddingVertical="6dp"
 					android:text="@string/all_matches"

@@ -4,13 +4,9 @@ import android.content.Context
 import android.icu.text.SimpleDateFormat
 import android.util.Log
 import androidx.annotation.WorkerThread
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.Flow
 import retrofit2.HttpException
 import tennis.bot.mobile.core.AuthTokenRepository
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
@@ -61,6 +57,7 @@ class MatchesRepository @Inject constructor(
 
 
 			MatchItem(
+				matchResponseItem.id,
 				matchResponseItem.win,
 				matchResponseItem.isDouble,
 				playerOneProfilePic,
