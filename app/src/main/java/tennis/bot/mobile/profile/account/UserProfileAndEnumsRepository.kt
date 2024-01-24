@@ -34,7 +34,7 @@ class UserProfileAndEnumsRepository @Inject constructor(
 
 	@WorkerThread
 	suspend fun precacheProfile(): ProfileData {
-		val response = api.getProfile(tokenRepo.getAccessToken() ?: "").execute()
+		val response = api.getProfile().execute()
 		if (response.code() == 200) {
 			cachedProfileData = response.body()!!
 		}

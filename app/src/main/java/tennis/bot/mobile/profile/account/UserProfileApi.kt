@@ -8,7 +8,7 @@ import retrofit2.http.Header
 interface UserProfileApi {
 
 	@GET("api/tennis-players/me")
-	fun getProfile(@Header("Authorization") authHeader: String): Call<ProfileData>
+	fun getProfile(): Call<ProfileData>
 }
 
 @Serializable

@@ -13,13 +13,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
 import tennis.bot.mobile.onboarding.survey.OnboardingRepository
+import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
 	@ApplicationContext private val context: Context,
-	private val accountInfo: OnboardingRepository
+	private val accountInfo: OnboardingRepository,
+	private val profileRepo: UserProfileAndEnumsRepository
 ) : ViewModel() {
 
 	private val _uiStateFlow = MutableStateFlow(
@@ -124,6 +126,7 @@ class LoginViewModel @Inject constructor(
 		viewModelScope.launch(Dispatchers.IO) {
 			when (accountInfo.postLogin(uiStateFlow.value.phonePrefix + username.toString(), password.toString())) {
 				200 -> {
+					profileRepo.precacheProfile()
 					navigationCallback.invoke()
 				}
 
