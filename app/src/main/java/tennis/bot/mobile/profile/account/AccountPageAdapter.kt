@@ -27,7 +27,7 @@ import javax.inject.Inject
 
 class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>(){
 
-	var clickListener: ((item: String) -> Unit)? = null // todo remake for different use cases
+	var clickListener: ((item: String) -> Unit)? = null
 	val childAdapter = SurveyResultsAdapter()
 
 	companion object { // todo there should be a place for PRO item
@@ -144,7 +144,6 @@ class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHol
 		if (profileImageUrl == null) return
 
 		if (profileImageUrl.contains("default")) {
-			Log.d("123456", "default image case was triggered")
 			val resourceId = getDefaultDrawableResourceId(
 				binding.accountPhoto.context,
 				profileImageUrl.removeSuffix(".png")

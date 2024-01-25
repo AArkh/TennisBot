@@ -166,6 +166,7 @@
 	<string name="lost_matches">Проигранные</string>
 	<string name="name_surname_default">Name Surname</string>
 	<string name="telegramid_default">telegramId</string>
+	<string name="edit_profile_title">Редактировать профиль</string>
 
 
 </resources>
