@@ -6,9 +6,11 @@ import androidx.core.content.ContextCompat.getString
 import dagger.hilt.android.qualifiers.ApplicationContext
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.AuthTokenRepository
+import tennis.bot.mobile.onboarding.survey.OnboardingRepository
 import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.IS_ONE_BACKHAND_TITLE
 import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.IS_RIGHTHAND_TITLE
 import tennis.bot.mobile.onboarding.survey.SurveyResultItem
+import tennis.bot.mobile.onboarding.survey.toApiNumericFormat
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,10 +19,10 @@ class UserProfileAndEnumsRepository @Inject constructor(
 	private val api: UserProfileApi,
 	private val enumsDao: AllEnumsDao,
 	private val enumsApi: EnumsApi,
-	private val tokenRepo: AuthTokenRepository,
 	@ApplicationContext private val context: Context
 ) {
 	private lateinit var cachedProfileData: ProfileData
+	private val sharedPreferences = context.getSharedPreferences("UserProfile", Context.MODE_PRIVATE)
 
 	val defaultGameData = listOf(
 		SurveyResultItem(context.getString(R.string.accountpage_gamedata_hand), getString(context, R.string.survey_option_null)),
@@ -30,7 +32,6 @@ class UserProfileAndEnumsRepository @Inject constructor(
 		SurveyResultItem(context.getString(R.string.accountpage_gamedata_racquet), getString(context, R.string.survey_option_null)),
 		SurveyResultItem(context.getString(R.string.accountpage_gamedata_racquetStrings), getString(context, R.string.survey_option_null), noUnderline = true),
 	)
-
 
 	@WorkerThread
 	suspend fun precacheProfile(): ProfileData {
@@ -94,5 +95,13 @@ class UserProfileAndEnumsRepository @Inject constructor(
 		} else {
 			emptyList()
 		}
+	}
+
+	fun recordPhone(phoneNumber: String) {
+		sharedPreferences.edit().putString(OnboardingRepository.PHONE_NUMBER_HEADER, phoneNumber).apply()
+	}
+
+	fun getPhoneNumber(): String? {
+		return sharedPreferences.getString(OnboardingRepository.PHONE_NUMBER_HEADER, null)
 	}
 }

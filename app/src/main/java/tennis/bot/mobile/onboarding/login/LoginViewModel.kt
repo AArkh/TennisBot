@@ -127,6 +127,7 @@ class LoginViewModel @Inject constructor(
 			when (accountInfo.postLogin(uiStateFlow.value.phonePrefix + username.toString(), password.toString())) {
 				200 -> {
 					profileRepo.precacheProfile()
+					profileRepo.recordPhone(uiStateFlow.value.phonePrefix + username.toString())
 					navigationCallback.invoke()
 				}
 

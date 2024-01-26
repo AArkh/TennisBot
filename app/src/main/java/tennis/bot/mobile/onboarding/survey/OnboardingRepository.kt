@@ -291,15 +291,7 @@ class OnboardingRepository @Inject constructor(
         return filePath?.let { File(it) }
     }
 
-    private fun String.toApiNumericFormat(): String {
-        val builder = StringBuilder()
-        for (char in this) {
-            if (char.isDigit()) {
-                builder.append(char)
-            }
-        }
-        return builder.toString()
-    }
+
 
     companion object {
         const val PHONE_NUMBER_HEADER = "phoneNumber"
@@ -321,6 +313,16 @@ class OnboardingRepository @Inject constructor(
         private const val SCOPE = "roles offline_access"
         private const val AUDIENCE = "Core"
     }
+}
+
+fun String.toApiNumericFormat(): String {
+    val builder = StringBuilder()
+    for (char in this) {
+        if (char.isDigit()) {
+            builder.append(char)
+        }
+    }
+    return builder.toString()
 }
 
 

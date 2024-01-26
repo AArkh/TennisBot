@@ -16,6 +16,7 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentAccountPageBinding
 import tennis.bot.mobile.onboarding.login.LoginDialogFragment
+import tennis.bot.mobile.profile.edit.EditProfileFragment
 import tennis.bot.mobile.profile.matches.MatchesFragment
 import javax.inject.Inject
 
@@ -45,11 +46,16 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 			parentFragmentManager.popBackStack()
 		}
 		binding.optionsButton.setOnClickListener {
-			lifecycleScope.launch {
-				delay(180L) // wait for keyboard to hide
-				val bottomSheet = OptionsDialogFragment()
-				bottomSheet.show(childFragmentManager, bottomSheet.tag)
-			}
+			parentFragmentManager.beginTransaction()
+				.replace(R.id.fragment_container_view, EditProfileFragment())
+				.addToBackStack(EditProfileFragment::class.java.name)
+				.commit()
+
+//			lifecycleScope.launch {
+//				delay(180L) // wait for keyboard to hide
+//				val bottomSheet = OptionsDialogFragment()
+//				bottomSheet.show(childFragmentManager, bottomSheet.tag)
+//			}
 		}
 
 		binding.tryAgainTv.setOnClickListener {

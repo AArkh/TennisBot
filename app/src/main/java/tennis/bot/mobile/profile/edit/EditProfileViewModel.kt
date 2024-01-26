@@ -1,11 +1,15 @@
 package tennis.bot.mobile.profile.edit
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import tennis.bot.mobile.R
 import tennis.bot.mobile.onboarding.location.LocationDataMapper
 import tennis.bot.mobile.onboarding.location.LocationRepository
@@ -17,16 +21,13 @@ class EditProfileViewModel @Inject constructor(
 	private val userProfileRepo: UserProfileAndEnumsRepository,
 	private val locationRepo: LocationRepository,
 	private val locationDataMapper: LocationDataMapper,
+	@ApplicationContext private val context: Context
 ) : ViewModel()  {
 
 	private val _uiStateFlow = MutableStateFlow(
 		EditProfileUiState(
 			profilePicture = "",
-			nameSurname = "",
-			dateOfBirthday = "",
-			location = "",
-			phoneNumber = "",
-			telegramId = "",
+			emptyList()
 		)
 	)
 	val uiStateFlow = _uiStateFlow.asStateFlow()
@@ -41,39 +42,34 @@ class EditProfileViewModel @Inject constructor(
 
 	fun onStartup() {
 		viewModelScope.launch {
-			val currentProfileData = userProfileRepo.getProfile()
-			val locations = locationRepo.getLocations()
-			val country = locationDataMapper.getCountryList(locations)[currentProfileData.primaryLocation!!].countryName
-			val city = locationDataMapper.getCityList(locations, country)[currentProfileData.secondaryLocation!!].countryName
-			val location = "$country, $city"
+			withContext(Dispatchers.IO) {
+				val currentProfileData = userProfileRepo.getProfile()
+				val locations = locationRepo.getLocations()
+				val country = if (currentProfileData.primaryLocation != null) {
+					locationDataMapper.getCountryList(locations)[currentProfileData.primaryLocation].countryName } else { null }
+				val city = if (currentProfileData.secondaryLocation != null && country != null) {
+					locationDataMapper.getCityList(locations, country)[currentProfileData.secondaryLocation].countryName } else { null }
+				val location = if (country != null && city != null) {
+					"$country, $city"
+				} else { country ?: context.getString(R.string.survey_option_null) }
 
-			_uiStateFlow.value = EditProfileUiState(
-				profilePicture = currentProfileData.photo ?: "", // mb add explicit 'user' placeholder here
-				nameSurname = currentProfileData.name,
-				dateOfBirthday = currentProfileData.birthday ?: "",
-				location = location,
-				phoneNumber = "", // where to get phone number?
-				telegramId = currentProfileData.telegram ?: "",
-			)
+				val receivedDataList = listOf(
+					currentProfileData.name,
+					currentProfileData.birthday ?: context.getString(R.string.survey_option_null),
+					"$country, $city",
+					userProfileRepo.getPhoneNumber() ?: context.getString(R.string.survey_option_null),
+					currentProfileData.telegram ?: context.getString(R.string.survey_option_null)
+				)
+
+				val categoriesDataList = editProfileItems.mapIndexed { index, editProfileItem ->
+					editProfileItem.copy(title = receivedDataList.getOrElse(index) { editProfileItem.title })
+				}
+
+				_uiStateFlow.value = EditProfileUiState(
+					profilePicture = currentProfileData.photo,
+					categoriesList = categoriesDataList
+				)
+			}
 		}
 	}
-
-//	private fun ImageView.loadPlayerImage() { // from AccountPage
-//		if (profileImageUrl == null) return
-//
-//		if (profileImageUrl.contains("default")) {
-//			val resourceId = getDefaultDrawableResourceId(
-//				binding.accountPhoto.context,
-//				profileImageUrl.removeSuffix(".png")
-//			)
-//			binding.accountPhoto.visibility = View.VISIBLE
-//			if (resourceId != null) binding.accountPhoto.setImageResource(resourceId)
-//			binding.placeholderPhoto.visibility = View.GONE
-//		} else {
-//			binding.accountPhoto.visibility = View.VISIBLE
-//			binding.accountPhoto.load(AccountPageAdapter.IMAGES_LINK + profileImageUrl) { crossfade(true) }
-//			binding.placeholderPhoto.visibility = View.GONE
-//		}
-//	}
-
 }
