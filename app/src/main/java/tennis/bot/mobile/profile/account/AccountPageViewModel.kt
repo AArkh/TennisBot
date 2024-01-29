@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
 import tennis.bot.mobile.onboarding.survey.SurveyResultItem
+import tennis.bot.mobile.utils.convertDateAndTime
 import java.util.Locale
 import javax.inject.Inject
 
@@ -136,26 +137,6 @@ class AccountPageViewModel @Inject constructor(
 		}
 
 		return percentage
-	}
-
-	fun convertDateAndTime(dateString: String): String {
-		val formats = listOf(
-			"yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ",
-			"yyyy-MM-dd'T'hh:mm:ss'Z'"
-		)
-
-		for (format in formats) {
-			try {
-				val dateTimeFormatter = SimpleDateFormat(format, Locale.getDefault())
-				val timeStampMs = dateTimeFormatter.parse(dateString)
-				val someOtherFormatter = SimpleDateFormat("d MMMM yyyy", Locale("ru", "RU"))
-				return someOtherFormatter.format(timeStampMs) ?: ""
-			} catch (e: Exception) {
-				// If parsing fails, try the next format
-			}
-		}
-
-		return ""
 	}
 
 //	fun onPickedProfilePic(uri: Uri) {

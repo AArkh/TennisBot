@@ -21,7 +21,7 @@ interface LocationDao {
     @Query("SELECT * from location WHERE id = :id")
     fun getLocation(id: Int): Location
 
-    @Query("SELECT * from location ORDER BY countryName ASC")
+    @Query("SELECT * from location ORDER BY name ASC")
     fun getLocations(): List<Location>
 
 }

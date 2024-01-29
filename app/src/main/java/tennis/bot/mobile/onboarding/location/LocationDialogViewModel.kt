@@ -71,19 +71,19 @@ class LocationDialogViewModel @Inject constructor(
             LocationFragment.SELECT_COUNTRY -> {
                 activity.supportFragmentManager.setFragmentResult(
                     COUNTRY_REQUEST_KEY,
-                    bundleOf(SELECTED_COUNTRY_KEY to countryItem.countryName)
+                    bundleOf(SELECTED_COUNTRY_KEY to countryItem.name)
                 )
             }
             LocationFragment.SELECT_CITY -> {
                 activity.supportFragmentManager.setFragmentResult(
                     CITY_REQUEST_KEY,
-                    bundleOf(SELECTED_CITY_KEY to countryItem.countryName)
+                    bundleOf(SELECTED_CITY_KEY to countryItem.name)
                 )
             }
             LocationFragment.SELECT_DISTRICT -> {
                 activity.supportFragmentManager.setFragmentResult(
                     DISTRICT_REQUEST_KEY,
-                    bundleOf(SELECTED_DISTRICT_KEY to countryItem.countryName)
+                    bundleOf(SELECTED_DISTRICT_KEY to countryItem.name)
                 )
             }
         }
@@ -178,7 +178,7 @@ class LocationDialogViewModel @Inject constructor(
     fun onSearchInputChanged(userInput: String) {
         val currentState = _uiStateFlow.value as? LocationDialogUiState.DataPassed ?: return
         val filteredList = currentState.dataList.filter { countryItem: CountryItem ->
-            countryItem.countryName.contains(userInput, ignoreCase = true)
+            countryItem.name.contains(userInput, ignoreCase = true)
         }
 
         _uiStateFlow.value = LocationDialogUiState.DataPassed(

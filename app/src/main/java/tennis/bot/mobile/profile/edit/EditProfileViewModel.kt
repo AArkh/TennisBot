@@ -14,6 +14,7 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.onboarding.location.LocationDataMapper
 import tennis.bot.mobile.onboarding.location.LocationRepository
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
+import tennis.bot.mobile.utils.convertDateAndTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,6 +24,19 @@ class EditProfileViewModel @Inject constructor(
 	private val locationDataMapper: LocationDataMapper,
 	@ApplicationContext private val context: Context
 ) : ViewModel()  {
+
+	companion object {
+		const val NAME_SURNAME_REQUEST_KEY = "NAME_SURNAME_REQUEST_KEY"
+		const val SELECTED_NAME_SURNAME = "SELECTED_NAME_SURNAME"
+		const val BIRTHDAY_REQUEST_KEY = "BIRTHDAY_REQUEST_KEY"
+		const val SELECTED_BIRTHDAY = "SELECTED_BIRTHDAY"
+		const val LOCATION_REQUEST_KEY = "LOCATION_REQUEST_KEY"
+		const val SELECTED_LOCATION = "SELECTED_LOCATION"
+		const val PHONE_NUMBER_REQUEST_KEY = "PHONE_NUMBER_REQUEST_KEY"
+		const val SELECTED_PHONE_NUMBER = "SELECTED_PHONE_NUMBER"
+		const val TELEGRAM_REQUEST_KEY = "TELEGRAM_REQUEST_KEY"
+		const val SELECTED_TELEGRAM = "SELECTED_TELEGRAM"
+	}
 
 	private val _uiStateFlow = MutableStateFlow(
 		EditProfileUiState(
@@ -46,23 +60,27 @@ class EditProfileViewModel @Inject constructor(
 				val currentProfileData = userProfileRepo.getProfile()
 				val locations = locationRepo.getLocations()
 				val country = if (currentProfileData.primaryLocation != null) {
-					locationDataMapper.getCountryList(locations)[currentProfileData.primaryLocation].countryName } else { null }
+					locationDataMapper.getCountryList(locations)[currentProfileData.primaryLocation].name } else { null }
 				val city = if (currentProfileData.secondaryLocation != null && country != null) {
-					locationDataMapper.getCityList(locations, country)[currentProfileData.secondaryLocation].countryName } else { null }
+					locationDataMapper.getCityList(locations, country)[currentProfileData.secondaryLocation].name } else { null }
 				val location = if (country != null && city != null) {
 					"$country, $city"
 				} else { country ?: context.getString(R.string.survey_option_null) }
 
 				val receivedDataList = listOf(
 					currentProfileData.name,
-					currentProfileData.birthday ?: context.getString(R.string.survey_option_null),
-					"$country, $city",
+					convertDateAndTime(currentProfileData.birthday ?: ""),
+					location,
 					userProfileRepo.getPhoneNumber() ?: context.getString(R.string.survey_option_null),
 					currentProfileData.telegram ?: context.getString(R.string.survey_option_null)
 				)
 
 				val categoriesDataList = editProfileItems.mapIndexed { index, editProfileItem ->
-					editProfileItem.copy(title = receivedDataList.getOrElse(index) { editProfileItem.title })
+					if (index == editProfileItems.lastIndex) {
+						editProfileItem.copy(title = receivedDataList.getOrElse(index) { editProfileItem.title }, noUnderline = true)
+					} else {
+						editProfileItem.copy(title = receivedDataList.getOrElse(index) { editProfileItem.title })
+					}
 				}
 
 				_uiStateFlow.value = EditProfileUiState(
@@ -71,5 +89,34 @@ class EditProfileViewModel @Inject constructor(
 				)
 			}
 		}
+	}
+
+	fun onUpdatedValues(key: Int, value: String) {
+		val currentState = uiStateFlow.value
+
+		val updatedList = currentState.categoriesList.mapIndexed { index, editProfileItem ->
+			if (key == index) {
+				when (index) {
+					0 -> { editProfileItem.copy(title = value) }
+					1 -> { editProfileItem.copy(title = value) }
+					2 -> { editProfileItem.copy(title = value) }
+					3 -> { editProfileItem.copy(title = value) }
+					4 -> { editProfileItem.copy(title = value) }
+					else -> { editProfileItem }
+				}
+			} else { editProfileItem }
+		}
+
+//		when(key) {
+//			SELECTED_NAME_SURNAME -> {
+//				currentState.categoriesList[0].copy(title = value)
+//			}
+//			SELECTED_BIRTHDAY -> {}
+//			SELECTED_LOCATION -> {}
+//			SELECTED_PHONE_NUMBER -> {}
+//			SELECTED_TELEGRAM -> {}
+//		}
+
+		_uiStateFlow.value = currentState.copy(categoriesList = updatedList)
 	}
 }
