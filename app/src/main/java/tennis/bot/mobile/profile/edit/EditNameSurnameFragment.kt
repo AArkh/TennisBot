@@ -39,7 +39,9 @@ class EditNameSurnameFragment : CoreFragment<FragmentEditNameSurnameBinding>() {
 		}
 
 		binding.buttonChange.setOnClickListener {
-			viewModel.onUpdateNameSurname(requireActivity())
+			viewModel.onUpdateNameSurname(requireActivity()) {
+				parentFragmentManager.popBackStack()
+			}
 		}
 
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState ->

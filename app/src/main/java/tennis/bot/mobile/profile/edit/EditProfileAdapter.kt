@@ -10,14 +10,14 @@ import tennis.bot.mobile.databinding.RecyclerEditProfileItemBinding
 import javax.inject.Inject
 
 class EditProfileAdapter @Inject constructor(): CoreAdapter<EditProfileItemViewHolder>() {
-	var clickListener: ((item: String) -> Unit)? = null
+	var clickListener: ((item: Int) -> Unit)? = null
 
 	companion object {
-		const val CHANGE_NAME = "CHANGE_NAME"
-		const val CHANGE_BIRTHDAY = "CHANGE_BIRTHDAY"
-		const val CHANGE_LOCATION = "CHANGE_LOCATION"
-		const val CHANGE_PHONE = "CHANGE_PHONE"
-		const val CHANGE_TELEGRAM = "CHANGE_TELEGRAM"
+		const val CHANGE_NAME = 0
+		const val CHANGE_BIRTHDAY = 1
+		const val CHANGE_LOCATION = 2
+		const val CHANGE_PHONE = 3
+		const val CHANGE_TELEGRAM = 4
 
 	}
 
@@ -34,7 +34,7 @@ class EditProfileAdapter @Inject constructor(): CoreAdapter<EditProfileItemViewH
 		}
 
 		holder.binding.root.setOnClickListener {
-			clickListener?.invoke(holder.binding.title.text.toString()) // figure out whether to find a unique identifier or add a vield with one
+			clickListener?.invoke(holder.bindingAdapterPosition) // figure out whether to find a unique identifier or add a vield with one
 		}
 	}
 

@@ -15,6 +15,7 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.onboarding.survey.OnboardingRepository
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.utils.showToast
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 @HiltViewModel

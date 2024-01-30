@@ -32,6 +32,7 @@ class EditProfileFragment : CoreFragment<FragmentEditProfileBinding>() {
 
 		binding.categoriesContainer.adapter = adapter
 		binding.categoriesContainer.layoutManager = LinearLayoutManager(requireContext())
+		viewModel.onStartup()
 
 		adapter.clickListener = { command ->
 			when(command) {
@@ -51,7 +52,7 @@ class EditProfileFragment : CoreFragment<FragmentEditProfileBinding>() {
 
 		subscribeToFlowOn(viewModel.uiStateFlow) {uiState: EditProfileUiState ->
 			onLoadingProfileImage(uiState.profilePicture)
-			viewModel.onStartup()
+
 
 			adapter.submitList(uiState.categoriesList)
 

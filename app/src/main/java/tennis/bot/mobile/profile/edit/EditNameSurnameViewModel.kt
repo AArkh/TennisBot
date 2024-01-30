@@ -24,7 +24,7 @@ class EditNameSurnameViewModel @Inject constructor(): ViewModel() {
 
 	val uiStateFlow = _uiStateFlow.asStateFlow()
 
-	fun onNameInput(name: CharSequence) {
+	fun onNameInput(name: CharSequence) { // get rid of spaces, numbers, mb force starting from uppercase
 		val prevState: EditNameSurnameUiState = _uiStateFlow.value
 		val isClearNameButtonVisible = name.isNotEmpty()
 
@@ -53,10 +53,11 @@ class EditNameSurnameViewModel @Inject constructor(): ViewModel() {
 		)
 	}
 
-	fun onUpdateNameSurname(activity: FragmentActivity) {
+	fun onUpdateNameSurname(activity: FragmentActivity, navigationCallback: () -> Unit) {
 		activity.supportFragmentManager.setFragmentResult(
 			NAME_SURNAME_REQUEST_KEY,
 			bundleOf(SELECTED_NAME_SURNAME to "${uiStateFlow.value.userNameInput} ${uiStateFlow.value.userSurnameInput}")
 		)
+		navigationCallback.invoke()
 	}
 }
