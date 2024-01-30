@@ -21,10 +21,8 @@ class OptionsDialogFragment : CoreBottomSheetDialogFragment<FragmentOptionsDialo
 		}
 
 		binding.updateContacts.setOnClickListener {
-			childFragmentManager.beginTransaction()
-				.replace(R.id.fragment_container_view, EditProfileFragment())
-				.addToBackStack(EditProfileFragment::class.java.name)
-				.commit()
+
+			// todo set result, depending on option selected and then just close the dialog
 		}
 	}
 }

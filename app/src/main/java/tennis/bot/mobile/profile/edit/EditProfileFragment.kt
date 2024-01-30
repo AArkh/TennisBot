@@ -50,12 +50,9 @@ class EditProfileFragment : CoreFragment<FragmentEditProfileBinding>() {
 			viewModel.onUpdatedValues(0, updatedNameSurname ?: getString(R.string.survey_option_null))
 		}
 
-		subscribeToFlowOn(viewModel.uiStateFlow) {uiState: EditProfileUiState ->
+		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: EditProfileUiState ->
 			onLoadingProfileImage(uiState.profilePicture)
-
-
 			adapter.submitList(uiState.categoriesList)
-
 		}
 	}
 
@@ -73,5 +70,4 @@ class EditProfileFragment : CoreFragment<FragmentEditProfileBinding>() {
 			binding.placeholderPhoto.visibility = View.GONE
 		}
 	}
-
 }

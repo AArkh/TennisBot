@@ -89,9 +89,7 @@ class MatchesRepository @Inject constructor(
 
 	inner class MyDataSource : PagingSource<Int, MatchItem>() {
 
-		override fun getRefreshKey(state: PagingState<Int, MatchItem>): Int? {
-			TODO("Not yet implemented")
-		}
+		override fun getRefreshKey(state: PagingState<Int, MatchItem>): Int? = null
 
 		override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MatchItem> {
 			val position = params.key ?: 0
@@ -103,16 +101,12 @@ class MatchesRepository @Inject constructor(
 					Log.d("MyDataSource", "Reached the end of data")
 					return LoadResult.Page(emptyList(), prevKey = null, nextKey = null)
 				} else {
-
-					Log.d("MyDataSource", "Loading page starting from position: $nextPosition")
 					LoadResult.Page(
 						data = matchItemsList!!,
 						prevKey = if (position == 0) null else position - params.loadSize,
 						nextKey = if (nextPosition >= (response.body()?.totalCount ?: 0)) null else nextPosition
 					)
 				}
-
-
 			} catch (exception: IOException) {
 				return LoadResult.Error(exception)
 			} catch (exception: HttpException) {

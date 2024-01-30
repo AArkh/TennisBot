@@ -49,7 +49,6 @@ class MatchesViewModel  @Inject constructor(
 	}
 
 	fun getMatchesNew(): Flow<PagingData<MatchItem>> {
-		Log.d("1234567", "New page")
 		return Pager(
 			config = PagingConfig(
 				pageSize = 20,

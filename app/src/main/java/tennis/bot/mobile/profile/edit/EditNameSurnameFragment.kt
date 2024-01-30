@@ -10,6 +10,7 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentEditNameSurnameBinding
 
+// todo поебаться с инсетами, чтобы кнопка над клавой выезжала
 @AndroidEntryPoint
 class EditNameSurnameFragment : CoreFragment<FragmentEditNameSurnameBinding>() {
 

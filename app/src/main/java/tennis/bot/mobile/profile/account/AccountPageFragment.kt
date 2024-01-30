@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -46,16 +47,32 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 			parentFragmentManager.popBackStack()
 		}
 		binding.optionsButton.setOnClickListener {
-			parentFragmentManager.beginTransaction()
-				.replace(R.id.fragment_container_view, EditProfileFragment())
-				.addToBackStack(EditProfileFragment::class.java.name)
-				.commit()
+//			parentFragmentManager.beginTransaction()
+//				.replace(R.id.fragment_container_view, EditProfileFragment())
+//				.addToBackStack(EditProfileFragment::class.java.name)
+//				.commit()
 
-//			lifecycleScope.launch {
-//				delay(180L) // wait for keyboard to hide
-//				val bottomSheet = OptionsDialogFragment()
-//				bottomSheet.show(childFragmentManager, bottomSheet.tag)
-//			}
+			lifecycleScope.launch {
+				delay(180L) // wait for keyboard to hide
+				val bottomSheet = OptionsDialogFragment()
+				bottomSheet.show(childFragmentManager, bottomSheet.tag)
+			}
+		}
+
+		setFragmentResultListener(BOTTOM_SHIT_KEY) { _, result ->
+			val selectedOption = result.getString(OPTION_KEY)
+			delay(300L) // to wait until bottom shit get closed w anim
+			when(selectedOption) {
+				"edit_profie" -> {
+//					parentFragmentManager.beginTransaction()
+				}
+				"change_game_data" -> {
+//					parentFragmentManager.beginTransaction()
+				}
+				"settings" -> {
+//					parentFragmentManager.beginTransaction()
+				}
+			}
 		}
 
 		binding.tryAgainTv.setOnClickListener {

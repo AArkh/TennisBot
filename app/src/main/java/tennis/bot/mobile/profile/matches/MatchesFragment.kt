@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.insertFooterItem
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -40,7 +41,7 @@ class MatchesFragment : CoreFragment<FragmentMatchesBinding>() {
 
 		lifecycleScope.launch {
 			viewModel.getMatchesNew().collectLatest {
-				matchesAdapter.submitData(it)
+				matchesAdapter.submitData(it.insertFooterItem()) // todo research the shit
 			}
 		}
 
