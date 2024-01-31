@@ -1,5 +1,7 @@
-package tennis.bot.mobile.profile.edit
+package tennis.bot.mobile.profile.edit.namesurname
 
+import android.text.InputFilter
+import android.text.Spanned
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
@@ -24,7 +26,7 @@ class EditNameSurnameViewModel @Inject constructor(): ViewModel() {
 
 	val uiStateFlow = _uiStateFlow.asStateFlow()
 
-	fun onNameInput(name: CharSequence) { // get rid of spaces, numbers, mb force starting from uppercase
+	fun onNameInput(name: CharSequence) {
 		val prevState: EditNameSurnameUiState = _uiStateFlow.value
 		val isClearNameButtonVisible = name.isNotEmpty()
 
@@ -59,5 +61,23 @@ class EditNameSurnameViewModel @Inject constructor(): ViewModel() {
 			bundleOf(SELECTED_NAME_SURNAME to "${uiStateFlow.value.userNameInput} ${uiStateFlow.value.userSurnameInput}")
 		)
 		navigationCallback.invoke()
+	}
+
+	inner class LetterInputFilter : InputFilter {
+		override fun filter(
+			source: CharSequence?,
+			start: Int,
+			end: Int,
+			dest: Spanned?,
+			dstart: Int,
+			dend: Int
+		): CharSequence? {
+			for (i in start until end) {
+				if (!Character.isLetter(source!![i])) {
+					return ""
+				}
+			}
+			return null
+		}
 	}
 }

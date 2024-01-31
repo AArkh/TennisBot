@@ -1,6 +1,8 @@
 package tennis.bot.mobile.onboarding.location
 
 import android.util.Log
+import androidx.core.os.bundleOf
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,10 +12,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tennis.bot.mobile.onboarding.survey.OnboardingRepository
+import tennis.bot.mobile.profile.edit.EditProfileViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class LocationViewModel @Inject constructor(
+open class LocationViewModel @Inject constructor(
 	private val repository: LocationRepository,
 	private val accountInfo: OnboardingRepository
 ) : ViewModel() {

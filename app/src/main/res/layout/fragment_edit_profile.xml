@@ -91,7 +91,6 @@
 		android:layout_marginTop="24dp"
 		android:layout_marginHorizontal="20dp"
 		android:background="@drawable/country_button_outline"
-		tools:listitem="@layout/recycler_edit_profile_item"
 		app:layout_constraintTop_toBottomOf="@id/account_photo_frame"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintEnd_toEndOf="parent" />

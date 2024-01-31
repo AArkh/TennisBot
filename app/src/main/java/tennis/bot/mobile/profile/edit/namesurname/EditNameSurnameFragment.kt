@@ -1,7 +1,8 @@
-package tennis.bot.mobile.profile.edit
+package tennis.bot.mobile.profile.edit.namesurname
 
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,10 +24,12 @@ class EditNameSurnameFragment : CoreFragment<FragmentEditNameSurnameBinding>() {
 			parentFragmentManager.popBackStack()
 		}
 
+		binding.nameInputEt.filters = arrayOf(viewModel.LetterInputFilter())
 		binding.nameInputEt.doOnTextChanged { name, _, _, _ ->
 			viewModel.onNameInput(name ?: "")
 		}
 
+		binding.surnameInputEt.filters = arrayOf(viewModel.LetterInputFilter())
 		binding.surnameInputEt.doOnTextChanged { surname, _, _, _ ->
 			viewModel.onSurnameInput(surname ?: "")
 		}
@@ -43,6 +46,8 @@ class EditNameSurnameFragment : CoreFragment<FragmentEditNameSurnameBinding>() {
 				parentFragmentManager.popBackStack()
 			}
 		}
+
+		requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState ->
 			binding.clearNameButton.visibility = if (uiState.clearNameButtonVisible) View.VISIBLE else View.INVISIBLE

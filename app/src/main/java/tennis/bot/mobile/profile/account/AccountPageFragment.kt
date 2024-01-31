@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -46,16 +47,28 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 			parentFragmentManager.popBackStack()
 		}
 		binding.optionsButton.setOnClickListener {
-			parentFragmentManager.beginTransaction()
-				.replace(R.id.fragment_container_view, EditProfileFragment())
-				.addToBackStack(EditProfileFragment::class.java.name)
-				.commit()
+			lifecycleScope.launch {
+				delay(180L) // wait for keyboard to hide
+				val bottomSheet = OptionsDialogFragment()
+				bottomSheet.show(childFragmentManager, bottomSheet.tag)
+			}
+		}
 
-//			lifecycleScope.launch {
-//				delay(180L) // wait for keyboard to hide
-//				val bottomSheet = OptionsDialogFragment()
-//				bottomSheet.show(childFragmentManager, bottomSheet.tag)
-//			}
+		setFragmentResultListener(OPTIONS_DIALOG_REQUEST_KEY) { _, result ->
+			lifecycleScope.launch {
+				delay(180L) // to wait until bottom shit get closed w anim
+				when (result.getString(SELECTED_DIALOG_OPTION)) {
+					OptionsDialogFragment.UPDATE_CONTACTS -> {
+						parentFragmentManager.beginTransaction()
+							.replace(R.id.fragment_container_view, EditProfileFragment())
+							.addToBackStack(EditProfileFragment::class.java.name)
+							.commit()
+					}
+					OptionsDialogFragment.UPDATE_GAMEDATA -> {}
+					OptionsDialogFragment.UPDATE_SETTINGS -> {}
+					OptionsDialogFragment.LOGOUT -> {}
+				}
+			}
 		}
 
 		binding.tryAgainTv.setOnClickListener {
@@ -116,5 +129,7 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 		const val INFLATE_GAMEDATA = "INFLATE_GAMEDATA"
 		const val GO_TO_TOURNAMENTS = "GO_TO_TOURNAMENTS"
 		const val PICK_IMAGE = "PICK_IMAGE"
+		const val OPTIONS_DIALOG_REQUEST_KEY = "OPTIONS_DIALOG_REQUEST_KEY"
+		const val SELECTED_DIALOG_OPTION = "SELECTED_DIALOG_OPTION"
 	}
 }

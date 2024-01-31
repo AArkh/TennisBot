@@ -18,7 +18,7 @@ import tennis.bot.mobile.utils.hideKeyboard
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
+open class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
 
     override var adjustToKeyboard: Boolean = true
     override val bindingInflation: Inflation<FragmentPhoneInputBinding> = FragmentPhoneInputBinding::inflate

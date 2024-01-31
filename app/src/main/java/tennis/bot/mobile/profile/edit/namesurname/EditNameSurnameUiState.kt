@@ -1,4 +1,4 @@
-package tennis.bot.mobile.profile.edit
+package tennis.bot.mobile.profile.edit.namesurname
 
 data class EditNameSurnameUiState(
 	val userNameInput: String,

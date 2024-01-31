@@ -13,11 +13,11 @@ class EditProfileAdapter @Inject constructor(): CoreAdapter<EditProfileItemViewH
 	var clickListener: ((item: Int) -> Unit)? = null
 
 	companion object {
-		const val CHANGE_NAME = 0
-		const val CHANGE_BIRTHDAY = 1
-		const val CHANGE_LOCATION = 2
-		const val CHANGE_PHONE = 3
-		const val CHANGE_TELEGRAM = 4
+		const val CHANGE_NAME_INDEX = 0
+		const val CHANGE_BIRTHDAY_INDEX = 1
+		const val CHANGE_LOCATION_INDEX = 2
+		const val CHANGE_PHONE_INDEX = 3
+		const val CHANGE_TELEGRAM_INDEX = 4
 
 	}
 
@@ -50,6 +50,6 @@ class EditProfileItemViewHolder(
 
 data class EditProfileItem(
 	val icon: Int,
-	val title: String,
+	val title: String?,
 	val noUnderline: Boolean = false
 ): CoreUtilsItem()

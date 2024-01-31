@@ -26,7 +26,7 @@
 		android:id="@+id/title"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="@string/edit_name_surname_title"
+		android:text="@string/change_telegram"
 		android:textSize="20sp"
 		android:textColor="@color/tb_black"
 		android:layout_marginStart="20dp"
@@ -35,14 +35,14 @@
 		app:layout_constraintTop_toBottomOf="@+id/back_button" />
 
 	<com.google.android.material.textfield.TextInputLayout
-		android:id="@+id/nameInput_layout"
+		android:id="@+id/telegramInput_layout"
 		style="?attr/textInputFilledStyle"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginHorizontal="20dp"
 		android:layout_marginTop="16dp"
 		android:textSize="15sp"
-		android:hint="@string/namesurname_name"
+		android:hint="@string/telegram_hint"
 		app:boxBackgroundColor="@color/tb_bg_main"
 		app:boxStrokeColor="@color/tb_primary_green"
 		app:boxStrokeWidth="2dp"
@@ -54,7 +54,7 @@
 		app:layout_constraintTop_toBottomOf="@+id/title">
 
 		<com.google.android.material.textfield.TextInputEditText
-			android:id="@+id/nameInputEt"
+			android:id="@+id/telegramEt"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:cursorVisible="true"
@@ -67,7 +67,7 @@
 	</com.google.android.material.textfield.TextInputLayout>
 
 	<FrameLayout
-		android:id="@+id/clear_name_button"
+		android:id="@+id/clear_text_button"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:padding="10dp"
@@ -78,60 +78,6 @@
 
 		<ImageView
 			android:id="@+id/clear_name_button_image"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="end"
-			android:layout_marginEnd="2dp"
-			android:background="@drawable/search_background"
-			android:backgroundTint="@color/tb_gray_border"
-			android:padding="2dp"
-			android:src="@drawable/x" />
-	</FrameLayout>
-
-	<com.google.android.material.textfield.TextInputLayout
-		android:id="@+id/surnameInput_layout"
-		style="?attr/textInputFilledStyle"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginHorizontal="20dp"
-		android:layout_marginTop="4dp"
-		android:textSize="15sp"
-		android:hint="@string/namesurname_surname"
-		app:boxBackgroundColor="@color/tb_bg_main"
-		app:boxStrokeColor="@color/tb_primary_green"
-		app:boxStrokeWidth="2dp"
-		app:errorEnabled="true"
-		app:errorIconTint="@color/invisible"
-		app:expandedHintEnabled="true"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/nameInput_layout">
-
-		<com.google.android.material.textfield.TextInputEditText
-			android:id="@+id/surnameInputEt"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:cursorVisible="true"
-			android:textCursorDrawable="@null"
-			android:textSize="15sp"
-			android:inputType="text"
-			android:maxLines="1"
-			android:imeOptions="actionDone"/>
-
-	</com.google.android.material.textfield.TextInputLayout>
-
-	<FrameLayout
-		android:id="@+id/clear_surname_button"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:padding="10dp"
-		android:layout_marginBottom="10dp"
-		app:layout_constraintBottom_toBottomOf="@+id/surnameInput_layout"
-		app:layout_constraintRight_toRightOf="@+id/surnameInput_layout"
-		app:layout_constraintTop_toTopOf="@+id/surnameInput_layout">
-
-		<ImageView
-			android:id="@+id/clear_surname_button_image"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="end"

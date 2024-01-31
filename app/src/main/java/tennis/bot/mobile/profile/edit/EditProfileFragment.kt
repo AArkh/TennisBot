@@ -2,6 +2,7 @@ package tennis.bot.mobile.profile.edit
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,9 +14,17 @@ import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentEditProfileBinding
 import tennis.bot.mobile.profile.account.AccountPageAdapter
 import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
+import tennis.bot.mobile.profile.edit.EditProfileViewModel.Companion.LOCATION_STRINGS_REQUEST_KEY
 import tennis.bot.mobile.profile.edit.EditProfileViewModel.Companion.NAME_SURNAME_REQUEST_KEY
+import tennis.bot.mobile.profile.edit.EditProfileViewModel.Companion.PHONE_NUMBER_REQUEST_KEY
+import tennis.bot.mobile.profile.edit.EditProfileViewModel.Companion.SELECTED_LOCATION_STRINGS
 import tennis.bot.mobile.profile.edit.EditProfileViewModel.Companion.SELECTED_NAME_SURNAME
-import tennis.bot.mobile.profile.matches.MatchesFragment
+import tennis.bot.mobile.profile.edit.EditProfileViewModel.Companion.SELECTED_PHONE_NUMBER
+import tennis.bot.mobile.profile.edit.EditProfileViewModel.Companion.SELECTED_TELEGRAM
+import tennis.bot.mobile.profile.edit.EditProfileViewModel.Companion.TELEGRAM_REQUEST_KEY
+import tennis.bot.mobile.profile.edit.location.EditLocationFragment
+import tennis.bot.mobile.profile.edit.namesurname.EditNameSurnameFragment
+import tennis.bot.mobile.profile.edit.telegram.EditTelegramFragment
 import javax.inject.Inject
 
 
@@ -32,31 +41,68 @@ class EditProfileFragment : CoreFragment<FragmentEditProfileBinding>() {
 
 		binding.categoriesContainer.adapter = adapter
 		binding.categoriesContainer.layoutManager = LinearLayoutManager(requireContext())
-		viewModel.onStartup()
 
-		adapter.clickListener = { command ->
-			when(command) {
-				EditProfileAdapter.CHANGE_NAME -> {
-					parentFragmentManager.beginTransaction()
-						.replace(R.id.fragment_container_view, EditNameSurnameFragment())
-						.addToBackStack(EditNameSurnameFragment::class.java.name)
-						.commit()
+		binding.backButton.setOnClickListener {
+			parentFragmentManager.popBackStack()
+		}
+
+		adapter.clickListener = { index ->
+			when(index) {
+				EditProfileAdapter.CHANGE_NAME_INDEX -> {
+					goToAnotherFragment(EditNameSurnameFragment())
+				}
+				EditProfileAdapter.CHANGE_BIRTHDAY_INDEX -> {}
+				EditProfileAdapter.CHANGE_LOCATION_INDEX -> {
+					goToAnotherFragment(EditLocationFragment())
+				}
+				EditProfileAdapter.CHANGE_PHONE_INDEX -> {
+					goToAnotherFragment(EditPhoneFragment())
+				}
+				EditProfileAdapter.CHANGE_TELEGRAM_INDEX -> {
+					goToAnotherFragment(EditTelegramFragment())
 				}
 			}
 		}
 
 		setFragmentResultListener(NAME_SURNAME_REQUEST_KEY) { _, result ->
 			val updatedNameSurname = result.getString(SELECTED_NAME_SURNAME)
-			viewModel.onUpdatedValues(0, updatedNameSurname ?: getString(R.string.survey_option_null))
+			viewModel.onUpdatedValues(EditProfileAdapter.CHANGE_NAME_INDEX, updatedNameSurname ?: getString(R.string.survey_option_null))
+			viewModel.onStartup()
+		}
+
+		setFragmentResultListener(LOCATION_STRINGS_REQUEST_KEY) { _, result ->
+			val updatedLocationInts = result.getStringArrayList(SELECTED_LOCATION_STRINGS)
+			viewModel.updateLocation(
+				updatedLocationInts?.getOrNull(0), updatedLocationInts?.getOrNull(1), updatedLocationInts?.getOrNull(2)
+			)
+			viewModel.onStartup()
+		}
+
+		setFragmentResultListener(PHONE_NUMBER_REQUEST_KEY) { _, result ->
+			val updatedPhoneNumber = result.getString(SELECTED_PHONE_NUMBER)
+			viewModel.onUpdatedValues(EditProfileAdapter.CHANGE_PHONE_INDEX, updatedPhoneNumber ?: getString(R.string.survey_option_null))
+			viewModel.onStartup()
+		}
+
+		setFragmentResultListener(TELEGRAM_REQUEST_KEY) { _, result ->
+			val updatedTelegram = result.getString(SELECTED_TELEGRAM)
+			viewModel.onUpdatedValues(EditProfileAdapter.CHANGE_TELEGRAM_INDEX, updatedTelegram ?: getString(R.string.survey_option_null))
+			viewModel.onStartup()
 		}
 
 		subscribeToFlowOn(viewModel.uiStateFlow) {uiState: EditProfileUiState ->
 			onLoadingProfileImage(uiState.profilePicture)
-
-
+			viewModel.onStartup()
 			adapter.submitList(uiState.categoriesList)
 
 		}
+	}
+
+	private fun goToAnotherFragment(fragment: Fragment) {
+		parentFragmentManager.beginTransaction()
+			.replace(R.id.fragment_container_view, fragment)
+			.addToBackStack(fragment::class.java.name)
+			.commit()
 	}
 
 	private fun onLoadingProfileImage(profileImageUrl: String?){
@@ -73,5 +119,4 @@ class EditProfileFragment : CoreFragment<FragmentEditProfileBinding>() {
 			binding.placeholderPhoto.visibility = View.GONE
 		}
 	}
-
 }

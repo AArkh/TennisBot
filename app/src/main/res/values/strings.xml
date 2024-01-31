@@ -169,6 +169,8 @@
 	<string name="edit_profile_title">Редактировать профиль</string>
 	<string name="edit_name_surname_title">Изменить имя</string>
 	<string name="button_change">Изменить</string>
+	<string name="change_telegram">Изменить Telegram</string>
+	<string name="telegram_hint">Telegram</string>
 
 
 </resources>

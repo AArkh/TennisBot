@@ -2,6 +2,7 @@ package tennis.bot.mobile.profile.account
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreBottomSheetDialogFragment
 import tennis.bot.mobile.core.Inflation
@@ -13,6 +14,13 @@ class OptionsDialogFragment : CoreBottomSheetDialogFragment<FragmentOptionsDialo
 	override val bindingInflation: Inflation<FragmentOptionsDialogBinding> =
 		FragmentOptionsDialogBinding::inflate
 
+	companion object {
+		const val UPDATE_CONTACTS = "CHANGE_CONTACTS"
+		const val UPDATE_GAMEDATA = "CHANGE_GAMEDATA"
+		const val UPDATE_SETTINGS = "CHANGE_SETTINGS"
+		const val LOGOUT = "LOGOUT"
+	}
+
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 
@@ -21,10 +29,36 @@ class OptionsDialogFragment : CoreBottomSheetDialogFragment<FragmentOptionsDialo
 		}
 
 		binding.updateContacts.setOnClickListener {
-			childFragmentManager.beginTransaction()
-				.replace(R.id.fragment_container_view, EditProfileFragment())
-				.addToBackStack(EditProfileFragment::class.java.name)
-				.commit()
+			requireActivity().supportFragmentManager.setFragmentResult(
+				AccountPageFragment.OPTIONS_DIALOG_REQUEST_KEY,
+				bundleOf(AccountPageFragment.SELECTED_DIALOG_OPTION to UPDATE_CONTACTS)
+			)
+			dialog?.dismiss()
 		}
+
+		binding.updateGameData.setOnClickListener {
+			requireActivity().supportFragmentManager.setFragmentResult(
+				AccountPageFragment.OPTIONS_DIALOG_REQUEST_KEY,
+				bundleOf(AccountPageFragment.SELECTED_DIALOG_OPTION to UPDATE_GAMEDATA)
+			)
+			dialog?.dismiss()
+		}
+
+		binding.settings.setOnClickListener {
+			requireActivity().supportFragmentManager.setFragmentResult(
+				AccountPageFragment.OPTIONS_DIALOG_REQUEST_KEY,
+				bundleOf(AccountPageFragment.SELECTED_DIALOG_OPTION to UPDATE_SETTINGS)
+			)
+			dialog?.dismiss()
+		}
+
+		binding.logout.setOnClickListener {
+			requireActivity().supportFragmentManager.setFragmentResult(
+				AccountPageFragment.OPTIONS_DIALOG_REQUEST_KEY,
+				bundleOf(AccountPageFragment.SELECTED_DIALOG_OPTION to LOGOUT)
+			)
+			dialog?.dismiss()
+		}
+
 	}
 }

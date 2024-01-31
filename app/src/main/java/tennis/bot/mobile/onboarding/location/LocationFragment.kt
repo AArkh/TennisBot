@@ -13,7 +13,7 @@ import tennis.bot.mobile.databinding.FragmentLocationBinding
 import tennis.bot.mobile.onboarding.photopick.PhotoPickFragment
 
 @AndroidEntryPoint
-class LocationFragment : CoreFragment<FragmentLocationBinding>() {
+open class LocationFragment : CoreFragment<FragmentLocationBinding>() {
 
     override val bindingInflation: Inflation<FragmentLocationBinding> = FragmentLocationBinding::inflate
     private val viewModel: LocationViewModel by viewModels()
@@ -107,7 +107,7 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
             viewModel.recordLocationValues(
                 selectedCountry = binding.countryTv.text.toString(),
                 selectedCity = binding.cityTv.text.toString(),
-                selectedDistrict = binding.countryTv.text.toString()
+                selectedDistrict = binding.districtTv.text.toString()
             )
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_view, PhotoPickFragment())
