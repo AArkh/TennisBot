@@ -26,6 +26,10 @@ class MatchesFragment : CoreFragment<FragmentMatchesBinding>() {
 		binding.matchesContainer.adapter = matchesAdapter
 		binding.matchesContainer.layoutManager = LinearLayoutManager(requireContext())
 
+		binding.backButton.setOnClickListener {
+			parentFragmentManager.popBackStack()
+		}
+
 		binding.allMatchesButton.setOnClickListener{
 			viewModel.onOptionClicked(buttonClicked = binding.allMatchesButton, binding.wonMatchesButton, binding.lostMatchesButton)
 		}

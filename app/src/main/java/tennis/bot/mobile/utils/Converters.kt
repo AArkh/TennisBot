@@ -11,7 +11,8 @@ const val DEFAULT_DATE_TIME = "0001-01-01T00:00:00Z"
 fun convertDateAndTime(dateString: String): String? {
 	val formats = listOf(
 		"yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ",
-		"yyyy-MM-dd'T'hh:mm:ss'Z'"
+		"yyyy-MM-dd'T'hh:mm:ss'Z'",
+		"dd/MM/yy"
 	)
 	if (dateString == DEFAULT_DATE_TIME) return null
 

@@ -1,7 +1,11 @@
 package tennis.bot.mobile.profile.edit
 
+import android.app.DatePickerDialog
+import android.icu.util.Calendar
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.DatePicker
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -51,7 +55,9 @@ class EditProfileFragment : CoreFragment<FragmentEditProfileBinding>() {
 				EditProfileAdapter.CHANGE_NAME_INDEX -> {
 					goToAnotherFragment(EditNameSurnameFragment())
 				}
-				EditProfileAdapter.CHANGE_BIRTHDAY_INDEX -> {}
+				EditProfileAdapter.CHANGE_BIRTHDAY_INDEX -> {
+					showDatePickerDialog()
+				}
 				EditProfileAdapter.CHANGE_LOCATION_INDEX -> {
 					goToAnotherFragment(EditLocationFragment())
 				}
@@ -118,5 +124,26 @@ class EditProfileFragment : CoreFragment<FragmentEditProfileBinding>() {
 			binding.accountPhoto.load(AccountPageAdapter.IMAGES_LINK + profileImageUrl) { crossfade(true) }
 			binding.placeholderPhoto.visibility = View.GONE
 		}
+	}
+
+	private fun showDatePickerDialog() {
+		val calendar = Calendar.getInstance()
+		val currentYear = calendar.get(Calendar.YEAR)
+		val currentMonth = calendar.get(Calendar.MONTH)
+		val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
+
+		val datePickerDialog = DatePickerDialog(
+			requireContext(),
+			{ _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
+				val selectedDate = "$dayOfMonth/${month + 1}/$year"
+				Log.d("123456", "Selected Date: $selectedDate")
+				viewModel.onUpdatedValues(EditProfileAdapter.CHANGE_BIRTHDAY_INDEX, selectedDate ?: getString(R.string.survey_option_null))
+				viewModel.onStartup()
+			},
+			currentYear,
+			currentMonth,
+			currentDay
+		)
+		datePickerDialog.show()
 	}
 }

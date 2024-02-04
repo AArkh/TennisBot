@@ -34,7 +34,7 @@ class EditProfileAdapter @Inject constructor(): CoreAdapter<EditProfileItemViewH
 		}
 
 		holder.binding.root.setOnClickListener {
-			clickListener?.invoke(holder.bindingAdapterPosition) // figure out whether to find a unique identifier or add a vield with one
+			clickListener?.invoke(holder.bindingAdapterPosition)
 		}
 	}
 
