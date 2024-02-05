@@ -1,6 +1,8 @@
 package tennis.bot.mobile.profile.edit
 
 import android.content.Context
+import android.icu.text.SimpleDateFormat
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,9 +16,11 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.onboarding.location.LocationDataMapper
 import tennis.bot.mobile.onboarding.location.LocationRepository
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
+import tennis.bot.mobile.utils.DEFAULT_DATE_TIME
 import tennis.bot.mobile.utils.convertDateAndTime
 import tennis.bot.mobile.utils.convertLocationIntToString
 import tennis.bot.mobile.utils.convertLocationStringToInt
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,6 +28,7 @@ class EditProfileViewModel @Inject constructor(
 	private val userProfileRepo: UserProfileAndEnumsRepository,
 	private val locationRepo: LocationRepository,
 	private val locationDataMapper: LocationDataMapper,
+	private val editProfileRepository: EditProfileRepository,
 	@ApplicationContext private val context: Context
 ) : ViewModel() {
 
@@ -58,34 +63,24 @@ class EditProfileViewModel @Inject constructor(
 		EditProfileItem(icon = R.drawable.telephone, title = null),
 		EditProfileItem(icon = R.drawable.telegram, title = null),
 	)
-	private val _currentlyEditedData = MutableStateFlow(
-		EditProfileUiState(
-			profilePicture = "",
-			editProfileItems // todo тут храним измененные юзером данные и сохраняем их на бэкенд по выходу из этого экрана
-		)
-	)
+	private val calendarDateAndTimeFormat = "dd/MM/yy"
+	private val networkDateAndTimeFormat = "yyyy-MM-dd'T'hh:mm:ss'Z'"
 
 	fun onStartup() {
 		viewModelScope.launch {
 			withContext(Dispatchers.IO) {
 				val currentProfileData = userProfileRepo.getProfile()
-				val updatedData = _currentlyEditedData.value.categoriesList
 				val locations = locationRepo.getLocations()
-				val country = if (currentProfileData.primaryLocation != null) {
-					locationDataMapper.getCountryList(locations)[currentProfileData.primaryLocation].name
-				} else { null }
-				val city = if (currentProfileData.secondaryLocation != null && country != null) {
-					locationDataMapper.getCityList(locations, country)[currentProfileData.secondaryLocation].name
-				} else { null }
-				val location = if (country != null && city != null) { "$country, $city" } else { country ?: context.getString(R.string.survey_option_null) }
+				val country = locationDataMapper.findCountryFromCity(locations, currentProfileData.cityId)
+				val city = locationDataMapper.findCityString(locations, currentProfileData.cityId)
+				val location = if (currentProfileData.districtId == null) { "$country, $city" } else { "$country, $city(${currentProfileData.districtId})" }
 
 				val receivedDataList = listOf(
-					updatedData[0].title ?: currentProfileData.name,
-					convertDateAndTime(updatedData[1].title ?: currentProfileData.birthday ?: "")
-						?: context.getString(R.string.survey_option_null),
-					updatedData[2].title ?: location,
-					(updatedData[3].title ?: userProfileRepo.getPhoneNumber()) ?: context.getString(R.string.survey_option_null),
-					(updatedData[4].title ?: currentProfileData.telegram) ?: context.getString(R.string.survey_option_null)
+					currentProfileData.name,
+					convertDateAndTime(currentProfileData.birthday ?: "") ?: context.getString(R.string.survey_option_null),
+					location,
+					userProfileRepo.getPhoneNumber() ?: context.getString(R.string.survey_option_null),
+					currentProfileData.telegram ?: context.getString(R.string.survey_option_null)
 				)
 
 				val categoriesDataList = editProfileItems.mapIndexed { index, editProfileItem ->
@@ -108,22 +103,43 @@ class EditProfileViewModel @Inject constructor(
 	}
 
 	fun onUpdatedValues(key: Int, value: String) {
-		val currentData = _currentlyEditedData.value
-
-		val updatedList = currentData.categoriesList.mapIndexed { index, editProfileItem ->
-			if (key == index) {
-				when (index) {
-					0 -> { editProfileItem.copy(title = value) }
-					1 -> { editProfileItem.copy(title = value) }
-					2 -> { editProfileItem.copy(title = value) }
-					3 -> { editProfileItem.copy(title = value) }
-					4 -> { editProfileItem.copy(title = value) }
-					else -> { editProfileItem }
+		viewModelScope.launch {
+			when(key) {
+				EditProfileAdapter.CHANGE_NAME_INDEX -> {
+					kotlin.runCatching {
+					withContext(Dispatchers.IO) {
+						val nameSurname = value.split(" ")
+						editProfileRepository.putNameSurname(nameSurname[0], nameSurname[1])
+					}  }.onFailure {
+						Log.d("123456", "Name - something went wrong")
+					}.onSuccess {
+						userProfileRepo.updateCachedProfile("name", value)
+						Log.d("123456", "Name - success")
+					}
 				}
-			} else { editProfileItem }
-		}
+				EditProfileAdapter.CHANGE_BIRTHDAY_INDEX -> {
+					withContext(Dispatchers.IO) {
 
-		_currentlyEditedData.value = currentData.copy(categoriesList = updatedList)
+						val networkDateTime = convertDateAndTimeToNetwork(value) // wrong format - ask and check which is the right one
+
+						editProfileRepository.putBirthday(networkDateTime ?: "")
+					}
+				}
+				EditProfileAdapter.CHANGE_LOCATION_INDEX -> {}
+				EditProfileAdapter.CHANGE_PHONE_INDEX -> {}
+				EditProfileAdapter.CHANGE_TELEGRAM_INDEX -> {}
+			}
+		}
+	}
+
+	private fun convertDateAndTimeToNetwork(dateTime: String): String? {
+		if (dateTime == DEFAULT_DATE_TIME) return null
+
+		val dateTimeFormatter = SimpleDateFormat(calendarDateAndTimeFormat, Locale.getDefault())
+		val timeStampMs = dateTimeFormatter.parse(dateTime)
+		val someOtherFormatter = SimpleDateFormat(networkDateAndTimeFormat, Locale("ru", "RU"))
+		return someOtherFormatter.format(timeStampMs) ?: ""
+
 	}
 
 	fun updateLocation(countryString: String?, cityString: String?, districtString: String?) {

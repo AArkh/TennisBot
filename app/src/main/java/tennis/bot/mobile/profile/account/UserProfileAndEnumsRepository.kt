@@ -50,6 +50,13 @@ class UserProfileAndEnumsRepository @Inject constructor(
 		return precacheProfile()
 	}
 
+	fun updateCachedProfile(key: String, value: String) {
+		return when(key){
+			"name" -> { cachedProfileData = cachedProfileData.copy(name = value) }
+			else -> {}
+		}
+	}
+
 	@WorkerThread
 	suspend fun precacheEnums(): List<EnumType> {
 		val response = enumsApi.getAllEnums().execute().body()

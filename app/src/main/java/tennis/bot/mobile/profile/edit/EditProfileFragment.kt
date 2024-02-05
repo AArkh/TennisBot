@@ -137,7 +137,7 @@ class EditProfileFragment : CoreFragment<FragmentEditProfileBinding>() {
 			{ _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
 				val selectedDate = "$dayOfMonth/${month + 1}/$year"
 				Log.d("123456", "Selected Date: $selectedDate")
-				viewModel.onUpdatedValues(EditProfileAdapter.CHANGE_BIRTHDAY_INDEX, selectedDate ?: getString(R.string.survey_option_null))
+				viewModel.onUpdatedValues(EditProfileAdapter.CHANGE_BIRTHDAY_INDEX, selectedDate)
 				viewModel.onStartup()
 			},
 			currentYear,
