@@ -51,7 +51,7 @@ class AccountPageViewModel @Inject constructor(
 						profileData.name,
 						profileData.telegram,
 						profileData.rating.toString(),
-						profileData.doublesRating.toString()
+						profileData.universalDoublesRating.toString()
 					),
 					Calibration(
 						if (gamesRemain < 10) context.getString(R.string.calibration_title) else context.getString(R.string.calibration_finished_title),

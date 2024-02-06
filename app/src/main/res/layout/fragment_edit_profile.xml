@@ -33,21 +33,6 @@
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent" />
 
-	<ImageView
-		android:id="@+id/options_button"
-		android:layout_width="36dp"
-		android:layout_height="36dp"
-		android:layout_marginEnd="20dp"
-		android:layout_marginTop="10dp"
-		android:background="@drawable/search_background"
-		android:backgroundTint="@color/tb_gray_border"
-		android:padding="6dp"
-		android:src="@drawable/options_dots"
-		android:visibility="visible"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintTop_toTopOf="parent"
-		app:tint="@color/tb_gray_active" />
-
 	<FrameLayout
 		android:id="@+id/account_photo_frame"
 		android:layout_width="92dp"

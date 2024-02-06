@@ -2,6 +2,7 @@ package tennis.bot.mobile.profile.edit
 
 import android.content.Context
 import android.icu.text.SimpleDateFormat
+import android.icu.util.TimeZone
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -118,28 +119,61 @@ class EditProfileViewModel @Inject constructor(
 					}
 				}
 				EditProfileAdapter.CHANGE_BIRTHDAY_INDEX -> {
-					withContext(Dispatchers.IO) {
+					kotlin.runCatching {
+						withContext(Dispatchers.IO) {
+							val networkDateTime =
+								convertDateAndTimeToNetwork(value) // wrong format - ask and check which is the right one
 
-						val networkDateTime = convertDateAndTimeToNetwork(value) // wrong format - ask and check which is the right one
-
-						editProfileRepository.putBirthday(networkDateTime ?: "")
+							editProfileRepository.putBirthday(networkDateTime ?: "")
+						}
+					}.onFailure {
+						Log.d("123456", "BirthdayNetwork - failure")
+					}.onSuccess {
+						userProfileRepo.updateCachedProfile("birthday", value)
+						Log.d("123456", "BirthdayNetwork - success")
 					}
 				}
-				EditProfileAdapter.CHANGE_LOCATION_INDEX -> {}
-				EditProfileAdapter.CHANGE_PHONE_INDEX -> {}
-				EditProfileAdapter.CHANGE_TELEGRAM_INDEX -> {}
+				EditProfileAdapter.CHANGE_LOCATION_INDEX -> {
+					kotlin.runCatching {
+						withContext(Dispatchers.IO) {
+							val cityString = value.split(", ")[1]
+							val cityInt = locationDataMapper.findCityIntFromString(locationRepo.getLocations(), cityString)
+							if (cityInt != null) {
+								editProfileRepository.putLocation(cityInt)
+								Log.d("123456", "CityNetwork - success")
+							}
+						}
+					}.onFailure {
+						Log.d("123456", "CHANGE_LOCATION_INDEX - failure")
+					}.onSuccess {
+						userProfileRepo.updateCachedProfile("cityId", value)
+						Log.d("123456", "CHANGE_LOCATION_INDEX - success")
+					}
+				}
+				EditProfileAdapter.CHANGE_PHONE_INDEX -> {
+					withContext(Dispatchers.IO) {
+						editProfileRepository.putPhoneNumber(value)
+					}
+				}
+				EditProfileAdapter.CHANGE_TELEGRAM_INDEX -> {
+					withContext(Dispatchers.IO) {
+						editProfileRepository.putTelegramIdNetwork(value)
+					}
+				}
 			}
+
+			onStartup()
 		}
 	}
 
-	private fun convertDateAndTimeToNetwork(dateTime: String): String? {
+	private fun convertDateAndTimeToNetwork(dateTime: String): String? { // waiting answer from eugene about proper format
 		if (dateTime == DEFAULT_DATE_TIME) return null
 
 		val dateTimeFormatter = SimpleDateFormat(calendarDateAndTimeFormat, Locale.getDefault())
 		val timeStampMs = dateTimeFormatter.parse(dateTime)
-		val someOtherFormatter = SimpleDateFormat(networkDateAndTimeFormat, Locale("ru", "RU"))
+		val someOtherFormatter = SimpleDateFormat(networkDateAndTimeFormat, Locale.getDefault())
+		someOtherFormatter.timeZone = TimeZone.getTimeZone("UTC")
 		return someOtherFormatter.format(timeStampMs) ?: ""
-
 	}
 
 	fun updateLocation(countryString: String?, cityString: String?, districtString: String?) {

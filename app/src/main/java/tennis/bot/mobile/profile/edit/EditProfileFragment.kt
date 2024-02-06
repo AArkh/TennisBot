@@ -73,27 +73,23 @@ class EditProfileFragment : CoreFragment<FragmentEditProfileBinding>() {
 		setFragmentResultListener(NAME_SURNAME_REQUEST_KEY) { _, result ->
 			val updatedNameSurname = result.getString(SELECTED_NAME_SURNAME)
 			viewModel.onUpdatedValues(EditProfileAdapter.CHANGE_NAME_INDEX, updatedNameSurname ?: getString(R.string.survey_option_null))
-			viewModel.onStartup()
 		}
 
 		setFragmentResultListener(LOCATION_STRINGS_REQUEST_KEY) { _, result ->
-			val updatedLocationInts = result.getStringArrayList(SELECTED_LOCATION_STRINGS)
+			val updatedLocationStrings = result.getStringArrayList(SELECTED_LOCATION_STRINGS)
 			viewModel.updateLocation(
-				updatedLocationInts?.getOrNull(0), updatedLocationInts?.getOrNull(1), updatedLocationInts?.getOrNull(2)
+				updatedLocationStrings?.getOrNull(0), updatedLocationStrings?.getOrNull(1), updatedLocationStrings?.getOrNull(2)
 			)
-			viewModel.onStartup()
 		}
 
 		setFragmentResultListener(PHONE_NUMBER_REQUEST_KEY) { _, result ->
 			val updatedPhoneNumber = result.getString(SELECTED_PHONE_NUMBER)
 			viewModel.onUpdatedValues(EditProfileAdapter.CHANGE_PHONE_INDEX, updatedPhoneNumber ?: getString(R.string.survey_option_null))
-			viewModel.onStartup()
 		}
 
 		setFragmentResultListener(TELEGRAM_REQUEST_KEY) { _, result ->
 			val updatedTelegram = result.getString(SELECTED_TELEGRAM)
 			viewModel.onUpdatedValues(EditProfileAdapter.CHANGE_TELEGRAM_INDEX, updatedTelegram ?: getString(R.string.survey_option_null))
-			viewModel.onStartup()
 		}
 
 		subscribeToFlowOn(viewModel.uiStateFlow) {uiState: EditProfileUiState ->

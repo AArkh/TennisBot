@@ -2,36 +2,50 @@ package tennis.bot.mobile.profile.edit
 
 import kotlinx.serialization.Serializable
 import retrofit2.Call
-import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.PUT
 
 interface EditProfileApi {
 
 	@PUT("api/tennis-players")
-	fun putNameSurname(@Body nameSurname: NameSurname): Call<Unit>
+	fun putNameSurname(@Body nameSurname: NameSurnameNetwork): Call<Unit>
 
 	@PUT("api/tennis-players")
-	fun putBirthday(@Body dateTime: String?): Call<Unit>
+	fun putBirthday(@Body birthdayNetwork: BirthdayNetwork): Call<Unit>
 
 	@PUT("api/tennis-players")
-	fun putLocation(@Body location: LocationNetwork): Call<Unit>
+	fun putLocation(@Body cityNetwork: CityNetwork): Call<Unit> // find how to make proper field in body
 
 	@PUT("api/tennis-players")
-	fun putPhoneNumber(@Body phoneNumber: String): Call<Unit>
+	fun putPhoneNumber(@Body phoneNumber: PhoneNumberNetwork): Call<Unit>
 
 	@PUT("api/tennis-players")
-	fun putTelegramId(@Body telegramId: String): Call<Unit>
+	fun putTelegramId(@Body telegramId: TelegramIdNetwork): Call<Unit>
 }
 
 @Serializable
-data class NameSurname(
+data class NameSurnameNetwork(
 	val name: String,
 	val surname: String
 )
 
-data class LocationNetwork(
-	val country: String?,
-	val city: String?,
-	val district: String?
+@Serializable
+data class BirthdayNetwork (
+	val birthday: String
 )
+
+@Serializable
+data class CityNetwork (
+	val cityId: Int
+)
+
+@Serializable
+data class PhoneNumberNetwork (
+	val phoneNumber: String
+)
+
+@Serializable
+data class TelegramIdNetwork (
+	val telegramId: String
+)
+

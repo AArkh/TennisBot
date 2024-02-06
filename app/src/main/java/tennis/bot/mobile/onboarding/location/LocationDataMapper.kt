@@ -38,8 +38,19 @@ class LocationDataMapper @Inject constructor() {
         for (country in responseData) {
             val cities: List<Location.LocationCity> = country.cities
             val city = cities.find { it.id == selectedCity }
-            if (city != null) { // ??
+            if (city != null) {
                 return country.countryName
+            }
+        }
+        return null
+    }
+
+    fun findCityIntFromString(responseData: List<Location>, cityString: String): Int? {
+        for (country in responseData) {
+            val cities: List<Location.LocationCity> = country.cities
+            val city = cities.find { it.name == cityString }
+            if (city != null) {
+                return city.id
             }
         }
         return null
@@ -49,9 +60,8 @@ class LocationDataMapper @Inject constructor() {
         for (country in responseData) {
             val cities: List<Location.LocationCity> = country.cities
             val city = cities.find { it.id == selectedCity }
-            if (city != null) { // ??
+            if (city != null) {
                 return city.name
-
             }
         }
         return null
