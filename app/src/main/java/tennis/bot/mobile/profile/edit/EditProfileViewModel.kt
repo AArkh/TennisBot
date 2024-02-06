@@ -16,11 +16,10 @@ import kotlinx.coroutines.withContext
 import tennis.bot.mobile.R
 import tennis.bot.mobile.onboarding.location.LocationDataMapper
 import tennis.bot.mobile.onboarding.location.LocationRepository
+import tennis.bot.mobile.profile.account.AccountPageAdapter.Companion.NULL_STRING
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.utils.DEFAULT_DATE_TIME
 import tennis.bot.mobile.utils.convertDateAndTime
-import tennis.bot.mobile.utils.convertLocationIntToString
-import tennis.bot.mobile.utils.convertLocationStringToInt
 import java.util.Locale
 import javax.inject.Inject
 
@@ -36,8 +35,6 @@ class EditProfileViewModel @Inject constructor(
 	companion object {
 		const val NAME_SURNAME_REQUEST_KEY = "NAME_SURNAME_REQUEST_KEY"
 		const val SELECTED_NAME_SURNAME = "SELECTED_NAME_SURNAME"
-		const val BIRTHDAY_REQUEST_KEY = "BIRTHDAY_REQUEST_KEY"
-		const val SELECTED_BIRTHDAY = "SELECTED_BIRTHDAY"
 		const val LOCATION_STRINGS_REQUEST_KEY = "LOCATION_STRINGS_REQUEST_KEY"
 		const val SELECTED_LOCATION_STRINGS = "SELECTED_LOCATION_STRINGS"
 		const val PHONE_NUMBER_REQUEST_KEY = "PHONE_NUMBER_REQUEST_KEY"
@@ -47,6 +44,12 @@ class EditProfileViewModel @Inject constructor(
 		const val DEFAULT_COUNTRY = "Страна"
 		const val DEFAULT_CITY = "Город"
 		const val DEFAULT_DISTRICT = "Район"
+		const val NAME_SURNAME_KEY = "name"
+		const val BIRTHDAY_KEY = "birthday"
+		const val CITY_KEY = "cityId"
+		const val DISTRICT_KEY = "districtId"
+		const val PHONE_NUMBER_KEY = "phoneNumber"
+		const val TELEGRAM_KEY = "telegram"
 	}
 
 	private val _uiStateFlow = MutableStateFlow(
@@ -74,14 +77,21 @@ class EditProfileViewModel @Inject constructor(
 				val locations = locationRepo.getLocations()
 				val country = locationDataMapper.findCountryFromCity(locations, currentProfileData.cityId)
 				val city = locationDataMapper.findCityString(locations, currentProfileData.cityId)
-				val location = if (currentProfileData.districtId == null) { "$country, $city" } else { "$country, $city(${currentProfileData.districtId})" }
+				val district = if (currentProfileData.districtId != null) {
+					locationDataMapper.findDistrictFromCity(locations, currentProfileData.cityId, currentProfileData.districtId)
+				} else { null }
+				val location = if (currentProfileData.districtId == null) {
+					"$country, $city"
+				} else {
+					"$country, $city(${district})"
+				}
 
 				val receivedDataList = listOf(
 					currentProfileData.name,
 					convertDateAndTime(currentProfileData.birthday ?: "") ?: context.getString(R.string.survey_option_null),
 					location,
 					userProfileRepo.getPhoneNumber() ?: context.getString(R.string.survey_option_null),
-					currentProfileData.telegram ?: context.getString(R.string.survey_option_null)
+					if (currentProfileData.telegram != NULL_STRING) currentProfileData.telegram else context.getString(R.string.survey_option_null)
 				)
 
 				val categoriesDataList = editProfileItems.mapIndexed { index, editProfileItem ->
@@ -105,59 +115,82 @@ class EditProfileViewModel @Inject constructor(
 
 	fun onUpdatedValues(key: Int, value: String) {
 		viewModelScope.launch {
-			when(key) {
+			when (key) {
 				EditProfileAdapter.CHANGE_NAME_INDEX -> {
 					kotlin.runCatching {
-					withContext(Dispatchers.IO) {
-						val nameSurname = value.split(" ")
-						editProfileRepository.putNameSurname(nameSurname[0], nameSurname[1])
-					}  }.onFailure {
+						withContext(Dispatchers.IO) {
+							val nameSurname = value.split(" ")
+							editProfileRepository.putNameSurname(nameSurname[0], nameSurname[1])
+						}
+					}.onFailure {
 						Log.d("123456", "Name - something went wrong")
 					}.onSuccess {
-						userProfileRepo.updateCachedProfile("name", value)
+						userProfileRepo.updateCachedProfile(NAME_SURNAME_KEY, value)
 						Log.d("123456", "Name - success")
 					}
 				}
+
 				EditProfileAdapter.CHANGE_BIRTHDAY_INDEX -> {
 					kotlin.runCatching {
 						withContext(Dispatchers.IO) {
 							val networkDateTime =
-								convertDateAndTimeToNetwork(value) // wrong format - ask and check which is the right one
+								convertDateAndTimeToNetwork(value)
 
 							editProfileRepository.putBirthday(networkDateTime ?: "")
 						}
 					}.onFailure {
 						Log.d("123456", "BirthdayNetwork - failure")
 					}.onSuccess {
-						userProfileRepo.updateCachedProfile("birthday", value)
+						userProfileRepo.updateCachedProfile(BIRTHDAY_KEY, value)
 						Log.d("123456", "BirthdayNetwork - success")
 					}
 				}
+
 				EditProfileAdapter.CHANGE_LOCATION_INDEX -> {
 					kotlin.runCatching {
 						withContext(Dispatchers.IO) {
 							val cityString = value.split(", ")[1]
-							val cityInt = locationDataMapper.findCityIntFromString(locationRepo.getLocations(), cityString)
+							val districtString = extractDistrictFromParentheses(value)
+							val locations = locationRepo.getLocations()
+							val cityInt = locationDataMapper.findCityIntFromString(locations, cityString)
+							val districtInt = locationDataMapper.findDistrictIntFromString(locations, cityInt, districtString)
 							if (cityInt != null) {
-								editProfileRepository.putLocation(cityInt)
-								Log.d("123456", "CityNetwork - success")
+								editProfileRepository.putLocation(cityInt, districtInt)
+								userProfileRepo.updateCachedProfile(CITY_KEY, cityInt.toString())
+								userProfileRepo.updateCachedProfile(DISTRICT_KEY, districtInt.toString())
+								Log.d("123456", "LocationNetwork - success")
 							}
 						}
 					}.onFailure {
 						Log.d("123456", "CHANGE_LOCATION_INDEX - failure")
 					}.onSuccess {
-						userProfileRepo.updateCachedProfile("cityId", value)
 						Log.d("123456", "CHANGE_LOCATION_INDEX - success")
 					}
 				}
+
 				EditProfileAdapter.CHANGE_PHONE_INDEX -> {
-					withContext(Dispatchers.IO) {
-						editProfileRepository.putPhoneNumber(value)
+					kotlin.runCatching {
+						withContext(Dispatchers.IO) {
+							editProfileRepository.putPhoneNumber(value)
+						}
+					}.onFailure {
+						Log.d("123456", "CHANGE_PHONE_INDEX - failure")
+					}.onSuccess {
+						userProfileRepo.updateCachedProfile(PHONE_NUMBER_KEY, value)
+						Log.d("123456", "CHANGE_PHONE_INDEX - success")
 					}
 				}
+
 				EditProfileAdapter.CHANGE_TELEGRAM_INDEX -> {
-					withContext(Dispatchers.IO) {
-						editProfileRepository.putTelegramIdNetwork(value)
+					kotlin.runCatching {
+						withContext(Dispatchers.IO) {
+							editProfileRepository.putTelegramIdNetwork(value)
+						}
+					}.onFailure {
+						Log.d("123456", "CHANGE_TELEGRAM_INDEX - failure")
+					}.onSuccess {
+						userProfileRepo.updateCachedProfile(TELEGRAM_KEY, value)
+						Log.d("123456", "CHANGE_TELEGRAM_INDEX - success")
 					}
 				}
 			}
@@ -166,7 +199,7 @@ class EditProfileViewModel @Inject constructor(
 		}
 	}
 
-	private fun convertDateAndTimeToNetwork(dateTime: String): String? { // waiting answer from eugene about proper format
+	private fun convertDateAndTimeToNetwork(dateTime: String): String? {
 		if (dateTime == DEFAULT_DATE_TIME) return null
 
 		val dateTimeFormatter = SimpleDateFormat(calendarDateAndTimeFormat, Locale.getDefault())
@@ -179,7 +212,8 @@ class EditProfileViewModel @Inject constructor(
 	fun updateLocation(countryString: String?, cityString: String?, districtString: String?) {
 		onUpdatedValues(
 			EditProfileAdapter.CHANGE_LOCATION_INDEX,
-			formLocationToFragmentResult(countryString, cityString, districtString) ?: context.getString(R.string.survey_option_null)
+			formLocationToFragmentResult(countryString, cityString, districtString)
+				?: context.getString(R.string.survey_option_null)
 		)
 	}
 
@@ -192,5 +226,16 @@ class EditProfileViewModel @Inject constructor(
 			} else if (countryString != DEFAULT_COUNTRY) countryString else context.getString(R.string.survey_option_null)
 
 		return result
+	}
+
+	private fun extractDistrictFromParentheses(inputString: String): String? {
+		val startIndex = inputString.indexOf('(')
+		val endIndex = inputString.indexOf(')')
+
+		return if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
+			inputString.substring(startIndex + 1, endIndex)
+		} else {
+			null
+		}
 	}
 }

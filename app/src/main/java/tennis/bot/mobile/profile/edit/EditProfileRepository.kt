@@ -23,8 +23,8 @@ class EditProfileRepository @Inject constructor(
 	}
 
 	@WorkerThread
-	suspend fun putLocation(cityId: Int): Boolean {
-		val response = api.putLocation(CityNetwork(cityId)).execute()
+	suspend fun putLocation(cityId: Int, districtId: Int?): Boolean {
+		val response = api.putLocation(LocationNetwork(cityId, districtId)).execute()
 		return response.isSuccessful
 	}
 

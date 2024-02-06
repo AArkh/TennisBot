@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.PUT
+import tennis.bot.mobile.onboarding.location.Location
 
 interface EditProfileApi {
 
@@ -14,7 +15,7 @@ interface EditProfileApi {
 	fun putBirthday(@Body birthdayNetwork: BirthdayNetwork): Call<Unit>
 
 	@PUT("api/tennis-players")
-	fun putLocation(@Body cityNetwork: CityNetwork): Call<Unit> // find how to make proper field in body
+	fun putLocation(@Body locationNetwork: LocationNetwork): Call<Unit> // find how to make proper field in body
 
 	@PUT("api/tennis-players")
 	fun putPhoneNumber(@Body phoneNumber: PhoneNumberNetwork): Call<Unit>
@@ -35,8 +36,9 @@ data class BirthdayNetwork (
 )
 
 @Serializable
-data class CityNetwork (
-	val cityId: Int
+data class LocationNetwork (
+	val cityId: Int,
+	val districtId: Int?
 )
 
 @Serializable

@@ -53,6 +53,11 @@ class UserProfileAndEnumsRepository @Inject constructor(
 	fun updateCachedProfile(key: String, value: String) {
 		return when(key){
 			"name" -> { cachedProfileData = cachedProfileData.copy(name = value) }
+			"birthday" -> {cachedProfileData = cachedProfileData.copy(birthday = value) }
+			"cityId" -> {cachedProfileData = cachedProfileData.copy(cityId = value.toInt()) }
+			"districtId" -> {cachedProfileData = cachedProfileData.copy(districtId = value.toInt()) }
+			"phoneNumber" -> { recordPhone(value) }
+			"telegram" -> {cachedProfileData = cachedProfileData.copy(telegram = value) }
 			else -> {}
 		}
 	}

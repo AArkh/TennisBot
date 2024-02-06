@@ -35,7 +35,7 @@ class EditTelegramViewModel @Inject constructor(): ViewModel() {
 	fun isChangeButtonEnabled() {
 		val prevState: EditTelegramUiState = _uiStateFlow.value
 		val input = _uiStateFlow.value.telegramInput
-		val isNameSurnameEntered = input.isNotEmpty() && input.length >= 5
+		val isNameSurnameEntered = input.isNotEmpty() && input.length >= 5 && input.length <= 32
 
 		_uiStateFlow.value = prevState.copy(
 			changeButtonEnabled = isNameSurnameEntered

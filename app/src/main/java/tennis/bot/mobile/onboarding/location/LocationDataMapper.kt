@@ -67,16 +67,33 @@ class LocationDataMapper @Inject constructor() {
         return null
     }
 
-//    fun findDistrictFromCity(responseData: List<Location>,country: String, selectedCity: Int): String? { // figure out a proper way for districts
-//        for (country in responseData) {
-//            val cities: List<Location.LocationCity> = country.cities
-//            val city = cities.find { it.id == selectedCity }
-//            val districts = city?.districts
-//            val dis
-//            if (city != null) { // ??
-//                return city.name
-//            }
-//        }
-//        return null
-//    }
+    fun findDistrictIntFromString(responseData: List<Location>, selectedCity: Int?, selectedDistrict: String?): Int? {
+        if (selectedCity == null || selectedDistrict == null) return null
+
+        for (country in responseData) {
+            val cities: List<Location.LocationCity> = country.cities
+            val city = cities.find { it.id == selectedCity }
+            if (city != null) {
+                val district = city.districts.find { it.title == selectedDistrict }
+                if (district != null) {
+                    return district.id
+                }
+            }
+        }
+        return null
+    }
+
+    fun findDistrictFromCity(responseData: List<Location>, selectedCity: Int, selectedDistrict: Int): String? { // figure out a proper way for districts
+        for (country in responseData) {
+            val cities: List<Location.LocationCity> = country.cities
+            val city = cities.find { it.id == selectedCity }
+            if (city != null) {
+                val district = city.districts.find { it.id == selectedDistrict }
+                if (district != null) {
+                    return district.title
+                }
+            }
+        }
+        return null
+    }
 }

@@ -39,6 +39,10 @@ class LoginDialogFragment: CoreDialogFragment<LoginDialogBinding>() {
 		}
 	}
 
+	fun changeTitle(newTitle: String) {
+		binding.dialogTitle.text = newTitle
+	}
+
 	private fun openLink(url: String) {
 		val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
 		startActivity(intent)
