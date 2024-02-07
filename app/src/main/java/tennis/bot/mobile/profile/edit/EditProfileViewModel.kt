@@ -218,6 +218,15 @@ class EditProfileViewModel @Inject constructor(
 		}
 	}
 
+	fun onPickedProfilePic(uri: Uri) {
+		onboardingRepository.recordUserPickedPictureUri(uri.toString())
+		viewModelScope.launch(Dispatchers.IO) {
+			onboardingRepository.postProfilePicture()
+			userProfileRepo.precacheProfile() // only way to update photo link
+			onStartup()
+		}
+	}
+
 	private fun convertDateAndTimeToNetwork(dateTime: String): String? {
 		if (dateTime == DEFAULT_DATE_TIME) return null
 
