@@ -47,6 +47,6 @@ data class PhoneNumberNetwork (
 
 @Serializable
 data class TelegramIdNetwork (
-	val telegramId: String
+	val telegram: String
 )
 

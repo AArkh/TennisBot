@@ -37,6 +37,18 @@
 		android:layout_marginEnd="20dp"
 		android:src="@drawable/chevron_vertical"
 		android:scaleX="-1"
+		android:visibility="gone"
+		app:layout_constraintTop_toTopOf="@id/title"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintBottom_toBottomOf="@id/title"/>
+
+	<androidx.appcompat.widget.SwitchCompat
+		android:id="@+id/button_switch"
+		android:layout_width="wrap_content"
+		android:layout_height="0dp"
+		android:layout_marginEnd="20dp"
+		app:trackTint="@color/tb_gray_light"
+		app:thumbTint="@color/tb_white"
 		app:layout_constraintTop_toTopOf="@id/title"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintBottom_toBottomOf="@id/title"/>

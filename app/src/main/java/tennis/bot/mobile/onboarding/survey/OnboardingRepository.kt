@@ -303,7 +303,7 @@ class OnboardingRepository @Inject constructor(
         const val COUNTRY_ID_HEADER = "countryId"
         const val CITY_ID_HEADER = "cityId"
         const val DISTRICT_ID_HEADER = "districtId"
-        const val TELEGRAM_ID_HEADER = "telegramId"
+        const val TELEGRAM_ID_HEADER = "telegram"
         const val PRESELECTED_PROFILE_PICTURE_ID = "profilePictureId"
         const val USER_PROFILE_PICTURE = "userProfilePicture"
 

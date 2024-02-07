@@ -31,7 +31,7 @@ public final class EditProfileViewModel_HiltModules {
 
     @Binds
     @IntoMap
-    @StringKey("tennis.bot.mobile.profile.edit.EditProfileViewModel")
+    @StringKey("tennis.bot.mobile.profile.editprofile.EditProfileViewModel")
     @HiltViewModelMap
     public abstract ViewModel binds(EditProfileViewModel vm);
   }
@@ -46,7 +46,7 @@ public final class EditProfileViewModel_HiltModules {
     @IntoSet
     @HiltViewModelMap.KeySet
     public static String provide() {
-      return "tennis.bot.mobile.profile.edit.EditProfileViewModel";
+      return "tennis.bot.mobile.profile.editprofile.EditProfileViewModel";
     }
   }
 }

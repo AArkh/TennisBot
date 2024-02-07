@@ -31,7 +31,7 @@ public final class EditLocationViewModel_HiltModules {
 
     @Binds
     @IntoMap
-    @StringKey("tennis.bot.mobile.profile.edit.location.EditLocationViewModel")
+    @StringKey("tennis.bot.mobile.profile.editprofile.location.EditLocationViewModel")
     @HiltViewModelMap
     public abstract ViewModel binds(EditLocationViewModel vm);
   }
@@ -46,7 +46,7 @@ public final class EditLocationViewModel_HiltModules {
     @IntoSet
     @HiltViewModelMap.KeySet
     public static String provide() {
-      return "tennis.bot.mobile.profile.edit.location.EditLocationViewModel";
+      return "tennis.bot.mobile.profile.editprofile.location.EditLocationViewModel";
     }
   }
 }

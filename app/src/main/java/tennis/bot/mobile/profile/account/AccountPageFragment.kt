@@ -17,6 +17,7 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentAccountPageBinding
 import tennis.bot.mobile.onboarding.login.LoginDialogFragment
+import tennis.bot.mobile.profile.appsetttings.AppSettingsFragment
 import tennis.bot.mobile.profile.editprofile.EditProfileFragment
 import tennis.bot.mobile.profile.matches.MatchesFragment
 import javax.inject.Inject
@@ -65,7 +66,12 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 							.commit()
 					}
 					OptionsDialogFragment.UPDATE_GAMEDATA -> {}
-					OptionsDialogFragment.UPDATE_SETTINGS -> {}
+					OptionsDialogFragment.UPDATE_SETTINGS -> {
+						parentFragmentManager.beginTransaction()
+							.replace(R.id.fragment_container_view, AppSettingsFragment())
+							.addToBackStack(AppSettingsFragment::class.java.name)
+							.commit()
+					}
 					OptionsDialogFragment.LOGOUT -> {}
 				}
 			}

@@ -9,7 +9,7 @@ import tennis.bot.mobile.core.CoreUtilsItem
 import tennis.bot.mobile.databinding.RecyclerEditProfileItemBinding
 import javax.inject.Inject
 
-class EditProfileAdapter @Inject constructor(): CoreAdapter<EditProfileItemViewHolder>() {
+open class EditProfileAdapter @Inject constructor(): CoreAdapter<EditProfileItemViewHolder>() {
 	var clickListener: ((item: Int) -> Unit)? = null
 
 	companion object {
@@ -26,6 +26,10 @@ class EditProfileAdapter @Inject constructor(): CoreAdapter<EditProfileItemViewH
 
 		holder.binding.icon.setImageResource(editProfileItem.icon)
 		holder.binding.title.text = editProfileItem.title
+
+		if(editProfileItem.isRadioButton) {
+
+		}
 
 		if (editProfileItem.noUnderline) {
 			holder.binding.underline.visibility = View.INVISIBLE
@@ -51,5 +55,6 @@ class EditProfileItemViewHolder(
 data class EditProfileItem(
 	val icon: Int,
 	val title: String?,
+	val isRadioButton: Boolean = false,
 	val noUnderline: Boolean = false
 ): CoreUtilsItem()

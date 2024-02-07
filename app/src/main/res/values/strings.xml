@@ -171,6 +171,7 @@
 	<string name="button_change">Изменить</string>
 	<string name="change_telegram">Изменить Telegram</string>
 	<string name="telegram_hint">Telegram</string>
+	<string name="settings_title">Настройки</string>
 
 
 </resources>

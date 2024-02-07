@@ -36,7 +36,7 @@ public final class EditProfileFragment_MembersInjector implements MembersInjecto
     injectAdapter(instance, adapterProvider.get());
   }
 
-  @InjectedFieldSignature("tennis.bot.mobile.profile.edit.EditProfileFragment.adapter")
+  @InjectedFieldSignature("tennis.bot.mobile.profile.editprofile.EditProfileFragment.adapter")
   public static void injectAdapter(EditProfileFragment instance, EditProfileAdapter adapter) {
     instance.adapter = adapter;
   }
