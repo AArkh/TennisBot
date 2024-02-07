@@ -3,6 +3,7 @@ package tennis.bot.mobile.profile.edit
 import android.content.Context
 import android.icu.text.SimpleDateFormat
 import android.icu.util.TimeZone
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,6 +17,7 @@ import kotlinx.coroutines.withContext
 import tennis.bot.mobile.R
 import tennis.bot.mobile.onboarding.location.LocationDataMapper
 import tennis.bot.mobile.onboarding.location.LocationRepository
+import tennis.bot.mobile.onboarding.survey.OnboardingRepository
 import tennis.bot.mobile.profile.account.AccountPageAdapter.Companion.NULL_STRING
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.utils.DEFAULT_DATE_TIME
@@ -29,6 +31,7 @@ class EditProfileViewModel @Inject constructor(
 	private val locationRepo: LocationRepository,
 	private val locationDataMapper: LocationDataMapper,
 	private val editProfileRepository: EditProfileRepository,
+	private val onboardingRepository: OnboardingRepository,
 	@ApplicationContext private val context: Context
 ) : ViewModel() {
 
@@ -79,7 +82,9 @@ class EditProfileViewModel @Inject constructor(
 				val city = locationDataMapper.findCityString(locations, currentProfileData.cityId)
 				val district = if (currentProfileData.districtId != null) {
 					locationDataMapper.findDistrictFromCity(locations, currentProfileData.cityId, currentProfileData.districtId)
-				} else { null }
+				} else {
+					null
+				}
 				val location = if (currentProfileData.districtId == null) {
 					"$country, $city"
 				} else {
@@ -195,6 +200,15 @@ class EditProfileViewModel @Inject constructor(
 				}
 			}
 
+			onStartup()
+		}
+	}
+
+	fun onPickedProfilePic(uri: Uri) {
+		onboardingRepository.recordUserPickedPictureUri(uri.toString())
+		viewModelScope.launch(Dispatchers.IO) {
+			onboardingRepository.postProfilePicture()
+			userProfileRepo.precacheProfile() // only way to update photo link
 			onStartup()
 		}
 	}

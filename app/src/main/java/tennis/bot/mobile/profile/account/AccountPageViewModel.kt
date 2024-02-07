@@ -40,7 +40,6 @@ class AccountPageViewModel @Inject constructor(
 
 	fun onFetchingProfileData(){
 		viewModelScope.launch(Dispatchers.IO) {
-
 				val profileData = repository.getProfile()
 				val difference = (10 - (profileData.games ?: 10))
 				val gamesRemain = if (difference in 0..9) difference else 10
@@ -55,8 +54,8 @@ class AccountPageViewModel @Inject constructor(
 					),
 					Calibration(
 						if (gamesRemain < 10) context.getString(R.string.calibration_title) else context.getString(R.string.calibration_finished_title),
-						progressBarProgress(gamesRemain),
-						context.getString(R.string.calibration_matches_remain, gamesRemain),
+						progressBarProgress(profileData.games),
+						context.getString(R.string.calibration_matches_remain, profileData.games),
 						when(gamesRemain){
 							0 -> context.getString(R.string.calibration_start)
 							in 1..9 -> context.getString(R.string.calibration_rounds_remain_text, gamesRemain)
@@ -138,13 +137,4 @@ class AccountPageViewModel @Inject constructor(
 
 		return percentage
 	}
-
-//	fun onPickedProfilePic(uri: Uri) {
-//		onboardingRepository.recordUserPickedPictureUri( uri.toString() )
-//		Log.d("123456", "$uri Uri is successfully recorded as a String")
-//		viewModelScope.launch(Dispatchers.IO) {
-//			onboardingRepository.postProfilePicture()
-//			Log.d("123456", "$uri Url is being posted")
-//		}
-//	}
 }
