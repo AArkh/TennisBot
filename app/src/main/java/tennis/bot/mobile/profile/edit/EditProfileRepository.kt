@@ -12,31 +12,31 @@ class EditProfileRepository @Inject constructor(
 
 	@WorkerThread
 	suspend fun putNameSurname(name: String, surname: String): Boolean{
-		val response = api.putNameSurname( NameSurnameNetwork(name, surname) ).execute()
+		val response = kotlin.runCatching { api.putNameSurname( NameSurnameNetwork(name, surname) ).execute() }.getOrElse { return false }
 		return response.isSuccessful
 	}
 
 	@WorkerThread
 	suspend fun putBirthday(networkDateTime: String): Boolean {
-		val response = api.putBirthday(BirthdayNetwork(networkDateTime)).execute()
+		val response = kotlin.runCatching { api.putBirthday(BirthdayNetwork(networkDateTime)).execute()  }.getOrElse { return false }
 		return response.isSuccessful
 	}
 
 	@WorkerThread
 	suspend fun putLocation(cityId: Int, districtId: Int?): Boolean {
-		val response = api.putLocation(LocationNetwork(cityId, districtId)).execute()
+		val response = kotlin.runCatching { api.putLocation(LocationNetwork(cityId, districtId)).execute()  }.getOrElse { return false }
 		return response.isSuccessful
 	}
 
 	@WorkerThread
 	suspend fun putPhoneNumber(phoneNumber: String): Boolean {
-		val response = api.putPhoneNumber(PhoneNumberNetwork(phoneNumber.toApiNumericFormat())).execute()
+		val response =  kotlin.runCatching { api.putPhoneNumber(PhoneNumberNetwork(phoneNumber.toApiNumericFormat())).execute() }.getOrElse { return false }
 		return response.isSuccessful
 	}
 
 	@WorkerThread
 	suspend fun putTelegramIdNetwork(telegramId: String): Boolean {
-		val response = api.putTelegramId(TelegramIdNetwork(telegramId)).execute()
+		val response =  kotlin.runCatching { api.putTelegramId(TelegramIdNetwork(telegramId)).execute() }.getOrElse { return false }
 		return response.isSuccessful
 	}
 }

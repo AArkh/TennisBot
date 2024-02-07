@@ -11,6 +11,8 @@ import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentEditTelegramBinding
 
 class EditTelegramFragment : CoreFragment<FragmentEditTelegramBinding>() {
+
+	override var adjustToKeyboard: Boolean = true
 	override val bindingInflation: Inflation<FragmentEditTelegramBinding> = FragmentEditTelegramBinding::inflate
 	private val viewModel: EditTelegramViewModel by viewModels()
 

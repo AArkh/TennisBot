@@ -14,6 +14,7 @@ import tennis.bot.mobile.databinding.FragmentEditNameSurnameBinding
 @AndroidEntryPoint
 class EditNameSurnameFragment : CoreFragment<FragmentEditNameSurnameBinding>() {
 
+	override var adjustToKeyboard: Boolean = true
 	override val bindingInflation: Inflation<FragmentEditNameSurnameBinding> = FragmentEditNameSurnameBinding::inflate
 	private val viewModel: EditNameSurnameViewModel by viewModels()
 

@@ -3,6 +3,7 @@ package tennis.bot.mobile.profile.edit
 import android.content.Context
 import android.icu.text.SimpleDateFormat
 import android.icu.util.TimeZone
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,6 +17,7 @@ import kotlinx.coroutines.withContext
 import tennis.bot.mobile.R
 import tennis.bot.mobile.onboarding.location.LocationDataMapper
 import tennis.bot.mobile.onboarding.location.LocationRepository
+import tennis.bot.mobile.onboarding.survey.OnboardingRepository
 import tennis.bot.mobile.profile.account.AccountPageAdapter.Companion.NULL_STRING
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.utils.DEFAULT_DATE_TIME
@@ -29,6 +31,7 @@ class EditProfileViewModel @Inject constructor(
 	private val locationRepo: LocationRepository,
 	private val locationDataMapper: LocationDataMapper,
 	private val editProfileRepository: EditProfileRepository,
+	private val onboardingRepository: OnboardingRepository,
 	@ApplicationContext private val context: Context
 ) : ViewModel() {
 
@@ -79,7 +82,9 @@ class EditProfileViewModel @Inject constructor(
 				val city = locationDataMapper.findCityString(locations, currentProfileData.cityId)
 				val district = if (currentProfileData.districtId != null) {
 					locationDataMapper.findDistrictFromCity(locations, currentProfileData.cityId, currentProfileData.districtId)
-				} else { null }
+				} else {
+					null
+				}
 				val location = if (currentProfileData.districtId == null) {
 					"$country, $city"
 				} else {
@@ -116,85 +121,99 @@ class EditProfileViewModel @Inject constructor(
 	fun onUpdatedValues(key: Int, value: String) {
 		viewModelScope.launch {
 			when (key) {
-				EditProfileAdapter.CHANGE_NAME_INDEX -> {
-					kotlin.runCatching {
-						withContext(Dispatchers.IO) {
-							val nameSurname = value.split(" ")
-							editProfileRepository.putNameSurname(nameSurname[0], nameSurname[1])
-						}
-					}.onFailure {
-						Log.d("123456", "Name - something went wrong")
-					}.onSuccess {
-						userProfileRepo.updateCachedProfile(NAME_SURNAME_KEY, value)
-						Log.d("123456", "Name - success")
-					}
-				}
+				EditProfileAdapter.CHANGE_NAME_INDEX -> { updateNameSurname(value) }
+				EditProfileAdapter.CHANGE_BIRTHDAY_INDEX -> { updateBirthday(value) }
+				EditProfileAdapter.CHANGE_LOCATION_INDEX -> { updateLocation(value) }
+				EditProfileAdapter.CHANGE_PHONE_INDEX -> { updatePhoneNumber(value) }
+				EditProfileAdapter.CHANGE_TELEGRAM_INDEX -> { updateTelegramId(value) }
+			}
+			onStartup()
+		}
+	}
 
-				EditProfileAdapter.CHANGE_BIRTHDAY_INDEX -> {
-					kotlin.runCatching {
-						withContext(Dispatchers.IO) {
-							val networkDateTime =
-								convertDateAndTimeToNetwork(value)
+	private suspend fun updateTelegramId(value: String) {
+		kotlin.runCatching {
+			withContext(Dispatchers.IO) {
+				editProfileRepository.putTelegramIdNetwork(value)
+			}
+		}.onFailure {
+			Log.d("123456", "CHANGE_TELEGRAM_INDEX - failure")
+		}.onSuccess {
+			userProfileRepo.updateCachedProfile(TELEGRAM_KEY, value)
+			Log.d("123456", "CHANGE_TELEGRAM_INDEX - success")
+		}
+	}
 
-							editProfileRepository.putBirthday(networkDateTime ?: "")
-						}
-					}.onFailure {
-						Log.d("123456", "BirthdayNetwork - failure")
-					}.onSuccess {
-						userProfileRepo.updateCachedProfile(BIRTHDAY_KEY, value)
-						Log.d("123456", "BirthdayNetwork - success")
-					}
-				}
+	private suspend fun updatePhoneNumber(value: String) {
+		kotlin.runCatching {
+			withContext(Dispatchers.IO) {
+				editProfileRepository.putPhoneNumber(value)
+			}
+		}.onFailure {
+			Log.d("123456", "CHANGE_PHONE_INDEX - failure")
+		}.onSuccess {
+			userProfileRepo.updateCachedProfile(PHONE_NUMBER_KEY, value)
+			Log.d("123456", "CHANGE_PHONE_INDEX - success")
+		}
+	}
 
-				EditProfileAdapter.CHANGE_LOCATION_INDEX -> {
-					kotlin.runCatching {
-						withContext(Dispatchers.IO) {
-							val cityString = value.split(", ")[1]
-							val districtString = extractDistrictFromParentheses(value)
-							val locations = locationRepo.getLocations()
-							val cityInt = locationDataMapper.findCityIntFromString(locations, cityString)
-							val districtInt = locationDataMapper.findDistrictIntFromString(locations, cityInt, districtString)
-							if (cityInt != null) {
-								editProfileRepository.putLocation(cityInt, districtInt)
-								userProfileRepo.updateCachedProfile(CITY_KEY, cityInt.toString())
-								userProfileRepo.updateCachedProfile(DISTRICT_KEY, districtInt.toString())
-								Log.d("123456", "LocationNetwork - success")
-							}
-						}
-					}.onFailure {
-						Log.d("123456", "CHANGE_LOCATION_INDEX - failure")
-					}.onSuccess {
-						Log.d("123456", "CHANGE_LOCATION_INDEX - success")
-					}
-				}
-
-				EditProfileAdapter.CHANGE_PHONE_INDEX -> {
-					kotlin.runCatching {
-						withContext(Dispatchers.IO) {
-							editProfileRepository.putPhoneNumber(value)
-						}
-					}.onFailure {
-						Log.d("123456", "CHANGE_PHONE_INDEX - failure")
-					}.onSuccess {
-						userProfileRepo.updateCachedProfile(PHONE_NUMBER_KEY, value)
-						Log.d("123456", "CHANGE_PHONE_INDEX - success")
-					}
-				}
-
-				EditProfileAdapter.CHANGE_TELEGRAM_INDEX -> {
-					kotlin.runCatching {
-						withContext(Dispatchers.IO) {
-							editProfileRepository.putTelegramIdNetwork(value)
-						}
-					}.onFailure {
-						Log.d("123456", "CHANGE_TELEGRAM_INDEX - failure")
-					}.onSuccess {
-						userProfileRepo.updateCachedProfile(TELEGRAM_KEY, value)
-						Log.d("123456", "CHANGE_TELEGRAM_INDEX - success")
-					}
+	private suspend fun updateLocation(value: String) {
+		kotlin.runCatching {
+			withContext(Dispatchers.IO) {
+				val cityString = value.split(", ")[1]
+				val districtString = extractDistrictFromParentheses(value)
+				val locations = locationRepo.getLocations()
+				val cityInt = locationDataMapper.findCityIntFromString(locations, cityString)
+				val districtInt = locationDataMapper.findDistrictIntFromString(locations, cityInt, districtString)
+				if (cityInt != null) {
+					editProfileRepository.putLocation(cityInt, districtInt)
+					userProfileRepo.updateCachedProfile(CITY_KEY, cityInt.toString())
+					userProfileRepo.updateCachedProfile(DISTRICT_KEY, districtInt.toString())
+					Log.d("123456", "LocationNetwork - success")
 				}
 			}
+		}.onFailure {
+			Log.d("123456", "CHANGE_LOCATION_INDEX - failure")
+		}.onSuccess {
+			Log.d("123456", "CHANGE_LOCATION_INDEX - success")
+		}
+	}
 
+	private suspend fun updateBirthday(value: String) {
+		kotlin.runCatching {
+			withContext(Dispatchers.IO) {
+				val networkDateTime =
+					convertDateAndTimeToNetwork(value)
+
+				editProfileRepository.putBirthday(networkDateTime ?: "")
+			}
+		}.onFailure {
+			Log.d("123456", "BirthdayNetwork - failure")
+		}.onSuccess {
+			userProfileRepo.updateCachedProfile(BIRTHDAY_KEY, value)
+			Log.d("123456", "BirthdayNetwork - success")
+		}
+	}
+
+	private suspend fun updateNameSurname(value: String) {
+		kotlin.runCatching {
+			withContext(Dispatchers.IO) {
+				val nameSurname = value.split(" ")
+				editProfileRepository.putNameSurname(nameSurname[0], nameSurname[1])
+			}
+		}.onFailure {
+			Log.d("123456", "Name - something went wrong")
+		}.onSuccess {
+			userProfileRepo.updateCachedProfile(NAME_SURNAME_KEY, value)
+			Log.d("123456", "Name - success")
+		}
+	}
+
+	fun onPickedProfilePic(uri: Uri) {
+		onboardingRepository.recordUserPickedPictureUri(uri.toString())
+		viewModelScope.launch(Dispatchers.IO) {
+			onboardingRepository.postProfilePicture()
+			userProfileRepo.precacheProfile() // only way to update photo link
 			onStartup()
 		}
 	}

@@ -48,7 +48,7 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 		}
 		binding.optionsButton.setOnClickListener {
 			lifecycleScope.launch {
-				delay(180L) // wait for keyboard to hide
+				delay(100L) // wait for keyboard to hide
 				val bottomSheet = OptionsDialogFragment()
 				bottomSheet.show(childFragmentManager, bottomSheet.tag)
 			}
@@ -109,8 +109,8 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 							}
 							GO_TO_TOURNAMENTS -> {
 								val dialog = LoginDialogFragment()
-								dialog.changeTitle("") // ask about the proper title
 								dialog.show(childFragmentManager, dialog.tag)
+								dialog.changeTitle("") // ask about the proper title
 							}
 						}
 					}
