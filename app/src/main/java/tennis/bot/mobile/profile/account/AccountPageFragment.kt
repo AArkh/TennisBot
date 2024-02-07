@@ -17,7 +17,7 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentAccountPageBinding
 import tennis.bot.mobile.onboarding.login.LoginDialogFragment
-import tennis.bot.mobile.profile.edit.EditProfileFragment
+import tennis.bot.mobile.profile.editprofile.EditProfileFragment
 import tennis.bot.mobile.profile.matches.MatchesFragment
 import javax.inject.Inject
 

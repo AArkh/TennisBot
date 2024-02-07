@@ -19,7 +19,7 @@ import tennis.bot.mobile.onboarding.phone.SmsApi
 import tennis.bot.mobile.onboarding.photopick.PhotoPickApi
 import tennis.bot.mobile.onboarding.survey.RegisterAndLoginApi
 import tennis.bot.mobile.onboarding.survey.NewPlayerApi
-import tennis.bot.mobile.profile.edit.EditProfileApi
+import tennis.bot.mobile.profile.editprofile.EditProfileApi
 import tennis.bot.mobile.profile.matches.MatchesApi
 import tennis.bot.mobile.utils.LoggingInterceptor
 import java.util.concurrent.TimeUnit

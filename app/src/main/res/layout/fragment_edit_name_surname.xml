@@ -5,7 +5,7 @@
 	android:layout_height="match_parent"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:fitsSystemWindows="true"
-	tools:context=".profile.edit.namesurname.EditNameSurnameFragment">
+	tools:context=".profile.editprofile.namesurname.EditNameSurnameFragment">
 
 	<ImageView
 		android:id="@+id/back_button"
