@@ -2,7 +2,7 @@ package tennis.bot.mobile.profile.editgamedata
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.os.bundleOf
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import tennis.bot.mobile.core.CoreBottomSheetDialogFragment
@@ -15,6 +15,7 @@ class EditGameDataDialog: CoreBottomSheetDialogFragment<FragmentEditGamedataDial
 	override val bindingInflation: Inflation<FragmentEditGamedataDialogBinding> = FragmentEditGamedataDialogBinding::inflate
 	@Inject
 	lateinit var adapter: EditGameDataDialogAdapter
+	private val viewModel: EditGameDataDialogViewModel by viewModels()
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
@@ -27,24 +28,13 @@ class EditGameDataDialog: CoreBottomSheetDialogFragment<FragmentEditGamedataDial
 		binding.optionsContainer.layoutManager = LinearLayoutManager(requireContext())
 
 		adapter.clickListener = { position ->
-			activity?.supportFragmentManager?.setFragmentResult(
-				EditGameDataFragment.GAMEDATA_DIALOG_REQUEST_KEY,
-				Bundle().apply {
-					putString("title", binding.title.text.toString())
-					putInt("position", position)
-				}
-			)
+			viewModel.onOptionPicked(requireActivity(), binding.title.text.toString(), position)
 			dialog?.dismiss()
 		}
 
-		adapter.submitList(listOf(TextOnlyItem("option1"),
-			TextOnlyItem("option2"),
-			TextOnlyItem("option3"),
-			TextOnlyItem("option4"))
-		)
-	}
-
-	fun submitDataToGameDataDialog(data: List<TextOnlyItem>) {
-		adapter.submitList(data)
+		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: EditGameDataDialogUiState ->
+			binding.title.text = uiState.title
+			adapter.submitList(uiState.optionsList)
+		}
 	}
 }

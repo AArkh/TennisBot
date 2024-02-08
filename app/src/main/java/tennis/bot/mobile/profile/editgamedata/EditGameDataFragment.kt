@@ -3,18 +3,14 @@ package tennis.bot.mobile.profile.editgamedata
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentEditGameDataBinding
-import tennis.bot.mobile.profile.account.OptionsDialogFragment
-import tennis.bot.mobile.profile.editprofile.EditProfileAdapter
-import tennis.bot.mobile.profile.editprofile.EditProfileViewModel
-import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -26,7 +22,9 @@ class EditGameDataFragment : CoreFragment<FragmentEditGameDataBinding>() {
 
 	companion object {
 		const val GAMEDATA_DIALOG_REQUEST_KEY = "GAMEDATA_DIALOG_REQUEST_KEY"
-		const val GAMEDATA_DIALOG_SELECTED_OPTION = "GAMEDATA_DIALOG_SELECTED_OPTION"
+		const val GAMEDATA_DIALOG_SELECT_ACTION_KEY = "GAMEDATA_DIALOG_SELECT_ACTION_KEY"
+		const val GAMEDATA_DIALOG_TITLE = "title"
+		const val GAMEDATA_DIALOG_PICKED_POSITION = "position"
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -40,31 +38,26 @@ class EditGameDataFragment : CoreFragment<FragmentEditGameDataBinding>() {
 		binding.categoriesContainer.layoutManager = LinearLayoutManager(requireContext())
 
 		setFragmentResultListener(GAMEDATA_DIALOG_REQUEST_KEY) { _, result ->
-			val title = result.getString("title")
-			val position = result.getInt("position")
+			val title = result.getString(GAMEDATA_DIALOG_TITLE)
+			val position = result.getInt(GAMEDATA_DIALOG_PICKED_POSITION)
 
 			Log.d("123456", "Result received: $title, $position")
 
 		}
 
 		adapter.clickListener = { position ->
-			when(position) {
-				EditGameDataAdapter.IS_RIGHT_HAND -> {
-					val bottomSheet = EditGameDataDialog()
-					bottomSheet.show(childFragmentManager, bottomSheet.tag)
-				}
-				EditGameDataAdapter.IS_ONE_BACKHAND -> {}
-				EditGameDataAdapter.SURFACE -> {}
-				EditGameDataAdapter.SHOES -> {}
-				EditGameDataAdapter.RACQUET -> {}
-				EditGameDataAdapter.RACQUET_STRINGS -> {}
-			}
-
+			startDialogWithKey(position)
 		}
 
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: EditGameDataUiState ->
 			adapter.submitList(uiState.gameDataCategoriesList)
 		}
 
+	}
+
+	private fun startDialogWithKey(key: Int) {
+		val bottomSheet = EditGameDataDialog()
+		bottomSheet.arguments = bundleOf(GAMEDATA_DIALOG_SELECT_ACTION_KEY to key)
+		bottomSheet.show(childFragmentManager, bottomSheet.tag)
 	}
 }

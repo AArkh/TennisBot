@@ -5,12 +5,14 @@ import androidx.annotation.WorkerThread
 import androidx.core.content.ContextCompat.getString
 import dagger.hilt.android.qualifiers.ApplicationContext
 import tennis.bot.mobile.R
-import tennis.bot.mobile.core.AuthTokenRepository
 import tennis.bot.mobile.onboarding.survey.OnboardingRepository
 import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.IS_ONE_BACKHAND_TITLE
 import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.IS_RIGHTHAND_TITLE
 import tennis.bot.mobile.onboarding.survey.SurveyResultItem
-import tennis.bot.mobile.onboarding.survey.toApiNumericFormat
+import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.RACQUET_STRINGS_TITLE
+import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.RACQUET_TITLE
+import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.SHOES_TITLE
+import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.SURFACE_TITLE
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -34,7 +36,7 @@ class UserProfileAndEnumsRepository @Inject constructor(
 	)
 
 	@WorkerThread
-	suspend fun precacheProfile(): ProfileData {
+	fun precacheProfile(): ProfileData {
 		val response = api.getProfile().execute()
 		if (response.code() == 200) {
 			cachedProfileData = response.body()!!
@@ -43,7 +45,7 @@ class UserProfileAndEnumsRepository @Inject constructor(
 	}
 
 	@WorkerThread
-	suspend fun getProfile() : ProfileData {
+	fun getProfile() : ProfileData {
 		if (::cachedProfileData.isInitialized) {
 			return cachedProfileData
 		}
@@ -105,8 +107,21 @@ class UserProfileAndEnumsRepository @Inject constructor(
 		return if (decodedList.isNotEmpty()) { decodedList.toList() } else { emptyList() }
 	}
 
-	fun getEnumGroup(allEnums: List<EnumType>, enumType: String): List<EnumData>? {
-		return allEnums.find { it.type == enumType }?.enums
+	suspend fun getEnumGroup(enumType: String): List<EnumData>? {
+		val enums = getEnums()
+		return enums.find { it.type == enumType }?.enums
+	}
+
+	fun getEnumTitle(enumType: String): String {
+		return when(enumType) {
+			IS_RIGHTHAND_TITLE -> { defaultGameData[0].resultTitle }
+			IS_ONE_BACKHAND_TITLE -> { defaultGameData[1].resultTitle }
+			SURFACE_TITLE -> { defaultGameData[2].resultTitle }
+			SHOES_TITLE -> { defaultGameData[3].resultTitle }
+			RACQUET_TITLE -> { defaultGameData[4].resultTitle }
+			RACQUET_STRINGS_TITLE -> { defaultGameData[5].resultTitle }
+			else -> { AccountPageAdapter.NULL_STRING }
+		}
 	}
 
 	fun recordPhone(phoneNumber: String) {
