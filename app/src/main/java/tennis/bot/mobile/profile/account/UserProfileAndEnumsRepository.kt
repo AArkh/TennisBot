@@ -102,11 +102,11 @@ class UserProfileAndEnumsRepository @Inject constructor(
 			}
 		}
 
-		return if (decodedList.isNotEmpty()) {
-			decodedList.toList()
-		} else {
-			emptyList()
-		}
+		return if (decodedList.isNotEmpty()) { decodedList.toList() } else { emptyList() }
+	}
+
+	fun getEnumGroup(allEnums: List<EnumType>, enumType: String): List<EnumData>? {
+		return allEnums.find { it.type == enumType }?.enums
 	}
 
 	fun recordPhone(phoneNumber: String) {

@@ -1,8 +1,9 @@
 package tennis.bot.mobile.profile.appsetttings
 
 import tennis.bot.mobile.profile.editprofile.EditProfileAdapter
+import javax.inject.Inject
 
-class AppSettingsAdapter: EditProfileAdapter() {
+class AppSettingsAdapter @Inject constructor(): EditProfileAdapter() {
 
 	companion object{
 		const val NOTIFICATIONS_SWITCH = 0

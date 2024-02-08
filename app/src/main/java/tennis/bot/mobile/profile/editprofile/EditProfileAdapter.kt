@@ -28,7 +28,11 @@ open class EditProfileAdapter @Inject constructor(): CoreAdapter<EditProfileItem
 		holder.binding.title.text = editProfileItem.title
 
 		if(editProfileItem.isRadioButton) {
-
+			holder.binding.chevron.visibility = View.GONE
+			holder.binding.buttonSwitch.visibility = View.VISIBLE
+		} else {
+			holder.binding.chevron.visibility = View.VISIBLE
+			holder.binding.buttonSwitch.visibility = View.GONE
 		}
 
 		if (editProfileItem.noUnderline) {

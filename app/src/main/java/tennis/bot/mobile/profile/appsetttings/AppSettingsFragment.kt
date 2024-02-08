@@ -1,5 +1,7 @@
 package tennis.bot.mobile.profile.appsetttings
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
@@ -7,57 +9,51 @@ import android.view.ViewPropertyAnimator
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
 import android.widget.FrameLayout
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentAppSettingsBinding
+import tennis.bot.mobile.onboarding.login.LoginDialogFragment
+import tennis.bot.mobile.profile.editprofile.EditProfileViewModel
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class AppSettingsFragment : CoreFragment<FragmentAppSettingsBinding>() {
 	override val bindingInflation: Inflation<FragmentAppSettingsBinding> = FragmentAppSettingsBinding::inflate
-	private var isSwitchOn: Boolean = false
+	private val viewModel: AppSettingsViewModel by viewModels()
+	@Inject
+	lateinit var adapter: AppSettingsAdapter
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+
+		binding.categoriesContainer.adapter = adapter
+		binding.categoriesContainer.layoutManager = LinearLayoutManager(requireContext())
 
 		binding.backButton.setOnClickListener {
 			parentFragmentManager.popBackStack()
 		}
 
-		binding.customSwitchLayout.setOnClickListener {
-			animateSwitchTransition(binding.thumb)
+		adapter.clickListener = {index ->
+			when(index) {
+				AppSettingsAdapter.NOTIFICATIONS_SWITCH -> {}
+				AppSettingsAdapter.SEND_EMAIL -> {}
+				AppSettingsAdapter.SEND_TELEGRAM -> { openLink(LoginDialogFragment.CHAT_URL) }
+			}
 		}
+
+		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: AppSettingsUiState ->
+			adapter.submitList(uiState.categoriesList)
+		}
+
 
 	}
 
-	private fun animateSwitchTransition(thumbView: View) { // refactor to support any case not just one
-		val layoutParams = thumbView.layoutParams as FrameLayout.LayoutParams
-		layoutParams.gravity =
-			if (isSwitchOn) Gravity.END or Gravity.CENTER_VERTICAL else Gravity.START or Gravity.CENTER_VERTICAL
-		thumbView.layoutParams = layoutParams
-
-		val targetGravity =
-			if (layoutParams.gravity == (Gravity.START or Gravity.CENTER_VERTICAL)) {
-				isSwitchOn = true
-				Gravity.END or Gravity.CENTER_VERTICAL
-			} else {
-				isSwitchOn = false
-				Gravity.START or Gravity.CENTER_VERTICAL
-			}
-
-		val animator: ViewPropertyAnimator = thumbView.animate()
-			.setInterpolator(AccelerateInterpolator())
-			.setDuration(300)
-
-		animator.translationXBy(
-			if (targetGravity == (Gravity.END or Gravity.CENTER_VERTICAL)) thumbView.width.toFloat() else -thumbView.width.toFloat()
-		)
-		animator.withEndAction {
-			layoutParams.gravity = targetGravity
-			thumbView.layoutParams = layoutParams
-			thumbView.translationX = 0f
-		}
-
-		animator.start()
+	private fun openLink(url: String) {
+		val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+		startActivity(intent)
 	}
 
 }
