@@ -19,6 +19,7 @@ import tennis.bot.mobile.onboarding.phone.SmsApi
 import tennis.bot.mobile.onboarding.photopick.PhotoPickApi
 import tennis.bot.mobile.onboarding.survey.RegisterAndLoginApi
 import tennis.bot.mobile.onboarding.survey.NewPlayerApi
+import tennis.bot.mobile.profile.editgamedata.EditGameDataApi
 import tennis.bot.mobile.profile.editprofile.EditProfileApi
 import tennis.bot.mobile.profile.matches.MatchesApi
 import tennis.bot.mobile.utils.LoggingInterceptor
@@ -39,6 +40,7 @@ class NetworkModule {
         const val PROFILE_PICTURE = "PROFILE_PICTURE"
         const val SCORES = "SCORES"
         const val EDIT_PROFILE = "EDIT_PROFILE"
+        const val EDIT_GAMEDATA = "EDIT_GAMEDATA"
     }
 
     @Provides
@@ -180,6 +182,20 @@ class NetworkModule {
     }
 
     @Provides
+    @Named(EDIT_GAMEDATA)
+    @Singleton
+    fun provideEditGameDataRetrofit(
+        @Named(WITH_AUTHENTICATION) okHttpClient: OkHttpClient,
+        converterFactory: Converter.Factory
+    ): Retrofit {
+        return Retrofit.Builder()
+            .client(okHttpClient)
+            .baseUrl("https://bugz.su:8443/core/") //todo вынести debug && prod url в gradle build config
+            .addConverterFactory(converterFactory)
+            .build()
+    }
+
+    @Provides
     @Singleton
     fun provideBalancesAllowancesApiClient(
         @Named(SMS_CODES) retrofit: Retrofit
@@ -232,5 +248,11 @@ class NetworkModule {
     fun provideEditProfileApiClient(
         @Named(EDIT_PROFILE) retrofit: Retrofit
     ): EditProfileApi = retrofit.create(EditProfileApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideEditGameDataApiClient(
+        @Named(EDIT_GAMEDATA) retrofit: Retrofit
+    ): EditGameDataApi = retrofit.create(EditGameDataApi::class.java)
 }
 

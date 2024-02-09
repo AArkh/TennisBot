@@ -48,7 +48,7 @@ class EditNameSurnameViewModel @Inject constructor(): ViewModel() {
 
 	fun isChangeButtonEnabled() {
 		val prevState: EditNameSurnameUiState = _uiStateFlow.value
-		val isNameSurnameEntered = _uiStateFlow.value.userSurnameInput.isNotEmpty() && _uiStateFlow.value.userSurnameInput.isNotEmpty()
+		val isNameSurnameEntered = _uiStateFlow.value.userNameInput.isNotEmpty() && _uiStateFlow.value.userSurnameInput.isNotEmpty()
 
 		_uiStateFlow.value = prevState.copy(
 			changeButtonEnabled = isNameSurnameEntered

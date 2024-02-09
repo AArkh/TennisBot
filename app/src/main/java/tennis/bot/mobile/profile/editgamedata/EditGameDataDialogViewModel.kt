@@ -32,7 +32,7 @@ class EditGameDataDialogViewModel @Inject constructor(
 	)
 	val uiStateFlow = _uiStateFlow.asStateFlow().onStart { onLoadingSelectedList() }
 
-	fun onLoadingSelectedList() {
+	private fun onLoadingSelectedList() {
 		when (currentAction) {
 			EditGameDataAdapter.IS_RIGHT_HAND -> {
 				loadOptionsListByTitle(AccountPageViewModel.IS_RIGHTHAND_TITLE)
@@ -60,7 +60,10 @@ class EditGameDataDialogViewModel @Inject constructor(
 			withContext(Dispatchers.IO) {
 				val enumList = repository.getEnumGroup(type)
 				val enumOptionsList = enumList?.map { enumData ->
-					TextOnlyItem(enumData.name.replaceFirstChar { it.uppercase() })
+					TextOnlyItem(
+						id = enumData.id,
+						title = enumData.name.replaceFirstChar { it.uppercase() }
+					)
 				}
 				if (enumOptionsList != null) {
 					_uiStateFlow.value = EditGameDataDialogUiState(

@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
 import tennis.bot.mobile.onboarding.survey.SurveyResultItem
+import tennis.bot.mobile.utils.DEFAULT_DATE_TIME
 import tennis.bot.mobile.utils.convertDateAndTime
 import java.util.Locale
 import javax.inject.Inject
@@ -30,7 +31,7 @@ class AccountPageViewModel @Inject constructor(
 		const val SURFACE_TITLE = "surface"
 		const val SHOES_TITLE = "shoes"
 		const val RACQUET_TITLE = "racquet"
-		const val RACQUET_STRINGS_TITLE = "racquetStrings"
+		const val RACQUET_STRINGS_TITLE = "strings"
 	}
 
 	private val _uiStateFlow = MutableStateFlow<AccountPageUiState>(
@@ -54,8 +55,8 @@ class AccountPageViewModel @Inject constructor(
 					),
 					Calibration(
 						if (gamesRemain < 10) context.getString(R.string.calibration_title) else context.getString(R.string.calibration_finished_title),
-						progressBarProgress(profileData.games),
-						context.getString(R.string.calibration_matches_remain, profileData.games),
+						progressBarProgress(if (profileData.games!! <= 10) profileData.games else 10 ),
+						context.getString(R.string.calibration_matches_remain, if (profileData.games <= 10) profileData.games else 10 ),
 						when(gamesRemain){
 							0 -> context.getString(R.string.calibration_start)
 							in 1..9 -> context.getString(R.string.calibration_rounds_remain_text, gamesRemain)
@@ -64,7 +65,9 @@ class AccountPageViewModel @Inject constructor(
 					),
 					MatchesPlayed(
 						context.getString(R.string.account_matches_played, profileData.games ?: ZERO),
-						if (profileData.lastGame != null) {
+						if (profileData.lastGame == DEFAULT_DATE_TIME) {
+							EMPTY_STRING
+						} else if (profileData.lastGame != null) {
 							context.getString(R.string.last_game_date, convertDateAndTime(profileData.lastGame))
 						} else {
 							EMPTY_STRING
@@ -84,7 +87,6 @@ class AccountPageViewModel @Inject constructor(
 					ButtonSwitch(true)
 				)
 				val gameDataList = onProvidingGameData(profileData)
-				val contactsList: List<SurveyResultItem>
 
 				_uiStateFlow.value =
 					AccountPageUiState.ProfileDataReceived(basicLayout, gameDataList, emptyList())

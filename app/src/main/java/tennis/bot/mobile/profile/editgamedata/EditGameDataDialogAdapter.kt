@@ -19,7 +19,7 @@ class EditGameDataDialogAdapter @Inject constructor(): CoreAdapter<TextOnlyItemV
 		if (textOnlyItem.isChecked) holder.binding.check.visibility = View.VISIBLE else holder.binding.check.visibility = View.GONE
 
 		holder.binding.root.setOnClickListener {
-			clickListener?.invoke(holder.bindingAdapterPosition)
+			clickListener?.invoke(textOnlyItem.id)
 		}
 	}
 
@@ -30,6 +30,7 @@ class EditGameDataDialogAdapter @Inject constructor(): CoreAdapter<TextOnlyItemV
 }
 
 data class TextOnlyItem(
+	val id: Int,
 	val title: String?,
 	val isChecked: Boolean = false
 ): CoreUtilsItem()

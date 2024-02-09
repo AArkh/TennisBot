@@ -13,14 +13,23 @@ import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.RACQUET_
 import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.RACQUET_TITLE
 import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.SHOES_TITLE
 import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.SURFACE_TITLE
+import tennis.bot.mobile.profile.editgamedata.EditGameDataApi
+import tennis.bot.mobile.profile.editgamedata.IsOneBackhandNetwork
+import tennis.bot.mobile.profile.editgamedata.IsRightHandNetwork
+import tennis.bot.mobile.profile.editgamedata.RacquetNetwork
+import tennis.bot.mobile.profile.editgamedata.RacquetStringsNetwork
+import tennis.bot.mobile.profile.editgamedata.ShoesNetwork
+import tennis.bot.mobile.profile.editgamedata.SurfaceNetwork
+import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class UserProfileAndEnumsRepository @Inject constructor(
-	private val api: UserProfileApi,
+	private val userProfileApi: UserProfileApi,
 	private val enumsDao: AllEnumsDao,
 	private val enumsApi: EnumsApi,
+	private val gameDataApi: EditGameDataApi,
 	@ApplicationContext private val context: Context
 ) {
 	private lateinit var cachedProfileData: ProfileData
@@ -37,7 +46,7 @@ class UserProfileAndEnumsRepository @Inject constructor(
 
 	@WorkerThread
 	fun precacheProfile(): ProfileData {
-		val response = api.getProfile().execute()
+		val response = userProfileApi.getProfile().execute()
 		if (response.code() == 200) {
 			cachedProfileData = response.body()!!
 		}
@@ -54,12 +63,32 @@ class UserProfileAndEnumsRepository @Inject constructor(
 
 	fun updateCachedProfile(key: String, value: String) {
 		return when(key){
-			"name" -> { cachedProfileData = cachedProfileData.copy(name = value) }
-			"birthday" -> {cachedProfileData = cachedProfileData.copy(birthday = value) }
-			"cityId" -> {cachedProfileData = cachedProfileData.copy(cityId = value.toInt()) }
-			"districtId" -> {cachedProfileData = cachedProfileData.copy(districtId = value.toInt()) }
+			"name" -> { cachedProfileData = cachedProfileData.copy(name = value) } // extract to const
+			"birthday" -> { cachedProfileData = cachedProfileData.copy(birthday = value) }
+			"cityId" -> { cachedProfileData = cachedProfileData.copy(cityId = value.toInt()) }
+			"districtId" -> { cachedProfileData = cachedProfileData.copy(districtId = value.toInt()) }
 			"phoneNumber" -> { recordPhone(value) }
-			"telegram" -> {cachedProfileData = cachedProfileData.copy(telegram = value) }
+			"telegram" -> { cachedProfileData = cachedProfileData.copy(telegram = value) }
+			IS_RIGHTHAND_TITLE -> {}
+			IS_ONE_BACKHAND_TITLE -> {}
+			SURFACE_TITLE -> {}
+			SHOES_TITLE -> {}
+			RACQUET_TITLE -> {}
+			RACQUET_STRINGS_TITLE -> {}
+			else -> {}
+		}
+	}
+
+	fun updateCachedProfile(key: String, value: Int) {
+		return when(key){
+			"cityId" -> { cachedProfileData = cachedProfileData.copy(cityId = value) }
+			"districtId" -> { cachedProfileData = cachedProfileData.copy(districtId = value) }
+			IS_RIGHTHAND_TITLE -> { cachedProfileData = cachedProfileData.copy(isRightHand = value == 1) }
+			IS_ONE_BACKHAND_TITLE -> {  cachedProfileData = cachedProfileData.copy(isOneBackhand = value == 1) }
+			SURFACE_TITLE -> { cachedProfileData = cachedProfileData.copy(surface = value) }
+			SHOES_TITLE -> { cachedProfileData = cachedProfileData.copy(shoes = value)}
+			RACQUET_TITLE -> { cachedProfileData = cachedProfileData.copy(racquet = value)}
+			RACQUET_STRINGS_TITLE -> { cachedProfileData = cachedProfileData.copy(racquetStrings = value)}
 			else -> {}
 		}
 	}
@@ -96,7 +125,7 @@ class UserProfileAndEnumsRepository @Inject constructor(
 		for ((type, id) in selectedEnumTypesAndIds){
 			val enumType = allEnums.find { return@find it.type == type }
 
-			if (id != null && id != 0) {
+			if (id != null) {
 				val enum = enumType?.enums?.find { return@find it.id == id }
 				if (enum != null) decodedList.add(enum.name.replaceFirstChar { it.uppercase() })
 			} else {
@@ -121,6 +150,54 @@ class UserProfileAndEnumsRepository @Inject constructor(
 			RACQUET_TITLE -> { defaultGameData[4].resultTitle }
 			RACQUET_STRINGS_TITLE -> { defaultGameData[5].resultTitle }
 			else -> { AccountPageAdapter.NULL_STRING }
+		}
+	}
+
+	@WorkerThread
+	fun updateGameDataValue(gameDataType: String, value: Int) {
+		when(gameDataType) {
+			defaultGameData[0].resultTitle -> {
+				kotlin.runCatching {
+					gameDataApi.putIsRightHand(IsRightHandNetwork(value == 1)).execute()
+				}.onSuccess {
+					updateCachedProfile(IS_RIGHTHAND_TITLE, value)
+				}.onFailure { context.showToast("Failed to update the value. Please, try again later") }
+			}
+			defaultGameData[1].resultTitle -> {
+				kotlin.runCatching {
+				gameDataApi.putIsOneBackhand(IsOneBackhandNetwork(value == 1)).execute()
+				}.onSuccess {
+					updateCachedProfile(IS_ONE_BACKHAND_TITLE, value)
+				}.onFailure { context.showToast("Failed to update the value. Please, try again later") }
+			}
+			defaultGameData[2].resultTitle -> {
+				kotlin.runCatching {
+				gameDataApi.putSurface(SurfaceNetwork(value)).execute()
+				}.onSuccess {
+					updateCachedProfile(SURFACE_TITLE, value)
+				}.onFailure { context.showToast("Failed to update the value. Please, try again later") }
+			}
+			defaultGameData[3].resultTitle -> {
+				kotlin.runCatching {
+				gameDataApi.putShoes(ShoesNetwork(value)).execute()
+				}.onSuccess {
+					updateCachedProfile(SHOES_TITLE, value)
+				}.onFailure { context.showToast("Failed to update the value. Please, try again later") }
+			}
+			defaultGameData[4].resultTitle -> {
+				kotlin.runCatching {
+				gameDataApi.putRacquet(RacquetNetwork(value)).execute()
+				}.onSuccess {
+					updateCachedProfile(RACQUET_TITLE, value)
+				}.onFailure { context.showToast("Failed to update the value. Please, try again later") }
+			}
+			defaultGameData[5].resultTitle -> {
+				kotlin.runCatching {
+				gameDataApi.putRacquetStrings(RacquetStringsNetwork(value)).execute()
+				}.onSuccess {
+					updateCachedProfile(RACQUET_STRINGS_TITLE, value)
+				}.onFailure { context.showToast("Failed to update the value. Please, try again later") }
+			}
 		}
 	}
 

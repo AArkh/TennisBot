@@ -51,6 +51,13 @@ class EditGameDataViewModel @Inject constructor(
 		}
 	}
 
+	fun onValueChanged(gameDataType: String, value: Int) {
+		viewModelScope.launch(Dispatchers.IO) {
+			repository.updateGameDataValue(gameDataType, value)
+			onStartup()
+		}
+	}
+
 
 
 }

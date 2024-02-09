@@ -14,7 +14,7 @@ interface EditProfileApi {
 	fun putBirthday(@Body birthdayNetwork: BirthdayNetwork): Call<Unit>
 
 	@PUT("api/tennis-players")
-	fun putLocation(@Body locationNetwork: LocationNetwork): Call<Unit> // find how to make proper field in body
+	fun putLocation(@Body locationNetwork: LocationNetwork): Call<Unit>
 
 	@PUT("api/tennis-players")
 	fun putPhoneNumber(@Body phoneNumber: PhoneNumberNetwork): Call<Unit>
