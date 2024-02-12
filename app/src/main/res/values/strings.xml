@@ -176,6 +176,15 @@
 	<string name="notification_title">Уведомление</string>
 	<string name="contact_email">Связаться по почте</string>
 	<string name="contact_telegram">Связаться по Telegram</string>
+	<string name="feed_toolbar_title">Активность</string>
+	<string name="events_spinner_title">Все события</string>
+	<string name="sports_spinner_title">Вид спорта</string>
+	<string name="city_spinner_title">Город</string>
+	<string name="game_title">Игра</string>
+	<string name="chat_title">Общение</string>
+	<string name="tournaments_title">Турниры</string>
+	<string name="add_score_title">Внести счет</string>
+	<string name="create_game_title">Создать заявку</string>
 
 
 </resources>

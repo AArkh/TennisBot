@@ -9,6 +9,7 @@
     <color name="tb_gray_border">#F4F6F8</color>
     <color name="tb_gray_choose">#E9EBF1</color>
     <color name="tb_gray_light">#CDCFD2</color>
+    <color name="tb_gray_gray">#B1B4B8</color>
 
     <color name="tb_primary_green">#57D26A</color>
     <color name="tb_primary_green_disabled">#6657D26A</color>

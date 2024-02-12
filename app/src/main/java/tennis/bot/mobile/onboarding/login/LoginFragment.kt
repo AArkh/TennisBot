@@ -15,6 +15,7 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentLoginBinding
+import tennis.bot.mobile.feed.FeedBottomNavigationFragment
 import tennis.bot.mobile.profile.account.AccountPageFragment
 import tennis.bot.mobile.onboarding.phone.CountryCodesDialogFragment
 import tennis.bot.mobile.utils.hideKeyboard
@@ -52,8 +53,8 @@ class LoginFragment : CoreFragment<FragmentLoginBinding>() {
 				password = binding.passwordEt.text.toString()
 			) {
 				parentFragmentManager.beginTransaction()
-					.replace(R.id.fragment_container_view, AccountPageFragment())
-					.addToBackStack(AccountPageFragment::class.java.name)
+					.replace(R.id.fragment_container_view, FeedBottomNavigationFragment())
+					.addToBackStack(FeedBottomNavigationFragment::class.java.name)
 					.commit()
 			}
 		}
