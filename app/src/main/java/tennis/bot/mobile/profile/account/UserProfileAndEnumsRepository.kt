@@ -9,6 +9,7 @@ import tennis.bot.mobile.onboarding.survey.OnboardingRepository
 import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.IS_ONE_BACKHAND_TITLE
 import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.IS_RIGHTHAND_TITLE
 import tennis.bot.mobile.onboarding.survey.SurveyResultItem
+import tennis.bot.mobile.onboarding.survey.toApiNumericFormat
 import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.RACQUET_STRINGS_TITLE
 import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.RACQUET_TITLE
 import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.SHOES_TITLE
@@ -20,6 +21,12 @@ import tennis.bot.mobile.profile.editgamedata.RacquetNetwork
 import tennis.bot.mobile.profile.editgamedata.RacquetStringsNetwork
 import tennis.bot.mobile.profile.editgamedata.ShoesNetwork
 import tennis.bot.mobile.profile.editgamedata.SurfaceNetwork
+import tennis.bot.mobile.profile.editprofile.BirthdayNetwork
+import tennis.bot.mobile.profile.editprofile.EditProfileApi
+import tennis.bot.mobile.profile.editprofile.LocationNetwork
+import tennis.bot.mobile.profile.editprofile.NameSurnameNetwork
+import tennis.bot.mobile.profile.editprofile.PhoneNumberNetwork
+import tennis.bot.mobile.profile.editprofile.TelegramIdNetwork
 import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -30,6 +37,7 @@ class UserProfileAndEnumsRepository @Inject constructor(
 	private val enumsDao: AllEnumsDao,
 	private val enumsApi: EnumsApi,
 	private val gameDataApi: EditGameDataApi,
+	private val editProfileApi: EditProfileApi,
 	@ApplicationContext private val context: Context
 ) {
 	private lateinit var cachedProfileData: ProfileData
@@ -199,6 +207,36 @@ class UserProfileAndEnumsRepository @Inject constructor(
 				}.onFailure { context.showToast("Failed to update the value. Please, try again later") }
 			}
 		}
+	}
+
+	@WorkerThread
+	fun putNameSurname(name: String, surname: String): Boolean{
+		val response = kotlin.runCatching { editProfileApi.putNameSurname( NameSurnameNetwork(name, surname) ).execute() }.getOrElse { return false }
+		return response.isSuccessful
+	}
+
+	@WorkerThread
+	fun putBirthday(networkDateTime: String): Boolean {
+		val response = kotlin.runCatching { editProfileApi.putBirthday(BirthdayNetwork(networkDateTime)).execute()  }.getOrElse { return false }
+		return response.isSuccessful
+	}
+
+	@WorkerThread
+	fun putLocation(cityId: Int, districtId: Int?): Boolean {
+		val response = kotlin.runCatching { editProfileApi.putLocation(LocationNetwork(cityId, districtId)).execute()  }.getOrElse { return false }
+		return response.isSuccessful
+	}
+
+	@WorkerThread
+	fun putPhoneNumber(phoneNumber: String): Boolean {
+		val response =  kotlin.runCatching { editProfileApi.putPhoneNumber(PhoneNumberNetwork(phoneNumber.toApiNumericFormat())).execute() }.getOrElse { return false }
+		return response.isSuccessful
+	}
+
+	@WorkerThread
+	fun putTelegramIdNetwork(telegramId: String): Boolean {
+		val response =  kotlin.runCatching { editProfileApi.putTelegramId(TelegramIdNetwork(telegramId)).execute() }.getOrElse { return false }
+		return response.isSuccessful
 	}
 
 	fun recordPhone(phoneNumber: String) {

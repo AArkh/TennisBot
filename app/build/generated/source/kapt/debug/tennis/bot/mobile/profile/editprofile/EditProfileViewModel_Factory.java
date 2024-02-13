@@ -32,8 +32,6 @@ public final class EditProfileViewModel_Factory implements Factory<EditProfileVi
 
   private final Provider<LocationDataMapper> locationDataMapperProvider;
 
-  private final Provider<EditProfileRepository> editProfileRepositoryProvider;
-
   private final Provider<OnboardingRepository> onboardingRepositoryProvider;
 
   private final Provider<Context> contextProvider;
@@ -42,36 +40,32 @@ public final class EditProfileViewModel_Factory implements Factory<EditProfileVi
       Provider<UserProfileAndEnumsRepository> userProfileRepoProvider,
       Provider<LocationRepository> locationRepoProvider,
       Provider<LocationDataMapper> locationDataMapperProvider,
-      Provider<EditProfileRepository> editProfileRepositoryProvider,
       Provider<OnboardingRepository> onboardingRepositoryProvider,
       Provider<Context> contextProvider) {
     this.userProfileRepoProvider = userProfileRepoProvider;
     this.locationRepoProvider = locationRepoProvider;
     this.locationDataMapperProvider = locationDataMapperProvider;
-    this.editProfileRepositoryProvider = editProfileRepositoryProvider;
     this.onboardingRepositoryProvider = onboardingRepositoryProvider;
     this.contextProvider = contextProvider;
   }
 
   @Override
   public EditProfileViewModel get() {
-    return newInstance(userProfileRepoProvider.get(), locationRepoProvider.get(), locationDataMapperProvider.get(), editProfileRepositoryProvider.get(), onboardingRepositoryProvider.get(), contextProvider.get());
+    return newInstance(userProfileRepoProvider.get(), locationRepoProvider.get(), locationDataMapperProvider.get(), onboardingRepositoryProvider.get(), contextProvider.get());
   }
 
   public static EditProfileViewModel_Factory create(
       Provider<UserProfileAndEnumsRepository> userProfileRepoProvider,
       Provider<LocationRepository> locationRepoProvider,
       Provider<LocationDataMapper> locationDataMapperProvider,
-      Provider<EditProfileRepository> editProfileRepositoryProvider,
       Provider<OnboardingRepository> onboardingRepositoryProvider,
       Provider<Context> contextProvider) {
-    return new EditProfileViewModel_Factory(userProfileRepoProvider, locationRepoProvider, locationDataMapperProvider, editProfileRepositoryProvider, onboardingRepositoryProvider, contextProvider);
+    return new EditProfileViewModel_Factory(userProfileRepoProvider, locationRepoProvider, locationDataMapperProvider, onboardingRepositoryProvider, contextProvider);
   }
 
   public static EditProfileViewModel newInstance(UserProfileAndEnumsRepository userProfileRepo,
       LocationRepository locationRepo, LocationDataMapper locationDataMapper,
-      EditProfileRepository editProfileRepository, OnboardingRepository onboardingRepository,
-      Context context) {
-    return new EditProfileViewModel(userProfileRepo, locationRepo, locationDataMapper, editProfileRepository, onboardingRepository, context);
+      OnboardingRepository onboardingRepository, Context context) {
+    return new EditProfileViewModel(userProfileRepo, locationRepo, locationDataMapper, onboardingRepository, context);
   }
 }

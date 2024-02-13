@@ -30,7 +30,6 @@ class EditProfileViewModel @Inject constructor(
 	private val userProfileRepo: UserProfileAndEnumsRepository,
 	private val locationRepo: LocationRepository,
 	private val locationDataMapper: LocationDataMapper,
-	private val editProfileRepository: EditProfileRepository,
 	private val onboardingRepository: OnboardingRepository,
 	@ApplicationContext private val context: Context
 ) : ViewModel() {
@@ -134,7 +133,7 @@ class EditProfileViewModel @Inject constructor(
 	private suspend fun updateTelegramId(value: String) {
 		kotlin.runCatching {
 			withContext(Dispatchers.IO) {
-				editProfileRepository.putTelegramIdNetwork(value)
+				userProfileRepo.putTelegramIdNetwork(value)
 			}
 		}.onFailure {
 			Log.d("123456", "CHANGE_TELEGRAM_INDEX - failure")
@@ -147,7 +146,7 @@ class EditProfileViewModel @Inject constructor(
 	private suspend fun updatePhoneNumber(value: String) {
 		kotlin.runCatching {
 			withContext(Dispatchers.IO) {
-				editProfileRepository.putPhoneNumber(value)
+				userProfileRepo.putPhoneNumber(value)
 			}
 		}.onFailure {
 			Log.d("123456", "CHANGE_PHONE_INDEX - failure")
@@ -166,7 +165,7 @@ class EditProfileViewModel @Inject constructor(
 				val cityInt = locationDataMapper.findCityIntFromString(locations, cityString)
 				val districtInt = locationDataMapper.findDistrictIntFromString(locations, cityInt, districtString)
 				if (cityInt != null) {
-					editProfileRepository.putLocation(cityInt, districtInt)
+					userProfileRepo.putLocation(cityInt, districtInt)
 					userProfileRepo.updateCachedProfile(CITY_KEY, cityInt.toString())
 					userProfileRepo.updateCachedProfile(DISTRICT_KEY, districtInt.toString())
 					Log.d("123456", "LocationNetwork - success")
@@ -185,7 +184,7 @@ class EditProfileViewModel @Inject constructor(
 				val networkDateTime =
 					convertDateAndTimeToNetwork(value)
 
-				editProfileRepository.putBirthday(networkDateTime ?: "")
+				userProfileRepo.putBirthday(networkDateTime ?: "")
 			}
 		}.onFailure {
 			Log.d("123456", "BirthdayNetwork - failure")
@@ -199,7 +198,7 @@ class EditProfileViewModel @Inject constructor(
 		kotlin.runCatching {
 			withContext(Dispatchers.IO) {
 				val nameSurname = value.split(" ")
-				editProfileRepository.putNameSurname(nameSurname[0], nameSurname[1])
+				userProfileRepo.putNameSurname(nameSurname[0], nameSurname[1])
 			}
 		}.onFailure {
 			Log.d("123456", "Name - something went wrong")

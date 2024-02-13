@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.core.CoreFragment
@@ -42,7 +43,7 @@ class MatchesFragment : CoreFragment<FragmentMatchesBinding>() {
 			viewModel.onOptionClicked(buttonClicked = binding.lostMatchesButton, binding.wonMatchesButton, binding.allMatchesButton)
 		}
 
-		lifecycleScope.launch {
+		lifecycleScope.launch(Dispatchers.IO) {
 			viewModel.getMatchesNew().collectLatest {
 				matchesAdapter.submitData(it)
 			}

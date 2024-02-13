@@ -14,6 +14,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import androidx.paging.PositionalDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -42,7 +43,7 @@ class MatchesViewModel  @Inject constructor(
 	val uiStateFlow = _uiStateFlow.asStateFlow()
 
 	fun onFetchingMatches(){
-		viewModelScope.launch {
+		viewModelScope.launch(Dispatchers.IO) {
 			val matches = repository.getMatchItems()
 			_uiStateFlow.value = MatchesUiState.MatchesDataReceived( matches )
 		}
