@@ -20,11 +20,9 @@ import javax.inject.Singleton
 class MatchesRepository @Inject constructor(
 	private val api: MatchesApi,
 	private val userProfileAndEnumsRepository: UserProfileAndEnumsRepository,
-	private val tokenRepo: AuthTokenRepository,
 	@ApplicationContext private val context: Context
 ) {
 
-	private val dateTimeFormatter = SimpleDateFormat( "yyyy-MM-dd'T'hh:mm:ss'Z'", Locale.getDefault())
 	private val someOtherFormatter = SimpleDateFormat("d MMMM, HH:mm", Locale("ru", "RU"))
 	private val formats = listOf(
 		"yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ",
@@ -55,7 +53,6 @@ class MatchesRepository @Inject constructor(
 
 			val dateTime = convertDateAndTime(matchResponseItem.playedAt)
 
-
 			MatchItem(
 				matchResponseItem.id,
 				matchResponseItem.win,
@@ -81,7 +78,7 @@ class MatchesRepository @Inject constructor(
 				val dateTimeFormatter = SimpleDateFormat(format, Locale.getDefault())
 				val timeStampMs = dateTimeFormatter.parse(dateString)
 				return someOtherFormatter.format(timeStampMs) ?: ""
-			} catch (_: Exception) { }
+			} catch (_: Exception) {}
 		}
 
 		return ""

@@ -1,0 +1,67 @@
+package tennis.bot.mobile.feed.searchopponent
+
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.core.view.setPadding
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import tennis.bot.mobile.databinding.RecyclerOpponentItemBinding
+import tennis.bot.mobile.profile.account.AccountPageAdapter
+import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
+import javax.inject.Inject
+
+class SearchOpponentsAdapter @Inject constructor(): PagingDataAdapter<OpponentItem, OpponentItemViewHolder>(OPPONENTS_COMPARATOR) {
+	var clickListener: ((item: String) -> Unit)? = null
+
+	companion object {
+		private val OPPONENTS_COMPARATOR = object : DiffUtil.ItemCallback<OpponentItem>() {
+			override fun areItemsTheSame(oldItem: OpponentItem, newItem: OpponentItem): Boolean =
+				oldItem.id == newItem.id
+
+			override fun areContentsTheSame(oldItem: OpponentItem, newItem: OpponentItem): Boolean =
+				oldItem == newItem
+		}
+	}
+
+	override fun onBindViewHolder(holder: OpponentItemViewHolder, position: Int) {
+		getItem(position)?.let { player ->
+			holder.showPlayerPhoto(player.profilePicture)
+			holder.binding.nameSurname.text = player.nameSurname
+			holder.binding.infoPanel.text = player.infoPanel
+		}
+	}
+
+	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OpponentItemViewHolder {
+		val binding = RecyclerOpponentItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+		return OpponentItemViewHolder(binding)
+	}
+}
+
+private fun OpponentItemViewHolder.showPlayerPhoto(profileImageUrl: String?) {
+	if (profileImageUrl == null) return
+
+	if (profileImageUrl.contains("default")) {
+		val resourceId = getDefaultDrawableResourceId(binding.playerImage.context, profileImageUrl.removeSuffix(".png"))
+		if (resourceId != null) binding.playerImage.load(resourceId)
+		binding.playerPhoto.setPadding(0)
+		binding.itemPicture.load(resourceId)
+	} else {
+		binding.playerImage.load(AccountPageAdapter.IMAGES_LINK + profileImageUrl) { crossfade(true) }
+		binding.playerPhoto.setPadding(0)
+		binding.itemPicture.load(AccountPageAdapter.IMAGES_LINK + profileImageUrl)
+	}
+}
+
+class OpponentItemViewHolder (
+	val binding: RecyclerOpponentItemBinding
+) : RecyclerView.ViewHolder(binding.root)
+
+data class OpponentItem(
+	val id: Long,
+	val profilePicture: String?,
+	val nameSurname: String,
+	val infoPanel: String // rating/doublesRating experience | games + string
+
+)

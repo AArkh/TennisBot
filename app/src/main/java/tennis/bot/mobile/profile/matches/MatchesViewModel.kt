@@ -59,5 +59,4 @@ class MatchesViewModel  @Inject constructor(
 			pagingSourceFactory = { repository.MyDataSource() }
 		).flow
 	}
-
 }

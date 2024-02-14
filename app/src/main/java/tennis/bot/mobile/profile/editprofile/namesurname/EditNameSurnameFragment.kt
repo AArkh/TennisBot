@@ -10,6 +10,7 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentEditNameSurnameBinding
+import tennis.bot.mobile.utils.LetterInputFilter
 
 @AndroidEntryPoint
 class EditNameSurnameFragment : CoreFragment<FragmentEditNameSurnameBinding>() {
@@ -25,12 +26,12 @@ class EditNameSurnameFragment : CoreFragment<FragmentEditNameSurnameBinding>() {
 			parentFragmentManager.popBackStack()
 		}
 
-		binding.nameInputEt.filters = arrayOf(viewModel.LetterInputFilter())
+		binding.nameInputEt.filters = arrayOf(LetterInputFilter())
 		binding.nameInputEt.doOnTextChanged { name, _, _, _ ->
 			viewModel.onNameInput(name ?: "")
 		}
 
-		binding.surnameInputEt.filters = arrayOf(viewModel.LetterInputFilter())
+		binding.surnameInputEt.filters = arrayOf(LetterInputFilter())
 		binding.surnameInputEt.doOnTextChanged { surname, _, _, _ ->
 			viewModel.onSurnameInput(surname ?: "")
 		}

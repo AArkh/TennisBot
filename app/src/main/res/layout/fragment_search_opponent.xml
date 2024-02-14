@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	tools:context=".feed.searchopponent.SearchOpponentsFragment">
+
+	<ImageView
+		android:id="@+id/back_button"
+		android:layout_width="36dp"
+		android:layout_height="36dp"
+		android:layout_marginStart="20dp"
+		android:layout_marginTop="10dp"
+		android:background="@drawable/search_background"
+		android:backgroundTint="@color/tb_gray_border"
+		android:padding="6dp"
+		android:src="@drawable/chevron_vertical"
+		android:visibility="visible"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:tint="@color/tb_gray_active" />
+
+	<TextView
+		android:id="@+id/title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="15dp"
+		android:text="Поиск соперника"
+		android:textColor="@color/tb_black"
+		android:textSize="17sp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
+
+	<com.google.android.material.textfield.TextInputLayout
+		android:id="@+id/search_bar_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginHorizontal="20dp"
+		android:layout_marginTop="22dp"
+		android:hint="@string/find"
+		android:textColorHint="@color/tb_gray_light"
+		app:boxStrokeWidth="-1dp"
+		app:boxStrokeWidthFocused="-1dp"
+		app:endIconDrawable="@drawable/x"
+		app:endIconMode="clear_text"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/title"
+		app:startIconDrawable="@drawable/search_lg"
+		app:startIconTint="@color/tb_gray_active">
+
+		<com.google.android.material.textfield.TextInputEditText
+			android:id="@+id/search_bar_et"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:lines="1"
+			android:inputType="text"
+			android:imeOptions="actionGo"
+			android:background="@drawable/search_background" />
+	</com.google.android.material.textfield.TextInputLayout>
+
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/matches_container"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_marginTop="16dp"
+		android:layout_marginBottom="12dp"
+		android:background="@color/tb_bg"
+		app:layout_constraintBottom_toTopOf="@id/buttonNext"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/search_bar_layout" />
+
+	<Button
+		android:id="@+id/buttonNext"
+		style="@style/Widget.TennisBot.Button.Inactive"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginHorizontal="20dp"
+		android:layout_marginBottom="8dp"
+		android:enabled="false"
+		android:text="@string/onboarding_continue_button"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent" />
+
+	<ProgressBar
+		android:id="@+id/loadingBar"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:padding="150dp"
+		android:visibility="gone"
+		android:layout_gravity="center"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"/>
+
+	<LinearLayout
+		android:id="@+id/error_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:padding="80dp"
+		android:gravity="center"
+		android:layout_gravity="center"
+		android:orientation="vertical"
+		android:visibility="gone"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent">
+
+		<ImageView
+			android:layout_width="100dp"
+			android:layout_height="100dp"
+			android:src="@android:drawable/stat_notify_error"
+			android:tintMode="multiply"
+			tools:layout_editor_absoluteX="182dp"
+			tools:layout_editor_absoluteY="354dp"
+			app:tint="@color/tb_gray_light" />
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/error_text"/>
+		<TextView
+			android:id="@+id/tryAgainTv"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/error_try_again_text" />
+
+	</LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

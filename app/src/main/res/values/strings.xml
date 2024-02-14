@@ -185,6 +185,12 @@
 	<string name="tournaments_title">Турниры</string>
 	<string name="add_score_title">Внести счет</string>
 	<string name="create_game_title">Создать заявку</string>
+	<string name="score_type_title">Тип счета</string>
+	<string name="score_type_single">Одиночный</string>
+	<string name="score_type_double">Парный</string>
+	<string name="score_type_tournament">Турнирный</string>
+	<string name="score_type_friendly">Дружеский</string>
+	<string name="player_info_panel">%d/%d · %s | %s</string>
 
 
 </resources>

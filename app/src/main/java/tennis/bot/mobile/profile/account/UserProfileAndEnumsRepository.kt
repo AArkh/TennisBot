@@ -87,7 +87,7 @@ class UserProfileAndEnumsRepository @Inject constructor(
 		}
 	}
 
-	fun updateCachedProfile(key: String, value: Int) {
+	private fun updateCachedProfile(key: String, value: Int) {
 		return when(key){
 			"cityId" -> { cachedProfileData = cachedProfileData.copy(cityId = value) }
 			"districtId" -> { cachedProfileData = cachedProfileData.copy(districtId = value) }
@@ -127,7 +127,8 @@ class UserProfileAndEnumsRepository @Inject constructor(
 		return precacheEnums()
 	}
 
-	fun getEnumsById(allEnums: List<EnumType>, selectedEnumTypesAndIds: List<Pair<String, Int?>>): List<String> {
+	suspend fun getEnumsById(selectedEnumTypesAndIds: List<Pair<String, Int?>>): List<String> {
+		val allEnums = getEnums()
 		val decodedList = mutableListOf<String>()
 
 		for ((type, id) in selectedEnumTypesAndIds){

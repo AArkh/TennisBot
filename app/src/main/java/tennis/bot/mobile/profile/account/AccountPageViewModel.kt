@@ -1,7 +1,6 @@
 package tennis.bot.mobile.profile.account
 
 import android.content.Context
-import android.icu.text.SimpleDateFormat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +13,6 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.onboarding.survey.SurveyResultItem
 import tennis.bot.mobile.utils.DEFAULT_DATE_TIME
 import tennis.bot.mobile.utils.convertDateAndTime
-import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -99,14 +97,16 @@ class AccountPageViewModel @Inject constructor(
 		val defaultGameData = repository.defaultGameData
 		val isRightHandInt = if (profileData.isRightHand == true) 1 else if (profileData.isRightHand == false) 0 else null
 		val isOneBackhandInt = if (profileData.isOneBackhand == true) 1 else if (profileData.isOneBackhand == false) 0 else null
-		val decodedIds = repository.getEnumsById(enumTypesList, listOf(
-			Pair(IS_RIGHTHAND_TITLE, isRightHandInt),
-			Pair(IS_ONE_BACKHAND_TITLE, isOneBackhandInt),
-			Pair(SURFACE_TITLE, profileData.surface),
-			Pair(SHOES_TITLE, profileData.shoes),
-			Pair(RACQUET_TITLE, profileData.racquet),
-			Pair(RACQUET_STRINGS_TITLE, profileData.racquetStrings)
-		))
+		val decodedIds = repository.getEnumsById(
+			listOf(
+				Pair(IS_RIGHTHAND_TITLE, isRightHandInt),
+				Pair(IS_ONE_BACKHAND_TITLE, isOneBackhandInt),
+				Pair(SURFACE_TITLE, profileData.surface),
+				Pair(SHOES_TITLE, profileData.shoes),
+				Pair(RACQUET_TITLE, profileData.racquet),
+				Pair(RACQUET_STRINGS_TITLE, profileData.racquetStrings)
+			)
+		)
 
 		val modifiedValues = emptyList<String>() + decodedIds
 

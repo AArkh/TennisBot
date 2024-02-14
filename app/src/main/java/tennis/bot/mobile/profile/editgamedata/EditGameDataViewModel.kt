@@ -33,14 +33,16 @@ class EditGameDataViewModel @Inject constructor(
 				val defaultGameData = repository.defaultGameData
 				val isRightHandInt = if (profileData.isRightHand == true) 1 else if (profileData.isRightHand == false) 0 else null
 				val isOneBackhandInt = if (profileData.isOneBackhand == true) 1 else if (profileData.isOneBackhand == false) 0 else null
-				val decodedIds = repository.getEnumsById(enumTypesList, listOf(
-					Pair(AccountPageViewModel.IS_RIGHTHAND_TITLE, isRightHandInt),
-					Pair(AccountPageViewModel.IS_ONE_BACKHAND_TITLE, isOneBackhandInt),
-					Pair(AccountPageViewModel.SURFACE_TITLE, profileData.surface),
-					Pair(AccountPageViewModel.SHOES_TITLE, profileData.shoes),
-					Pair(AccountPageViewModel.RACQUET_TITLE, profileData.racquet),
-					Pair(AccountPageViewModel.RACQUET_STRINGS_TITLE, profileData.racquetStrings)
-				))
+				val decodedIds = repository.getEnumsById(
+					listOf(
+						Pair(AccountPageViewModel.IS_RIGHTHAND_TITLE, isRightHandInt),
+						Pair(AccountPageViewModel.IS_ONE_BACKHAND_TITLE, isOneBackhandInt),
+						Pair(AccountPageViewModel.SURFACE_TITLE, profileData.surface),
+						Pair(AccountPageViewModel.SHOES_TITLE, profileData.shoes),
+						Pair(AccountPageViewModel.RACQUET_TITLE, profileData.racquet),
+						Pair(AccountPageViewModel.RACQUET_STRINGS_TITLE, profileData.racquetStrings)
+					)
+				)
 
 				val modifiedGameData = defaultGameData.mapIndexed { index, gameDataItem ->
 					gameDataItem.copy(resultOption = decodedIds.getOrElse(index) { gameDataItem.resultOption })

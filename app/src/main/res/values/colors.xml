@@ -13,10 +13,12 @@
 
     <color name="tb_primary_green">#57D26A</color>
     <color name="tb_primary_green_disabled">#6657D26A</color>
+    <color name="tb_new_green">#15CC79</color>
     <color name="tb_bland_green">#EBFBED</color>
 
     <color name="tb_light_orange">#FFEDE1</color>
     <color name="tb_orange">#FF793F</color>
+    <color name="tb_new_orange">#FF8642</color>
 
     <color name="tb_red">#F04848</color>
     <color name="tb_bland_red">#FCE5E5</color>
