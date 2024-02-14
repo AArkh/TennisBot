@@ -1,10 +1,7 @@
 package tennis.bot.mobile.feed.addscore
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import tennis.bot.mobile.R
@@ -12,7 +9,6 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentAddScoreBinding
 import tennis.bot.mobile.feed.searchopponent.SearchOpponentsFragment
-import tennis.bot.mobile.profile.account.AccountPageFragment
 
 @AndroidEntryPoint
 class AddScoreFragment : CoreFragment<FragmentAddScoreBinding>() {
