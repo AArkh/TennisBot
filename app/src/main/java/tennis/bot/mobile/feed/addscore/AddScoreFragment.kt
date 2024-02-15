@@ -9,11 +9,19 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentAddScoreBinding
 import tennis.bot.mobile.feed.searchopponent.SearchOpponentsFragment
+import tennis.bot.mobile.utils.showToast
 
 @AndroidEntryPoint
 class AddScoreFragment : CoreFragment<FragmentAddScoreBinding>() {
 	override val bindingInflation: Inflation<FragmentAddScoreBinding> = FragmentAddScoreBinding::inflate
 	private val viewModel: AddScoreViewModel by viewModels()
+
+	companion object {
+		const val SCORE_SINGLE = 1
+		const val SCORE_DOUBLE = 2
+		const val SCORE_TOURNAMENT = 3
+		const val SCORE_FRIENDLY = 4
+	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
@@ -22,10 +30,10 @@ class AddScoreFragment : CoreFragment<FragmentAddScoreBinding>() {
 			parentFragmentManager.popBackStack()
 		}
 
-		binding.option1.setOnClickListener { viewModel.onOptionPicked(1) }
-		binding.option2.setOnClickListener { viewModel.onOptionPicked(2) }
-		binding.option3.setOnClickListener { viewModel.onOptionPicked(3) }
-		binding.option4.setOnClickListener { viewModel.onOptionPicked(4) }
+		binding.option1.setOnClickListener { viewModel.onOptionPicked(requireActivity(),SCORE_SINGLE) }
+		binding.option2.setOnClickListener { context?.showToast("Still in development") }
+		binding.option3.setOnClickListener { context?.showToast("Still in development") }
+		binding.option4.setOnClickListener { context?.showToast("Still in development") }
 
 		binding.buttonNext.setOnClickListener {
 			viewModel.onNextButtonClicked {
@@ -35,7 +43,6 @@ class AddScoreFragment : CoreFragment<FragmentAddScoreBinding>() {
 					.commit()
 			}
 		}
-
 
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState ->
 			onPickedActive(uiState.pickedOption)
@@ -58,10 +65,10 @@ class AddScoreFragment : CoreFragment<FragmentAddScoreBinding>() {
 		binding.option2.setBackgroundResource(R.drawable.survey_option_outline)
 
 		when(pickedOption) {
-			1 -> binding.option1.setBackgroundResource(R.drawable.survey_option_outline_picked)
-			2 -> binding.option2.setBackgroundResource(R.drawable.survey_option_outline_picked)
-			3 -> binding.option3.setBackgroundResource(R.drawable.survey_option_outline_picked)
-			4 -> binding.option4.setBackgroundResource(R.drawable.survey_option_outline_picked)
+			SCORE_SINGLE -> binding.option1.setBackgroundResource(R.drawable.survey_option_outline_picked)
+			SCORE_DOUBLE -> binding.option2.setBackgroundResource(R.drawable.survey_option_outline_picked)
+			SCORE_TOURNAMENT -> binding.option3.setBackgroundResource(R.drawable.survey_option_outline_picked)
+			SCORE_FRIENDLY -> binding.option4.setBackgroundResource(R.drawable.survey_option_outline_picked)
 		}
 	}
 

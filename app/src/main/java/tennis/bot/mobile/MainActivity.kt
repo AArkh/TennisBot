@@ -48,7 +48,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 try{

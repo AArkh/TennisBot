@@ -1,14 +1,16 @@
 package tennis.bot.mobile.feed.searchopponent
 
 import android.util.Log
+import androidx.core.os.bundleOf
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,17 +24,16 @@ class SearchOpponentsViewModel @Inject constructor(
 	private val repository: SearchOpponentsRepository
 ): ViewModel() {
 
+	companion object {
+		const val OPPONENT_PICKED_REQUEST_KEY = "OPPONENT_PICKED_REQUEST_KEY"
+		const val SELECTED_OPPONENT_KEY = "OPPONENT_PICKED_REQUEST_KEY"
+	}
+
 	private val _uiStateFlow = MutableStateFlow<SearchOpponentsUiState>(SearchOpponentsUiState.Initial)
 	val uiStateFlow = _uiStateFlow.asStateFlow()
 
 	private val _userInput = MutableStateFlow<String?>(null)
 	val userInput: StateFlow<String?> = _userInput
-
-	fun onSearchOpponentsInput(text: CharSequence) {
-		viewModelScope.launch {
-			_userInput.emit(text.toString())
-		}
-	}
 
 	val opponentsPager = Pager(
 			config = PagingConfig(
@@ -41,6 +42,19 @@ class SearchOpponentsViewModel @Inject constructor(
 			),
 			pagingSourceFactory = { OpponentsDataSource() }
 		).flow
+
+	fun onSearchOpponentsInput(text: CharSequence) {
+		viewModelScope.launch {
+			_userInput.emit(text.toString())
+		}
+	}
+
+	fun onOpponentPicked(opponent: OpponentItem, activity: FragmentActivity) {
+		activity.supportFragmentManager.setFragmentResult(
+			OPPONENT_PICKED_REQUEST_KEY,
+			bundleOf(SELECTED_OPPONENT_KEY to opponent)
+		)
+	}
 
 	inner class OpponentsDataSource : PagingSource<Int, OpponentItem>() {
 		override fun getRefreshKey(state: PagingState<Int, OpponentItem>): Int { return 0 }

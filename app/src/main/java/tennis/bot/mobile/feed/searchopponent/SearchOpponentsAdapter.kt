@@ -8,13 +8,16 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import tennis.bot.mobile.R
 import tennis.bot.mobile.databinding.RecyclerOpponentItemBinding
 import tennis.bot.mobile.profile.account.AccountPageAdapter
 import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
 import javax.inject.Inject
 
 class SearchOpponentsAdapter @Inject constructor(): PagingDataAdapter<OpponentItem, OpponentItemViewHolder>(OPPONENTS_COMPARATOR) {
-	var clickListener: ((item: String) -> Unit)? = null
+	var clickListener: ((item: OpponentItem) -> Unit)? = null
+	private var selectedItem = -1
+
 
 	companion object {
 		private val OPPONENTS_COMPARATOR = object : DiffUtil.ItemCallback<OpponentItem>() {
@@ -31,6 +34,22 @@ class SearchOpponentsAdapter @Inject constructor(): PagingDataAdapter<OpponentIt
 			holder.showPlayerPhoto(player.profilePicture)
 			holder.binding.nameSurname.text = player.nameSurname
 			holder.binding.infoPanel.text = player.infoPanel
+			if (holder.absoluteAdapterPosition == selectedItem){
+				holder.binding.root.setBackgroundResource(R.drawable.survey_option_outline_picked)
+			} else {
+				holder.binding.root.setBackgroundResource(R.drawable.background_corners_16dp)
+			}
+
+			holder.binding.root.setOnClickListener {
+				if (holder.absoluteAdapterPosition == selectedItem) {
+					selectedItem = -1
+				} else {
+					selectedItem = holder.absoluteAdapterPosition
+					clickListener?.invoke(player)
+				}
+				notifyDataSetChanged() // more specific options doesn't provide the intended result
+
+			}
 		}
 	}
 
@@ -66,6 +85,6 @@ data class OpponentItem(
 	val id: Long,
 	val profilePicture: String?,
 	val nameSurname: String,
-	val infoPanel: String // rating/doublesRating experience | games + string
-
+	val infoPanel: String, // rating/doublesRating experience | games + string
+	val isPicked: Boolean = false
 )

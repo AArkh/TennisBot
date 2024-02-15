@@ -191,6 +191,8 @@
 	<string name="score_type_tournament">Турнирный</string>
 	<string name="score_type_friendly">Дружеский</string>
 	<string name="player_info_panel">%d/%d · %s | %s</string>
+	<string name="opponents_single_hint_text">Введите данные в строке \nпоиска. Выберите игрока и \nнажмите \"Далее\"</string>
+	<string name="opponents_single_hint_title">Найдите соперника по фамилии</string>
 
 
 </resources>

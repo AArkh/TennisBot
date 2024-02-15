@@ -1,12 +1,15 @@
 package tennis.bot.mobile.core
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.annotation.WorkerThread
+import androidx.core.content.ContextCompat.startActivity
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import tennis.bot.mobile.MainActivity
 import tennis.bot.mobile.onboarding.survey.OnboardingRepository
 import tennis.bot.mobile.onboarding.survey.RegisterAndLoginApi
 import tennis.bot.mobile.onboarding.survey.TokenResponse

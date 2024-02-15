@@ -1,18 +1,24 @@
 package tennis.bot.mobile.feed.searchopponent
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentSearchOpponentBinding
+import tennis.bot.mobile.feed.FeedBottomNavigationFragment
+import tennis.bot.mobile.feed.addscore.AddScoreFragment
 import tennis.bot.mobile.utils.LetterInputFilter
 import javax.inject.Inject
 
@@ -23,6 +29,11 @@ class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>() {
 	@Inject
 	lateinit var adapter: SearchOpponentsAdapter
 
+	companion object {
+		const val SCORE_TYPE_REQUEST_KEY = "SCORE_TYPE_REQUEST_KEY"
+		const val SELECTED_SCORE_TYPE_OPTION = "SELECTED_SCORE_TYPE_OPTION"
+	}
+
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 
@@ -32,11 +43,30 @@ class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>() {
 
 		binding.searchBarEt.filters = arrayOf(LetterInputFilter())
 		binding.searchBarEt.doAfterTextChanged { text ->
+			binding.matchesContainer.visibility = View.VISIBLE
+			binding.cardsAnimation.visibility = View.GONE
+			binding.hintTitle.visibility = View.GONE
+			binding.hintText.visibility = View.GONE
+
 			viewModel.onSearchOpponentsInput(text ?: "")
 		}
 
 		binding.matchesContainer.adapter = adapter
 		binding.matchesContainer.layoutManager = LinearLayoutManager(requireContext())
+
+		adapter.clickListener = { opponent ->
+			Log.d("123546", "Recieved $opponent")
+			viewModel.onOpponentPicked(opponent, requireActivity())
+		}
+
+		setFragmentResultListener(SCORE_TYPE_REQUEST_KEY) { _, result ->
+			when(result.getInt(SELECTED_SCORE_TYPE_OPTION)) { // there will be different logic and ui changes for each option
+				AddScoreFragment.SCORE_SINGLE -> {}
+				AddScoreFragment.SCORE_DOUBLE -> {}
+				AddScoreFragment.SCORE_TOURNAMENT -> {}
+				AddScoreFragment.SCORE_FRIENDLY -> {}
+			}
+		}
 
 		lifecycleScope.launch(Dispatchers.IO) {
 			viewModel.userInput.collectLatest {
@@ -67,7 +97,6 @@ class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>() {
 					binding.errorLayout.visibility = View.VISIBLE
 					binding.matchesContainer.visibility = View.GONE
 				}
-
 			}
 		}
 	}
