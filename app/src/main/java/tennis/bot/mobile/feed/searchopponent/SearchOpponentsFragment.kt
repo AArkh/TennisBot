@@ -39,12 +39,14 @@ class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>() {
 		binding.matchesContainer.layoutManager = LinearLayoutManager(requireContext())
 
 		lifecycleScope.launch(Dispatchers.IO) {
-			viewModel.getOpponentsNew().collectLatest {
-				adapter.submitData(it)
+			viewModel.userInput.collectLatest {
+				viewModel.opponentsPager.collectLatest {
+					adapter.submitData(it)
+				}
 			}
 		}
 
-		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: SearchOpponentsUiState ->
+		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: SearchOpponentsUiState -> // may be useless, todo check out the way to add loading and catch error states in PagingLibrary
 			when(uiState){
 				is SearchOpponentsUiState.Initial -> {
 					binding.loadingBar.visibility = View.GONE

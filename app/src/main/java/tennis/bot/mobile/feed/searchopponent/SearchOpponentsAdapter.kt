@@ -1,6 +1,7 @@
 package tennis.bot.mobile.feed.searchopponent
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.setPadding
 import androidx.paging.PagingDataAdapter
@@ -40,7 +41,10 @@ class SearchOpponentsAdapter @Inject constructor(): PagingDataAdapter<OpponentIt
 }
 
 private fun OpponentItemViewHolder.showPlayerPhoto(profileImageUrl: String?) {
-	if (profileImageUrl == null) return
+	if (profileImageUrl == null) {
+		binding.itemPicture.visibility = View.GONE
+		return
+	}
 
 	if (profileImageUrl.contains("default")) {
 		val resourceId = getDefaultDrawableResourceId(binding.playerImage.context, profileImageUrl.removeSuffix(".png"))

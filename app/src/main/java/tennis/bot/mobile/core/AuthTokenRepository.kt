@@ -100,7 +100,7 @@ class AuthTokenRepository @Inject constructor(
 				)
 			)
 		} else {
-			throw IOException("Failed to update token")
+			sharedPreferences.edit().remove(REFRESH_TOKEN_KEY).apply()
 		}
 	}
 }

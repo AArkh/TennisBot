@@ -4,5 +4,5 @@
     <size
         android:width="45dp"
         android:height="45dp" />
-    <solid android:color="@color/tb_gray_border" /> <!-- Change the color as needed -->
+    <solid android:color="@color/tb_gray_border" />
 </shape>
