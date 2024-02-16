@@ -7,18 +7,17 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentSearchOpponentBinding
-import tennis.bot.mobile.feed.FeedBottomNavigationFragment
 import tennis.bot.mobile.feed.addscore.AddScoreFragment
+import tennis.bot.mobile.feed.insertscore.InsertScoreFragment
 import tennis.bot.mobile.utils.LetterInputFilter
 import javax.inject.Inject
 
@@ -56,7 +55,21 @@ class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>() {
 
 		adapter.clickListener = { opponent ->
 			Log.d("123546", "Recieved $opponent")
+			binding.buttonNext.isEnabled = true
+			val buttonBackground = if (binding.buttonNext.isEnabled) {
+				R.drawable.btn_bkg_enabled
+			} else {
+				R.drawable.btn_bkg_disabled
+			}
+			binding.buttonNext.setBackgroundResource(buttonBackground)
 			viewModel.onOpponentPicked(opponent, requireActivity())
+		}
+
+		binding.buttonNext.setOnClickListener {
+			parentFragmentManager.beginTransaction()
+				.replace(R.id.fragment_container_view, InsertScoreFragment())
+				.addToBackStack(InsertScoreFragment::class.java.name)
+				.commit()
 		}
 
 		setFragmentResultListener(SCORE_TYPE_REQUEST_KEY) { _, result ->

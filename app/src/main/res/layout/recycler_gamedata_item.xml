@@ -42,7 +42,7 @@
 		android:layout_width="20dp"
 		android:layout_height="20dp"
 		android:layout_marginEnd="20dp"
-		android:src="@drawable/chevron_vertical"
+		android:src="@drawable/chevron_left_wide"
 		android:scaleX="-1"
 		android:visibility="visible"
 		app:layout_constraintTop_toTopOf="@id/title"

@@ -1,7 +1,5 @@
 package tennis.bot.mobile.profile.editprofile.namesurname
 
-import android.text.InputFilter
-import android.text.Spanned
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel

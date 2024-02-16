@@ -5,7 +5,6 @@ import android.view.Gravity
 import android.view.View
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.setPadding
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import coil.load
 import dagger.hilt.android.AndroidEntryPoint
@@ -14,10 +13,6 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentFeedBottomNavigationBinding
 import tennis.bot.mobile.feed.addscore.AddScoreFragment
-import tennis.bot.mobile.feed.addscore.AddScoreFragment.Companion.SCORE_DOUBLE
-import tennis.bot.mobile.feed.addscore.AddScoreFragment.Companion.SCORE_FRIENDLY
-import tennis.bot.mobile.feed.addscore.AddScoreFragment.Companion.SCORE_SINGLE
-import tennis.bot.mobile.feed.addscore.AddScoreFragment.Companion.SCORE_TOURNAMENT
 import tennis.bot.mobile.profile.account.AccountPageAdapter
 import tennis.bot.mobile.profile.account.AccountPageFragment
 import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
@@ -71,7 +66,7 @@ class FeedBottomNavigationFragment : CoreFragment<FragmentFeedBottomNavigationBi
 	private fun showAddScorePopup(view: View, items: List<String>) {
 		val menu = PopupMenu(requireContext(), view, Gravity.END, 0, R.style.PopupMenuStyle)
 		for (item in items) {
-			menu.menu.add(item);
+			menu.menu.add(item)
 		}
 		menu.setOnMenuItemClickListener { menuItem ->
 			when(items.indexOf(menuItem.title.toString())) {

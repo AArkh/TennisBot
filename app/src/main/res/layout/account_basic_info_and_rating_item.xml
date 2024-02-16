@@ -104,7 +104,6 @@
 		android:textSize="14sp"
 		android:textColor="@color/tb_primary_green"
 		android:textStyle="bold"
-
 		android:paddingTop="11dp"
 		android:paddingBottom="10dp"
 		android:paddingEnd="15.5dp"

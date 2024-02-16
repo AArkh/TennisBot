@@ -3,9 +3,7 @@ package tennis.bot.mobile.feed.searchopponent
 import kotlinx.serialization.Serializable
 import retrofit2.Response
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
-import tennis.bot.mobile.profile.matches.MatchResponseItem
 
 interface OpponentsApi {
 	@GET("api/tennis-players/")

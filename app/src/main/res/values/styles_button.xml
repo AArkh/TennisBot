@@ -36,6 +36,26 @@
         <item name="android:textColor">@color/tb_white</item>
     </style>
 
+    <style name="Widget.TennisBot.ButtonFlat.Active" parent="Widget.TennisBot.Button">
+        <item name="android:background">@color/tb_primary_green</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:foregroundTint">@color/tb_primary_green</item>
+        <item name="android:textColor">@color/tb_white</item>
+        <item name="iconTint">#fbfbfb</item>
+    </style>
+
+    <style name="Widget.TennisBot.ButtonFlat.Secondary" parent="Widget.TennisBot.Button">
+        <item name="android:background">@color/tb_bg</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:textColor">@color/tb_gray_active</item>
+    </style>
+
+    <style name="Widget.TennisBot.ButtonFlat.Inactive" parent="Widget.TennisBot.Button">
+        <item name="android:background">@color/tb_primary_green_disabled</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:textColor">@color/tb_white</item>
+    </style>
+
     <style name="Widget.TennisBot.Button.Loading" parent="Widget.TennisBot.Button.Active"/>
 
 </resources>

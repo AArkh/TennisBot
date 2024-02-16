@@ -20,4 +20,8 @@
 		<item name="android:popupBackground">@drawable/popup_background</item>
 	</style>
 
+	<style name="Theme.TennisBot.FlatButton" parent="Widget.AppCompat.TextView">
+
+	</style>
+
 </resources>

@@ -11,7 +11,6 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentSurveyBinding
-import tennis.bot.mobile.onboarding.initial.LoginProposalFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -30,7 +29,7 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 
 		val dialog = Dialog(requireContext())
 		dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-		dialog.setContentView(R.layout.survey_welcome_dialog)
+		dialog.setContentView(R.layout.dialog_survey_welcome)
 		dialog.window?.setBackgroundDrawableResource(R.drawable.survey_dialog_rounded)
 		val dialogButton = dialog.findViewById<Button>(R.id.dialog_buttonStart)
 		dialog.show()

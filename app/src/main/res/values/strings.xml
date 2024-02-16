@@ -193,6 +193,19 @@
 	<string name="player_info_panel">%d/%d · %s | %s</string>
 	<string name="opponents_single_hint_text">Введите данные в строке \nпоиска. Выберите игрока и \nнажмите \"Далее\"</string>
 	<string name="opponents_single_hint_title">Найдите соперника по фамилии</string>
+	<string name="opponent_search">Поиск соперника</string>
+	<string name="side_note_hint_multiplier">Добавляя фотографию или видео игры, вы умножаете ваши баллы х2 и х3 в погоне за ракеткой</string>
+	<string name="insert_score_set_item_title">Счет %d сета</string>
+	<string name="insert_set_item_score">%d-%d</string>
+	<string name="super_tie_break">Супер тай-брейк</string>
+	<string name="add_set">Добавить сет</string>
+	<string name="add_photo">Добавить фото</string>
+	<string name="add_video">Добавить видео</string>
+	<string name="void_space_string" />
+	<string name="repeat">Повторить</string>
+	<string name="pick_sport">Выбери спорт</string>
+	<string name="tennis">Теннис</string>
+	<string name="in_development">В разработке</string>
 
 
 </resources>

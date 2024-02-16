@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_marginBottom="16dp"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<TextView
+		android:id="@+id/title"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:paddingVertical="10dp"
+		android:layout_marginStart="20dp"
+		android:gravity="center|start"
+		android:text="@string/insert_score_set_item_title"
+		android:textColor="@color/tb_gray_active"
+		android:textSize="13sp"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toStartOf="@id/set_score"
+		app:layout_constraintBottom_toTopOf="@id/underline"/>
+
+	<TextView
+		android:id="@+id/set_score"
+		android:layout_width="wrap_content"
+		android:layout_height="0dp"
+		android:gravity="center"
+		android:text="@string/insert_set_item_score"
+		android:textColor="@color/tb_black"
+		android:paddingStart="14dp"
+		android:paddingEnd="9dp"
+		android:paddingVertical="6dp"
+		android:background="@drawable/outline_100dp"
+		app:drawableEndCompat="@drawable/chevron_right_wide"
+		app:layout_constraintTop_toTopOf="@id/title"
+		app:layout_constraintBottom_toBottomOf="@id/title"
+		app:layout_constraintStart_toEndOf="@id/title"
+		app:layout_constraintEnd_toStartOf="@id/clear_button" />
+
+	<FrameLayout
+		android:id="@+id/clear_button"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:padding="8dp"
+		app:layout_constraintBottom_toBottomOf="@id/title"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toTopOf="@id/title">
+
+		<ImageView
+			android:id="@+id/clear_button_image"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="end"
+			android:layout_marginEnd="2dp"
+			android:background="@drawable/search_background"
+			android:backgroundTint="@color/tb_gray_border"
+			android:padding="2dp"
+			android:src="@drawable/x" />
+	</FrameLayout>
+
+	<View
+		android:id="@+id/underline"
+		android:layout_width="match_parent"
+		android:layout_height="2dp"
+		android:layout_marginTop="8dp"
+		android:layout_marginHorizontal="20dp"
+		app:layout_constraintTop_toBottomOf="@id/title"
+		android:background="@drawable/underline"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

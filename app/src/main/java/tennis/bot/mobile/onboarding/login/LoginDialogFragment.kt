@@ -12,12 +12,12 @@ import android.view.Window
 import dagger.hilt.android.AndroidEntryPoint
 import tennis.bot.mobile.core.CoreDialogFragment
 import tennis.bot.mobile.core.Inflation
-import tennis.bot.mobile.databinding.LoginDialogBinding
+import tennis.bot.mobile.databinding.DialogLoginBinding
 
 @AndroidEntryPoint
-class LoginDialogFragment: CoreDialogFragment<LoginDialogBinding>() {
+class LoginDialogFragment: CoreDialogFragment<DialogLoginBinding>() {
 
-	override val bindingInflation: Inflation<LoginDialogBinding> = LoginDialogBinding::inflate
+	override val bindingInflation: Inflation<DialogLoginBinding> = DialogLoginBinding::inflate
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 		if (dialog != null && dialog!!.window != null) {

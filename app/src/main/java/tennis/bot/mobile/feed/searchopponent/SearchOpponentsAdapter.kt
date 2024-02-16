@@ -3,6 +3,7 @@ package tennis.bot.mobile.feed.searchopponent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.view.setPadding
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -35,9 +36,9 @@ class SearchOpponentsAdapter @Inject constructor(): PagingDataAdapter<OpponentIt
 			holder.binding.nameSurname.text = player.nameSurname
 			holder.binding.infoPanel.text = player.infoPanel
 			if (holder.absoluteAdapterPosition == selectedItem){
-				holder.binding.root.setBackgroundResource(R.drawable.survey_option_outline_picked)
+				holder.binding.root.foreground = getDrawable(holder.binding.root.context, R.drawable.survey_option_outline_picked)
 			} else {
-				holder.binding.root.setBackgroundResource(R.drawable.background_corners_16dp)
+				holder.binding.root.foreground = null
 			}
 
 			holder.binding.root.setOnClickListener {
@@ -48,7 +49,6 @@ class SearchOpponentsAdapter @Inject constructor(): PagingDataAdapter<OpponentIt
 					clickListener?.invoke(player)
 				}
 				notifyDataSetChanged() // more specific options doesn't provide the intended result
-
 			}
 		}
 	}
