@@ -8,6 +8,8 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreBottomSheetDialogFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentInsertScoreBottomDialogBinding
+import tennis.bot.mobile.feed.insertscore.InsertScoreDialogViewModel.Companion.LEFT_TIE_POSITION
+import tennis.bot.mobile.feed.insertscore.InsertScoreDialogViewModel.Companion.RIGHT_TIE_POSITION
 
 @AndroidEntryPoint
 class InsertScoreDialogFragment : CoreBottomSheetDialogFragment<FragmentInsertScoreBottomDialogBinding>() {
@@ -31,11 +33,11 @@ class InsertScoreDialogFragment : CoreBottomSheetDialogFragment<FragmentInsertSc
 
 		binding.basicScore.setOnValueChangedListener { _, _, newVal ->
 			when(newVal){
-				7 -> {
+				RIGHT_TIE_POSITION -> {
 					binding.rightTieBreak.visibility = View.VISIBLE
 					binding.leftTieBreak.visibility = View.GONE
 				}
-				8 -> {
+				LEFT_TIE_POSITION -> {
 					binding.leftTieBreak.visibility = View.VISIBLE
 					binding.rightTieBreak.visibility = View.GONE
 				}
@@ -47,7 +49,12 @@ class InsertScoreDialogFragment : CoreBottomSheetDialogFragment<FragmentInsertSc
 		}
 
 		binding.buttonChoose.setOnClickListener {
-			viewModel.onScorePicked(binding.basicScore.value, requireActivity())
+			viewModel.onScorePicked(
+				valuePositionBasic = binding.basicScore.value,
+				valuePositionLeftTie = binding.leftTieBreak.value,
+				valuePositionRightTie = binding.rightTieBreak.value,
+				activity = requireActivity()
+			)
 			dialog?.dismiss()
 		}
 

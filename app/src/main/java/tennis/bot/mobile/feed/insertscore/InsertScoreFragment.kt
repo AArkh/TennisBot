@@ -77,7 +77,9 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 			val score = result.getString(InsertScoreDialogViewModel.SELECTED_SCORE_KEY)
 			val setNumber = result.getInt(InsertScoreDialogViewModel.SELECTED_SET_KEY)
 			Log.d("123456", "received result $score and $setNumber")
-			viewModel.onScoreReceived(setNumber, score ?: "")
+			viewModel.onScoreReceived(setNumber, score ?: "") {
+				binding.
+			}
 
 		}
 

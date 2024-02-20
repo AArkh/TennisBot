@@ -58,7 +58,7 @@ class InsertScoreViewModel @Inject constructor(
 		_uiStateFlow.value = uiStateFlow.value.copy(setsList = newSets)
 	}
 
-	fun onScoreReceived(setNumber: Int,score: String) {
+	fun onScoreReceived(setNumber: Int,score: String, visualCallBack: () -> Unit) {
 		val newSetList = uiStateFlow.value.setsList.map { setItem ->
 			if (setItem.setNumber == setNumber) {
 				score.let { setItem.copy(score = it) }

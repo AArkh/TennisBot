@@ -19,6 +19,8 @@ class InsertScoreDialogViewModel @Inject constructor(
 		const val REQUEST_SCORE_KEY = "REQUEST_SCORE_KEY"
 		const val SELECTED_SCORE_KEY = "SELECTED_SCORE_KEY"
 		const val SELECTED_SET_KEY = "SELECTED_SET_KEY"
+		const val LEFT_TIE_POSITION = 8
+		const val RIGHT_TIE_POSITION = 7
 	}
 
 	val basicScoreVariants = arrayOf(
@@ -44,13 +46,21 @@ class InsertScoreDialogViewModel @Inject constructor(
 	)
 	val uiStateFlow = _uiStateFlow.asStateFlow()
 
-	fun onScorePicked(valuePosition: Int, activity: FragmentActivity) {
-		val pickedResult: String = basicScoreVariants[valuePosition]
+	fun onScorePicked(valuePositionBasic: Int, valuePositionLeftTie: Int, valuePositionRightTie: Int, activity: FragmentActivity) {
+		var pickedScore: String = basicScoreVariants[valuePositionBasic].replace("-", ":")
+		when(valuePositionBasic) {
+			RIGHT_TIE_POSITION -> {
+				pickedScore = "$pickedScore (${rightTieBreakScoreVariants[valuePositionRightTie]})"
+			}
+			LEFT_TIE_POSITION -> {
+				pickedScore = "$pickedScore (${leftTieBreakScoreVariants[valuePositionLeftTie]})"
+			}
+		}
 
 		activity.supportFragmentManager.setFragmentResult(
 			REQUEST_SCORE_KEY, // using set number to determine which value to change in InsertScoreFragment
 			bundleOf(
-				SELECTED_SCORE_KEY to pickedResult,
+				SELECTED_SCORE_KEY to pickedScore,
 				SELECTED_SET_KEY to uiStateFlow.value.setNumber)
 		)
 	}
