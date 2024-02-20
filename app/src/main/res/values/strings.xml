@@ -207,6 +207,8 @@
 	<string name="tennis">Теннис</string>
 	<string name="in_development">В разработке</string>
 	<string name="button_choose">Выбрать</string>
+	<string name="button_send">Отправить</string>
+	<string name="insert_score_media_title">Медиа матча</string>
 
 
 </resources>
