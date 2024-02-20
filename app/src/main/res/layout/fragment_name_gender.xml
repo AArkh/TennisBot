@@ -183,7 +183,7 @@
 		android:textColor="@color/tb_black"
 		android:textSize="14sp"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toEndOf="male"
+		app:layout_constraintStart_toEndOf="@id/male"
 		app:layout_constraintTop_toBottomOf="@id/surnameInput_layout" />
 
 	<Button

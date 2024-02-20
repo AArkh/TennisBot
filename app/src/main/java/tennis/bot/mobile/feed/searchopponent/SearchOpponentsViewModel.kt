@@ -26,7 +26,9 @@ class SearchOpponentsViewModel @Inject constructor(
 
 	companion object {
 		const val OPPONENT_PICKED_REQUEST_KEY = "OPPONENT_PICKED_REQUEST_KEY"
-		const val SELECTED_OPPONENT_KEY = "OPPONENT_PICKED_REQUEST_KEY"
+		const val SELECTED_OPPONENT_NAME_KEY = "SELECTED_OPPONENT_NAME_KEY"
+		const val SELECTED_OPPONENT_PHOTO_KEY = "SELECTED_OPPONENT_PHOTO_KEY"
+		const val SELECTED_OPPONENT_ID_KEY = "SELECTED_OPPONENT_ID_KEY"
 	}
 
 	private val _uiStateFlow = MutableStateFlow<SearchOpponentsUiState>(SearchOpponentsUiState.Initial)
@@ -52,7 +54,10 @@ class SearchOpponentsViewModel @Inject constructor(
 	fun onOpponentPicked(opponent: OpponentItem, activity: FragmentActivity) {
 		activity.supportFragmentManager.setFragmentResult(
 			OPPONENT_PICKED_REQUEST_KEY,
-			bundleOf(SELECTED_OPPONENT_KEY to opponent.nameSurname)
+			bundleOf(
+				SELECTED_OPPONENT_ID_KEY to opponent.id,
+				SELECTED_OPPONENT_NAME_KEY to opponent.nameSurname,
+				SELECTED_OPPONENT_PHOTO_KEY to opponent.profilePicture)
 		)
 	}
 

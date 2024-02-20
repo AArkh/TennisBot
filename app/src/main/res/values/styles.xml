@@ -20,8 +20,9 @@
 		<item name="android:popupBackground">@drawable/popup_background</item>
 	</style>
 
-	<style name="Theme.TennisBot.FlatButton" parent="Widget.AppCompat.TextView">
-
+	<style name="Theme.TennisBot.NumberPicker">
+		<item name="android:textSize">22sp</item>
+		<item name="colorControlNormal">@color/invisible</item>
 	</style>
 
 </resources>

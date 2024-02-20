@@ -206,6 +206,7 @@
 	<string name="pick_sport">Выбери спорт</string>
 	<string name="tennis">Теннис</string>
 	<string name="in_development">В разработке</string>
+	<string name="button_choose">Выбрать</string>
 
 
 </resources>

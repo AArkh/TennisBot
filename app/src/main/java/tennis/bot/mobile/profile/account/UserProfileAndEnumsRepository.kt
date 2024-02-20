@@ -61,7 +61,6 @@ class UserProfileAndEnumsRepository @Inject constructor(
 		return response.body()!!
 	}
 
-	@WorkerThread
 	fun getProfile() : ProfileData {
 		if (::cachedProfileData.isInitialized) {
 			return cachedProfileData

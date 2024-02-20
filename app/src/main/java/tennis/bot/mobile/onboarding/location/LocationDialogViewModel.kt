@@ -21,7 +21,7 @@ import javax.inject.Inject
 class LocationDialogViewModel @Inject constructor(
     private val repository: LocationRepository,
     private val dataMapper: LocationDataMapper,
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
 

@@ -21,7 +21,7 @@ class EditGameDataAdapter @Inject constructor(): CoreAdapter<EditGameDataItemVie
 	}
 
 	override fun onBindViewHolder(holder: EditGameDataItemViewHolder, item: Any) {
-		val editGameDataItem = item as? SurveyResultItem ?: throw IllegalArgumentException("Item must be EditProfileItem")
+		val editGameDataItem = item as? SurveyResultItem ?: throw IllegalArgumentException("Item must be EditGameDataItem")
 
 		holder.binding.title.text = editGameDataItem.resultTitle
 		holder.binding.value.text = editGameDataItem.resultOption

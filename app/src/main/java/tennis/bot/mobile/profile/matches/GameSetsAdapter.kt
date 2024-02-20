@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import tennis.bot.mobile.core.CoreAdapter
-import tennis.bot.mobile.databinding.RecyclerGameSetItemBinding
+import tennis.bot.mobile.databinding.RecyclerSetResultItemBinding
 import javax.inject.Inject
 
 class GameSetsAdapter @Inject constructor(): CoreAdapter<GameSetItemViewHolder>() {
@@ -16,12 +16,12 @@ class GameSetsAdapter @Inject constructor(): CoreAdapter<GameSetItemViewHolder>(
 	}
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GameSetItemViewHolder {
-		val binding = RecyclerGameSetItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+		val binding = RecyclerSetResultItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 		return GameSetItemViewHolder(binding)
 	}
 }
 
 class GameSetItemViewHolder (
-	val binding: RecyclerGameSetItemBinding
+	val binding: RecyclerSetResultItemBinding
 ) : RecyclerView.ViewHolder(binding.root)
 

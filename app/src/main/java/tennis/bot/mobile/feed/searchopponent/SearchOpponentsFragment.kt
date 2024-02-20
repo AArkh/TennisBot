@@ -3,7 +3,9 @@ package tennis.bot.mobile.feed.searchopponent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -66,8 +68,14 @@ class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>() {
 		}
 
 		binding.buttonNext.setOnClickListener {
+			val fragment = InsertScoreFragment()
+			fragment.arguments = bundleOf(
+
+			)
+
 			parentFragmentManager.beginTransaction()
 				.replace(R.id.fragment_container_view, InsertScoreFragment())
+				.setTransition(TRANSIT_FRAGMENT_OPEN)
 				.addToBackStack(InsertScoreFragment::class.java.name)
 				.commit()
 		}

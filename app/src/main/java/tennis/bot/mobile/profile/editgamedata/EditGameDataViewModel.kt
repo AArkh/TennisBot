@@ -29,7 +29,6 @@ class EditGameDataViewModel @Inject constructor(
 		viewModelScope.launch {
 			withContext(Dispatchers.IO) {
 				val profileData = repository.getProfile()
-				val enumTypesList = repository.getEnums()
 				val defaultGameData = repository.defaultGameData
 				val isRightHandInt = if (profileData.isRightHand == true) 1 else if (profileData.isRightHand == false) 0 else null
 				val isOneBackhandInt = if (profileData.isOneBackhand == true) 1 else if (profileData.isOneBackhand == false) 0 else null
@@ -59,7 +58,4 @@ class EditGameDataViewModel @Inject constructor(
 			onStartup()
 		}
 	}
-
-
-
 }

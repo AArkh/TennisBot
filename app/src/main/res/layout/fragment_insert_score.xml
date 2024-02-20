@@ -270,7 +270,7 @@
 		app:layout_constraintTop_toBottomOf="@id/side_note_title" />
 
 	<Button
-		android:id="@+id/buttonNext"
+		android:id="@+id/buttonSend"
 		style="@style/Widget.TennisBot.ButtonFlat.Inactive"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
