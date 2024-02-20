@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.CombinedLoadStates
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -64,7 +65,7 @@ class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>() {
 				R.drawable.btn_bkg_disabled
 			}
 			binding.buttonNext.setBackgroundResource(buttonBackground)
-			viewModel.onOpponentPicked(opponent, requireActivity())
+			viewModel.onOpponentPicked(opponent, requireActivity()) // fixme выставлять нулловый для disabled
 		}
 
 		binding.buttonNext.setOnClickListener {
@@ -97,6 +98,11 @@ class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>() {
 			}
 		}
 
+		adapter.addLoadStateListener { state: CombinedLoadStates ->
+			// todo тут прокидывать события во viewModel, тогда subscribeToFlowOn ниже заведется
+			// viewModel.onLoad
+		}
+
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: SearchOpponentsUiState -> // may be useless, todo check out the way to add loading and catch error states in PagingLibrary
 			when(uiState){
 				is SearchOpponentsUiState.Initial -> {
@@ -121,5 +127,4 @@ class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>() {
 			}
 		}
 	}
-
 }

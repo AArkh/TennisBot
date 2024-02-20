@@ -141,10 +141,9 @@
 
 	<ProgressBar
 		android:id="@+id/loadingBar"
-		android:layout_width="match_parent"
+		android:layout_width="0dp"
 		android:layout_height="wrap_content"
-		android:padding="150dp"
-		android:visibility="gone"
+		android:visibility="visible"
 		android:layout_gravity="center"/>
 
 	<LinearLayout

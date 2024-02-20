@@ -11,9 +11,11 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -35,7 +37,7 @@ class SearchOpponentsViewModel @Inject constructor(
 	val uiStateFlow = _uiStateFlow.asStateFlow()
 
 	private val _userInput = MutableStateFlow<String?>(null)
-	val userInput: StateFlow<String?> = _userInput
+	val userInput: Flow<String?> = _userInput.debounce(250L)
 
 	val opponentsPager = Pager(
 			config = PagingConfig(
@@ -68,7 +70,7 @@ class SearchOpponentsViewModel @Inject constructor(
 
 			val position = params.key ?: 0
 			return try {
-				val response = userInput.value?.let { repository.getOpponents(it, position) }
+				val response = _userInput.value?.let { repository.getOpponents(it, position) }
 				val opponentItemsList = response?.items?.let { repository.convertToOpponentItemList(it) }
 				val nextPosition = position + 20
 				if (position >= (response?.totalCount ?: 0)) {
@@ -83,12 +85,15 @@ class SearchOpponentsViewModel @Inject constructor(
 					)
 				}
 			} catch (exception: IOException) {
+				Log.e("1234567", "load: io", exception)
 				return LoadResult.Error(exception)
 			} catch (exception: HttpException) {
+				Log.e("1234567", "load: gttp", exception)
 				return LoadResult.Error(exception)
+			} catch (e: Exception) {
+				Log.e("1234567", "load: general", e)
+				return LoadResult.Error(e)
 			}
 		}
 	}
-
-
 }

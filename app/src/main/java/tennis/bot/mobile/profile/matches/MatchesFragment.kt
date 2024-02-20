@@ -50,7 +50,7 @@ class MatchesFragment : CoreFragment<FragmentMatchesBinding>() {
 		}
 
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: MatchesUiState ->
-			when(uiState){
+			when(uiState) {
 				is MatchesUiState.Loading -> {
 					binding.errorLayout.visibility = View.GONE
 					binding.loadingBar.visibility = View.VISIBLE
@@ -70,5 +70,4 @@ class MatchesFragment : CoreFragment<FragmentMatchesBinding>() {
 			}
 		}
 	}
-
 }
