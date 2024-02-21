@@ -22,7 +22,7 @@ class InsertScoreAdapter @Inject constructor(): CoreAdapter<InsertSetItemViewHol
 			clickListener?.invoke(holder.bindingAdapterPosition)
 		}
 		holder.binding.clearButton.setOnClickListener {
-			clickListener?.invoke(-holder.bindingAdapterPosition) // will treat it like a 'delete' order
+			clickListener?.invoke(-(holder.bindingAdapterPosition + 1)) // will treat it like a 'delete' order // added +1 because -0 is not a thing
 		}
 	}
 

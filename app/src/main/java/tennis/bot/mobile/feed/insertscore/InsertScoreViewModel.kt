@@ -1,12 +1,11 @@
 package tennis.bot.mobile.feed.insertscore
 
-import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
-import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,8 +23,7 @@ class InsertScoreViewModel @Inject constructor(
 			player1Name = "",
 			player2Id = 0,
 			player2Image = null,
-			player2Name = "",
-			isSendButtonActive = false
+			player2Name = ""
 		)
 	)
 	val uiStateFlow = _uiStateFlow.asStateFlow()
@@ -41,24 +39,38 @@ class InsertScoreViewModel @Inject constructor(
 		)
 	}
 
-	fun onAddingSetItem(context: Context) {
+	fun onAddingSetItem() {
 		val currentSets = uiStateFlow.value.setsList
 		if(currentSets.size < 5) {
 			val newSets = currentSets + TennisSetItem((currentSets.size + 1),  DEFAULT_SCORE)
-			_uiStateFlow.value = uiStateFlow.value.copy(setsList = newSets)
+			_uiStateFlow.value =
+				uiStateFlow.value.copy(setsList = newSets, isAddSetButtonActive = false, isAddSuperTieBreakActive = isSuperTieBreakButtonActive())
 		} else {
-			context.showToast("You can't add more sets")
+			_uiStateFlow.value = uiStateFlow.value.copy(isAddSetButtonActive = false, isAddSuperTieBreakActive = false)
 		}
 	}
 
-	fun onDeletingSetItem(position: Int) {
+	fun onDeletingSetItem(setNumber: Int) {
 		val currentSets = uiStateFlow.value.setsList
+		val position = setNumber - 1
 
-		val newSets = currentSets - currentSets[position]
-		_uiStateFlow.value = uiStateFlow.value.copy(setsList = newSets)
+		if (position == 0) {
+			val newSets = listOf(currentSets[position].copy(score = DEFAULT_SCORE))
+			_uiStateFlow.value = uiStateFlow.value.copy(
+				setsList = newSets,
+				isAddSetButtonActive = false,
+				isAddSuperTieBreakActive = isSuperTieBreakButtonActive(),
+				isPhotoBackgroundActive = false)
+		} else {
+			val newSets = currentSets - currentSets[position]
+			_uiStateFlow.value = uiStateFlow.value.copy(
+				setsList = newSets,
+				isAddSetButtonActive = true,
+				isAddSuperTieBreakActive = isSuperTieBreakButtonActive())
+		}
 	}
 
-	fun onScoreReceived(setNumber: Int,score: String, visualCallBack: () -> Unit) {
+	fun onScoreReceived(setNumber: Int,score: String) {
 		val newSetList = uiStateFlow.value.setsList.map { setItem ->
 			if (setItem.setNumber == setNumber) {
 				score.let { setItem.copy(score = it) }
@@ -66,6 +78,23 @@ class InsertScoreViewModel @Inject constructor(
 				setItem
 			}
 		}
-		_uiStateFlow.value = uiStateFlow.value.copy(setsList = newSetList)
+		_uiStateFlow.value = uiStateFlow.value.copy(
+			setsList = newSetList,
+			isAddSetButtonActive = true,
+			isAddSuperTieBreakActive = isSuperTieBreakButtonActive(),
+			isPhotoBackgroundActive = true)
+	}
+
+	fun onPickedPhoto(pickedImageUri: Uri) {
+		_uiStateFlow.value = uiStateFlow.value.copy(pickedPhoto = pickedImageUri)
+	}
+
+	fun onPickedVideo(pickedVideoUri: Uri) {
+		_uiStateFlow.value = uiStateFlow.value.copy(pickedVideo = pickedVideoUri)
+	}
+
+
+	private fun isSuperTieBreakButtonActive(): Boolean {
+		return uiStateFlow.value.setsList.size == 4 || uiStateFlow.value.setsList.size == 2
 	}
 }

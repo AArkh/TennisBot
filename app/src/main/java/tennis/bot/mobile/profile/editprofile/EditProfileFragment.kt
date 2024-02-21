@@ -227,7 +227,7 @@ class EditProfileFragment : CoreFragment<FragmentEditProfileBinding>() {
 		datePickerDialog.show()
 	}
 
-	fun getImageUriFromBitmap(bitmap: Bitmap): Uri{
+	private fun getImageUriFromBitmap(bitmap: Bitmap): Uri{
 		val bytes = ByteArrayOutputStream()
 		bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
 		val path = MediaStore.Images.Media.insertImage(requireContext().contentResolver, bitmap, "Title", null)

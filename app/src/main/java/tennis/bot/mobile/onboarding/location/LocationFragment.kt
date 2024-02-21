@@ -120,7 +120,7 @@ open class LocationFragment : CoreFragment<FragmentLocationBinding>() {
                 LocationUiState.Initial -> {
                     binding.titleTv.visibility = View.VISIBLE
                     binding.countryPickLayout.visibility = View.VISIBLE
-                    binding.countryPickLayout.setBackgroundResource(R.drawable.country_button_outline_active)
+                    binding.countryPickLayout.setBackgroundResource(R.drawable.outline_16dp_2dp_active)
                     binding.cityPickLayout.visibility = View.INVISIBLE
                     binding.districtPickLayout.visibility = View.INVISIBLE
                     binding.buttonNext.visibility = View.VISIBLE
@@ -140,7 +140,7 @@ open class LocationFragment : CoreFragment<FragmentLocationBinding>() {
                     binding.cityPickLayout.visibility = View.INVISIBLE
                     binding.districtPickLayout.visibility = View.INVISIBLE
                     binding.countryPickLayout.setBackgroundResource(R.drawable.country_button_outline)
-                    binding.cityPickLayout.setBackgroundResource(R.drawable.country_button_outline_active)
+                    binding.cityPickLayout.setBackgroundResource(R.drawable.outline_16dp_2dp_active)
                     binding.districtPickLayout.setBackgroundResource(R.drawable.country_button_outline)
                     binding.buttonNext.isEnabled = false
                     binding.buttonNext.setBackgroundResource(R.drawable.btn_bkg_disabled)
@@ -161,7 +161,7 @@ open class LocationFragment : CoreFragment<FragmentLocationBinding>() {
 
                     binding.districtPickLayout.visibility = View.INVISIBLE
                     binding.cityPickLayout.setBackgroundResource(R.drawable.country_button_outline)
-                    binding.districtPickLayout.setBackgroundResource(R.drawable.country_button_outline_active)
+                    binding.districtPickLayout.setBackgroundResource(R.drawable.outline_16dp_2dp_active)
                     binding.buttonNext.isEnabled = false
                     binding.buttonNext.setBackgroundResource(R.drawable.btn_bkg_disabled)
 
