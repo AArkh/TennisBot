@@ -94,6 +94,14 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 			pickVideo.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly))
 		}
 
+		binding.deletePhotoButton.setOnClickListener {
+			viewModel.onDeletePickedPhoto(binding.addPhotoHolder)
+		}
+
+		binding.deleteVideoButton.setOnClickListener {
+			viewModel.onDeletePickedVideo(binding.addVideoHolder)
+		}
+
 		setFragmentResultListener(SearchOpponentsViewModel.OPPONENT_PICKED_REQUEST_KEY) { _, result ->
 			viewModel.onInitial(
 				result.getLong(SearchOpponentsViewModel.SELECTED_OPPONENT_ID_KEY),
@@ -165,25 +173,35 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 		}
 	}
 
-	private fun onPhotoAdded(isPhotoBackgroundActive: Boolean, photoUri: Uri?) { //todo добавить норм форматирование, чтобы выглядело как в дизайне + вью для удаления (крестик)
+	private fun onPhotoAdded(isPhotoBackgroundActive: Boolean, photoUri: Uri?) {
 		if (photoUri != null) {
 			binding.addPhotoHolder.load(photoUri)
 			binding.photoHint.visibility = View.INVISIBLE
+			binding.deletePhotoButton.visibility = View.VISIBLE
 		} else {
 			val addPhotoOutline = if (isPhotoBackgroundActive) {
 				R.drawable.outline_8dp_2dp_active
 			} else {
 				R.drawable.dotted_background_corners_8dp
 			}
-			binding.addPhotoHolder.load(addPhotoOutline)
+			binding.addPhotoHolder.setBackgroundResource(addPhotoOutline)
+			binding.photoHint.visibility = View.VISIBLE
+			binding.deletePhotoButton.visibility = View.INVISIBLE
 		}
 	}
 
-	private fun onVideoAdded(videoUri: Uri?) { //todo добавить норм форматирование, чтобы выглядело как в дизайне + таймкод + вью для удаления (крестик)
+	private fun onVideoAdded(videoUri: Uri?) {
 		if (videoUri != null) {
 			binding.addVideoHolder.load(getVideoThumbnail(videoUri))
 			binding.videoHint.visibility = View.INVISIBLE
-		} else return
+			binding.videoDurationTimer.text = viewModel.getVideoDuration(requireContext(), videoUri)
+			binding.videoDurationTimer.visibility = View.VISIBLE
+			binding.deleteVideoButton.visibility = View.VISIBLE
+		} else {
+			binding.videoHint.visibility = View.VISIBLE
+			binding.videoDurationTimer.visibility = View.INVISIBLE
+			binding.deleteVideoButton.visibility = View.INVISIBLE
+		}
 	}
 
 	private fun getVideoThumbnail(videoUri: Uri): Bitmap? {
@@ -200,7 +218,4 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 
 		return null
 	}
-
-
-
 }

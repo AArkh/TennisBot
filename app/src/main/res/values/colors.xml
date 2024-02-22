@@ -2,6 +2,7 @@
 <resources>
 
     <color name="tb_black">#262729</color>
+    <color name="tb_black_card">#E6202022</color>
     <color name="tb_white">#FFFFFF</color>
 
     <color name="tb_gray_active">#ADAFB7</color>

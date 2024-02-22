@@ -1,7 +1,12 @@
 package tennis.bot.mobile.feed.insertscore
 
+import android.content.Context
+import android.media.MediaMetadataRetriever
 import android.net.Uri
 import androidx.lifecycle.ViewModel
+import coil.dispose
+import coil.load
+import com.google.android.material.imageview.ShapeableImageView
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -91,6 +96,41 @@ class InsertScoreViewModel @Inject constructor(
 
 	fun onPickedVideo(pickedVideoUri: Uri) {
 		_uiStateFlow.value = uiStateFlow.value.copy(pickedVideo = pickedVideoUri)
+	}
+
+	fun onDeletePickedPhoto(imageView: ShapeableImageView) {
+		imageView.dispose()
+		imageView.load(null)
+
+		_uiStateFlow.value = uiStateFlow.value.copy(pickedPhoto = null)
+	}
+
+	fun onDeletePickedVideo(imageView: ShapeableImageView) {
+		imageView.dispose()
+		imageView.load(null)
+
+		_uiStateFlow.value = uiStateFlow.value.copy(pickedVideo = null)
+	}
+
+	fun getVideoDuration(context: Context, videoUri: Uri?): String  {
+		val retriever = MediaMetadataRetriever()
+
+		try {
+			retriever.setDataSource(context, videoUri)
+			val durationString = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+			val durationInMillis = durationString?.toLong() ?: 0L
+
+			val minutes = (durationInMillis / 1000 / 60).toInt()
+			val seconds = (durationInMillis / 1000 % 60).toInt()
+
+			return String.format("%02d:%02d", minutes, seconds)
+		} catch (e: Exception) {
+			e.printStackTrace()
+		} finally {
+			retriever.release()
+		}
+
+		return "00:00" // Return a default value if there's an error
 	}
 
 
