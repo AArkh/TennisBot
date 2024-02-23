@@ -33,7 +33,9 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 	override val bindingInflation: Inflation<FragmentInsertScoreBinding> = FragmentInsertScoreBinding::inflate
 	private val viewModel: InsertScoreViewModel by viewModels()
 	@Inject
-	lateinit var adapter: InsertScoreAdapter
+	lateinit var setsAdapter: InsertScoreAdapter
+	@Inject
+	lateinit var mediaAdapter: InsertScoreMediaAdapter
 	private val pickPhoto = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
 		if (uri != null) {
 			Log.d("PhotoPicker", "Selected URI: $uri")
@@ -55,6 +57,10 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 	companion object {
 		const val SELECTED_SET_NUMBER = "SELECTED_SET_NUMBER"
 		const val SELECTED_SET_CURRENT_VALUE = "SELECTED_SET_CURRENT_VALUE"
+		const val ADD_PHOTO = "ADD_PHOTO"
+		const val ADD_VIDEO = "ADD_VIDEO"
+		const val DELETE_PHOTO = "DELETE_PHOTO"
+		const val DELETE_VIDEO = "DELETE_VIDEO"
 
 	}
 
@@ -65,9 +71,9 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 			parentFragmentManager.popBackStack()
 		}
 
-		binding.setsContainer.adapter = adapter
+		binding.setsContainer.adapter = setsAdapter
 		binding.setsContainer.layoutManager = LinearLayoutManager(requireContext())
-		adapter.clickListener = { position ->
+		setsAdapter.clickListener = { position ->
 			when(position) {
 				in -5..-1 -> {
 					viewModel.onDeletingSetItem(abs(position))
@@ -82,25 +88,30 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 			}
 		}
 
+		binding.mediaContainer.adapter = mediaAdapter
+		binding.mediaContainer.layoutManager = LinearLayoutManager(requireContext())
+		mediaAdapter.clickListener = { command ->
+			when(command) {
+				ADD_PHOTO -> {
+					pickPhoto.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+				}
+				ADD_VIDEO -> {
+					pickVideo.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly))
+				}
+				DELETE_PHOTO -> {
+					viewModel.onDeletePickedPhoto()
+				}
+				DELETE_VIDEO -> {
+					viewModel.onDeletePickedVideo()
+				}
+			}
+		}
+
 		binding.addSetButton.setOnClickListener {
 			viewModel.onAddingSetItem()
 		}
 
-		binding.addPhotoHolder.setOnClickListener {
-			pickPhoto.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-		}
 
-		binding.addVideoHolder.setOnClickListener {
-			pickVideo.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly))
-		}
-
-		binding.deletePhotoButton.setOnClickListener {
-			viewModel.onDeletePickedPhoto(binding.addPhotoHolder)
-		}
-
-		binding.deleteVideoButton.setOnClickListener {
-			viewModel.onDeletePickedVideo(binding.addVideoHolder)
-		}
 
 		setFragmentResultListener(SearchOpponentsViewModel.OPPONENT_PICKED_REQUEST_KEY) { _, result ->
 			viewModel.onInitial(
@@ -119,7 +130,8 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 		}
 
 		subscribeToFlowOn(viewModel.uiStateFlow){uiState: InsertScoreUiState ->
-			adapter.submitList(uiState.setsList)
+			setsAdapter.submitList(uiState.setsList)
+			mediaAdapter.submitList(uiState.mediaItemList)
 
 			binding.player1Image.loadPlayerImage(uiState.player1Image, binding.player1Photo)
 			binding.player2Image.loadPlayerImage(uiState.player2Image, binding.player2Photo)
@@ -130,9 +142,6 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 			binding.addSetButton.isEnabled = uiState.isAddSetButtonActive
 			binding.addSuperTieBreakButton.isEnabled = uiState.isAddSuperTieBreakActive
 			buttonVisibilityController()
-
-			onPhotoAdded(uiState.isPhotoBackgroundActive, uiState.pickedPhoto)
-			onVideoAdded(uiState.pickedVideo)
 		}
 	}
 
@@ -171,51 +180,5 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 		} else {
 			binding.addSuperTieBreakButton.alpha = 1F
 		}
-	}
-
-	private fun onPhotoAdded(isPhotoBackgroundActive: Boolean, photoUri: Uri?) {
-		if (photoUri != null) {
-			binding.addPhotoHolder.load(photoUri)
-			binding.photoHint.visibility = View.INVISIBLE
-			binding.deletePhotoButton.visibility = View.VISIBLE
-		} else {
-			val addPhotoOutline = if (isPhotoBackgroundActive) {
-				R.drawable.outline_8dp_2dp_active
-			} else {
-				R.drawable.dotted_background_corners_8dp
-			}
-			binding.addPhotoHolder.setBackgroundResource(addPhotoOutline)
-			binding.photoHint.visibility = View.VISIBLE
-			binding.deletePhotoButton.visibility = View.INVISIBLE
-		}
-	}
-
-	private fun onVideoAdded(videoUri: Uri?) {
-		if (videoUri != null) {
-			binding.addVideoHolder.load(getVideoThumbnail(videoUri))
-			binding.videoHint.visibility = View.INVISIBLE
-			binding.videoDurationTimer.text = viewModel.getVideoDuration(requireContext(), videoUri)
-			binding.videoDurationTimer.visibility = View.VISIBLE
-			binding.deleteVideoButton.visibility = View.VISIBLE
-		} else {
-			binding.videoHint.visibility = View.VISIBLE
-			binding.videoDurationTimer.visibility = View.INVISIBLE
-			binding.deleteVideoButton.visibility = View.INVISIBLE
-		}
-	}
-
-	private fun getVideoThumbnail(videoUri: Uri): Bitmap? {
-		val retriever = MediaMetadataRetriever()
-
-		try {
-			retriever.setDataSource(requireContext(), videoUri)
-			return retriever.frameAtTime
-		} catch (e: Exception) {
-			e.printStackTrace()
-		} finally {
-			retriever.release()
-		}
-
-		return null
 	}
 }

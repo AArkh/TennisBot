@@ -61,11 +61,12 @@ class InsertScoreViewModel @Inject constructor(
 
 		if (position == 0) {
 			val newSets = listOf(currentSets[position].copy(score = DEFAULT_SCORE))
+			val updatedList = listOf(uiStateFlow.value.mediaItemList[0].copy(isPhotoBackgroundActive = false))
 			_uiStateFlow.value = uiStateFlow.value.copy(
 				setsList = newSets,
 				isAddSetButtonActive = false,
 				isAddSuperTieBreakActive = isSuperTieBreakButtonActive(),
-				isPhotoBackgroundActive = false)
+				mediaItemList = updatedList)
 		} else {
 			val newSets = currentSets - currentSets[position]
 			_uiStateFlow.value = uiStateFlow.value.copy(
@@ -83,56 +84,34 @@ class InsertScoreViewModel @Inject constructor(
 				setItem
 			}
 		}
+		val updatedList = listOf(uiStateFlow.value.mediaItemList[0].copy(isPhotoBackgroundActive = true))
+
 		_uiStateFlow.value = uiStateFlow.value.copy(
 			setsList = newSetList,
 			isAddSetButtonActive = true,
 			isAddSuperTieBreakActive = isSuperTieBreakButtonActive(),
-			isPhotoBackgroundActive = true)
+			mediaItemList = updatedList)
 	}
 
 	fun onPickedPhoto(pickedImageUri: Uri) {
-		_uiStateFlow.value = uiStateFlow.value.copy(pickedPhoto = pickedImageUri)
+		val updatedList = listOf(uiStateFlow.value.mediaItemList[0].copy(pickedPhoto = pickedImageUri))
+		_uiStateFlow.value = uiStateFlow.value.copy(mediaItemList = updatedList)
 	}
 
 	fun onPickedVideo(pickedVideoUri: Uri) {
-		_uiStateFlow.value = uiStateFlow.value.copy(pickedVideo = pickedVideoUri)
+		val updatedList = listOf(uiStateFlow.value.mediaItemList[0].copy(pickedVideo = pickedVideoUri))
+		_uiStateFlow.value = uiStateFlow.value.copy(mediaItemList = updatedList)
 	}
 
-	fun onDeletePickedPhoto(imageView: ShapeableImageView) {
-		imageView.dispose()
-		imageView.load(null)
-
-		_uiStateFlow.value = uiStateFlow.value.copy(pickedPhoto = null)
+	fun onDeletePickedPhoto() {
+		val updatedList = listOf(uiStateFlow.value.mediaItemList[0].copy(pickedPhoto = null))
+		_uiStateFlow.value = uiStateFlow.value.copy(mediaItemList = updatedList)
 	}
 
-	fun onDeletePickedVideo(imageView: ShapeableImageView) {
-		imageView.dispose()
-		imageView.load(null)
-
-		_uiStateFlow.value = uiStateFlow.value.copy(pickedVideo = null)
+	fun onDeletePickedVideo() {
+		val updatedList = listOf(uiStateFlow.value.mediaItemList[0].copy(pickedVideo = null))
+		_uiStateFlow.value = uiStateFlow.value.copy(mediaItemList = updatedList)
 	}
-
-	fun getVideoDuration(context: Context, videoUri: Uri?): String  {
-		val retriever = MediaMetadataRetriever()
-
-		try {
-			retriever.setDataSource(context, videoUri)
-			val durationString = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
-			val durationInMillis = durationString?.toLong() ?: 0L
-
-			val minutes = (durationInMillis / 1000 / 60).toInt()
-			val seconds = (durationInMillis / 1000 % 60).toInt()
-
-			return String.format("%02d:%02d", minutes, seconds)
-		} catch (e: Exception) {
-			e.printStackTrace()
-		} finally {
-			retriever.release()
-		}
-
-		return "00:00" // Return a default value if there's an error
-	}
-
 
 	private fun isSuperTieBreakButtonActive(): Boolean {
 		return uiStateFlow.value.setsList.size == 4 || uiStateFlow.value.setsList.size == 2
