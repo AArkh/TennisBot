@@ -57,6 +57,7 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 	companion object {
 		const val SELECTED_SET_NUMBER = "SELECTED_SET_NUMBER"
 		const val SELECTED_SET_CURRENT_VALUE = "SELECTED_SET_CURRENT_VALUE"
+		const val SELECTED_SET_IS_SUPER_TIE = "SELECTED_SET_IS_SUPER_TIE"
 		const val ADD_PHOTO = "ADD_PHOTO"
 		const val ADD_VIDEO = "ADD_VIDEO"
 		const val DELETE_PHOTO = "DELETE_PHOTO"
@@ -73,7 +74,7 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 
 		binding.setsContainer.adapter = setsAdapter
 		binding.setsContainer.layoutManager = LinearLayoutManager(requireContext())
-		setsAdapter.clickListener = { position ->
+		setsAdapter.clickListener = { position, value, isSuperTieBreak ->
 			when(position) {
 				in -5..-1 -> {
 					viewModel.onDeletingSetItem(abs(position))
@@ -81,7 +82,9 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 				else -> {
 					val bottomDialog = InsertScoreDialogFragment()
 					bottomDialog.arguments = bundleOf(
-						SELECTED_SET_NUMBER to position + 1
+						SELECTED_SET_NUMBER to position + 1,
+						SELECTED_SET_CURRENT_VALUE to value,
+						SELECTED_SET_IS_SUPER_TIE to isSuperTieBreak
 					)
 					bottomDialog.show(childFragmentManager, bottomDialog.tag)
 				}
@@ -111,7 +114,9 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 			viewModel.onAddingSetItem()
 		}
 
-
+		binding.addSuperTieBreakButton.setOnClickListener {
+			viewModel.onAddingSuperTieBreakItem()
+		}
 
 		setFragmentResultListener(SearchOpponentsViewModel.OPPONENT_PICKED_REQUEST_KEY) { _, result ->
 			viewModel.onInitial(
@@ -119,7 +124,6 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 				result.getString(SearchOpponentsViewModel.SELECTED_OPPONENT_PHOTO_KEY),
 				result.getString(SearchOpponentsViewModel.SELECTED_OPPONENT_NAME_KEY) ?: ""
 			)
-
 		}
 
 		setFragmentResultListener(InsertScoreDialogViewModel.REQUEST_SCORE_KEY) { _, result ->
@@ -132,6 +136,9 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 		subscribeToFlowOn(viewModel.uiStateFlow){uiState: InsertScoreUiState ->
 			setsAdapter.submitList(uiState.setsList)
 			mediaAdapter.submitList(uiState.mediaItemList)
+			viewModel.isMatchValid()
+			viewModel.isSuperTieBreakButtonActive()
+			viewModel.isAddSetButtonActive()
 
 			binding.player1Image.loadPlayerImage(uiState.player1Image, binding.player1Photo)
 			binding.player2Image.loadPlayerImage(uiState.player2Image, binding.player2Photo)

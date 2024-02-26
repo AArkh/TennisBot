@@ -27,10 +27,6 @@ class InsertScoreDialogFragment : CoreBottomSheetDialogFragment<FragmentInsertSc
 			dialog?.dismiss()
 		}
 
-		binding.basicScore.setupWithCustomValues(viewModel.basicScoreVariants)
-		binding.leftTieBreak.setupWithCustomValues(viewModel.leftTieBreakScoreVariants)
-		binding.rightTieBreak.setupWithCustomValues(viewModel.rightTieBreakScoreVariants)
-
 		binding.basicScore.setOnValueChangedListener { _, _, newVal ->
 			when(newVal){
 				RIGHT_TIE_POSITION -> {
@@ -59,7 +55,16 @@ class InsertScoreDialogFragment : CoreBottomSheetDialogFragment<FragmentInsertSc
 		}
 
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: InsertScoreDialogUiState ->
-			binding.title.text = requireContext().getString(R.string.insert_score_set_item_title, uiState.setNumber)
+			if (uiState.isSuperTieBreak == true) {
+				binding.title.text = "Супер Тай-брейк"
+				binding.basicScore.setupWithCustomValues(viewModel.superTieBreakScoreVariants)
+				binding.basicScore.setOnValueChangedListener { _, _, _ -> }
+			} else {
+				binding.basicScore.setupWithCustomValues(viewModel.basicScoreVariants)
+				binding.leftTieBreak.setupWithCustomValues(viewModel.leftTieBreakScoreVariants)
+				binding.rightTieBreak.setupWithCustomValues(viewModel.rightTieBreakScoreVariants)
+				binding.title.text = requireContext().getString(R.string.insert_score_set_item_title, uiState.setNumber)
+			}
 		}
 	}
 }

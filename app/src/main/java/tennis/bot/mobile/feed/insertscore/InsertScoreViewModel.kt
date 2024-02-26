@@ -1,12 +1,8 @@
 package tennis.bot.mobile.feed.insertscore
 
-import android.content.Context
-import android.media.MediaMetadataRetriever
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
-import coil.dispose
-import coil.load
-import com.google.android.material.imageview.ShapeableImageView
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,7 +15,7 @@ class InsertScoreViewModel @Inject constructor(
 ): ViewModel() {
 
 	companion object {
-		const val DEFAULT_SCORE = "0 - 0"
+		const val DEFAULT_SCORE = "0 : 0"
 	}
 
 	private val _uiStateFlow = MutableStateFlow(
@@ -49,9 +45,16 @@ class InsertScoreViewModel @Inject constructor(
 		if(currentSets.size < 5) {
 			val newSets = currentSets + TennisSetItem((currentSets.size + 1),  DEFAULT_SCORE)
 			_uiStateFlow.value =
-				uiStateFlow.value.copy(setsList = newSets, isAddSetButtonActive = false, isAddSuperTieBreakActive = isSuperTieBreakButtonActive())
-		} else {
-			_uiStateFlow.value = uiStateFlow.value.copy(isAddSetButtonActive = false, isAddSuperTieBreakActive = false)
+				uiStateFlow.value.copy(setsList = newSets)
+		}
+	}
+
+	fun onAddingSuperTieBreakItem() {
+		val currentSets = uiStateFlow.value.setsList
+		if(currentSets.size < 5) {
+			val newSets = currentSets + TennisSetItem((currentSets.size + 1),  DEFAULT_SCORE, isSuperTieBreak = true)
+			_uiStateFlow.value =
+				uiStateFlow.value.copy(setsList = newSets)
 		}
 	}
 
@@ -64,15 +67,11 @@ class InsertScoreViewModel @Inject constructor(
 			val updatedList = listOf(uiStateFlow.value.mediaItemList[0].copy(isPhotoBackgroundActive = false))
 			_uiStateFlow.value = uiStateFlow.value.copy(
 				setsList = newSets,
-				isAddSetButtonActive = false,
-				isAddSuperTieBreakActive = isSuperTieBreakButtonActive(),
 				mediaItemList = updatedList)
 		} else {
-			val newSets = currentSets - currentSets[position]
+			val newSets = currentSets - currentSets[position] // todo чтобы номера сетов были правильные даже при удалении сета из середины списка
 			_uiStateFlow.value = uiStateFlow.value.copy(
-				setsList = newSets,
-				isAddSetButtonActive = true,
-				isAddSuperTieBreakActive = isSuperTieBreakButtonActive())
+				setsList = newSets)
 		}
 	}
 
@@ -88,8 +87,6 @@ class InsertScoreViewModel @Inject constructor(
 
 		_uiStateFlow.value = uiStateFlow.value.copy(
 			setsList = newSetList,
-			isAddSetButtonActive = true,
-			isAddSuperTieBreakActive = isSuperTieBreakButtonActive(),
 			mediaItemList = updatedList)
 	}
 
@@ -113,7 +110,63 @@ class InsertScoreViewModel @Inject constructor(
 		_uiStateFlow.value = uiStateFlow.value.copy(mediaItemList = updatedList)
 	}
 
-	private fun isSuperTieBreakButtonActive(): Boolean {
-		return uiStateFlow.value.setsList.size == 4 || uiStateFlow.value.setsList.size == 2
+	fun isAddSetButtonActive() {
+		val setsList = uiStateFlow.value.setsList
+		val lastSet = setsList.last()
+
+		val player1Wins = setsList.count { getSetWinner(it.score) == 1 }
+		val player2Wins = setsList.count { getSetWinner(it.score) == 2 }
+
+		val isActive = lastSet.score != DEFAULT_SCORE && !setsList.any { it.isSuperTieBreak } && (player1Wins < 3 && player2Wins < 3) && setsList.size < 5
+		Log.d("isAddSetButtonActive", "setsList.any { !it.isSuperTieBreak } = ${!setsList.any { it.isSuperTieBreak }}")
+
+		_uiStateFlow.value = uiStateFlow.value.copy(isAddSetButtonActive = isActive)
+	}
+
+	fun isSuperTieBreakButtonActive() {
+		val setsList = uiStateFlow.value.setsList
+
+		val requiredWins = if (setsList.size <= 3) 1 else 2
+		val requiredSize = setsList.size == 2 || setsList.size == 4
+		val player1Wins = setsList.count { getSetWinner(it.score) == 1 }
+		val player2Wins = setsList.count { getSetWinner(it.score) == 2 }
+
+		val isActive = if (!setsList.any { it.isSuperTieBreak }) {
+			if (requiredSize) player1Wins == requiredWins && player2Wins == requiredWins else false
+		} else false
+
+		_uiStateFlow.value = uiStateFlow.value.copy(isAddSuperTieBreakActive = isActive)
+	}
+
+	private fun getSetWinner(score: String): Int? {
+		if (score.contains("(")) {
+			val tiebreakPart = score.substringAfter(" (").removeSuffix(")")
+			val (player1Tiebreak, player2Tiebreak) = tiebreakPart.split(" - ").map { it.trim().toInt() }
+			val isValidTiebreak = (player1Tiebreak >= 7 || player2Tiebreak >= 7)
+
+			return if (isValidTiebreak) {
+				if (player1Tiebreak > player2Tiebreak) 1 else 2
+			} else {
+				null
+			}
+		} else {
+			val (player1Games, player2Games) = score.split(" : ").map { it.toInt() }
+			val isValidSet = (player1Games >= 6 || player2Games >= 6) &&
+					((player1Games - player2Games) >= 2 || (player1Games - player2Games) <= -2)
+
+			return if (isValidSet){
+				if (player1Games > player2Games) 1 else 2
+			} else {
+				null
+			}
+		}
+	}
+
+	fun isMatchValid() {
+		val requiredWins = if (uiStateFlow.value.setsList.size == 1) 1 else if (uiStateFlow.value.setsList.size <= 3) 2 else 3
+		val player1Wins = uiStateFlow.value.setsList.count { getSetWinner(it.score) == 1 }
+		val player2Wins = uiStateFlow.value.setsList.count { getSetWinner(it.score) == 2 }
+		Log.d("Score", "player1Wins = $player1Wins, player2Wins = $player2Wins")
+		_uiStateFlow.value = uiStateFlow.value.copy(isSendButtonActive = player1Wins >= requiredWins || player2Wins >= requiredWins)
 	}
 }

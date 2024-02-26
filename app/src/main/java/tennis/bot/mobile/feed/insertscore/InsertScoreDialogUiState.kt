@@ -2,5 +2,6 @@ package tennis.bot.mobile.feed.insertscore
 
 data class InsertScoreDialogUiState(
 	val setNumber: Int?,
-	val pickedValue: String?
+	val pickedValue: String?,
+	val isSuperTieBreak: Boolean?
 )

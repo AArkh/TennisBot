@@ -38,16 +38,31 @@ class InsertScoreDialogViewModel @Inject constructor(
 		"8 - 6", "9 - 7", "10 - 8", "11 - 9", "12 - 10", "13 - 11", "14 - 12", "15 - 13"
 	)
 
+	val superTieBreakScoreVariants = arrayOf(
+		"- - -", "10 - 0", "10 - 1", "10 - 2", "10 - 3", "10 - 4", "10 - 5", "10 - 6", "10 - 7",
+		"10 - 8", "11 - 9", "12 - 10", "13 - 11", "14 - 12", "15 - 13",
+		"13 - 15", "12 - 14", "11 - 13", "10 - 12", "9 - 11", "8 - 10", "7 - 10", "6 - 10", "5 - 10", "4 - 10",
+		"3 - 10", "2 - 10", "1 - 10", "0 - 10"
+	)
+
 	private val _uiStateFlow = MutableStateFlow(
 		InsertScoreDialogUiState(
 			setNumber = savedStateHandle.get<Int>(InsertScoreFragment.SELECTED_SET_NUMBER),
-			pickedValue = savedStateHandle.get<String>(InsertScoreFragment.SELECTED_SET_CURRENT_VALUE)
+			pickedValue = savedStateHandle.get<String>(InsertScoreFragment.SELECTED_SET_CURRENT_VALUE),
+			isSuperTieBreak = savedStateHandle.get<Boolean>(InsertScoreFragment.SELECTED_SET_IS_SUPER_TIE)
 		)
 	)
 	val uiStateFlow = _uiStateFlow.asStateFlow()
 
 	fun onScorePicked(valuePositionBasic: Int, valuePositionLeftTie: Int, valuePositionRightTie: Int, activity: FragmentActivity) {
-		var pickedScore: String = basicScoreVariants[valuePositionBasic].replace("-", ":")
+		var pickedScore: String = if (valuePositionBasic != 0) {
+			if (uiStateFlow.value.isSuperTieBreak == true) {
+				superTieBreakScoreVariants[valuePositionBasic].replace("-", ":")
+			} else {
+				basicScoreVariants[valuePositionBasic].replace("-", ":")
+			}
+		} else InsertScoreViewModel.DEFAULT_SCORE
+
 		when(valuePositionBasic) {
 			RIGHT_TIE_POSITION -> {
 				pickedScore = "$pickedScore (${rightTieBreakScoreVariants[valuePositionRightTie]})"

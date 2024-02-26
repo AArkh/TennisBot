@@ -83,8 +83,13 @@ class SearchOpponentsViewModel @Inject constructor(
 					)
 				}
 			} catch (exception: IOException) {
+				Log.e("SearchOpponent", "SearchOpponent = $exception")
 				return LoadResult.Error(exception)
 			} catch (exception: HttpException) {
+				Log.e("SearchOpponent", "HttpException = $exception")
+				return LoadResult.Error(exception)
+			} catch (exception: Exception) {
+				Log.e("SearchOpponent", "Exception = $exception")
 				return LoadResult.Error(exception)
 			}
 		}
