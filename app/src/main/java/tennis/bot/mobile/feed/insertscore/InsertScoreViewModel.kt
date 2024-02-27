@@ -26,6 +26,7 @@ class InsertScoreViewModel @Inject constructor(
 
 	companion object {
 		const val DEFAULT_SCORE = "0 : 0"
+		const val MEDIA_INDEX = 1
 	}
 
 	private val _uiStateFlow = MutableStateFlow(
@@ -74,7 +75,9 @@ class InsertScoreViewModel @Inject constructor(
 
 		if (position == 0) {
 			val newSets = listOf(currentSets[position].copy(score = DEFAULT_SCORE))
-			val updatedList = listOf(uiStateFlow.value.mediaItemList[0].copy(isPhotoBackgroundActive = false))
+			val updatedList = uiStateFlow.value.mediaItemList.mapIndexed { index, item ->
+				if (index == MEDIA_INDEX) item.let{ (item as InsertScoreMediaItem).copy(isPhotoBackgroundActive = false) } else item
+			}
 			_uiStateFlow.value = uiStateFlow.value.copy(
 				setsList = newSets,
 				mediaItemList = updatedList)
@@ -94,7 +97,9 @@ class InsertScoreViewModel @Inject constructor(
 				setItem
 			}
 		}
-		val updatedList = listOf(uiStateFlow.value.mediaItemList[0].copy(isPhotoBackgroundActive = true))
+		val updatedList = uiStateFlow.value.mediaItemList.mapIndexed { index, item ->
+			if (index == MEDIA_INDEX) item.let{ (item as InsertScoreMediaItem).copy(isPhotoBackgroundActive = true) } else item
+		}
 
 		_uiStateFlow.value = uiStateFlow.value.copy(
 			setsList = newSetList,
@@ -102,22 +107,30 @@ class InsertScoreViewModel @Inject constructor(
 	}
 
 	fun onPickedPhoto(pickedImageUri: Uri) {
-		val updatedList = listOf(uiStateFlow.value.mediaItemList[0].copy(pickedPhoto = pickedImageUri))
+		val updatedList = uiStateFlow.value.mediaItemList.mapIndexed { index, item ->
+			if (index == MEDIA_INDEX) item.let{ (item as InsertScoreMediaItem).copy(pickedPhoto = pickedImageUri) } else item
+		}
 		_uiStateFlow.value = uiStateFlow.value.copy(mediaItemList = updatedList)
 	}
 
 	fun onPickedVideo(pickedVideoUri: Uri) {
-		val updatedList = listOf(uiStateFlow.value.mediaItemList[0].copy(pickedVideo = pickedVideoUri))
+		val updatedList = uiStateFlow.value.mediaItemList.mapIndexed { index, item ->
+			if (index == MEDIA_INDEX) item.let{ (item as InsertScoreMediaItem).copy(pickedVideo = pickedVideoUri) } else item
+		}
 		_uiStateFlow.value = uiStateFlow.value.copy(mediaItemList = updatedList)
 	}
 
 	fun onDeletePickedPhoto() {
-		val updatedList = listOf(uiStateFlow.value.mediaItemList[0].copy(pickedPhoto = null))
+		val updatedList = uiStateFlow.value.mediaItemList.mapIndexed { index, item ->
+			if (index == MEDIA_INDEX) item.let{ (item as InsertScoreMediaItem).copy(pickedPhoto = null) } else item
+		}
 		_uiStateFlow.value = uiStateFlow.value.copy(mediaItemList = updatedList)
 	}
 
 	fun onDeletePickedVideo() {
-		val updatedList = listOf(uiStateFlow.value.mediaItemList[0].copy(pickedVideo = null))
+		val updatedList = uiStateFlow.value.mediaItemList.mapIndexed { index, item ->
+			if (index == MEDIA_INDEX) item.let{ (item as InsertScoreMediaItem).copy(pickedVideo = null) } else item
+		}
 		_uiStateFlow.value = uiStateFlow.value.copy(mediaItemList = updatedList)
 	}
 

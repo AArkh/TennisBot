@@ -196,5 +196,5 @@
 		android:paddingBottom="10dp"
 		android:indeterminate="true"
 		android:indeterminateTint="@color/tb_white"
-		android:visibility="visible" />
+		android:visibility="gone" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

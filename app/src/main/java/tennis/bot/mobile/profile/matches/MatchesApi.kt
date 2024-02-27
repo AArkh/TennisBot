@@ -37,7 +37,7 @@ data class MatchResponseItem(
 	val playedAt: String,
 	val photo: String?,
 	val video: String?,
-	val tennisSets: List<TennisSetNetwork>,
+	val gameSets: List<TennisSetNetwork>,
 	val players: List<Player>
 )
 

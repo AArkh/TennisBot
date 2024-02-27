@@ -13,42 +13,91 @@ import coil.load
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreAdapter
 import tennis.bot.mobile.core.CoreUtilsItem
-import tennis.bot.mobile.databinding.FragmentInsertScoreMediaItemBinding
+import tennis.bot.mobile.databinding.RecyclerEmptyItemBinding
+import tennis.bot.mobile.databinding.RecyclerMediaItemBinding
+import tennis.bot.mobile.databinding.RecyclerMediaTitleBinding
+import tennis.bot.mobile.databinding.RecyclerSideNoteItemBinding
+import tennis.bot.mobile.profile.account.EmptyItemViewHolder
 import javax.inject.Inject
 
-class InsertScoreMediaAdapter @Inject constructor(): CoreAdapter<InsertScoreMediaItemViewHolder>() {
+class InsertScoreMediaAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>() {
 	var clickListener: ((item: String) -> Unit)? = null
 
-	override fun onBindViewHolder(holder: InsertScoreMediaItemViewHolder, item: Any) {
-		val mediaItem = item as? InsertScoreMediaItem ?: throw IllegalArgumentException("Item must be InsertScoreMediaItem")
+	companion object {
+		private const val TITLE = 0
+		private const val MEDIA = 1
+		private const val SIDE_NOTE = 2
+		private const val OTHER = 3
+	}
 
-		onPhotoAdded(holder, mediaItem.isPhotoBackgroundActive, mediaItem.pickedPhoto)
-		onVideoAdded(holder, mediaItem.pickedVideo)
+	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: Any) {
+		when(holder) {
+			is InsertScoreMediaTitleViewHolder -> {}
+			is InsertScoreMediaItemViewHolder -> {
+				val mediaItem = item as? InsertScoreMediaItem ?: throw IllegalArgumentException("Item must be InsertScoreMediaItem")
 
-		holder.binding.addPhotoHolder.setOnClickListener {
-			clickListener?.invoke(InsertScoreFragment.ADD_PHOTO)
-		}
+				onPhotoAdded(holder, mediaItem.isPhotoBackgroundActive, mediaItem.pickedPhoto)
+				onVideoAdded(holder, mediaItem.pickedVideo)
 
-		holder.binding.addVideoHolder.setOnClickListener {
-			clickListener?.invoke(InsertScoreFragment.ADD_VIDEO)
-		}
+				holder.binding.addPhotoHolder.setOnClickListener {
+					clickListener?.invoke(InsertScoreFragment.ADD_PHOTO)
+				}
 
-		holder.binding.deletePhotoButton.setOnClickListener {
-			holder.binding.addPhotoHolder.dispose()
-			holder.binding.addPhotoHolder.load(null)
-			clickListener?.invoke(InsertScoreFragment.DELETE_PHOTO)
-		}
+				holder.binding.addVideoHolder.setOnClickListener {
+					clickListener?.invoke(InsertScoreFragment.ADD_VIDEO)
+				}
 
-		holder.binding.deleteVideoButton.setOnClickListener {
-			holder.binding.addVideoHolder.dispose()
-			holder.binding.addVideoHolder.load(null)
-			clickListener?.invoke(InsertScoreFragment.DELETE_VIDEO)
+				holder.binding.deletePhotoButton.setOnClickListener {
+					holder.binding.addPhotoHolder.dispose()
+					holder.binding.addPhotoHolder.load(null)
+					clickListener?.invoke(InsertScoreFragment.DELETE_PHOTO)
+				}
+
+				holder.binding.deleteVideoButton.setOnClickListener {
+					holder.binding.addVideoHolder.dispose()
+					holder.binding.addVideoHolder.load(null)
+					clickListener?.invoke(InsertScoreFragment.DELETE_VIDEO)
+				}
+			}
+			is InsertScoreMediaSideNoteViewHolder -> {
+				val sideNoteItem = item as? SideNoteItem ?: throw IllegalArgumentException("Item must be SideNoteItem")
+
+				if (sideNoteItem.title != null) holder.binding.sideNoteTitle.text = sideNoteItem.title
+				if (sideNoteItem.text != null) holder.binding.sideNoteText.text = sideNoteItem.title
+			}
 		}
 	}
 
-	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InsertScoreMediaItemViewHolder {
-		val binding = FragmentInsertScoreMediaItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-		return InsertScoreMediaItemViewHolder(binding)
+	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+		val inflater = LayoutInflater.from(parent.context)
+
+		return when(viewType) {
+			TITLE -> {
+				val binding = RecyclerMediaTitleBinding.inflate(inflater, parent, false)
+				InsertScoreMediaTitleViewHolder(binding)
+			}
+			MEDIA -> {
+				val binding = RecyclerMediaItemBinding.inflate(inflater, parent, false)
+				InsertScoreMediaItemViewHolder(binding)
+			}
+			SIDE_NOTE -> {
+				val binding = RecyclerSideNoteItemBinding.inflate(inflater, parent, false)
+				InsertScoreMediaSideNoteViewHolder(binding)
+			}
+			else -> {
+				val binding = RecyclerEmptyItemBinding.inflate(inflater, parent, false)
+				EmptyItemViewHolder(binding)
+			}
+		}
+	}
+
+	override fun getItemViewType(position: Int): Int {
+		return when(position) {
+			0 -> TITLE
+			1 -> MEDIA
+			2 -> SIDE_NOTE
+			else -> OTHER
+		}
 	}
 
 	private fun onPhotoAdded(holder: InsertScoreMediaItemViewHolder, isPhotoBackgroundActive: Boolean, photoUri: Uri?) {
@@ -63,6 +112,7 @@ class InsertScoreMediaAdapter @Inject constructor(): CoreAdapter<InsertScoreMedi
 				R.drawable.dotted_background_corners_8dp
 			}
 			holder.binding.addPhotoHolder.setBackgroundResource(addPhotoOutline)
+			holder.binding.addPhotoHolder.load(addPhotoOutline)
 			holder.binding.photoHint.visibility = View.VISIBLE
 			holder.binding.deletePhotoButton.visibility = View.INVISIBLE
 		}
@@ -76,6 +126,7 @@ class InsertScoreMediaAdapter @Inject constructor(): CoreAdapter<InsertScoreMedi
 			holder.binding.videoDurationTimer.visibility = View.VISIBLE
 			holder.binding.deleteVideoButton.visibility = View.VISIBLE
 		} else {
+			holder.binding.addVideoHolder.load(R.drawable.dotted_background_corners_8dp)
 			holder.binding.videoHint.visibility = View.VISIBLE
 			holder.binding.videoDurationTimer.visibility = View.INVISIBLE
 			holder.binding.deleteVideoButton.visibility = View.INVISIBLE
@@ -118,12 +169,27 @@ class InsertScoreMediaAdapter @Inject constructor(): CoreAdapter<InsertScoreMedi
 	}
 }
 
-class InsertScoreMediaItemViewHolder(
-	val binding: FragmentInsertScoreMediaItemBinding
+class InsertScoreMediaTitleViewHolder(
+	val binding: RecyclerMediaTitleBinding
 ) : RecyclerView.ViewHolder(binding.root)
+
+class InsertScoreMediaItemViewHolder(
+	val binding: RecyclerMediaItemBinding
+) : RecyclerView.ViewHolder(binding.root)
+
+class InsertScoreMediaSideNoteViewHolder(
+	val binding: RecyclerSideNoteItemBinding
+) : RecyclerView.ViewHolder(binding.root)
+
+object MediaTitle: CoreUtilsItem()
 
 data class InsertScoreMediaItem(
 	val pickedPhoto: Uri? = null,
 	val pickedVideo: Uri? = null,
 	val isPhotoBackgroundActive: Boolean = false
+): CoreUtilsItem()
+
+data class SideNoteItem(
+	val title: String? = null,
+	val text: String? = null
 ): CoreUtilsItem()

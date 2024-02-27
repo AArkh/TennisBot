@@ -18,7 +18,7 @@ class InsertScoreAdapter @Inject constructor(): CoreAdapter<InsertSetItemViewHol
 		if (!tennisSetItem.isSuperTieBreak) {
 			holder.binding.title.text = holder.binding.title.context.getString(R.string.insert_score_set_item_title, holder.bindingAdapterPosition + 1)
 		} else {
-			holder.binding.title.text = "Супер Тай-брейк"
+			holder.binding.title.text = holder.binding.title.context.getString(R.string.super_tie_break)
 		}
 
 		holder.binding.setScore.text = tennisSetItem.score

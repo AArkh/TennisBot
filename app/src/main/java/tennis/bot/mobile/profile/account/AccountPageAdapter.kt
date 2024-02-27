@@ -89,8 +89,6 @@ class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHol
 				holder.binding.friendsElseNumber.text = friends.friendsElseNumber
 			}
 			is AccountButtonSwitchViewHolder -> {
-				val buttonSwitch = item as? ButtonSwitch ?: throw IllegalArgumentException("Item must be MatchesPlayed")
-
 				holder.binding.recyclerView.adapter = childAdapter
 				holder.binding.recyclerView.layoutManager = LinearLayoutManager(holder.binding.recyclerView.context)
 
