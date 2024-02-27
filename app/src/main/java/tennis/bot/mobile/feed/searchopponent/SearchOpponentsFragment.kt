@@ -21,6 +21,7 @@ import tennis.bot.mobile.databinding.FragmentSearchOpponentBinding
 import tennis.bot.mobile.feed.addscore.AddScoreFragment
 import tennis.bot.mobile.feed.insertscore.InsertScoreFragment
 import tennis.bot.mobile.utils.LetterInputFilter
+import tennis.bot.mobile.utils.traverseToAnotherFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -68,16 +69,7 @@ class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>() {
 		}
 
 		binding.buttonNext.setOnClickListener {
-			val fragment = InsertScoreFragment()
-			fragment.arguments = bundleOf(
-
-			)
-
-			parentFragmentManager.beginTransaction()
-				.replace(R.id.fragment_container_view, InsertScoreFragment())
-				.setTransition(TRANSIT_FRAGMENT_OPEN)
-				.addToBackStack(InsertScoreFragment::class.java.name)
-				.commit()
+			parentFragmentManager.traverseToAnotherFragment(InsertScoreFragment())
 		}
 
 		setFragmentResultListener(SCORE_TYPE_REQUEST_KEY) { _, result ->

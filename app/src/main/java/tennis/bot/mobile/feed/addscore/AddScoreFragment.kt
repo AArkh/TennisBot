@@ -10,6 +10,7 @@ import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentAddScoreBinding
 import tennis.bot.mobile.feed.searchopponent.SearchOpponentsFragment
 import tennis.bot.mobile.utils.showToast
+import tennis.bot.mobile.utils.traverseToAnotherFragment
 
 @AndroidEntryPoint
 class AddScoreFragment : CoreFragment<FragmentAddScoreBinding>() {
@@ -37,10 +38,7 @@ class AddScoreFragment : CoreFragment<FragmentAddScoreBinding>() {
 
 		binding.buttonNext.setOnClickListener {
 			viewModel.onNextButtonClicked {
-				parentFragmentManager.beginTransaction()
-					.replace(R.id.fragment_container_view, SearchOpponentsFragment())
-					.addToBackStack(SearchOpponentsFragment::class.java.name)
-					.commit()
+				parentFragmentManager.traverseToAnotherFragment(SearchOpponentsFragment())
 			}
 		}
 

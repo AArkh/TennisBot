@@ -17,6 +17,7 @@ import tennis.bot.mobile.profile.account.AccountPageAdapter
 import tennis.bot.mobile.profile.account.AccountPageFragment
 import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
 import tennis.bot.mobile.utils.dpToPx
+import tennis.bot.mobile.utils.goToAnotherSectionFragment
 
 @AndroidEntryPoint
 class FeedBottomNavigationFragment : CoreFragment<FragmentFeedBottomNavigationBinding>() {
@@ -33,6 +34,7 @@ class FeedBottomNavigationFragment : CoreFragment<FragmentFeedBottomNavigationBi
 
 		binding.playerPhoto.setOnClickListener {
 			parentFragmentManager.beginTransaction()
+				.setCustomAnimations(R.anim.slide_in, R.anim.fade_out, R.anim.fade_in, R.anim.slide_out)
 				.replace(R.id.fragment_container_view, AccountPageFragment())
 				.addToBackStack(AccountPageFragment::class.java.name)
 				.commit()
@@ -71,10 +73,7 @@ class FeedBottomNavigationFragment : CoreFragment<FragmentFeedBottomNavigationBi
 		menu.setOnMenuItemClickListener { menuItem ->
 			when(items.indexOf(menuItem.title.toString())) {
 				ADD_SCORE_INDEX -> {
-					parentFragmentManager.beginTransaction()
-						.replace(R.id.fragment_container_view, AddScoreFragment())
-						.addToBackStack(AddScoreFragment::class.java.name)
-						.commit()
+					parentFragmentManager.goToAnotherSectionFragment(AddScoreFragment())
 				}
 				CREATE_GAME_ITEM -> {}
 				else -> {}

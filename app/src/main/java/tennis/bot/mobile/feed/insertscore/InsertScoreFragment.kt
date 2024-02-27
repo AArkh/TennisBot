@@ -118,6 +118,12 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 			viewModel.onAddingSuperTieBreakItem()
 		}
 
+		binding.buttonSend.setOnClickListener {
+			viewModel.onSendButtonClicked(requireContext()) {
+				//go to a usual dialog
+			}
+		}
+
 		setFragmentResultListener(SearchOpponentsViewModel.OPPONENT_PICKED_REQUEST_KEY) { _, result ->
 			viewModel.onInitial(
 				result.getLong(SearchOpponentsViewModel.SELECTED_OPPONENT_ID_KEY),
@@ -148,7 +154,7 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 			binding.buttonSend.isEnabled = uiState.isSendButtonActive
 			binding.addSetButton.isEnabled = uiState.isAddSetButtonActive
 			binding.addSuperTieBreakButton.isEnabled = uiState.isAddSuperTieBreakActive
-			buttonVisibilityController()
+			buttonVisibilityController(uiState.isLoading)
 		}
 	}
 
@@ -168,13 +174,20 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 		}
 	}
 
-	private fun buttonVisibilityController() {
+	private fun buttonVisibilityController(isLoading: Boolean) {
 		val buttonSendBackground = if (binding.buttonSend.isEnabled) {
 			R.drawable.btn_bkg_enabled
 		} else {
 			R.drawable.btn_bkg_disabled
 		}
 		binding.buttonSend.setBackgroundResource(buttonSendBackground)
+		if (isLoading) {
+			binding.buttonSend.text = ""
+			binding.buttonLoadingAnim.visibility = View.VISIBLE
+		} else {
+			binding.buttonSend.text = context?.getString(R.string.button_send)
+			binding.buttonLoadingAnim.visibility = View.GONE
+		}
 
 		if (!binding.addSetButton.isEnabled) {
 			binding.addSetButton.alpha = 0.3F

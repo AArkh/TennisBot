@@ -41,6 +41,7 @@ import tennis.bot.mobile.profile.editprofile.location.EditLocationFragment
 import tennis.bot.mobile.profile.editprofile.namesurname.EditNameSurnameFragment
 import tennis.bot.mobile.profile.editprofile.telegram.EditTelegramFragment
 import tennis.bot.mobile.utils.showToast
+import tennis.bot.mobile.utils.traverseToAnotherFragment
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
@@ -105,7 +106,7 @@ class EditProfileFragment : CoreFragment<FragmentEditProfileBinding>() {
 		adapter.clickListener = { index ->
 			when (index) {
 				EditProfileAdapter.CHANGE_NAME_INDEX -> {
-					goToAnotherFragment(EditNameSurnameFragment())
+					parentFragmentManager.traverseToAnotherFragment(EditNameSurnameFragment())
 				}
 
 				EditProfileAdapter.CHANGE_BIRTHDAY_INDEX -> {
@@ -113,15 +114,15 @@ class EditProfileFragment : CoreFragment<FragmentEditProfileBinding>() {
 				}
 
 				EditProfileAdapter.CHANGE_LOCATION_INDEX -> {
-					goToAnotherFragment(EditLocationFragment())
+					parentFragmentManager.traverseToAnotherFragment(EditLocationFragment())
 				}
 
 				EditProfileAdapter.CHANGE_PHONE_INDEX -> {
-					goToAnotherFragment(EditPhoneFragment())
+					parentFragmentManager.traverseToAnotherFragment(EditPhoneFragment())
 				}
 
 				EditProfileAdapter.CHANGE_TELEGRAM_INDEX -> {
-					goToAnotherFragment(EditTelegramFragment())
+					parentFragmentManager.traverseToAnotherFragment(EditTelegramFragment())
 				}
 			}
 		}
@@ -179,13 +180,6 @@ class EditProfileFragment : CoreFragment<FragmentEditProfileBinding>() {
 			adapter.submitList(uiState.categoriesList)
 
 		}
-	}
-
-	private fun goToAnotherFragment(fragment: Fragment) {
-		parentFragmentManager.beginTransaction()
-			.replace(R.id.fragment_container_view, fragment)
-			.addToBackStack(fragment::class.java.name)
-			.commit()
 	}
 
 	private fun onLoadingProfileImage(profileImageUrl: String?) {

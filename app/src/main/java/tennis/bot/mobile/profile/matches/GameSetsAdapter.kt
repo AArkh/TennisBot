@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class GameSetsAdapter @Inject constructor(): CoreAdapter<GameSetItemViewHolder>() {
 	override fun onBindViewHolder(holder: GameSetItemViewHolder, item: Any) {
-		val set = item as? GameSet ?: throw IllegalArgumentException("Item must be GameSet")
+		val set = item as? TennisSetNetwork ?: throw IllegalArgumentException("Item must be TennisSetNetwork")
 
 		holder.binding.player1Score.text = set.score1.toString()
 		holder.binding.player2Score.text = set.score2.toString()

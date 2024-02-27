@@ -29,20 +29,20 @@ data class MatchBasicResponse(
 
 @Serializable
 data class MatchResponseItem(
-val id: Int,
-val win: Boolean,
-val isDouble: Boolean,
-val headToHead1: Int,
-val headToHead2: Int,
-val playedAt: String,
-val photo: String?,
-val video: String?,
-val gameSets: List<GameSet>,
-val players: List<Player>
+	val id: Int,
+	val win: Boolean,
+	val isDouble: Boolean,
+	val headToHead1: Int,
+	val headToHead2: Int,
+	val playedAt: String,
+	val photo: String?,
+	val video: String?,
+	val tennisSets: List<TennisSetNetwork>,
+	val players: List<Player>
 )
 
 @Serializable
-data class GameSet(
+data class TennisSetNetwork(
 	val score1: Int,
 	val score2: Int,
 	val scoreTie1: Int?,

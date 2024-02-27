@@ -1,6 +1,5 @@
 package tennis.bot.mobile.feed.insertscore
 
-import android.net.Uri
 
 data class InsertScoreUiState( // todo probably should store picture and video here as well
 	val player1Image: String?,
@@ -12,5 +11,6 @@ data class InsertScoreUiState( // todo probably should store picture and video h
 	val mediaItemList: List<InsertScoreMediaItem> = listOf(InsertScoreMediaItem()),
 	val isAddSetButtonActive: Boolean = false,
 	val isAddSuperTieBreakActive: Boolean = false,
-	val isSendButtonActive: Boolean = false
+	val isSendButtonActive: Boolean = false,
+	val isLoading: Boolean = false
 )

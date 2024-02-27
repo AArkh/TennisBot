@@ -13,7 +13,7 @@ import javax.inject.Inject
 @HiltViewModel
 class InsertScoreDialogViewModel @Inject constructor(
 	savedStateHandle: SavedStateHandle
-): ViewModel() {
+) : ViewModel() {
 
 	companion object {
 		const val REQUEST_SCORE_KEY = "REQUEST_SCORE_KEY"
@@ -21,6 +21,7 @@ class InsertScoreDialogViewModel @Inject constructor(
 		const val SELECTED_SET_KEY = "SELECTED_SET_KEY"
 		const val LEFT_TIE_POSITION = 8
 		const val RIGHT_TIE_POSITION = 7
+		const val SUPER_TIE_WON = 14
 	}
 
 	val basicScoreVariants = arrayOf(
@@ -54,19 +55,30 @@ class InsertScoreDialogViewModel @Inject constructor(
 	)
 	val uiStateFlow = _uiStateFlow.asStateFlow()
 
-	fun onScorePicked(valuePositionBasic: Int, valuePositionLeftTie: Int, valuePositionRightTie: Int, activity: FragmentActivity) {
-		var pickedScore: String = if (valuePositionBasic != 0) {
-			if (uiStateFlow.value.isSuperTieBreak == true) {
-				superTieBreakScoreVariants[valuePositionBasic].replace("-", ":")
-			} else {
-				basicScoreVariants[valuePositionBasic].replace("-", ":")
-			}
-		} else InsertScoreViewModel.DEFAULT_SCORE
+	fun onScorePicked(
+		valuePositionBasic: Int,
+		valuePositionLeftTie: Int,
+		valuePositionRightTie: Int,
+		activity: FragmentActivity
+	) {
+		var pickedScore: String =
+			if (valuePositionBasic != 0) {
+				if (uiStateFlow.value.isSuperTieBreak == true) {
+					if (valuePositionBasic <= SUPER_TIE_WON) {
+						"1 : 0 (${superTieBreakScoreVariants[valuePositionBasic]})"
+					} else {
+						"0 : 1 (${superTieBreakScoreVariants[valuePositionBasic]})"
+					}
+				} else {
+					basicScoreVariants[valuePositionBasic].replace("-", ":")
+				}
+			} else InsertScoreViewModel.DEFAULT_SCORE
 
-		when(valuePositionBasic) {
+		when (valuePositionBasic) {
 			RIGHT_TIE_POSITION -> {
 				pickedScore = "$pickedScore (${rightTieBreakScoreVariants[valuePositionRightTie]})"
 			}
+
 			LEFT_TIE_POSITION -> {
 				pickedScore = "$pickedScore (${leftTieBreakScoreVariants[valuePositionLeftTie]})"
 			}
@@ -76,10 +88,10 @@ class InsertScoreDialogViewModel @Inject constructor(
 			REQUEST_SCORE_KEY, // using set number to determine which value to change in InsertScoreFragment
 			bundleOf(
 				SELECTED_SCORE_KEY to pickedScore,
-				SELECTED_SET_KEY to uiStateFlow.value.setNumber)
+				SELECTED_SET_KEY to uiStateFlow.value.setNumber
+			)
 		)
 	}
-
 }
 
 fun NumberPicker.setupWithCustomValues(scoreVariants: Array<String>) {

@@ -12,6 +12,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Converter
 import retrofit2.Retrofit
 import tennis.bot.mobile.core.AuthInterceptor
+import tennis.bot.mobile.feed.insertscore.InsertScoreApi
 import tennis.bot.mobile.feed.searchopponent.OpponentsApi
 import tennis.bot.mobile.profile.account.EnumsApi
 import tennis.bot.mobile.profile.account.UserProfileApi
@@ -43,6 +44,7 @@ class NetworkModule {
         const val EDIT_PROFILE = "EDIT_PROFILE"
         const val EDIT_GAMEDATA = "EDIT_GAMEDATA"
         const val SEARCH_OPPONENTS = "SEARCH_OPPONENTS"
+        const val INSERT_SCORE = "INSERT_SCORE"
     }
 
     @Provides
@@ -212,6 +214,20 @@ class NetworkModule {
     }
 
     @Provides
+    @Named(INSERT_SCORE)
+    @Singleton
+    fun provideInsertScoreRetrofit(
+        @Named(WITH_AUTHENTICATION) okHttpClient: OkHttpClient,
+        converterFactory: Converter.Factory
+    ): Retrofit {
+        return Retrofit.Builder()
+            .client(okHttpClient)
+            .baseUrl("https://bugz.su:8443/core/") //todo вынести debug && prod url в gradle build config
+            .addConverterFactory(converterFactory)
+            .build()
+    }
+
+    @Provides
     @Singleton
     fun provideBalancesAllowancesApiClient(
         @Named(SMS_CODES) retrofit: Retrofit
@@ -274,7 +290,13 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideSearchOpponentsApiClient(
-        @Named(EDIT_GAMEDATA) retrofit: Retrofit
+        @Named(SEARCH_OPPONENTS) retrofit: Retrofit
     ): OpponentsApi = retrofit.create(OpponentsApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideInsertScoreApiClient(
+        @Named(INSERT_SCORE) retrofit: Retrofit
+    ): InsertScoreApi = retrofit.create(InsertScoreApi::class.java)
 }
 

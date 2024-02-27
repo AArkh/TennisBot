@@ -58,7 +58,7 @@ class MatchesAdapter @Inject constructor(): PagingDataAdapter<MatchItem, MatchIt
 			holder.binding.gameSetsContainer.adapter = gameSetsAdapter
 			holder.binding.gameSetsContainer.layoutManager = LinearLayoutManager(
 				holder.binding.gameSetsContainer.context, LinearLayoutManager.HORIZONTAL, true)
-			gameSetsAdapter.submitList(match.gameSets)
+			gameSetsAdapter.submitList(match.tennisSets)
 
 			holder.binding.score.text = match.score
 			holder.binding.dateTime.text = match.dateTime
@@ -135,6 +135,6 @@ data class MatchItem(
 	val playerTwoCurrentRating: String,
 	val playerTwoPreviousRating:String,
 	val score: String,
-	val gameSets: List<GameSet>,
+	val tennisSets: List<TennisSetNetwork>,
 	val dateTime: String
 ): CoreUtilsItem()

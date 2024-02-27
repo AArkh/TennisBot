@@ -65,7 +65,7 @@ class MatchesRepository @Inject constructor(
 				matchResponseItem.players.getOrNull(1)?.rating.toString(),
 				matchResponseItem.players.getOrNull(1)?.oldRating.toString(),
 				"${matchResponseItem.headToHead1} - ${matchResponseItem.headToHead2}",
-				matchResponseItem.gameSets,
+				matchResponseItem.tennisSets,
 				dateTime
 			)
 		}

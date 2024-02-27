@@ -1,17 +1,27 @@
 package tennis.bot.mobile.feed.insertscore
 
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import tennis.bot.mobile.R
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
+import tennis.bot.mobile.profile.matches.TennisSetNetwork
+import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
+
+private const val i = 0
 
 @HiltViewModel
 class InsertScoreViewModel @Inject constructor(
 	private val userProfileRepository: UserProfileAndEnumsRepository,
+	private val repository: InsertScoreRepository
 ): ViewModel() {
 
 	companion object {
@@ -69,7 +79,8 @@ class InsertScoreViewModel @Inject constructor(
 				setsList = newSets,
 				mediaItemList = updatedList)
 		} else {
-			val newSets = currentSets - currentSets[position] // todo чтобы номера сетов были правильные даже при удалении сета из середины списка
+			val newSets = (currentSets - currentSets[position])
+				.mapIndexed { index, tennisSetItem ->  tennisSetItem.copy(setNumber = index + 1) }
 			_uiStateFlow.value = uiStateFlow.value.copy(
 				setsList = newSets)
 		}
@@ -118,7 +129,6 @@ class InsertScoreViewModel @Inject constructor(
 		val player2Wins = setsList.count { getSetWinner(it.score) == 2 }
 
 		val isActive = lastSet.score != DEFAULT_SCORE && !setsList.any { it.isSuperTieBreak } && (player1Wins < 3 && player2Wins < 3) && setsList.size < 5
-		Log.d("isAddSetButtonActive", "setsList.any { !it.isSuperTieBreak } = ${!setsList.any { it.isSuperTieBreak }}")
 
 		_uiStateFlow.value = uiStateFlow.value.copy(isAddSetButtonActive = isActive)
 	}
@@ -136,6 +146,38 @@ class InsertScoreViewModel @Inject constructor(
 		} else false
 
 		_uiStateFlow.value = uiStateFlow.value.copy(isAddSuperTieBreakActive = isActive)
+	}
+
+	private fun getSetsScore(): List<TennisSetNetwork> {
+		val setsList = uiStateFlow.value.setsList
+		val convertedSetsList = mutableListOf<TennisSetNetwork>()
+
+		for(set in setsList) {
+			if (set.score.contains("(")) {
+				val gamesPart = set.score.substringBefore(" (")
+				val (player1Games, player2Games) = gamesPart.split(" : ").map { it.trim().toInt() }
+				val tiebreakPart = set.score.substringAfter(" (").removeSuffix(")")
+				val (player1Tiebreak, player2Tiebreak) = tiebreakPart.split(" - ").map { it.trim().toInt() }
+
+				convertedSetsList.add(TennisSetNetwork(
+					score1 = player1Games,
+					score2 = player2Games,
+					scoreTie1 = player1Tiebreak,
+					scoreTie2 = player2Tiebreak))
+				Log.d("getSetsScore", "convertedSetsList: $convertedSetsList")
+			} else {
+				val (player1Games, player2Games) = set.score.split(" : ").map { it.toInt() }
+
+				convertedSetsList.add(TennisSetNetwork(
+					score1 = player1Games,
+					score2 = player2Games,
+					scoreTie1 = 0,
+					scoreTie2 = 0))
+				Log.d("getSetsScore", "convertedSetsList: $convertedSetsList")
+			}
+		}
+
+		return convertedSetsList.toList()
 	}
 
 	private fun getSetWinner(score: String): Int? {
@@ -166,7 +208,39 @@ class InsertScoreViewModel @Inject constructor(
 		val requiredWins = if (uiStateFlow.value.setsList.size == 1) 1 else if (uiStateFlow.value.setsList.size <= 3) 2 else 3
 		val player1Wins = uiStateFlow.value.setsList.count { getSetWinner(it.score) == 1 }
 		val player2Wins = uiStateFlow.value.setsList.count { getSetWinner(it.score) == 2 }
-		Log.d("Score", "player1Wins = $player1Wins, player2Wins = $player2Wins")
+
 		_uiStateFlow.value = uiStateFlow.value.copy(isSendButtonActive = player1Wins >= requiredWins || player2Wins >= requiredWins)
+	}
+
+	private fun showLoading() {
+		val currentState = _uiStateFlow.value
+		_uiStateFlow.value = currentState.copy(
+			isLoading = true
+		)
+	}
+
+	private fun onStopLoading() {
+		val currentState = _uiStateFlow.value
+		_uiStateFlow.value = currentState.copy(
+			isLoading = false
+		)
+	}
+
+	fun onSendButtonClicked(context: Context, navigationCallback: () -> Unit) {
+		viewModelScope.launch(Dispatchers.IO) {
+			kotlin.runCatching {
+				showLoading()
+				repository.postAddScore(InsertScoreItem(
+					opponentPlayerId = uiStateFlow.value.player2Id,
+					sets = getSetsScore()
+				))
+			}.onFailure {
+				onStopLoading()
+				context.showToast(context.getString(R.string.error_no_network_message))
+			}.onSuccess {
+				onStopLoading()
+				navigationCallback.invoke()
+			}
+		}
 	}
 }
