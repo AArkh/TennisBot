@@ -145,6 +145,7 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 			viewModel.isMatchValid()
 			viewModel.isSuperTieBreakButtonActive()
 			viewModel.isAddSetButtonActive()
+			viewModel.appointActiveSetItem()
 
 			binding.player1Image.loadPlayerImage(uiState.player1Image, binding.player1Photo)
 			binding.player2Image.loadPlayerImage(uiState.player2Image, binding.player2Photo)

@@ -54,7 +54,8 @@ class InsertScoreViewModel @Inject constructor(
 	fun onAddingSetItem() {
 		val currentSets = uiStateFlow.value.setsList
 		if(currentSets.size < 5) {
-			val newSets = currentSets + TennisSetItem((currentSets.size + 1),  DEFAULT_SCORE)
+			val newSets = currentSets + TennisSetItem((currentSets.size + 1),  DEFAULT_SCORE, isActive = true)
+
 			_uiStateFlow.value =
 				uiStateFlow.value.copy(setsList = newSets)
 		}
@@ -63,7 +64,8 @@ class InsertScoreViewModel @Inject constructor(
 	fun onAddingSuperTieBreakItem() {
 		val currentSets = uiStateFlow.value.setsList
 		if(currentSets.size < 5) {
-			val newSets = currentSets + TennisSetItem((currentSets.size + 1),  DEFAULT_SCORE, isSuperTieBreak = true)
+			val newSets = currentSets + TennisSetItem((currentSets.size + 1),  DEFAULT_SCORE, isSuperTieBreak = true, isActive = true)
+
 			_uiStateFlow.value =
 				uiStateFlow.value.copy(setsList = newSets)
 		}
@@ -78,12 +80,14 @@ class InsertScoreViewModel @Inject constructor(
 			val updatedList = uiStateFlow.value.mediaItemList.mapIndexed { index, item ->
 				if (index == MEDIA_INDEX) item.let{ (item as InsertScoreMediaItem).copy(isPhotoBackgroundActive = false) } else item
 			}
+
 			_uiStateFlow.value = uiStateFlow.value.copy(
 				setsList = newSets,
 				mediaItemList = updatedList)
 		} else {
 			val newSets = (currentSets - currentSets[position])
 				.mapIndexed { index, tennisSetItem ->  tennisSetItem.copy(setNumber = index + 1) }
+
 			_uiStateFlow.value = uiStateFlow.value.copy(
 				setsList = newSets)
 		}
@@ -104,6 +108,14 @@ class InsertScoreViewModel @Inject constructor(
 		_uiStateFlow.value = uiStateFlow.value.copy(
 			setsList = newSetList,
 			mediaItemList = updatedList)
+	}
+
+	fun appointActiveSetItem() {
+		val newList = uiStateFlow.value.setsList.mapIndexed { index, tennisSetItem ->
+			if (index == uiStateFlow.value.setsList.lastIndex) tennisSetItem.copy(isActive = true) else tennisSetItem.copy(isActive = false)
+		}
+
+		_uiStateFlow.value = uiStateFlow.value.copy(setsList = newList)
 	}
 
 	fun onPickedPhoto(pickedImageUri: Uri) {
