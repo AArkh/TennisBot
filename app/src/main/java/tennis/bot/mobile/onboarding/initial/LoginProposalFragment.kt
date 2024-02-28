@@ -11,11 +11,9 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.databinding.FragmentLoginProposalBinding
-import tennis.bot.mobile.profile.account.AccountPageFragment
 import tennis.bot.mobile.onboarding.login.LoginFragment
 import tennis.bot.mobile.onboarding.phone.PhoneInputFragment
-import tennis.bot.mobile.onboarding.photopick.PhotoPickFragment
-import tennis.bot.mobile.profile.matches.MatchesFragment
+import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
 @SuppressLint("ClickableViewAccessibility")
@@ -52,10 +50,7 @@ class LoginProposalFragment : CoreFragment<FragmentLoginProposalBinding>() {
                 .commit()
         }
         binding.buttonWithoutRegistration.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .addToBackStack(this::class.java.name)
-                .replace(R.id.fragment_container_view, MatchesFragment())
-                .commit()
+            requireContext().showToast("To be implemented yet")
         }
         binding.buttonLogin.setOnClickListener {
             parentFragmentManager.beginTransaction()
@@ -63,9 +58,6 @@ class LoginProposalFragment : CoreFragment<FragmentLoginProposalBinding>() {
                 .replace(R.id.fragment_container_view, LoginFragment())
                 .commit()
         }
-//        binding.buttonWithoutRegistration.setOnClickListener {
-//            requireContext().showToast("To be implemented yet")
-//        }
 
         textAdapter.setListAndNotify(listOf(
             TitledText(

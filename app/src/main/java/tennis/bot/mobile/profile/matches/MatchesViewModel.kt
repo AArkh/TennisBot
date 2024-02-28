@@ -5,17 +5,15 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.content.ContextCompat.getColorStateList
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
+import tennis.bot.mobile.feed.searchopponent.SearchOpponentsViewModel
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,21 +35,15 @@ class MatchesViewModel  @Inject constructor(
 	)
 	val uiStateFlow = _uiStateFlow.asStateFlow()
 
-	fun onFetchingMatches(){
-		viewModelScope.launch(Dispatchers.IO) {
-			val matches = repository.getMatchItems()
-			_uiStateFlow.value = MatchesUiState.MatchesDataReceived( matches )
-		}
-	}
-
 	fun getMatchesNew(): Flow<PagingData<MatchItem>> {
 		Log.d("1234567", "New page")
 		return Pager(
 			config = PagingConfig(
-				pageSize = 20,
+				pageSize = SearchOpponentsViewModel.PAGE_SIZE,
+				maxSize = SearchOpponentsViewModel.PAGE_SIZE + (SearchOpponentsViewModel.PAGE_SIZE * 2),
 				enablePlaceholders = true
 			),
-			pagingSourceFactory = { repository.MyDataSource() }
+			pagingSourceFactory = { repository.MatchesDataSource() }
 		).flow
 	}
 }

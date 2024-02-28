@@ -2,14 +2,17 @@ package tennis.bot.mobile.profile.matches
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.core.CoreFragment
+import tennis.bot.mobile.core.DefaultLoadStateAdapter
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentMatchesBinding
 import javax.inject.Inject
@@ -24,7 +27,10 @@ class MatchesFragment : CoreFragment<FragmentMatchesBinding>() {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 
-		binding.matchesContainer.adapter = matchesAdapter
+		binding.matchesContainer.adapter = matchesAdapter.withLoadStateHeaderAndFooter(
+			header = DefaultLoadStateAdapter { matchesAdapter.retry() },
+			footer = DefaultLoadStateAdapter { matchesAdapter.retry() }
+		)
 		binding.matchesContainer.layoutManager = LinearLayoutManager(requireContext())
 
 		binding.backButton.setOnClickListener {
@@ -49,13 +55,18 @@ class MatchesFragment : CoreFragment<FragmentMatchesBinding>() {
 			}
 		}
 
+		matchesAdapter.addLoadStateListener { loadState ->
+			binding.errorLayout.isVisible = loadState.source.refresh is LoadState.Error
+			binding.loadingBar.isVisible = loadState.source.refresh is LoadState.Loading
+
+		}
+
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: MatchesUiState ->
 			when(uiState){
 				is MatchesUiState.Loading -> {
 					binding.errorLayout.visibility = View.GONE
 					binding.loadingBar.visibility = View.VISIBLE
 					binding.matchesContainer.visibility = View.VISIBLE
-					viewModel.onFetchingMatches()
 				}
 				is MatchesUiState.MatchesDataReceived -> {
 					binding.loadingBar.visibility = View.GONE

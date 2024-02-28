@@ -29,6 +29,7 @@ class SearchOpponentsViewModel @Inject constructor(
 		const val SELECTED_OPPONENT_NAME_KEY = "SELECTED_OPPONENT_NAME_KEY"
 		const val SELECTED_OPPONENT_PHOTO_KEY = "SELECTED_OPPONENT_PHOTO_KEY"
 		const val SELECTED_OPPONENT_ID_KEY = "SELECTED_OPPONENT_ID_KEY"
+		const val PAGE_SIZE = 20
 	}
 
 	private val _uiStateFlow = MutableStateFlow<SearchOpponentsUiState>(SearchOpponentsUiState.Initial)
@@ -39,7 +40,8 @@ class SearchOpponentsViewModel @Inject constructor(
 
 	val opponentsPager = Pager(
 			config = PagingConfig(
-				pageSize = 20,
+				pageSize = PAGE_SIZE,
+				maxSize = PAGE_SIZE + (PAGE_SIZE * 2), // since paging library stores all received pages using memory so we add this thing, to prevent in to store too much. the value is recommended in docs
 				enablePlaceholders = true
 			),
 			pagingSourceFactory = { OpponentsDataSource() }
@@ -65,31 +67,25 @@ class SearchOpponentsViewModel @Inject constructor(
 		override fun getRefreshKey(state: PagingState<Int, OpponentItem>): Int { return 0 }
 
 		override suspend fun load(params: LoadParams<Int>): LoadResult<Int, OpponentItem> {
-
 			val position = params.key ?: 0
+
 			return try {
 				val response = userInput.value?.let { repository.getOpponents(it, position) }
 				val opponentItemsList = response?.items?.let { repository.convertToOpponentItemList(it) }
 				val nextPosition = position + 20
-				if (position >= (response?.totalCount ?: 0)) {
-					Log.d("OpponentsDataSource", "Reached the end of data")
-					return LoadResult.Page(emptyList(), prevKey = null, nextKey = null)
-				} else {
-					Log.d("OpponentsDataSource", "Loading page starting from position: $nextPosition")
-					LoadResult.Page(
-						data = opponentItemsList!!,
-						prevKey = if (position == 0) null else position - params.loadSize,
-						nextKey = if (nextPosition >= (response.totalCount)) null else nextPosition
-					)
-				}
+
+				Log.d("OpponentsDataSource", "Loading page starting from position: $nextPosition")
+				LoadResult.Page(
+					data = opponentItemsList ?: emptyList(),
+					prevKey = if (position == 0) null else position - params.loadSize,
+					nextKey = if (nextPosition >= (response?.totalCount ?: 0)) null else nextPosition
+				)
+
 			} catch (exception: IOException) {
 				Log.e("SearchOpponent", "SearchOpponent = $exception")
 				return LoadResult.Error(exception)
 			} catch (exception: HttpException) {
 				Log.e("SearchOpponent", "HttpException = $exception")
-				return LoadResult.Error(exception)
-			} catch (exception: Exception) {
-				Log.e("SearchOpponent", "Exception = $exception")
 				return LoadResult.Error(exception)
 			}
 		}

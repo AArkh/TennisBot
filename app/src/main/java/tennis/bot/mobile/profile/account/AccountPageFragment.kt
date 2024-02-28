@@ -1,10 +1,7 @@
 package tennis.bot.mobile.profile.account
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -16,11 +13,14 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentAccountPageBinding
+import tennis.bot.mobile.onboarding.initial.LoginProposalFragment
 import tennis.bot.mobile.onboarding.login.LoginDialogFragment
 import tennis.bot.mobile.profile.appsetttings.AppSettingsFragment
 import tennis.bot.mobile.profile.editgamedata.EditGameDataFragment
 import tennis.bot.mobile.profile.editprofile.EditProfileFragment
 import tennis.bot.mobile.profile.matches.MatchesFragment
+import tennis.bot.mobile.utils.destroyBackstack
+import tennis.bot.mobile.utils.goToAnotherSectionFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -28,14 +28,6 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 	@Inject
 	lateinit var accountPageAdapter: AccountPageAdapter
 	private val viewModel: AccountPageViewModel by viewModels()
-	private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-		if (uri != null) {
-			Log.d("PhotoPicker", "Selected URI: $uri")
-//			viewModel.onPickedProfilePic(uri)
-		} else {
-			Log.d("PhotoPicker", "No media selected")
-		}
-	}
 
 	override val bindingInflation: Inflation<FragmentAccountPageBinding> = FragmentAccountPageBinding::inflate
 
@@ -61,24 +53,18 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 				delay(180L) // to wait until bottom shit get closed w anim
 				when (result.getString(SELECTED_DIALOG_OPTION)) {
 					OptionsDialogFragment.UPDATE_CONTACTS -> {
-						parentFragmentManager.beginTransaction()
-							.replace(R.id.fragment_container_view, EditProfileFragment())
-							.addToBackStack(EditProfileFragment::class.java.name)
-							.commit()
+						parentFragmentManager.goToAnotherSectionFragment(EditProfileFragment())
 					}
 					OptionsDialogFragment.UPDATE_GAMEDATA -> {
-						parentFragmentManager.beginTransaction()
-							.replace(R.id.fragment_container_view, EditGameDataFragment())
-							.addToBackStack(EditGameDataFragment::class.java.name)
-							.commit()
+						parentFragmentManager.goToAnotherSectionFragment(EditGameDataFragment())
 					}
 					OptionsDialogFragment.UPDATE_SETTINGS -> {
-						parentFragmentManager.beginTransaction()
-							.replace(R.id.fragment_container_view, AppSettingsFragment())
-							.addToBackStack(AppSettingsFragment::class.java.name)
-							.commit()
+						parentFragmentManager.goToAnotherSectionFragment(AppSettingsFragment())
 					}
-					OptionsDialogFragment.LOGOUT -> {}
+					OptionsDialogFragment.LOGOUT -> { // for some reason remains a white screen + i do nothing about refresh token
+						parentFragmentManager.destroyBackstack()
+						parentFragmentManager.goToAnotherSectionFragment(LoginProposalFragment())
+					}
 				}
 			}
 		}
@@ -104,9 +90,7 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 					accountPageAdapter.childAdapter.submitList(uiState.gameDataList)
 					accountPageAdapter.clickListener = { command ->
 						when(command) {
-							PICK_IMAGE -> {
-								pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-							}
+							PICK_IMAGE -> {}
 							INFLATE_GAMEDATA -> {
 								accountPageAdapter.childAdapter.submitList(uiState.gameDataList)
 							}

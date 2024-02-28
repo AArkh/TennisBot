@@ -99,7 +99,11 @@ class AuthTokenRepository @Inject constructor(
 				)
 			)
 		} else {
-			sharedPreferences.edit().remove(REFRESH_TOKEN_KEY).apply()
+			removeToken()
 		}
+	}
+
+	fun removeToken() {
+		sharedPreferences.edit().remove(REFRESH_TOKEN_KEY).apply()
 	}
 }

@@ -37,14 +37,6 @@ class MatchesRepository @Inject constructor(
 		return MatchBasicResponse(0, emptyList())
 	}
 
-	@WorkerThread
-	suspend fun getMatchItems(): List<MatchItem> {
-		val networkMatches = getMatches()
-		val matchResponseItems = networkMatches?.items
-		return if (!matchResponseItems.isNullOrEmpty()) matchResponseItems.convertToMatchItemList()
-		else emptyList()
-	}
-
 	private fun List<MatchResponseItem>.convertToMatchItemList(): List<MatchItem> {
 		return map { matchResponseItem ->
 			val playerOneProfilePic = matchResponseItem.players.getOrNull(0)?.photo
@@ -83,7 +75,7 @@ class MatchesRepository @Inject constructor(
 		return ""
 	}
 
-	inner class MyDataSource : PagingSource<Int, MatchItem>() {
+	inner class MatchesDataSource : PagingSource<Int, MatchItem>() {
 
 		override fun getRefreshKey(state: PagingState<Int, MatchItem>): Int? {
 			TODO("Not yet implemented")
@@ -95,20 +87,13 @@ class MatchesRepository @Inject constructor(
 				val response = api.getScores(userProfileAndEnumsRepository.getProfile().id, position)
 				val matchItemsList = response.body()?.items?.convertToMatchItemList()
 				val nextPosition = position + 20
-				if (position >= (response.body()?.totalCount ?: 0)) {
-					Log.d("MyDataSource", "Reached the end of data")
-					return LoadResult.Page(emptyList(), prevKey = null, nextKey = null)
-				} else {
 
-					Log.d("MyDataSource", "Loading page starting from position: $nextPosition")
-					LoadResult.Page(
-						data = matchItemsList!!,
-						prevKey = if (position == 0) null else position - params.loadSize,
-						nextKey = if (nextPosition >= (response.body()?.totalCount ?: 0)) null else nextPosition
-					)
-				}
-
-
+				Log.d("MatchesDataSource", "Loading page starting from position: $nextPosition")
+				LoadResult.Page(
+					data = matchItemsList!!,
+					prevKey = if (position == 0) null else position - params.loadSize,
+					nextKey = if (nextPosition >= (response.body()?.totalCount ?: 0)) null else nextPosition
+				)
 			} catch (exception: IOException) {
 				return LoadResult.Error(exception)
 			} catch (exception: HttpException) {

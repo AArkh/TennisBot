@@ -3,12 +3,12 @@ package tennis.bot.mobile.feed.searchopponent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
+import tennis.bot.mobile.core.DefaultLoadStateAdapter
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentSearchOpponentBinding
 import tennis.bot.mobile.feed.addscore.AddScoreFragment
@@ -45,7 +46,7 @@ class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>() {
 
 		binding.searchBarEt.filters = arrayOf(LetterInputFilter())
 		binding.searchBarEt.doAfterTextChanged { text ->
-			binding.matchesContainer.visibility = View.VISIBLE
+			binding.opponentsContainer.visibility = View.VISIBLE
 			binding.cardsAnimation.visibility = View.GONE
 			binding.hintTitle.visibility = View.GONE
 			binding.hintText.visibility = View.GONE
@@ -53,8 +54,11 @@ class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>() {
 			viewModel.onSearchOpponentsInput(text ?: "")
 		}
 
-		binding.matchesContainer.adapter = adapter
-		binding.matchesContainer.layoutManager = LinearLayoutManager(requireContext())
+		binding.opponentsContainer.adapter = adapter.withLoadStateHeaderAndFooter(
+			header = DefaultLoadStateAdapter { adapter.retry() },
+			footer = DefaultLoadStateAdapter { adapter.retry() }
+		)
+		binding.opponentsContainer.layoutManager = LinearLayoutManager(requireContext())
 
 		adapter.clickListener = { opponent ->
 			Log.d("123546", "Recieved $opponent")
@@ -89,7 +93,12 @@ class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>() {
 			}
 		}
 
-		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: SearchOpponentsUiState -> // may be useless, todo check out the way to add loading and catch error states in PagingLibrary
+		adapter.addLoadStateListener { loadState ->
+			binding.errorLayout.isVisible = loadState.source.refresh is LoadState.Error
+			binding.loadingBar.isVisible = loadState.source.refresh is LoadState.Loading
+		}
+
+		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: SearchOpponentsUiState -> // may be useless
 			when(uiState){
 				is SearchOpponentsUiState.Initial -> {
 					binding.loadingBar.visibility = View.GONE
@@ -98,17 +107,17 @@ class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>() {
 				is SearchOpponentsUiState.Loading -> {
 					binding.errorLayout.visibility = View.GONE
 					binding.loadingBar.visibility = View.VISIBLE
-					binding.matchesContainer.visibility = View.VISIBLE
+					binding.opponentsContainer.visibility = View.VISIBLE
 				}
 				is SearchOpponentsUiState.OpponentDataReceived -> {
 					binding.loadingBar.visibility = View.GONE
 					binding.errorLayout.visibility = View.GONE
-					binding.matchesContainer.visibility = View.VISIBLE
+					binding.opponentsContainer.visibility = View.VISIBLE
 				}
 				is SearchOpponentsUiState.Error -> {
 					binding.loadingBar.visibility = View.GONE
 					binding.errorLayout.visibility = View.VISIBLE
-					binding.matchesContainer.visibility = View.GONE
+					binding.opponentsContainer.visibility = View.GONE
 				}
 			}
 		}

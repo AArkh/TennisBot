@@ -19,3 +19,9 @@ fun FragmentManager.traverseToAnotherFragment(fragment: Fragment) {
 		.addToBackStack(fragment::class.java.name)
 		.commit()
 }
+
+fun FragmentManager.destroyBackstack() {
+	for (i in 0 until backStackEntryCount) {
+		popBackStack()
+	}
+}

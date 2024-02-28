@@ -39,7 +39,9 @@ class MainActivity : AppCompatActivity() {
         if (supportFragmentManager.fragments.isEmpty()) {
             if (authTokenRepository.getRefreshToken() != null) { // blows up if there's no internet + when refresh has problems. todo think on how to act when there's no internet
                 supportFragmentManager.beginTransaction()
-                    .add(binding.fragmentContainerView.id, FeedBottomNavigationFragment())
+                    .add(binding.fragmentContainerView.id, LoginProposalFragment())
+                    .replace(R.id.fragment_container_view, FeedBottomNavigationFragment())
+                    .addToBackStack(FeedBottomNavigationFragment::class.java.name)
                     .commit()
             } else {
                 supportFragmentManager.beginTransaction()
