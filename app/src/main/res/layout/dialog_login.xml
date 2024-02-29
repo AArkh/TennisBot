@@ -3,6 +3,7 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
+	android:paddingBottom="16dp"
 	android:background="@drawable/survey_dialog_rounded">
 
 	<com.airbnb.lottie.LottieAnimationView
@@ -45,7 +46,7 @@
 		app:layout_constraintEnd_toEndOf="parent"/>
 
 	<Button
-		android:id="@+id/buttonBot"
+		android:id="@+id/buttonGreen"
 		style="@style/Widget.TennisBot.Button.Active"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
@@ -57,18 +58,17 @@
 		app:layout_constraintTop_toBottomOf="@+id/dialog_text" />
 
 	<Button
-		android:id="@+id/buttonChat"
+		android:id="@+id/buttonGrey"
 		style="@style/Widget.TennisBot.Button.Secondary"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:layout_marginHorizontal="16dp"
 		android:layout_marginTop="10dp"
-		android:layout_marginBottom="16dp"
 		android:text="@string/login_dialog_go_chat"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/buttonBot" />
+		app:layout_constraintTop_toBottomOf="@+id/buttonGreen" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

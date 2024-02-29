@@ -104,9 +104,8 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 									.commit()
 							}
 							GO_TO_TOURNAMENTS -> {
-								val dialog = LoginDialogFragment()
+								val dialog = InDevelopmentDialog()
 								dialog.show(childFragmentManager, dialog.tag)
-								dialog.changeTitle("") // ask about the proper title
 							}
 						}
 					}

@@ -126,7 +126,7 @@
 	<string name="enter_password">Введи пароль</string>
 	<string name="forgot_password">Забыл пароль</string>
 	<string name="wrong_pass_or_login">Неправильный логин или пароль</string>
-	<string name="login_dialog_text">Приложение в разработке. Всеми функциями можно воспользоваться в телеграмм боте:</string>
+	<string name="login_dialog_text">Сейчас вы можете воспользоваться всеми функциями Теннис Бота в телеграм</string>
 	<string name="login_dialog_title">Ваша заявка создана</string>
 	<string name="login_dialog_go_chat">Перейти в чат</string>
 	<string name="login_dialog_go_bot">Перейти в бот</string>
@@ -210,6 +210,10 @@
 	<string name="button_send">Отправить</string>
 	<string name="insert_score_media_title">Медиа матча</string>
 	<string name="default_time">00:00</string>
+	<string name="insert_score_dialog_text">Вы внесли счет, перейдите в ленту, чтобы\n его увидеть</string>
+	<string name="insert_score_dialog_title">Счет внесен!</string>
+	<string name="go_to_feed">Перейти в ленту</string>
+	<string name="in_development_title">Раздел в разработке</string>
 
 
 </resources>

@@ -21,10 +21,16 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentInsertScoreBinding
+import tennis.bot.mobile.feed.FeedBottomNavigationFragment
+import tennis.bot.mobile.feed.addscore.AddScoreFragment
+import tennis.bot.mobile.feed.searchopponent.SearchOpponentsFragment
 import tennis.bot.mobile.feed.searchopponent.SearchOpponentsViewModel
+import tennis.bot.mobile.onboarding.login.LoginDialogFragment
 import tennis.bot.mobile.profile.account.AccountPageAdapter
+import tennis.bot.mobile.profile.account.AccountPageFragment
 import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
 import tennis.bot.mobile.utils.dpToPx
+import tennis.bot.mobile.utils.traverseToAnotherFragment
 import javax.inject.Inject
 import kotlin.math.abs
 
@@ -62,6 +68,8 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 		const val ADD_VIDEO = "ADD_VIDEO"
 		const val DELETE_PHOTO = "DELETE_PHOTO"
 		const val DELETE_VIDEO = "DELETE_VIDEO"
+		const val RESULT_DIALOG_REQUEST_KEY = "RESULT_DIALOG_REQUEST_KEY"
+		const val RESULT_DIALOG_SELECTED_OPTION_KEY = "RESULT_DIALOG_SELECTED_OPTION_KEY"
 
 	}
 
@@ -120,7 +128,8 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 
 		binding.buttonSend.setOnClickListener {
 			viewModel.onSendButtonClicked(requireContext()) {
-				//go to a usual dialog
+				val dialog = InsertScoreResultDialog()
+				dialog.show(childFragmentManager, dialog.tag)
 			}
 		}
 
@@ -137,6 +146,13 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 			val setNumber = result.getInt(InsertScoreDialogViewModel.SELECTED_SET_KEY)
 			Log.d("123456", "received result $score and $setNumber")
 			viewModel.onScoreReceived(setNumber, score ?: "")
+		}
+
+		setFragmentResultListener(AccountPageFragment.OPTIONS_DIALOG_REQUEST_KEY) { _, result ->
+			parentFragmentManager.popBackStack()
+			parentFragmentManager.popBackStack()
+			parentFragmentManager.popBackStack()
+//			parentFragmentManager.traverseToAnotherFragment(FeedBottomNavigationFragment())
 		}
 
 		subscribeToFlowOn(viewModel.uiStateFlow){uiState: InsertScoreUiState ->

@@ -15,7 +15,7 @@ import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.DialogLoginBinding
 
 @AndroidEntryPoint
-class LoginDialogFragment: CoreDialogFragment<DialogLoginBinding>() {
+open class LoginDialogFragment: CoreDialogFragment<DialogLoginBinding>() {
 
 	override val bindingInflation: Inflation<DialogLoginBinding> = DialogLoginBinding::inflate
 
@@ -30,17 +30,13 @@ class LoginDialogFragment: CoreDialogFragment<DialogLoginBinding>() {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 
-		binding.buttonBot.setOnClickListener {
+		binding.buttonGreen.setOnClickListener {
 			openLink(BOT_URL)
 		}
 
-		binding.buttonChat.setOnClickListener {
+		binding.buttonGrey.setOnClickListener {
 			openLink(CHAT_URL)
 		}
-	}
-
-	fun changeTitle(newTitle: String) {
-		binding.dialogTitle.text = newTitle
 	}
 
 	private fun openLink(url: String) {

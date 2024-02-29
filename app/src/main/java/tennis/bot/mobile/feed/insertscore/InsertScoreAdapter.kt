@@ -31,7 +31,7 @@ class InsertScoreAdapter @Inject constructor(): CoreAdapter<InsertSetItemViewHol
 			holder.binding.setScore.setPaddingRelative(
 				holder.binding.setScore.context.dpToPx(14),
 				holder.binding.setScore.context.dpToPx(6),
-				holder.binding.setScore.context.dpToPx(14),
+				holder.binding.setScore.context.dpToPx(9),
 				holder.binding.setScore.context.dpToPx(6)
 			)
 
@@ -45,7 +45,7 @@ class InsertScoreAdapter @Inject constructor(): CoreAdapter<InsertSetItemViewHol
 			holder.binding.setScore.setPaddingRelative(
 				holder.binding.setScore.context.dpToPx(14),
 				holder.binding.setScore.context.dpToPx(6),
-				holder.binding.setScore.context.dpToPx(9),
+				holder.binding.setScore.context.dpToPx(14),
 				holder.binding.setScore.context.dpToPx(6)
 			)
 			holder.binding.setScore.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
