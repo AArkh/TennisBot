@@ -30,7 +30,6 @@ class InsertScoreResultDialog: LoginDialogFragment() {
 				RESULT_DIALOG_REQUEST_KEY,
 				bundleOf(RESULT_DIALOG_SELECTED_OPTION_KEY to GO_TO_FEED)
 			)
-			dialog?.dismiss()
 		}
 		binding.buttonGrey.visibility = View.GONE
 

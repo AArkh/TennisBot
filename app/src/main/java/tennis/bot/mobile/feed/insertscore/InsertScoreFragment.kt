@@ -148,11 +148,11 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 			viewModel.onScoreReceived(setNumber, score ?: "")
 		}
 
-		setFragmentResultListener(AccountPageFragment.OPTIONS_DIALOG_REQUEST_KEY) { _, result ->
-			parentFragmentManager.popBackStack()
-			parentFragmentManager.popBackStack()
-			parentFragmentManager.popBackStack()
-//			parentFragmentManager.traverseToAnotherFragment(FeedBottomNavigationFragment())
+		setFragmentResultListener(RESULT_DIALOG_REQUEST_KEY) { _, result ->
+			parentFragmentManager.clearBackStack(InsertScoreFragment::class.java.name)
+			parentFragmentManager.clearBackStack(SearchOpponentsFragment::class.java.name)
+			parentFragmentManager.clearBackStack(AddScoreFragment::class.java.name)
+			parentFragmentManager.traverseToAnotherFragment(FeedBottomNavigationFragment())
 		}
 
 		subscribeToFlowOn(viewModel.uiStateFlow){uiState: InsertScoreUiState ->

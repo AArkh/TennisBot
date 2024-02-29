@@ -64,6 +64,7 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 					OptionsDialogFragment.LOGOUT -> { // for some reason remains a white screen + i do nothing about refresh token
 						parentFragmentManager.destroyBackstack()
 						parentFragmentManager.goToAnotherSectionFragment(LoginProposalFragment())
+						parentFragmentManager.destroyBackstack()
 					}
 				}
 			}
