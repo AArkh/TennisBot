@@ -9,7 +9,7 @@ import tennis.bot.mobile.core.CoreUtilsItem
 import tennis.bot.mobile.databinding.RecyclerSurveyResultsItemBinding
 import javax.inject.Inject
 
-class SurveyResultsAdapter @Inject constructor(): CoreAdapter<SurveyResultItemViewHolder>() {
+open class SurveyResultsAdapter @Inject constructor(): CoreAdapter<SurveyResultItemViewHolder>() {
 
 	override fun onBindViewHolder(holder: SurveyResultItemViewHolder, item: Any) {
 		val surveyResultItem = item as? SurveyResultItem ?: throw IllegalArgumentException("Item must be SurveyResultItem")

@@ -16,7 +16,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class SurveyResultsFragment : CoreFragment<FragmentSurveyResultsBinding>() {
 	override val bindingInflation: Inflation<FragmentSurveyResultsBinding> = FragmentSurveyResultsBinding::inflate
-
 	@Inject
 	lateinit var surveyResultsAdapter: SurveyResultsAdapter
 	private val viewModel: SurveyResultsViewModel by viewModels()

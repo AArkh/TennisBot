@@ -214,6 +214,21 @@
 	<string name="insert_score_dialog_title">Счет внесен!</string>
 	<string name="go_to_feed">Перейти в ленту</string>
 	<string name="in_development_title">Раздел в разработке</string>
-
+	<string name="add_score_side_note_title">Баллы за ваши игры</string>
+	<string name="add_score_side_note_text">Накапливайте баллы, участвуйте в ежемесячной «Гонке за ракеткой» или другими ценными призами. Баллы не сгорают и начисляются по следующему принципу:</string>
+	<string name="add_score_single_side_note_title">Копите баллы</string>
+	<string name="add_score_double_side_note_title">Подсказка</string>
+	<string name="add_score_friendly_side_note_title">Игра без счета</string>
+	<string name="add_score_single_side_note_text">Играйте и получайте баллы, которые можно обменять на ценны призы. Розыгрыш проходит раз в месяц. У кого больше баллов, тот и забирает главный приз. Баллы не сгорают. Pro- версия умножаются ваши баллы х3.</string>
+	<string name="add_score_double_side_note_text">Добавьте сначала вашего партнера, а затем двух соперников. Достаточно ввести фамилию и выбрать из списка игрков.</string>
+	<string name="add_score_friendly_side_note_text">Приятно провести время, играя без счета с вашими друзьями и поделиться этим событием в теннис боте всегда праздник. Прикрепите фотографии или видео, чтобы собрать как можно больше реакции.</string>
+	<string name="side_note_item_title_1">Обычный счет</string>
+	<string name="side_note_item_title_2">При счете 7:5</string>
+	<string name="side_note_item_title_3">Тай-брейк</string>
+	<string name="side_note_item_title_4">Фото/Видео</string>
+	<string name="side_note_item_value_1">10 баллов</string>
+	<string name="side_note_item_value_2">15 баллов</string>
+	<string name="side_note_item_value_3">20 баллов</string>
+	<string name="side_note_item_value_4">x2/x3</string>
 
 </resources>

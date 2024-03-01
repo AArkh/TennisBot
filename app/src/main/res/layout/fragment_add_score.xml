@@ -147,7 +147,7 @@
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/option3"
-		app:layout_constraintBottom_toBottomOf="@id/side_note_text"/>
+		app:layout_constraintBottom_toBottomOf="@id/side_note_container"/>
 
 	<TextView
 		android:id="@+id/side_note_title"
@@ -155,7 +155,7 @@
 		android:layout_height="wrap_content"
 		android:layout_marginTop="16dp"
 		android:layout_marginHorizontal="16dp"
-		android:text="@string/side_note_title_0"
+		android:text="@string/add_score_side_note_title"
 		android:textColor="@color/tb_primary_green"
 		android:textSize="16sp"
 		app:layout_constraintStart_toStartOf="@id/side_note_background"
@@ -166,11 +166,22 @@
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:layout_marginHorizontal="16dp"
-		android:text="@string/survey_side_note_text_9"
+		android:text="@string/add_score_side_note_text"
 		android:textSize="12sp"
 		app:layout_constraintStart_toStartOf="@id/side_note_background"
 		app:layout_constraintEnd_toEndOf="@id/side_note_background"
 		app:layout_constraintTop_toBottomOf="@id/side_note_title" />
+
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/side_note_container"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="10dp"
+		tools:listitem="@layout/recycler_survey_results_item"
+		app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+		app:layout_constraintTop_toBottomOf="@id/side_note_text"
+		app:layout_constraintStart_toStartOf="@id/side_note_background"
+		app:layout_constraintEnd_toEndOf="@id/side_note_background"/>
 
 	<Button
 		android:id="@+id/buttonNext"
