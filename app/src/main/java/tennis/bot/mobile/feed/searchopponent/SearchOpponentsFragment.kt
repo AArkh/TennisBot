@@ -32,6 +32,8 @@ class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>() {
 	@Inject
 	lateinit var adapter: SearchOpponentsAdapter
 
+	override var adjustToKeyboard: Boolean = true
+
 	companion object {
 		const val SCORE_TYPE_REQUEST_KEY = "SCORE_TYPE_REQUEST_KEY"
 		const val SELECTED_SCORE_TYPE_OPTION = "SELECTED_SCORE_TYPE_OPTION"
@@ -86,14 +88,13 @@ class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>() {
 		}
 
 		lifecycleScope.launch(Dispatchers.IO) {
-			viewModel.userInput.collectLatest {
-				viewModel.opponentsPager.collectLatest {
-					adapter.submitData(it)
-				}
-			}
+            viewModel.opponentsPager.collectLatest {
+                adapter.submitData(it)
+            }
 		}
 
 		adapter.addLoadStateListener { loadState ->
+            Log.d("1234567", "state changed $loadState")
 			binding.errorLayout.isVisible = loadState.source.refresh is LoadState.Error
 			binding.loadingBar.isVisible = loadState.source.refresh is LoadState.Loading
 		}
@@ -122,5 +123,4 @@ class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>() {
 			}
 		}
 	}
-
 }

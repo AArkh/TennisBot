@@ -4,6 +4,8 @@ import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
@@ -100,6 +102,7 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 		}
 
 		binding.mediaContainer.adapter = mediaAdapter
+		binding.mediaContainer.itemAnimator = null
 		binding.mediaContainer.layoutManager = LinearLayoutManager(requireContext())
 		mediaAdapter.clickListener = { command ->
 			when(command) {
