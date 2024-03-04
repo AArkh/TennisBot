@@ -1,5 +1,6 @@
 package tennis.bot.mobile.feed.searchopponent
 
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import kotlinx.parcelize.Parcelize
 import tennis.bot.mobile.R
 import tennis.bot.mobile.databinding.RecyclerOpponentItemBinding
 import tennis.bot.mobile.profile.account.AccountPageAdapter
@@ -81,10 +83,11 @@ class OpponentItemViewHolder (
 	val binding: RecyclerOpponentItemBinding
 ) : RecyclerView.ViewHolder(binding.root)
 
+@Parcelize
 data class OpponentItem(
 	val id: Long,
 	val profilePicture: String?,
 	val nameSurname: String,
 	val infoPanel: String, // rating/doublesRating experience | games + string
 	val isPicked: Boolean = false
-)
+): Parcelable

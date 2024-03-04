@@ -1,5 +1,6 @@
 package tennis.bot.mobile.feed.searchopponent
 
+import android.content.Context
 import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentActivity
@@ -10,29 +11,35 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import tennis.bot.mobile.feed.addscore.AddScoreFragment
 import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchOpponentsViewModel @Inject constructor(
-	private val repository: SearchOpponentsRepository
+open class SearchOpponentsViewModel @Inject constructor(
+	private val repository: SearchOpponentsRepository,
+	@ApplicationContext private val context: Context
 ): ViewModel() {
 
 	companion object {
 		const val OPPONENT_PICKED_REQUEST_KEY = "OPPONENT_PICKED_REQUEST_KEY"
-		const val SELECTED_OPPONENT_NAME_KEY = "SELECTED_OPPONENT_NAME_KEY"
-		const val SELECTED_OPPONENT_PHOTO_KEY = "SELECTED_OPPONENT_PHOTO_KEY"
-		const val SELECTED_OPPONENT_ID_KEY = "SELECTED_OPPONENT_ID_KEY"
+		const val SELECTED_OPPONENT_KEY = "SELECTED_OPPONENT_KEY"
 		const val PAGE_SIZE = 20
 	}
 
-	private val _uiStateFlow = MutableStateFlow<SearchOpponentsUiState>(SearchOpponentsUiState.Initial)
+	private val _uiStateFlow = MutableStateFlow(
+		SearchOpponentsUiState(
+			hintTitle = null,
+			opponentsList = null,
+		)
+	)
 	val uiStateFlow = _uiStateFlow.asStateFlow()
 
 	private val _userInput = MutableStateFlow<String?>(null)
@@ -47,6 +54,16 @@ class SearchOpponentsViewModel @Inject constructor(
 			pagingSourceFactory = { OpponentsDataSource() }
 		).flow
 
+	fun onReceivingScoreType(scoreType: Int) {
+		when(scoreType) {
+			AddScoreFragment.SCORE_SINGLE -> {}
+			AddScoreFragment.SCORE_DOUBLE -> {}
+			AddScoreFragment.SCORE_TOURNAMENT -> {}
+			AddScoreFragment.SCORE_FRIENDLY -> {}
+		}
+
+	}
+
 	fun onSearchOpponentsInput(text: CharSequence) {
 		viewModelScope.launch(Dispatchers.IO) {
 			_userInput.emit(text.toString())
@@ -57,9 +74,7 @@ class SearchOpponentsViewModel @Inject constructor(
 		activity.supportFragmentManager.setFragmentResult(
 			OPPONENT_PICKED_REQUEST_KEY,
 			bundleOf(
-				SELECTED_OPPONENT_ID_KEY to opponent.id,
-				SELECTED_OPPONENT_NAME_KEY to opponent.nameSurname,
-				SELECTED_OPPONENT_PHOTO_KEY to opponent.profilePicture)
+				SELECTED_OPPONENT_KEY to opponent)
 		)
 	}
 

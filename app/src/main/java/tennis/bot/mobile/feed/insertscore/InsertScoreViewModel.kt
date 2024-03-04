@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
+import tennis.bot.mobile.feed.searchopponent.OpponentItem
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.profile.matches.TennisSetNetwork
 import tennis.bot.mobile.utils.showToast
@@ -40,14 +41,17 @@ class InsertScoreViewModel @Inject constructor(
 	)
 	val uiStateFlow = _uiStateFlow.asStateFlow()
 
-	fun onInitial(opponentId: Long, opponentPhoto: String?, opponentName: String) {
+	fun onInitial(opponents: Array<*>) {
+		if (opponents[0] !is OpponentItem) return
+
 		val player1 = userProfileRepository.getProfile()
+		val player2 = opponents[0]
 		_uiStateFlow.value = _uiStateFlow.value.copy(
 			player1Image = player1.photo,
 			player1Name = player1.name.substringBefore(" "),
-			player2Id = opponentId,
-			player2Image = opponentPhoto,
-			player2Name = opponentName.substringBefore(" "),
+			player2Id = player2.id,
+			player2Image = player2.profilePicture,
+			player2Name = player2.nameSurname.substringBefore(" "),
 		)
 	}
 

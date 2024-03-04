@@ -26,7 +26,7 @@ import tennis.bot.mobile.utils.traverseToAnotherFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>() {
+open class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>() {
 	override val bindingInflation: Inflation<FragmentSearchOpponentBinding> = FragmentSearchOpponentBinding::inflate
 	private val viewModel: SearchOpponentsViewModel by viewModels()
 	@Inject
@@ -46,10 +46,7 @@ class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>() {
 
 		binding.searchBarEt.filters = arrayOf(LetterInputFilter())
 		binding.searchBarEt.doAfterTextChanged { text ->
-			binding.opponentsContainer.visibility = View.VISIBLE
-			binding.cardsAnimation.visibility = View.GONE
-			binding.hintTitle.visibility = View.GONE
-			binding.hintText.visibility = View.GONE
+			onContainerVisibility(isVisible = true)
 
 			viewModel.onSearchOpponentsInput(text ?: "")
 		}
@@ -70,6 +67,7 @@ class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>() {
 			}
 			binding.buttonNext.setBackgroundResource(buttonBackground)
 			viewModel.onOpponentPicked(opponent, requireActivity())
+//			restartFragment()
 		}
 
 		binding.buttonNext.setOnClickListener {
@@ -77,12 +75,7 @@ class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>() {
 		}
 
 		setFragmentResultListener(SCORE_TYPE_REQUEST_KEY) { _, result ->
-			when(result.getInt(SELECTED_SCORE_TYPE_OPTION)) { // there will be different logic and ui changes for each option
-				AddScoreFragment.SCORE_SINGLE -> {}
-				AddScoreFragment.SCORE_DOUBLE -> {}
-				AddScoreFragment.SCORE_TOURNAMENT -> {}
-				AddScoreFragment.SCORE_FRIENDLY -> {}
-			}
+			viewModel.onReceivingScoreType(result.getInt(SELECTED_SCORE_TYPE_OPTION))
 		}
 
 		lifecycleScope.launch(Dispatchers.IO) {
@@ -98,28 +91,31 @@ class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>() {
 			binding.loadingBar.isVisible = loadState.source.refresh is LoadState.Loading
 		}
 
-		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: SearchOpponentsUiState -> // may be useless
-			when(uiState){
-				is SearchOpponentsUiState.Initial -> {
-					binding.loadingBar.visibility = View.GONE
-					binding.errorLayout.visibility = View.GONE
-				}
-				is SearchOpponentsUiState.Loading -> {
-					binding.errorLayout.visibility = View.GONE
-					binding.loadingBar.visibility = View.VISIBLE
-					binding.opponentsContainer.visibility = View.VISIBLE
-				}
-				is SearchOpponentsUiState.OpponentDataReceived -> {
-					binding.loadingBar.visibility = View.GONE
-					binding.errorLayout.visibility = View.GONE
-					binding.opponentsContainer.visibility = View.VISIBLE
-				}
-				is SearchOpponentsUiState.Error -> {
-					binding.loadingBar.visibility = View.GONE
-					binding.errorLayout.visibility = View.VISIBLE
-					binding.opponentsContainer.visibility = View.GONE
-				}
-			}
+//		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: SearchOpponentsUiState -> // may be useless
+//			when(uiState){
+//
+//			}
+//		}
+	}
+
+	private fun restartFragment() {
+		parentFragmentManager.beginTransaction()
+			.replace(R.id.fragment_container_view, SearchOpponentsFragment())
+			.addToBackStack(SearchOpponentsFragment::class.java.name)
+			.commit()
+	}
+
+	private fun onContainerVisibility(isVisible: Boolean) {
+		if(isVisible) {
+			binding.opponentsContainer.visibility = View.VISIBLE
+			binding.cardsAnimation.visibility = View.GONE
+			binding.hintTitle.visibility = View.GONE
+			binding.hintText.visibility = View.GONE
+		} else {
+			binding.opponentsContainer.visibility = View.GONE
+			binding.cardsAnimation.visibility = View.VISIBLE
+			binding.hintTitle.visibility = View.VISIBLE
+			binding.hintText.visibility = View.VISIBLE
 		}
 	}
 

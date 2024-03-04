@@ -1,8 +1,5 @@
 package tennis.bot.mobile.feed.insertscore
 
-import android.graphics.Bitmap
-import android.media.MediaMetadataRetriever
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -23,11 +20,10 @@ import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentInsertScoreBinding
 import tennis.bot.mobile.feed.FeedBottomNavigationFragment
 import tennis.bot.mobile.feed.addscore.AddScoreFragment
+import tennis.bot.mobile.feed.searchopponent.OpponentItem
 import tennis.bot.mobile.feed.searchopponent.SearchOpponentsFragment
 import tennis.bot.mobile.feed.searchopponent.SearchOpponentsViewModel
-import tennis.bot.mobile.onboarding.login.LoginDialogFragment
 import tennis.bot.mobile.profile.account.AccountPageAdapter
-import tennis.bot.mobile.profile.account.AccountPageFragment
 import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
 import tennis.bot.mobile.utils.dpToPx
 import tennis.bot.mobile.utils.traverseToAnotherFragment
@@ -134,11 +130,10 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 		}
 
 		setFragmentResultListener(SearchOpponentsViewModel.OPPONENT_PICKED_REQUEST_KEY) { _, result ->
-			viewModel.onInitial(
-				result.getLong(SearchOpponentsViewModel.SELECTED_OPPONENT_ID_KEY),
-				result.getString(SearchOpponentsViewModel.SELECTED_OPPONENT_PHOTO_KEY),
-				result.getString(SearchOpponentsViewModel.SELECTED_OPPONENT_NAME_KEY) ?: ""
-			)
+			(result.getParcelableArray(SearchOpponentsViewModel.SELECTED_OPPONENT_KEY) as Array<OpponentItem>?)?.let { // not deprecated version blows up
+				viewModel.onInitial(it)
+			}
+
 		}
 
 		setFragmentResultListener(InsertScoreDialogViewModel.REQUEST_SCORE_KEY) { _, result ->
@@ -149,7 +144,7 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 		}
 
 		setFragmentResultListener(RESULT_DIALOG_REQUEST_KEY) { _, result ->
-			parentFragmentManager.clearBackStack(InsertScoreFragment::class.java.name)
+			parentFragmentManager.clearBackStack(InsertScoreFragment::class.java.name) // do i need to clear them?
 			parentFragmentManager.clearBackStack(SearchOpponentsFragment::class.java.name)
 			parentFragmentManager.clearBackStack(AddScoreFragment::class.java.name)
 			parentFragmentManager.traverseToAnotherFragment(FeedBottomNavigationFragment())
