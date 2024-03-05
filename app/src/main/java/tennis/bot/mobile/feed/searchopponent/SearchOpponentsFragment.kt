@@ -19,7 +19,6 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.DefaultLoadStateAdapter
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentSearchOpponentBinding
-import tennis.bot.mobile.feed.addscore.AddScoreFragment
 import tennis.bot.mobile.feed.insertscore.InsertScoreFragment
 import tennis.bot.mobile.utils.LetterInputFilter
 import tennis.bot.mobile.utils.traverseToAnotherFragment
@@ -60,17 +59,12 @@ open class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>
 
 		adapter.clickListener = { opponent ->
 			Log.d("123546", "Recieved $opponent")
-			binding.buttonNext.isEnabled = true
-			val buttonBackground = if (binding.buttonNext.isEnabled) {
-				R.drawable.btn_bkg_enabled
-			} else {
-				R.drawable.btn_bkg_disabled
-			}
-			binding.buttonNext.setBackgroundResource(buttonBackground)
-			viewModel.onOpponentPicked(opponent, requireActivity())
+			viewModel.onOpponentPicked(opponent)
+
 		}
 
 		binding.buttonNext.setOnClickListener {
+			viewModel.onOpponentsSent(requireActivity())
 			parentFragmentManager.traverseToAnotherFragment(InsertScoreFragment())
 		}
 
@@ -91,11 +85,15 @@ open class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>
 			binding.loadingBar.isVisible = loadState.source.refresh is LoadState.Loading
 		}
 
-//		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: SearchOpponentsUiState -> // may be useless
-//			when(uiState){
-//
-//			}
-//		}
+		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: SearchOpponentsUiState -> // doesn't collect values properly
+			binding.buttonNext.isEnabled = uiState.isNextButtonEnabled
+			val buttonBackground = if (binding.buttonNext.isEnabled) {
+				R.drawable.btn_bkg_enabled
+			} else {
+				R.drawable.btn_bkg_disabled
+			}
+			binding.buttonNext.setBackgroundResource(buttonBackground)
+		}
 	}
 
 	private fun onContainerVisibility(isVisible: Boolean) {

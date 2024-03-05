@@ -1,6 +1,7 @@
 package tennis.bot.mobile.core
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -66,7 +67,10 @@ abstract class CoreFragment<BINDING : ViewBinding> : Fragment() {
     ) {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(state) {
-                flow.collect { state -> action(state) }
+                flow.collect { state ->
+                    Log.d("FlowSubscription", "Collected state: $state")
+                    action(state)
+                }
             }
         }
     }

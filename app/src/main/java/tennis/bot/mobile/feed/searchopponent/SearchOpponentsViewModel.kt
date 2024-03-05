@@ -1,7 +1,6 @@
 package tennis.bot.mobile.feed.searchopponent
 
 import android.content.Context
-import android.os.Parcelable
 import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentActivity
@@ -17,8 +16,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import tennis.bot.mobile.R
 import tennis.bot.mobile.feed.addscore.AddScoreFragment
 import java.io.IOException
 import javax.inject.Inject
@@ -39,6 +40,7 @@ open class SearchOpponentsViewModel @Inject constructor(
 		SearchOpponentsUiState(
 			hintTitle = null,
 			opponentsList = null,
+			isNextButtonEnabled = false
 		)
 	)
 	val uiStateFlow = _uiStateFlow.asStateFlow()
@@ -57,12 +59,27 @@ open class SearchOpponentsViewModel @Inject constructor(
 
 	fun onReceivingScoreType(scoreType: Int) {
 		when(scoreType) {
-			AddScoreFragment.SCORE_SINGLE -> {}
-			AddScoreFragment.SCORE_DOUBLE -> {}
+			AddScoreFragment.SCORE_SINGLE -> {
+				Log.d("123456", "Before: ${uiStateFlow.value}")
+				_uiStateFlow.value = uiStateFlow.value.copy(
+					scoreType = AddScoreFragment.SCORE_SINGLE,
+					hintTitle = context.getString(R.string.opponents_single_hint_title),
+					opponentsList = arrayOfNulls(1),
+					numberOfOpponents = 1
+				)
+				Log.d("123456", "After: ${uiStateFlow.value}")
+			}
+			AddScoreFragment.SCORE_DOUBLE -> {
+				_uiStateFlow.value = uiStateFlow.value.copy(
+					scoreType = AddScoreFragment.SCORE_DOUBLE,
+					hintTitle = context.getString(R.string.opponents_double_hint_title_1),
+					opponentsList = arrayOfNulls(3),
+					numberOfOpponents = 3
+				)
+			}
 			AddScoreFragment.SCORE_TOURNAMENT -> {}
 			AddScoreFragment.SCORE_FRIENDLY -> {}
 		}
-
 	}
 
 	fun onSearchOpponentsInput(text: CharSequence) {
@@ -71,11 +88,31 @@ open class SearchOpponentsViewModel @Inject constructor(
 		}
 	}
 
-	fun onOpponentPicked(opponent: OpponentItem, activity: FragmentActivity) {
+	fun onOpponentPicked(opponent: OpponentItem) {
+		when(uiStateFlow.value.scoreType) {
+			AddScoreFragment.SCORE_SINGLE -> {
+				Log.d("123456", "Before: ${_uiStateFlow.value}")
+				uiStateFlow.value.opponentsList?.set(0, opponent)
+				Log.d("123456", uiStateFlow.value.opponentsList.toString())
+				_uiStateFlow.value = uiStateFlow.value.copy(
+					isNextButtonEnabled = true
+				)
+				Log.d("123456", "After: ${_uiStateFlow.value}")
+			}
+			AddScoreFragment.SCORE_DOUBLE -> {
+
+			}
+			AddScoreFragment.SCORE_TOURNAMENT -> {}
+			AddScoreFragment.SCORE_FRIENDLY -> {}
+		}
+
+	}
+
+	fun onOpponentsSent(activity: FragmentActivity) {
 		activity.supportFragmentManager.setFragmentResult(
 			OPPONENT_PICKED_REQUEST_KEY,
 			bundleOf(
-				SELECTED_OPPONENT_KEY to arrayOf(opponent)
+				SELECTED_OPPONENT_KEY to uiStateFlow.value.opponentsList
 			)
 		)
 	}
