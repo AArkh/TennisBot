@@ -41,8 +41,7 @@ class InsertScoreViewModel @Inject constructor(
 	)
 	val uiStateFlow = _uiStateFlow.asStateFlow()
 
-	fun onInitial(opponents: Array<*>) {
-		if (opponents[0] !is OpponentItem) return
+	fun onInitial(opponents: Array<OpponentItem>) {
 
 		val player1 = userProfileRepository.getProfile()
 		val player2 = opponents[0]

@@ -96,6 +96,7 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 		}
 
 		binding.mediaContainer.adapter = mediaAdapter
+		binding.mediaContainer.itemAnimator = null
 		binding.mediaContainer.layoutManager = LinearLayoutManager(requireContext())
 		mediaAdapter.clickListener = { command ->
 			when(command) {
@@ -130,7 +131,7 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 		}
 
 		setFragmentResultListener(SearchOpponentsViewModel.OPPONENT_PICKED_REQUEST_KEY) { _, result ->
-			(result.getParcelableArray(SearchOpponentsViewModel.SELECTED_OPPONENT_KEY) as Array<OpponentItem>?)?.let { // not deprecated version blows up
+			(result.getParcelableArray(SearchOpponentsViewModel.SELECTED_OPPONENT_KEY) as? Array<OpponentItem>)?.let { // not deprecated version blows up + i used safe cast
 				viewModel.onInitial(it)
 			}
 

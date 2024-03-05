@@ -1,6 +1,7 @@
 package tennis.bot.mobile.feed.searchopponent
 
 import android.content.Context
+import android.os.Parcelable
 import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentActivity
@@ -48,7 +49,7 @@ open class SearchOpponentsViewModel @Inject constructor(
 	val opponentsPager = Pager(
 			config = PagingConfig(
 				pageSize = PAGE_SIZE,
-				maxSize = PAGE_SIZE + (PAGE_SIZE * 2), // since paging library stores all received pages using memory so we add this thing, to prevent in to store too much. the value is recommended in docs
+				maxSize = PAGE_SIZE + (PAGE_SIZE * 2), // since paging library stores all received pages using memory so we add this thing, to prevent in to store too much. the value is one recommended in docs
 				enablePlaceholders = true
 			),
 			pagingSourceFactory = { OpponentsDataSource() }
@@ -74,7 +75,8 @@ open class SearchOpponentsViewModel @Inject constructor(
 		activity.supportFragmentManager.setFragmentResult(
 			OPPONENT_PICKED_REQUEST_KEY,
 			bundleOf(
-				SELECTED_OPPONENT_KEY to opponent)
+				SELECTED_OPPONENT_KEY to arrayOf(opponent)
+			)
 		)
 	}
 

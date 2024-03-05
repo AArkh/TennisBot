@@ -31,6 +31,7 @@ open class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>
 	private val viewModel: SearchOpponentsViewModel by viewModels()
 	@Inject
 	lateinit var adapter: SearchOpponentsAdapter
+	override var adjustToKeyboard: Boolean = true
 
 	companion object {
 		const val SCORE_TYPE_REQUEST_KEY = "SCORE_TYPE_REQUEST_KEY"
@@ -67,7 +68,6 @@ open class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>
 			}
 			binding.buttonNext.setBackgroundResource(buttonBackground)
 			viewModel.onOpponentPicked(opponent, requireActivity())
-//			restartFragment()
 		}
 
 		binding.buttonNext.setOnClickListener {
@@ -96,13 +96,6 @@ open class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>
 //
 //			}
 //		}
-	}
-
-	private fun restartFragment() {
-		parentFragmentManager.beginTransaction()
-			.replace(R.id.fragment_container_view, SearchOpponentsFragment())
-			.addToBackStack(SearchOpponentsFragment::class.java.name)
-			.commit()
 	}
 
 	private fun onContainerVisibility(isVisible: Boolean) {

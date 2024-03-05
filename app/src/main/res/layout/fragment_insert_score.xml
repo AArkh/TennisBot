@@ -1,181 +1,175 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent">
+	android:layout_height="match_parent"
+	android:background="@color/tb_white"
+	tools:context=".feed.insertscore.InsertScoreFragment">
 
-	<androidx.core.widget.NestedScrollView
-		android:layout_width="match_parent"
-		android:layout_height="match_parent">
+	<ImageView
+		android:id="@+id/back_button"
+		android:layout_width="36dp"
+		android:layout_height="36dp"
+		android:layout_marginStart="20dp"
+		android:layout_marginTop="10dp"
+		android:background="@drawable/search_background"
+		android:backgroundTint="@color/tb_gray_border"
+		android:padding="6dp"
+		android:src="@drawable/chevron_left_wide"
+		android:visibility="visible"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:tint="@color/tb_gray_active" />
 
-		<androidx.constraintlayout.widget.ConstraintLayout
+	<FrameLayout
+		android:id="@+id/player1_photo"
+		android:layout_width="70dp"
+		android:layout_height="70dp"
+		android:layout_marginStart="51dp"
+		android:layout_marginTop="26dp"
+		android:background="@drawable/circle_background"
+		android:backgroundTint="@color/tb_gray_border"
+		android:padding="20dp"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/back_button">
+
+		<com.google.android.material.imageview.ShapeableImageView
+			android:id="@+id/player1_image"
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:background="@color/tb_white"
-			tools:context=".feed.insertscore.InsertScoreFragment">
+			android:layout_height="match_parent"
+			android:scaleType="centerCrop"
+			android:src="@drawable/user"
+			android:visibility="visible"
+			app:shapeAppearanceOverlay="@style/roundedImageViewRounded" />
 
-			<ImageView
-				android:id="@+id/back_button"
-				android:layout_width="36dp"
-				android:layout_height="36dp"
-				android:layout_marginStart="20dp"
-				android:layout_marginTop="10dp"
-				android:background="@drawable/search_background"
-				android:backgroundTint="@color/tb_gray_border"
-				android:padding="6dp"
-				android:src="@drawable/chevron_left_wide"
-				android:visibility="visible"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toTopOf="parent"
-				app:tint="@color/tb_gray_active" />
+	</FrameLayout>
 
-			<FrameLayout
-				android:id="@+id/player1_photo"
-				android:layout_width="70dp"
-				android:layout_height="70dp"
-				android:layout_marginStart="51dp"
-				android:layout_marginTop="26dp"
-				android:background="@drawable/circle_background"
-				android:backgroundTint="@color/tb_gray_border"
-				android:padding="20dp"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toBottomOf="@id/back_button">
+	<TextView
+		android:id="@+id/player1_name"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:text="@string/namesurname_name"
+		android:textColor="@color/tb_black"
+		android:textSize="14sp"
+		app:layout_constraintEnd_toEndOf="@id/player1_photo"
+		app:layout_constraintStart_toStartOf="@id/player1_photo"
+		app:layout_constraintTop_toBottomOf="@id/player1_photo" />
 
-				<com.google.android.material.imageview.ShapeableImageView
-					android:id="@+id/player1_image"
-					android:layout_width="match_parent"
-					android:layout_height="match_parent"
-					android:scaleType="centerCrop"
-					android:src="@drawable/user"
-					android:visibility="visible"
-					app:shapeAppearanceOverlay="@style/roundedImageViewRounded" />
+	<com.airbnb.lottie.LottieAnimationView
+		android:id="@+id/game_animation"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:layout_marginBottom="-15dp"
+		android:padding="5dp"
+		android:visibility="visible"
+		app:layout_constraintBottom_toBottomOf="@id/player1_name"
+		app:layout_constraintEnd_toStartOf="@id/player2_photo"
+		app:layout_constraintStart_toEndOf="@id/player1_photo"
+		app:layout_constraintTop_toBottomOf="@id/back_button"
+		app:lottie_autoPlay="true"
+		app:lottie_loop="false"
+		app:lottie_rawRes="@raw/game" />
 
-			</FrameLayout>
+	<FrameLayout
+		android:id="@+id/player2_photo"
+		android:layout_width="70dp"
+		android:layout_height="70dp"
+		android:layout_marginTop="26dp"
+		android:layout_marginEnd="51dp"
+		android:background="@drawable/circle_background"
+		android:backgroundTint="@color/tb_gray_border"
+		android:padding="20dp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/back_button">
 
-			<TextView
-				android:id="@+id/player1_name"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:gravity="center"
-				android:text="@string/namesurname_name"
-				android:textColor="@color/tb_black"
-				android:textSize="14sp"
-				app:layout_constraintEnd_toEndOf="@id/player1_photo"
-				app:layout_constraintStart_toStartOf="@id/player1_photo"
-				app:layout_constraintTop_toBottomOf="@id/player1_photo" />
+		<com.google.android.material.imageview.ShapeableImageView
+			android:id="@+id/player2_image"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:scaleType="centerCrop"
+			android:src="@drawable/user"
+			android:visibility="visible"
+			app:shapeAppearanceOverlay="@style/roundedImageViewRounded" />
 
-			<com.airbnb.lottie.LottieAnimationView
-				android:id="@+id/game_animation"
-				android:layout_width="0dp"
-				android:layout_height="0dp"
-				android:layout_marginBottom="-15dp"
-				android:padding="5dp"
-				android:visibility="visible"
-				app:layout_constraintBottom_toBottomOf="@id/player1_name"
-				app:layout_constraintEnd_toStartOf="@id/player2_photo"
-				app:layout_constraintStart_toEndOf="@id/player1_photo"
-				app:layout_constraintTop_toBottomOf="@id/back_button"
-				app:lottie_autoPlay="true"
-				app:lottie_loop="false"
-				app:lottie_rawRes="@raw/game" />
+	</FrameLayout>
 
-			<FrameLayout
-				android:id="@+id/player2_photo"
-				android:layout_width="70dp"
-				android:layout_height="70dp"
-				android:layout_marginTop="26dp"
-				android:layout_marginEnd="51dp"
-				android:background="@drawable/circle_background"
-				android:backgroundTint="@color/tb_gray_border"
-				android:padding="20dp"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintTop_toBottomOf="@id/back_button">
+	<TextView
+		android:id="@+id/player2_name"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:text="@string/namesurname_name"
+		android:textColor="@color/tb_black"
+		android:textSize="14sp"
+		app:layout_constraintEnd_toEndOf="@id/player2_photo"
+		app:layout_constraintStart_toStartOf="@id/player2_photo"
+		app:layout_constraintTop_toBottomOf="@id/player2_photo" />
 
-				<com.google.android.material.imageview.ShapeableImageView
-					android:id="@+id/player2_image"
-					android:layout_width="match_parent"
-					android:layout_height="match_parent"
-					android:scaleType="centerCrop"
-					android:src="@drawable/user"
-					android:visibility="visible"
-					app:shapeAppearanceOverlay="@style/roundedImageViewRounded" />
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/sets_container"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="32dp"
+		app:layout_constraintBottom_toTopOf="@id/add_super_tie_break_button"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/player1_name"
+		tools:itemCount="5"
+		tools:listitem="@layout/recycler_insert_set_item" />
 
-			</FrameLayout>
+	<TextView
+		android:id="@+id/add_super_tie_break_button"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="20dp"
+		android:layout_marginEnd="8dp"
+		android:background="@drawable/outline_100x2"
+		android:clickable="true"
+		android:focusable="true"
+		android:foreground="@drawable/ripple_green_corners_100dp"
+		android:gravity="center"
+		android:paddingVertical="10dp"
+		android:text="@string/super_tie_break"
+		android:textColor="@color/tb_primary_green"
+		android:textSize="14sp"
+		app:layout_constraintEnd_toStartOf="@id/add_set_button"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/sets_container" />
 
-			<TextView
-				android:id="@+id/player2_name"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:gravity="center"
-				android:text="@string/namesurname_name"
-				android:textColor="@color/tb_black"
-				android:textSize="14sp"
-				app:layout_constraintEnd_toEndOf="@id/player2_photo"
-				app:layout_constraintStart_toStartOf="@id/player2_photo"
-				app:layout_constraintTop_toBottomOf="@id/player2_photo" />
+	<TextView
+		android:id="@+id/add_set_button"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="20dp"
+		android:background="@drawable/background_corners_100dp"
+		android:backgroundTint="@color/tb_bland_green"
+		android:clickable="true"
+		android:focusable="true"
+		android:foreground="@drawable/ripple_green_corners_100dp"
+		android:gravity="center"
+		android:paddingVertical="10dp"
+		android:text="@string/add_set"
+		android:textColor="@color/tb_primary_green"
+		android:textSize="14sp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toEndOf="@id/add_super_tie_break_button"
+		app:layout_constraintTop_toBottomOf="@id/sets_container" />
 
-			<androidx.recyclerview.widget.RecyclerView
-				android:id="@+id/sets_container"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="32dp"
-				app:layout_constraintBottom_toTopOf="@id/add_super_tie_break_button"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toBottomOf="@id/player1_name" />
-
-			<TextView
-				android:id="@+id/add_super_tie_break_button"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:layout_marginStart="20dp"
-				android:layout_marginEnd="8dp"
-				android:background="@drawable/outline_100x2"
-				android:clickable="true"
-				android:focusable="true"
-				android:foreground="@drawable/ripple_green_corners_100dp"
-				android:gravity="center"
-				android:paddingVertical="10dp"
-				android:text="@string/super_tie_break"
-				android:textColor="@color/tb_primary_green"
-				android:textSize="14sp"
-				app:layout_constraintEnd_toStartOf="@id/add_set_button"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toBottomOf="@id/sets_container" />
-
-			<TextView
-				android:id="@+id/add_set_button"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:layout_marginEnd="20dp"
-				android:background="@drawable/background_corners_100dp"
-				android:backgroundTint="@color/tb_bland_green"
-				android:clickable="true"
-				android:focusable="true"
-				android:foreground="@drawable/ripple_green_corners_100dp"
-				android:gravity="center"
-				android:paddingVertical="10dp"
-				android:text="@string/add_set"
-				android:textColor="@color/tb_primary_green"
-				android:textSize="14sp"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toEndOf="@id/add_super_tie_break_button"
-				app:layout_constraintTop_toBottomOf="@id/sets_container" />
-
-			<androidx.recyclerview.widget.RecyclerView
-				android:id="@+id/media_container"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="20dp"
-				android:background="@color/tb_bg"
-				app:layout_behavior="@string/appbar_scrolling_view_behavior"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toBottomOf="@id/add_set_button" />
-
-		</androidx.constraintlayout.widget.ConstraintLayout>
-	</androidx.core.widget.NestedScrollView>
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/media_container"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_marginTop="20dp"
+		android:background="@color/tb_bg"
+		app:layout_behavior="@string/appbar_scrolling_view_behavior"
+		app:layout_constraintBottom_toTopOf="@+id/buttonSend"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/add_set_button"
+		tools:itemCount="1"
+		tools:listitem="@layout/recycler_media_item" />
 
 	<Button
 		android:id="@+id/buttonSend"
@@ -186,15 +180,23 @@
 		android:layout_marginHorizontal="20dp"
 		android:layout_marginBottom="8dp"
 		android:enabled="false"
-		android:text="@string/button_send" />
+		android:text="@string/button_send"
+		app:layout_constraintBottom_toBottomOf="parent" />
 
 	<ProgressBar
 		android:id="@+id/button_loading_anim"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_gravity="bottom|center_horizontal"
-		android:paddingBottom="10dp"
 		android:indeterminate="true"
 		android:indeterminateTint="@color/tb_white"
-		android:visibility="gone" />
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+		android:visibility="gone"
+		app:layout_constraintBottom_toBottomOf="@id/buttonSend"
+		app:layout_constraintLeft_toLeftOf="@id/buttonSend"
+		app:layout_constraintRight_toRightOf="@id/buttonSend"
+		app:layout_constraintTop_toTopOf="@id/buttonSend"
+		tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
