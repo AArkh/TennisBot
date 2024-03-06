@@ -160,9 +160,9 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 			viewModel.appointActiveSetItem()
 
 			binding.player1Image.loadPlayerImage(uiState.player1Image, binding.player1Photo)
-			binding.player2Image.loadPlayerImage(uiState.player2Image, binding.player2Photo)
+			binding.player2Image.loadPlayerImage(uiState.player2?.profilePicture, binding.player2Photo)
 			binding.player1Name.text = uiState.player1Name
-			binding.player2Name.text = uiState.player2Name
+			binding.player2Name.text = uiState.player2?.nameSurname?.substringBefore(" ")
 
 			binding.buttonSend.isEnabled = uiState.isSendButtonActive
 			binding.addSetButton.isEnabled = uiState.isAddSetButtonActive

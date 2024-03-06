@@ -68,7 +68,6 @@ abstract class CoreFragment<BINDING : ViewBinding> : Fragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(state) {
                 flow.collect { state ->
-                    Log.d("FlowSubscription", "Collected state: $state")
                     action(state)
                 }
             }

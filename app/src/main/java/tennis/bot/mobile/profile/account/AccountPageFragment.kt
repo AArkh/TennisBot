@@ -120,6 +120,12 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 		}
 	}
 
+	override fun onResume() {
+		super.onResume()
+
+		viewModel.onFetchingProfileData()
+	}
+
 	companion object {
 		const val GO_TO_MATCHES = "GO_TO_MATCHES"
 		const val INFLATE_CONTACTS = "INFLATE_CONTACTS"

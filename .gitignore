@@ -9,3 +9,4 @@ local.properties
 /.idea
 /build
 build/
+/hs_err_pid21448.log

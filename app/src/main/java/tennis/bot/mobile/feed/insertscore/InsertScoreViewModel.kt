@@ -34,9 +34,7 @@ class InsertScoreViewModel @Inject constructor(
 		InsertScoreUiState(
 			player1Image = null,
 			player1Name = "",
-			player2Id = 0,
-			player2Image = null,
-			player2Name = ""
+			player2 = null
 		)
 	)
 	val uiStateFlow = _uiStateFlow.asStateFlow()
@@ -44,14 +42,19 @@ class InsertScoreViewModel @Inject constructor(
 	fun onInitial(opponents: Array<OpponentItem>) {
 
 		val player1 = userProfileRepository.getProfile()
-		val player2 = opponents[0]
-		_uiStateFlow.value = _uiStateFlow.value.copy(
-			player1Image = player1.photo,
-			player1Name = player1.name.substringBefore(" "),
-			player2Id = player2.id,
-			player2Image = player2.profilePicture,
-			player2Name = player2.nameSurname.substringBefore(" "),
-		)
+		if (opponents.size == 1) {
+			_uiStateFlow.value = _uiStateFlow.value.copy(
+				player1Image = player1.photo,
+				player1Name = player1.name.substringBefore(" "),
+				player2 = opponents[0]
+			)
+		} else if (opponents.size == 3) {
+			_uiStateFlow.value = _uiStateFlow.value.copy(
+				player1Image = player1.photo,
+				player1Name = player1.name.substringBefore(" "),
+				player2 = opponents[0]
+			)
+		}
 	}
 
 	fun onAddingSetItem() {
@@ -259,7 +262,7 @@ class InsertScoreViewModel @Inject constructor(
 			kotlin.runCatching {
 				showLoading()
 				repository.postAddScore(InsertScoreItem(
-					opponentPlayerId = uiStateFlow.value.player2Id,
+					opponentPlayerId = uiStateFlow.value.player2!!.id, // at this point it should not be null
 					sets = getSetsScore()
 				))
 			}.onFailure {

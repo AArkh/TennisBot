@@ -1,6 +1,7 @@
 package tennis.bot.mobile.feed.addscore
 
 import android.content.Context
+import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel

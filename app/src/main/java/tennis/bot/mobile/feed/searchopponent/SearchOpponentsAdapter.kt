@@ -32,6 +32,10 @@ class SearchOpponentsAdapter @Inject constructor(): PagingDataAdapter<OpponentIt
 		}
 	}
 
+	fun clearOutlinePosition() {
+		selectedItem = -1
+	}
+
 	override fun onBindViewHolder(holder: OpponentItemViewHolder, position: Int) {
 		getItem(position)?.let { player ->
 			holder.showPlayerPhoto(player.profilePicture)

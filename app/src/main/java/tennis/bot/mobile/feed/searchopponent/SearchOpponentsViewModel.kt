@@ -60,14 +60,12 @@ open class SearchOpponentsViewModel @Inject constructor(
 	fun onReceivingScoreType(scoreType: Int) {
 		when(scoreType) {
 			AddScoreFragment.SCORE_SINGLE -> {
-				Log.d("123456", "Before: ${uiStateFlow.value}")
 				_uiStateFlow.value = uiStateFlow.value.copy(
 					scoreType = AddScoreFragment.SCORE_SINGLE,
 					hintTitle = context.getString(R.string.opponents_single_hint_title),
 					opponentsList = arrayOfNulls(1),
 					numberOfOpponents = 1
 				)
-				Log.d("123456", "After: ${uiStateFlow.value}")
 			}
 			AddScoreFragment.SCORE_DOUBLE -> {
 				_uiStateFlow.value = uiStateFlow.value.copy(
@@ -89,10 +87,10 @@ open class SearchOpponentsViewModel @Inject constructor(
 	}
 
 	fun onOpponentPicked(opponent: OpponentItem) {
+		val currentState = uiStateFlow.value
 		when(uiStateFlow.value.scoreType) {
 			AddScoreFragment.SCORE_SINGLE -> {
-				Log.d("123456", "Before: ${_uiStateFlow.value}")
-				uiStateFlow.value.opponentsList?.set(0, opponent)
+				currentState.opponentsList?.set(0, opponent)
 				Log.d("123456", uiStateFlow.value.opponentsList.toString())
 				_uiStateFlow.value = uiStateFlow.value.copy(
 					isNextButtonEnabled = true
@@ -100,12 +98,22 @@ open class SearchOpponentsViewModel @Inject constructor(
 				Log.d("123456", "After: ${_uiStateFlow.value}")
 			}
 			AddScoreFragment.SCORE_DOUBLE -> {
-
+				Log.d("123456", "Before: ${_uiStateFlow.value}")
+				if (currentState.opponentsList?.get(0) == null) {
+					currentState.opponentsList?.set(0, opponent)
+					_uiStateFlow.value = currentState.copy(hintTitle = context.getString(R.string.opponents_double_hint_title_2, 1))
+				} else if(uiStateFlow.value.opponentsList?.get(1) == null) {
+					_uiStateFlow.value = currentState.copy(hintTitle = context.getString(R.string.opponents_double_hint_title_2, 2))
+					currentState.opponentsList[1] = opponent
+				} else {
+					currentState.opponentsList[2] = opponent
+					_uiStateFlow.value = currentState.copy(isNextButtonEnabled = true)
+				}
+				Log.d("123456", uiStateFlow.value.opponentsList.toString())
 			}
 			AddScoreFragment.SCORE_TOURNAMENT -> {}
 			AddScoreFragment.SCORE_FRIENDLY -> {}
 		}
-
 	}
 
 	fun onOpponentsSent(activity: FragmentActivity) {
@@ -136,10 +144,8 @@ open class SearchOpponentsViewModel @Inject constructor(
 				)
 
 			} catch (exception: IOException) {
-				Log.e("SearchOpponent", "SearchOpponent = $exception")
 				return LoadResult.Error(exception)
 			} catch (exception: HttpException) {
-				Log.e("SearchOpponent", "HttpException = $exception")
 				return LoadResult.Error(exception)
 			}
 		}
