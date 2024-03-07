@@ -117,15 +117,27 @@
 	<Button
 		android:id="@+id/buttonNext"
 		style="@style/Widget.TennisBot.Button.Inactive"
-		android:layout_width="match_parent"
+		android:layout_width="0dp"
 		android:layout_height="wrap_content"
-		android:layout_marginHorizontal="20dp"
+		android:layout_marginEnd="20dp"
 		android:layout_marginBottom="8dp"
 		android:enabled="false"
 		android:text="@string/onboarding_continue_button"
+		app:layout_constraintStart_toEndOf="@id/imageSeriesView"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent" />
+
+	<tennis.bot.mobile.utils.view.ImageSeriesView
+		android:id="@+id/imageSeriesView"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:paddingHorizontal="20dp"
+		app:withBorder="true"
+		app:layout_constraintTop_toTopOf="@id/buttonNext"
+		app:layout_constraintBottom_toBottomOf="@id/buttonNext"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toStartOf="@id/buttonNext"/>
 
 	<ProgressBar
 		android:id="@+id/loadingBar"

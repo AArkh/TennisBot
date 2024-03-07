@@ -144,7 +144,7 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 			viewModel.onScoreReceived(setNumber, score ?: "")
 		}
 
-		setFragmentResultListener(RESULT_DIALOG_REQUEST_KEY) { _, result ->
+		setFragmentResultListener(RESULT_DIALOG_REQUEST_KEY) { _, _ ->
 			parentFragmentManager.clearBackStack(InsertScoreFragment::class.java.name) // do i need to clear them?
 			parentFragmentManager.clearBackStack(SearchOpponentsFragment::class.java.name)
 			parentFragmentManager.clearBackStack(AddScoreFragment::class.java.name)

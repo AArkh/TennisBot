@@ -17,8 +17,6 @@ import tennis.bot.mobile.profile.matches.TennisSetNetwork
 import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
-private const val i = 0
-
 @HiltViewModel
 class InsertScoreViewModel @Inject constructor(
 	private val userProfileRepository: UserProfileAndEnumsRepository,

@@ -196,6 +196,7 @@
 	<string name="opponents_double_hint_title_1">Найдите партнера по фамилии</string>
 	<string name="opponents_double_hint_title_2">Введите фамилию %d-го соперника</string>
 	<string name="opponent_search">Поиск соперника</string>
+	<string name="opponent_double_title">Парный счет</string>
 	<string name="side_note_hint_multiplier">Добавляя фотографию или видео игры, вы умножаете ваши баллы х2 и х3 в погоне за ракеткой</string>
 	<string name="insert_score_set_item_title">Счет %d сета</string>
 	<string name="insert_set_item_score">%d-%d</string>

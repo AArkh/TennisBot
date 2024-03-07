@@ -16,11 +16,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import tennis.bot.mobile.R
 import tennis.bot.mobile.feed.addscore.AddScoreFragment
+import tennis.bot.mobile.utils.view.AvatarImage
 import java.io.IOException
 import javax.inject.Inject
 
@@ -62,6 +62,7 @@ open class SearchOpponentsViewModel @Inject constructor(
 			AddScoreFragment.SCORE_SINGLE -> {
 				_uiStateFlow.value = uiStateFlow.value.copy(
 					scoreType = AddScoreFragment.SCORE_SINGLE,
+					title = context.getString(R.string.opponent_search),
 					hintTitle = context.getString(R.string.opponents_single_hint_title),
 					opponentsList = arrayOfNulls(1),
 					numberOfOpponents = 1
@@ -70,6 +71,7 @@ open class SearchOpponentsViewModel @Inject constructor(
 			AddScoreFragment.SCORE_DOUBLE -> {
 				_uiStateFlow.value = uiStateFlow.value.copy(
 					scoreType = AddScoreFragment.SCORE_DOUBLE,
+					title = context.getString(R.string.opponent_double_title),
 					hintTitle = context.getString(R.string.opponents_double_hint_title_1),
 					opponentsList = arrayOfNulls(3),
 					numberOfOpponents = 3
@@ -91,14 +93,11 @@ open class SearchOpponentsViewModel @Inject constructor(
 		when(uiStateFlow.value.scoreType) {
 			AddScoreFragment.SCORE_SINGLE -> {
 				currentState.opponentsList?.set(0, opponent)
-				Log.d("123456", uiStateFlow.value.opponentsList.toString())
 				_uiStateFlow.value = uiStateFlow.value.copy(
 					isNextButtonEnabled = true
 				)
-				Log.d("123456", "After: ${_uiStateFlow.value}")
 			}
 			AddScoreFragment.SCORE_DOUBLE -> {
-				Log.d("123456", "Before: ${_uiStateFlow.value}")
 				if (currentState.opponentsList?.get(0) == null) {
 					currentState.opponentsList?.set(0, opponent)
 					_uiStateFlow.value = currentState.copy(hintTitle = context.getString(R.string.opponents_double_hint_title_2, 1))
@@ -109,20 +108,31 @@ open class SearchOpponentsViewModel @Inject constructor(
 					currentState.opponentsList[2] = opponent
 					_uiStateFlow.value = currentState.copy(isNextButtonEnabled = true)
 				}
-				Log.d("123456", uiStateFlow.value.opponentsList.toString())
 			}
 			AddScoreFragment.SCORE_TOURNAMENT -> {}
 			AddScoreFragment.SCORE_FRIENDLY -> {}
 		}
 	}
 
-	fun onOpponentsSent(activity: FragmentActivity) {
+	fun formAvatarImageList(): List<AvatarImage> {
+		val avatarImages = mutableListOf<AvatarImage>()
+		uiStateFlow.value.opponentsList?.forEach { opponent ->
+			if (opponent != null) {
+				val avatarImage = AvatarImage(opponent.profilePicture, opponent.nameSurname.substringBefore(""))
+				avatarImages.add(avatarImage)
+			}
+		}
+		return avatarImages
+	}
+
+	fun onNextButtonClicked(activity: FragmentActivity, navigationCallback: () -> Unit) {
 		activity.supportFragmentManager.setFragmentResult(
 			OPPONENT_PICKED_REQUEST_KEY,
 			bundleOf(
 				SELECTED_OPPONENT_KEY to uiStateFlow.value.opponentsList
 			)
 		)
+		navigationCallback.invoke()
 	}
 
 	inner class OpponentsDataSource : PagingSource<Int, OpponentItem>() {

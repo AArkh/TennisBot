@@ -1,14 +1,12 @@
 package tennis.bot.mobile.feed.searchopponent
 
 import android.os.Bundle
-import android.text.Editable
 import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,7 +14,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.DefaultLoadStateAdapter
@@ -25,6 +22,7 @@ import tennis.bot.mobile.databinding.FragmentSearchOpponentBinding
 import tennis.bot.mobile.feed.insertscore.InsertScoreFragment
 import tennis.bot.mobile.utils.LetterInputFilter
 import tennis.bot.mobile.utils.traverseToAnotherFragment
+import tennis.bot.mobile.utils.view.AvatarImage
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -51,7 +49,7 @@ open class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>
 		binding.searchBarEt.doAfterTextChanged { text ->
 			if(text?.isNotEmpty() == true) {
 				onContainerVisibility(isVisible = true)
-				viewModel.onSearchOpponentsInput(text ?: "")
+				viewModel.onSearchOpponentsInput(text)
 			}
 		}
 
@@ -65,7 +63,9 @@ open class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>
 			Log.d("123546", "Recieved $opponent")
 			viewModel.onOpponentPicked(opponent)
 
+
 			if (viewModel.uiStateFlow.value.numberOfOpponents > 1) {
+
 				binding.searchBarEt.text = null // for some reason want Editable?
 				if (!viewModel.uiStateFlow.value.isNextButtonEnabled) {
 					adapter.clearOutlinePosition()
@@ -75,8 +75,9 @@ open class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>
 		}
 
 		binding.buttonNext.setOnClickListener {
-			viewModel.onOpponentsSent(requireActivity())
-			parentFragmentManager.traverseToAnotherFragment(InsertScoreFragment())
+			viewModel.onNextButtonClicked(requireActivity()) {
+				parentFragmentManager.traverseToAnotherFragment(InsertScoreFragment())
+			}
 		}
 
 		setFragmentResultListener(SCORE_TYPE_REQUEST_KEY) { _, result ->
@@ -97,7 +98,8 @@ open class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>
 			binding.loadingBar.isVisible = loadState.source.refresh is LoadState.Loading
 		}
 
-		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: SearchOpponentsUiState -> // doesn't collect values properly
+		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: SearchOpponentsUiState ->
+			binding.imageSeriesView.setImages(viewModel.formAvatarImageList(), 0)
 			binding.hintTitle.text = uiState.hintTitle
 			binding.buttonNext.isEnabled = uiState.isNextButtonEnabled
 			val buttonBackground = if (binding.buttonNext.isEnabled) {

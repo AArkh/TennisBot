@@ -14,7 +14,6 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentAccountPageBinding
 import tennis.bot.mobile.onboarding.initial.LoginProposalFragment
-import tennis.bot.mobile.onboarding.login.LoginDialogFragment
 import tennis.bot.mobile.profile.appsetttings.AppSettingsFragment
 import tennis.bot.mobile.profile.editgamedata.EditGameDataFragment
 import tennis.bot.mobile.profile.editprofile.EditProfileFragment
