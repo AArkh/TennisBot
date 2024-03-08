@@ -10,12 +10,15 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.annotation.Keep
 import androidx.core.content.ContextCompat.getColor
+import androidx.core.view.setPadding
 import coil.ImageLoader
+import coil.load
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 import kotlinx.parcelize.Parcelize
 import tennis.bot.mobile.R
 import tennis.bot.mobile.profile.account.AccountPageAdapter
+import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
 import tennis.bot.mobile.utils.dpToPx
 import kotlin.math.roundToInt
 
@@ -124,18 +127,16 @@ class ImageSeriesView @JvmOverloads constructor(
         avatarImages.forEachIndexed { index, avatarImage ->
             val drawables = drawables // to avoid index out of bounds exception when set images called twice
             drawables[index] = TextShapeDrawable(avatarImage.shortName, getColor(context, R.color.tb_gray_border))
-            if (!avatarImage.imageUrl.isNullOrEmpty()) {
-                val imageLoader = ImageLoader(context)
-                val request = ImageRequest.Builder(context)
-                    .data(AccountPageAdapter.IMAGES_LINK + avatarImage.imageUrl) // todo think on how to deal with default images which are not from backend
-                    .target { result ->
-                        drawables[index] = result
-                        invalidate()
-                    }
-                    .transformations(CircleCropTransformation())
-                    .build()
-                imageLoader.enqueue(request)
-            }
+            val imageLoader = ImageLoader(context)
+            val request = ImageRequest.Builder(context)
+                .data(buildImageRequest(avatarImage.imageUrl))
+                .target { result ->
+                    drawables[index] = result
+                    invalidate()
+                }
+                .transformations(CircleCropTransformation())
+                .build()
+            imageLoader.enqueue(request)
         }
         requestLayout()
     }
@@ -143,6 +144,21 @@ class ImageSeriesView @JvmOverloads constructor(
     fun setImageOffsetFactor(factor: Float) {
         imageOffsetFactor = factor
         requestLayout()
+    }
+
+    private fun buildImageRequest(profileImageUrl: String?): Any? {
+        var result: Any? = null
+
+        if (profileImageUrl == null) {
+            result = R.drawable.null_placeholder
+        } else if (profileImageUrl.contains("default")) {
+            val resourceId = getDefaultDrawableResourceId(context, profileImageUrl.removeSuffix(".png"))
+            if (resourceId != null) result = resourceId
+        } else {
+            result = AccountPageAdapter.IMAGES_LINK + profileImageUrl
+        }
+
+        return result
     }
 
     private companion object {
@@ -154,5 +170,5 @@ class ImageSeriesView @JvmOverloads constructor(
 @Parcelize
 data class AvatarImage(
     val imageUrl: String?,
-    val shortName: String
+    val shortName: String = ""
 ) : Parcelable

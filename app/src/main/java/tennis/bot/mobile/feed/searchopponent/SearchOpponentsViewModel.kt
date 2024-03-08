@@ -100,29 +100,38 @@ open class SearchOpponentsViewModel @Inject constructor(
 			AddScoreFragment.SCORE_DOUBLE -> {
 				if (currentState.opponentsList?.get(0) == null) {
 					currentState.opponentsList?.set(0, opponent)
-					_uiStateFlow.value = currentState.copy(hintTitle = context.getString(R.string.opponents_double_hint_title_2, 1))
+					val newList = currentState.photosList?.toMutableList()
+					newList?.add(0, AvatarImage(opponent.profilePicture))
+					Log.d("photosList", "newList: $newList")
+					_uiStateFlow.value = currentState.copy(
+						photosList = newList?.toList(),
+						hintTitle = context.getString(R.string.opponents_double_hint_title_2, 1)
+					)
 				} else if(uiStateFlow.value.opponentsList?.get(1) == null) {
-					_uiStateFlow.value = currentState.copy(hintTitle = context.getString(R.string.opponents_double_hint_title_2, 2))
+					val newList = currentState.photosList?.toMutableList()
+					newList?.add(1, AvatarImage(opponent.profilePicture))
+					_uiStateFlow.value = currentState.copy(
+						photosList = newList?.toList(),
+						hintTitle = context.getString(R.string.opponents_double_hint_title_2, 2)
+					)
 					currentState.opponentsList[1] = opponent
 				} else {
+					val newList = currentState.photosList?.toMutableList()
+					if(newList?.size != 2) {
+						newList?.set(2, AvatarImage(opponent.profilePicture))
+					} else {
+						newList.add(2, AvatarImage(opponent.profilePicture))
+					}
 					currentState.opponentsList[2] = opponent
-					_uiStateFlow.value = currentState.copy(isNextButtonEnabled = true)
+					_uiStateFlow.value = currentState.copy(
+						photosList = newList?.toList(),
+						isNextButtonEnabled = true
+					)
 				}
 			}
 			AddScoreFragment.SCORE_TOURNAMENT -> {}
 			AddScoreFragment.SCORE_FRIENDLY -> {}
 		}
-	}
-
-	fun formAvatarImageList(): List<AvatarImage> {
-		val avatarImages = mutableListOf<AvatarImage>()
-		uiStateFlow.value.opponentsList?.forEach { opponent ->
-			if (opponent != null) {
-				val avatarImage = AvatarImage(opponent.profilePicture, opponent.nameSurname.substringBefore(""))
-				avatarImages.add(avatarImage)
-			}
-		}
-		return avatarImages
 	}
 
 	fun onNextButtonClicked(activity: FragmentActivity, navigationCallback: () -> Unit) {

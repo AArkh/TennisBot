@@ -67,7 +67,9 @@ class SearchOpponentsAdapter @Inject constructor(): PagingDataAdapter<OpponentIt
 
 private fun OpponentItemViewHolder.showPlayerPhoto(profileImageUrl: String?) {
 	if (profileImageUrl == null) {
-		binding.itemPicture.visibility = View.GONE
+		binding.playerImage.load(R.drawable.null_placeholder)
+		binding.playerPhoto.setPadding(0)
+		binding.itemPicture.load(R.drawable.null_placeholder)
 		return
 	}
 

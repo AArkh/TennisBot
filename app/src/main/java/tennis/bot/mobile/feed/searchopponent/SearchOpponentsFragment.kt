@@ -63,10 +63,10 @@ open class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>
 			Log.d("123546", "Recieved $opponent")
 			viewModel.onOpponentPicked(opponent)
 
-
 			if (viewModel.uiStateFlow.value.numberOfOpponents > 1) {
-
+				binding.imageSeriesView.isVisible = true
 				binding.searchBarEt.text = null // for some reason want Editable?
+				viewModel.uiStateFlow.value.photosList?.let { binding.imageSeriesView.setImages(it, 0) }
 				if (!viewModel.uiStateFlow.value.isNextButtonEnabled) {
 					adapter.clearOutlinePosition()
 					onContainerVisibility(isVisible = false)
@@ -99,7 +99,6 @@ open class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>
 		}
 
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: SearchOpponentsUiState ->
-			binding.imageSeriesView.setImages(viewModel.formAvatarImageList(), 0)
 			binding.hintTitle.text = uiState.hintTitle
 			binding.buttonNext.isEnabled = uiState.isNextButtonEnabled
 			val buttonBackground = if (binding.buttonNext.isEnabled) {
@@ -108,6 +107,7 @@ open class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>
 				R.drawable.btn_bkg_disabled
 			}
 			binding.buttonNext.setBackgroundResource(buttonBackground)
+
 		}
 	}
 
