@@ -22,7 +22,6 @@ import tennis.bot.mobile.databinding.FragmentSearchOpponentBinding
 import tennis.bot.mobile.feed.insertscore.InsertScoreFragment
 import tennis.bot.mobile.utils.LetterInputFilter
 import tennis.bot.mobile.utils.traverseToAnotherFragment
-import tennis.bot.mobile.utils.view.AvatarImage
 import javax.inject.Inject
 
 @AndroidEntryPoint

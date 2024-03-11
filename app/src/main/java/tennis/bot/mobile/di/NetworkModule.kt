@@ -13,6 +13,7 @@ import retrofit2.Converter
 import retrofit2.Retrofit
 import tennis.bot.mobile.core.AuthInterceptor
 import tennis.bot.mobile.feed.insertscore.InsertScoreApi
+import tennis.bot.mobile.feed.insertscore.MediaApi
 import tennis.bot.mobile.feed.searchopponent.OpponentsApi
 import tennis.bot.mobile.profile.account.EnumsApi
 import tennis.bot.mobile.profile.account.UserProfileApi
@@ -298,5 +299,11 @@ class NetworkModule {
     fun provideInsertScoreApiClient(
         @Named(INSERT_SCORE) retrofit: Retrofit
     ): InsertScoreApi = retrofit.create(InsertScoreApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideMediaApiClient(
+        @Named(INSERT_SCORE) retrofit: Retrofit
+    ): MediaApi = retrofit.create(MediaApi::class.java)
 }
 

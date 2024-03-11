@@ -1,5 +1,6 @@
 package tennis.bot.mobile.feed.insertscore
 
+import android.net.Uri
 import tennis.bot.mobile.core.CoreUtilsItem
 import tennis.bot.mobile.feed.searchopponent.OpponentItem
 
@@ -10,6 +11,8 @@ data class InsertScoreUiState(
 	val player2: OpponentItem?,
 	val player3: OpponentItem? = null,
 	val player4: OpponentItem? = null,
+	val photoUri: Uri? = null,
+	val videoUri: Uri? = null,
 	val setsList: List<TennisSetItem> = mutableListOf(TennisSetItem(1, "0 : 0", isActive = true)),
 	val mediaItemList: List<CoreUtilsItem> = listOf(MediaTitle, InsertScoreMediaItem(), SideNoteItem()),
 	val isAddSetButtonActive: Boolean = false,

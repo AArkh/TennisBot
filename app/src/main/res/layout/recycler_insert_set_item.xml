@@ -14,7 +14,7 @@
 		android:gravity="center|start"
 		android:text="@string/insert_score_set_item_title"
 		android:textColor="@color/tb_gray_active"
-		android:textSize="13sp"
+		android:textSize="14sp"
 		app:layout_constraintTop_toTopOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintEnd_toStartOf="@id/set_score"

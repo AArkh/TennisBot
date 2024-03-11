@@ -10,9 +10,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.annotation.Keep
 import androidx.core.content.ContextCompat.getColor
-import androidx.core.view.setPadding
 import coil.ImageLoader
-import coil.load
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 import kotlinx.parcelize.Parcelize

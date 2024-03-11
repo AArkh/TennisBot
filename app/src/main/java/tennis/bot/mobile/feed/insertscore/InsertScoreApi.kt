@@ -15,6 +15,8 @@ interface InsertScoreApi {
 @Serializable
 data class InsertScoreItem(
 	val opponentPlayerId: Long,
+	val secondOpponentPlayerId: Long? = null,
+	val teammatePlayerId: Long? = null,
 	val tournamentId: Int? = null,
 	val photo: String? = null, // content is sent using a different post. here's just the name of the content. same for video
 	val video: String? = null,

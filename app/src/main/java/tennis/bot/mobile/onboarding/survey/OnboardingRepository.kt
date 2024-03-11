@@ -1,10 +1,6 @@
 package tennis.bot.mobile.onboarding.survey
 
 import android.content.Context
-import android.database.Cursor
-import android.net.Uri
-import android.provider.MediaStore
-import android.util.Base64
 import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.core.net.toUri
@@ -14,7 +10,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import tennis.bot.mobile.core.AuthTokenRepository
 import tennis.bot.mobile.onboarding.photopick.PhotoPickApi
-import java.io.File
+import tennis.bot.mobile.utils.uriToFile
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -280,18 +276,6 @@ class OnboardingRepository @Inject constructor(
     fun getPassword(): String? {
         return sharedPreferences.getString(PASSWORD_HEADER, null)
     }
-
-    private fun uriToFile(context: Context, uri: Uri): File? {
-        val projection = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor: Cursor? = context.contentResolver.query(uri, projection, null, null, null)
-        val columnIndex: Int? = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-        cursor?.moveToFirst()
-        val filePath: String? = columnIndex?.let { cursor.getString(it) }
-        cursor?.close()
-        return filePath?.let { File(it) }
-    }
-
-
 
     companion object {
         const val PHONE_NUMBER_HEADER = "phoneNumber"

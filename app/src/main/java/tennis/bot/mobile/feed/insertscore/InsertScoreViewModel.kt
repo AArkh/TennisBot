@@ -26,6 +26,8 @@ class InsertScoreViewModel @Inject constructor(
 	companion object {
 		const val DEFAULT_SCORE = "0 : 0"
 		const val MEDIA_INDEX = 1
+		private const val SINGLE = 1
+		private const val DOUBLE = 3
 	}
 
 	private val _uiStateFlow = MutableStateFlow(
@@ -40,17 +42,19 @@ class InsertScoreViewModel @Inject constructor(
 	fun onInitial(opponents: Array<OpponentItem>) {
 
 		val player1 = userProfileRepository.getProfile()
-		if (opponents.size == 1) {
+		if (opponents.size == SINGLE) {
 			_uiStateFlow.value = _uiStateFlow.value.copy(
 				player1Image = player1.photo,
 				player1Name = player1.name.substringBefore(" "),
 				player2 = opponents[0]
 			)
-		} else if (opponents.size == 3) {
+		} else if (opponents.size == DOUBLE) {
 			_uiStateFlow.value = _uiStateFlow.value.copy(
 				player1Image = player1.photo,
 				player1Name = player1.name.substringBefore(" "),
-				player2 = opponents[0]
+				player2 = opponents[0],
+				player3 = opponents[1],
+				player4 = opponents[2]
 			)
 		}
 	}
@@ -126,28 +130,36 @@ class InsertScoreViewModel @Inject constructor(
 		val updatedList = uiStateFlow.value.mediaItemList.mapIndexed { index, item ->
 			if (index == MEDIA_INDEX) item.let{ (item as InsertScoreMediaItem).copy(pickedPhoto = pickedImageUri) } else item
 		}
-		_uiStateFlow.value = uiStateFlow.value.copy(mediaItemList = updatedList)
+		_uiStateFlow.value = uiStateFlow.value.copy(
+			photoUri = pickedImageUri,
+			mediaItemList = updatedList)
 	}
 
 	fun onPickedVideo(pickedVideoUri: Uri) {
 		val updatedList = uiStateFlow.value.mediaItemList.mapIndexed { index, item ->
 			if (index == MEDIA_INDEX) item.let{ (item as InsertScoreMediaItem).copy(pickedVideo = pickedVideoUri) } else item
 		}
-		_uiStateFlow.value = uiStateFlow.value.copy(mediaItemList = updatedList)
+		_uiStateFlow.value = uiStateFlow.value.copy(
+			videoUri = pickedVideoUri,
+			mediaItemList = updatedList)
 	}
 
 	fun onDeletePickedPhoto() {
 		val updatedList = uiStateFlow.value.mediaItemList.mapIndexed { index, item ->
 			if (index == MEDIA_INDEX) item.let{ (item as InsertScoreMediaItem).copy(pickedPhoto = null) } else item
 		}
-		_uiStateFlow.value = uiStateFlow.value.copy(mediaItemList = updatedList)
+		_uiStateFlow.value = uiStateFlow.value.copy(
+			photoUri = null,
+			mediaItemList = updatedList)
 	}
 
 	fun onDeletePickedVideo() {
 		val updatedList = uiStateFlow.value.mediaItemList.mapIndexed { index, item ->
 			if (index == MEDIA_INDEX) item.let{ (item as InsertScoreMediaItem).copy(pickedVideo = null) } else item
 		}
-		_uiStateFlow.value = uiStateFlow.value.copy(mediaItemList = updatedList)
+		_uiStateFlow.value = uiStateFlow.value.copy(
+			videoUri = null,
+			mediaItemList = updatedList)
 	}
 
 	fun isAddSetButtonActive() {
@@ -259,10 +271,23 @@ class InsertScoreViewModel @Inject constructor(
 		viewModelScope.launch(Dispatchers.IO) {
 			kotlin.runCatching {
 				showLoading()
-				repository.postAddScore(InsertScoreItem(
-					opponentPlayerId = uiStateFlow.value.player2!!.id, // at this point it should not be null
-					sets = getSetsScore()
-				))
+				if(uiStateFlow.value.player3 != null && uiStateFlow.value.player4 != null) {
+					repository.postAddScore(InsertScoreItem(
+						teammatePlayerId = uiStateFlow.value.player2!!.id, // at this point it should not be null
+						opponentPlayerId = uiStateFlow.value.player3!!.id,
+						secondOpponentPlayerId = uiStateFlow.value.player4!!.id,
+						photo = repository.postPhoto(uiStateFlow.value.photoUri), // works nicely but ask Andrey if that's a good practice
+						video = repository.postVideo(uiStateFlow.value.videoUri),
+						sets = getSetsScore()
+					))
+				} else {
+					repository.postAddScore(InsertScoreItem(
+						opponentPlayerId = uiStateFlow.value.player2!!.id, // at this point it should not be null
+						photo = repository.postPhoto(uiStateFlow.value.photoUri),
+						video = repository.postVideo(uiStateFlow.value.videoUri),
+						sets = getSetsScore()
+					))
+				}
 			}.onFailure {
 				onStopLoading()
 				context.showToast(context.getString(R.string.error_no_network_message))

@@ -3,16 +3,12 @@ package tennis.bot.mobile.feed.insertscore
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.FrameLayout
-import android.widget.ImageView
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
-import androidx.core.view.setPadding
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import coil.load
 import dagger.hilt.android.AndroidEntryPoint
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
@@ -23,10 +19,9 @@ import tennis.bot.mobile.feed.addscore.AddScoreFragment
 import tennis.bot.mobile.feed.searchopponent.OpponentItem
 import tennis.bot.mobile.feed.searchopponent.SearchOpponentsFragment
 import tennis.bot.mobile.feed.searchopponent.SearchOpponentsViewModel
-import tennis.bot.mobile.profile.account.AccountPageAdapter
-import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
 import tennis.bot.mobile.utils.dpToPx
 import tennis.bot.mobile.utils.traverseToAnotherFragment
+import tennis.bot.mobile.utils.view.AvatarImage
 import javax.inject.Inject
 import kotlin.math.abs
 
@@ -57,6 +52,7 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 
 
 	companion object {
+		private const val IMAGE_SIZE_DP = 66
 		const val SELECTED_SET_NUMBER = "SELECTED_SET_NUMBER"
 		const val SELECTED_SET_CURRENT_VALUE = "SELECTED_SET_CURRENT_VALUE"
 		const val SELECTED_SET_IS_SUPER_TIE = "SELECTED_SET_IS_SUPER_TIE"
@@ -130,11 +126,11 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 			}
 		}
 
+		@Suppress("UNCHECKED_CAST")
 		setFragmentResultListener(SearchOpponentsViewModel.OPPONENT_PICKED_REQUEST_KEY) { _, result ->
 			(result.getParcelableArray(SearchOpponentsViewModel.SELECTED_OPPONENT_KEY) as? Array<OpponentItem>)?.let { // not deprecated version blows up + i used safe cast
 				viewModel.onInitial(it)
 			}
-
 		}
 
 		setFragmentResultListener(InsertScoreDialogViewModel.REQUEST_SCORE_KEY) { _, result ->
@@ -159,10 +155,11 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 			viewModel.isAddSetButtonActive()
 			viewModel.appointActiveSetItem()
 
-			binding.player1Image.loadPlayerImage(uiState.player1Image, binding.player1Photo)
-			binding.player2Image.loadPlayerImage(uiState.player2?.profilePicture, binding.player2Photo)
-			binding.player1Name.text = uiState.player1Name
-			binding.player2Name.text = uiState.player2?.nameSurname?.substringBefore(" ")
+			if(uiState.player3 != null && uiState.player4 != null) {
+				bindPlayerPhotosAndNames(true, uiState)
+			} else {
+				bindPlayerPhotosAndNames(false, uiState)
+			}
 
 			binding.buttonSend.isEnabled = uiState.isSendButtonActive
 			binding.addSetButton.isEnabled = uiState.isAddSetButtonActive
@@ -171,19 +168,31 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 		}
 	}
 
-	private fun ImageView.loadPlayerImage(playerImage: String?, frame: FrameLayout) {
-		if (playerImage == null) return
-
-		load(R.drawable.user) { crossfade(true) }
-		frame.setPadding(frame.context.dpToPx(20))
-
-		if (playerImage.contains("default")) {
-			val resourceId = getDefaultDrawableResourceId(context, playerImage.removeSuffix(".png"))
-			if (resourceId != null) load(resourceId)
-			frame.setPadding(0)
+	private fun bindPlayerPhotosAndNames(isDouble: Boolean, uiState: InsertScoreUiState) {
+		if (!isDouble){
+			binding.playersLeftPhotos.setImages(listOf(AvatarImage(uiState.player1Image)), 0)
+			binding.playersLeftPhotos.drawableSize = requireContext().dpToPx(IMAGE_SIZE_DP)
+			binding.playersRightPhotos.setImages(listOf(AvatarImage(uiState.player2?.profilePicture)), 0)
+			binding.playersRightPhotos.drawableSize = requireContext().dpToPx(IMAGE_SIZE_DP)
+			binding.playersLeftNames.text = uiState.player1Name
+			binding.playersRightNames.text = uiState.player2?.nameSurname?.substringBefore(" ")
 		} else {
-			load(AccountPageAdapter.IMAGES_LINK + playerImage) { crossfade(true) }
-			frame.setPadding(0)
+			binding.playersLeftPhotos.setImages(
+				listOf(AvatarImage(uiState.player1Image), AvatarImage(uiState.player2?.profilePicture)), 0)
+			binding.playersLeftPhotos.drawableSize = requireContext().dpToPx(IMAGE_SIZE_DP)
+			binding.playersRightPhotos.setImages(
+				listOf(AvatarImage(uiState.player3?.profilePicture), AvatarImage(uiState.player4?.profilePicture)), 0)
+			binding.playersRightPhotos.drawableSize = requireContext().dpToPx(IMAGE_SIZE_DP)
+			binding.playersLeftNames.text = getString(
+				R.string.insert_score_doubles_names,
+				uiState.player1Name,
+				uiState.player2?.nameSurname?.substringBefore(" ")
+			)
+			binding.playersRightNames.text = getString(
+				R.string.insert_score_doubles_names,
+				uiState.player3?.nameSurname?.substringBefore(" "),
+				uiState.player4?.nameSurname?.substringBefore(" ")
+			)
 		}
 	}
 

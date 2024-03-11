@@ -22,90 +22,66 @@
 		app:layout_constraintTop_toTopOf="parent"
 		app:tint="@color/tb_gray_active" />
 
-	<FrameLayout
-		android:id="@+id/player1_photo"
+	<tennis.bot.mobile.utils.view.ImageSeriesView
+		android:id="@+id/players_left_photos"
 		android:layout_width="70dp"
 		android:layout_height="70dp"
-		android:layout_marginStart="51dp"
+		android:layout_marginStart="20dp"
 		android:layout_marginTop="26dp"
-		android:background="@drawable/circle_background"
-		android:backgroundTint="@color/tb_gray_border"
-		android:padding="20dp"
+		app:withBorder="true"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/back_button">
-
-		<com.google.android.material.imageview.ShapeableImageView
-			android:id="@+id/player1_image"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:scaleType="centerCrop"
-			android:src="@drawable/user"
-			android:visibility="visible"
-			app:shapeAppearanceOverlay="@style/roundedImageViewRounded" />
-
-	</FrameLayout>
+		app:layout_constraintEnd_toStartOf="@id/game_animation"
+		app:layout_constraintTop_toBottomOf="@id/back_button"/>
 
 	<TextView
-		android:id="@+id/player1_name"
+		android:id="@+id/players_left_names"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:gravity="center"
 		android:text="@string/namesurname_name"
 		android:textColor="@color/tb_black"
 		android:textSize="14sp"
-		app:layout_constraintEnd_toEndOf="@id/player1_photo"
-		app:layout_constraintStart_toStartOf="@id/player1_photo"
-		app:layout_constraintTop_toBottomOf="@id/player1_photo" />
+		app:layout_constraintEnd_toEndOf="@id/players_left_photos"
+		app:layout_constraintStart_toStartOf="@id/players_left_photos"
+		app:layout_constraintTop_toBottomOf="@id/players_left_photos" />
 
 	<com.airbnb.lottie.LottieAnimationView
 		android:id="@+id/game_animation"
 		android:layout_width="0dp"
 		android:layout_height="0dp"
 		android:layout_marginBottom="-15dp"
-		android:padding="5dp"
+		android:padding="-5dp"
 		android:visibility="visible"
-		app:layout_constraintBottom_toBottomOf="@id/player1_name"
-		app:layout_constraintEnd_toStartOf="@id/player2_photo"
-		app:layout_constraintStart_toEndOf="@id/player1_photo"
+		app:layout_constraintBottom_toBottomOf="@id/players_left_names"
+		app:layout_constraintStart_toEndOf="@id/players_left_photos"
+		app:layout_constraintEnd_toStartOf="@id/players_right_photos"
 		app:layout_constraintTop_toBottomOf="@id/back_button"
 		app:lottie_autoPlay="true"
 		app:lottie_loop="false"
 		app:lottie_rawRes="@raw/game" />
 
-	<FrameLayout
-		android:id="@+id/player2_photo"
+	<tennis.bot.mobile.utils.view.ImageSeriesView
+		android:id="@+id/players_right_photos"
 		android:layout_width="70dp"
 		android:layout_height="70dp"
 		android:layout_marginTop="26dp"
-		android:layout_marginEnd="51dp"
-		android:background="@drawable/circle_background"
-		android:backgroundTint="@color/tb_gray_border"
-		android:padding="20dp"
+		android:layout_marginEnd="20dp"
+		app:withBorder="true"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/back_button">
-
-		<com.google.android.material.imageview.ShapeableImageView
-			android:id="@+id/player2_image"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:scaleType="centerCrop"
-			android:src="@drawable/user"
-			android:visibility="visible"
-			app:shapeAppearanceOverlay="@style/roundedImageViewRounded" />
-
-	</FrameLayout>
+		app:layout_constraintStart_toEndOf="@id/game_animation"
+		app:layout_constraintTop_toBottomOf="@id/back_button"/>
 
 	<TextView
-		android:id="@+id/player2_name"
+		android:id="@+id/players_right_names"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:gravity="center"
 		android:text="@string/namesurname_name"
 		android:textColor="@color/tb_black"
 		android:textSize="14sp"
-		app:layout_constraintEnd_toEndOf="@id/player2_photo"
-		app:layout_constraintStart_toStartOf="@id/player2_photo"
-		app:layout_constraintTop_toBottomOf="@id/player2_photo" />
+		app:layout_constraintEnd_toEndOf="@id/players_right_photos"
+		app:layout_constraintStart_toStartOf="@id/players_right_photos"
+		app:layout_constraintTop_toBottomOf="@id/players_right_photos" />
 
 	<androidx.recyclerview.widget.RecyclerView
 		android:id="@+id/sets_container"
@@ -115,7 +91,7 @@
 		app:layout_constraintBottom_toTopOf="@id/add_super_tie_break_button"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/player1_name"
+		app:layout_constraintTop_toBottomOf="@id/players_left_names"
 		tools:itemCount="5"
 		tools:listitem="@layout/recycler_insert_set_item" />
 

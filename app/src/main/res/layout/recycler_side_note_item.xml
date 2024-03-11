@@ -27,7 +27,7 @@
 		android:layout_marginTop="16dp"
 		android:text="@string/side_note_title_0"
 		android:textColor="@color/tb_primary_green"
-		android:textSize="16sp"
+		android:textSize="17sp"
 		app:layout_constraintStart_toStartOf="@id/side_note_background"
 		app:layout_constraintTop_toTopOf="@id/side_note_background" />
 
@@ -38,7 +38,7 @@
 		android:layout_marginHorizontal="16dp"
 		android:layout_marginBottom="32dp"
 		android:text="@string/side_note_hint_multiplier"
-		android:textSize="12sp"
+		android:textSize="13sp"
 		app:layout_constraintEnd_toEndOf="@id/side_note_background"
 		app:layout_constraintStart_toStartOf="@id/side_note_background"
 		app:layout_constraintTop_toBottomOf="@id/side_note_title"

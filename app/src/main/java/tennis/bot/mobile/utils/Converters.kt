@@ -1,9 +1,14 @@
 package tennis.bot.mobile.utils
 
+import android.content.Context
+import android.database.Cursor
 import android.icu.text.SimpleDateFormat
+import android.net.Uri
+import android.provider.MediaStore
 import android.util.Log
 import androidx.annotation.WorkerThread
 import tennis.bot.mobile.onboarding.location.LocationRepository
+import java.io.File
 import java.util.Locale
 
 const val DEFAULT_DATE_TIME = "0001-01-01T00:00:00Z"
@@ -83,4 +88,14 @@ suspend fun convertLocationStringToInt(
 	}
 
 	return Triple(countryInt, cityInt, districtInt)
+}
+
+fun uriToFile(context: Context, uri: Uri): File? {
+	val projection = arrayOf(MediaStore.Images.Media.DATA)
+	val cursor: Cursor? = context.contentResolver.query(uri, projection, null, null, null)
+	val columnIndex: Int? = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+	cursor?.moveToFirst()
+	val filePath: String? = columnIndex?.let { cursor.getString(it) }
+	cursor?.close()
+	return filePath?.let { File(it) }
 }

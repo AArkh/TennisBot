@@ -233,5 +233,6 @@
 	<string name="side_note_item_value_2">15 баллов</string>
 	<string name="side_note_item_value_3">20 баллов</string>
 	<string name="side_note_item_value_4">x2/x3</string>
+	<string name="insert_score_doubles_names">%s/%s</string>
 
 </resources>
