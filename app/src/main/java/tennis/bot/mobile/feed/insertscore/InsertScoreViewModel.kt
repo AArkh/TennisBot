@@ -272,7 +272,7 @@ class InsertScoreViewModel @Inject constructor(
 			kotlin.runCatching {
 				showLoading()
 				if(uiStateFlow.value.player3 != null && uiStateFlow.value.player4 != null) {
-					repository.postAddScore(InsertScoreItem(
+					repository.postDoublesScore(InsertScoreItem(
 						teammatePlayerId = uiStateFlow.value.player2!!.id, // at this point it should not be null
 						opponentPlayerId = uiStateFlow.value.player3!!.id,
 						secondOpponentPlayerId = uiStateFlow.value.player4!!.id,
@@ -281,7 +281,7 @@ class InsertScoreViewModel @Inject constructor(
 						sets = getSetsScore()
 					))
 				} else {
-					repository.postAddScore(InsertScoreItem(
+					repository.postSingleScore(InsertScoreItem(
 						opponentPlayerId = uiStateFlow.value.player2!!.id, // at this point it should not be null
 						photo = repository.postPhoto(uiStateFlow.value.photoUri),
 						video = repository.postVideo(uiStateFlow.value.videoUri),

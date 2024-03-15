@@ -9,7 +9,10 @@ import tennis.bot.mobile.profile.matches.TennisSetNetwork
 interface InsertScoreApi {
 
 	@POST("api/games/score")
-	suspend fun postAddScore(@Body newScore: InsertScoreItem): Response<Unit>
+	suspend fun postSingleScore(@Body newScore: InsertScoreItem): Response<Unit>
+
+	@POST("api/games/doubles-score")
+	suspend fun postDoublesScore(@Body newScore: InsertScoreItem): Response<Unit>
 }
 
 @Serializable

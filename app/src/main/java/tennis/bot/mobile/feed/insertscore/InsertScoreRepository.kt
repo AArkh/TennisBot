@@ -20,9 +20,18 @@ class InsertScoreRepository @Inject constructor(
 ) {
 
 	@WorkerThread
-	suspend fun postAddScore(postBody: InsertScoreItem): Boolean {
+	suspend fun postSingleScore(postBody: InsertScoreItem): Boolean {
 		val response = kotlin.runCatching {
-			insertScoreApi.postAddScore(postBody)
+			insertScoreApi.postSingleScore(postBody)
+		}.getOrElse { return false }
+
+		return response.isSuccessful
+	}
+
+	@WorkerThread
+	suspend fun postDoublesScore(postBody: InsertScoreItem): Boolean {
+		val response = kotlin.runCatching {
+			insertScoreApi.postDoublesScore(postBody)
 		}.getOrElse { return false }
 
 		return response.isSuccessful
