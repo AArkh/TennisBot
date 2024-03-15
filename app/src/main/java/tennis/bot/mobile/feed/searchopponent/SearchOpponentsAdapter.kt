@@ -4,7 +4,6 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
-import androidx.core.view.setPadding
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +13,8 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.databinding.RecyclerOpponentItemBinding
 import tennis.bot.mobile.profile.account.AccountPageAdapter
 import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
+import tennis.bot.mobile.utils.dpToPx
+import tennis.bot.mobile.utils.view.AvatarImage
 import javax.inject.Inject
 
 class SearchOpponentsAdapter @Inject constructor(): PagingDataAdapter<OpponentItem, OpponentItemViewHolder>(OPPONENTS_COMPARATOR) {
@@ -65,21 +66,18 @@ class SearchOpponentsAdapter @Inject constructor(): PagingDataAdapter<OpponentIt
 }
 
 private fun OpponentItemViewHolder.showPlayerPhoto(profileImageUrl: String?) {
+	binding.playerPhoto.setImage(AvatarImage(profileImageUrl))
+	binding.playerPhoto.drawableSize = binding.playerPhoto.context.dpToPx(40)
+
 	if (profileImageUrl == null) {
-		binding.playerImage.load(R.drawable.null_placeholder)
-		binding.playerPhoto.setPadding(0)
 		binding.itemPicture.load(R.drawable.null_placeholder)
 		return
 	}
 
 	if (profileImageUrl.contains("default")) {
-		val resourceId = getDefaultDrawableResourceId(binding.playerImage.context, profileImageUrl.removeSuffix(".png"))
-		if (resourceId != null) binding.playerImage.load(resourceId)
-		binding.playerPhoto.setPadding(0)
-		binding.itemPicture.load(resourceId)
+		val resourceId = getDefaultDrawableResourceId(binding.itemPicture.context, profileImageUrl.removeSuffix(".png"))
+		if (resourceId != null) binding.itemPicture.load(resourceId)
 	} else {
-		binding.playerImage.load(AccountPageAdapter.IMAGES_LINK + profileImageUrl) { crossfade(true) }
-		binding.playerPhoto.setPadding(0)
 		binding.itemPicture.load(AccountPageAdapter.IMAGES_LINK + profileImageUrl)
 	}
 }

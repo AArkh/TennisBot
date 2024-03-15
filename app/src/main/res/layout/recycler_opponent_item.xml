@@ -6,27 +6,15 @@
 	android:layout_marginTop="8dp"
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 
-	<FrameLayout
+	<tennis.bot.mobile.utils.view.ImageSeriesView
 		android:id="@+id/player_photo"
 		android:layout_width="40dp"
 		android:layout_height="40dp"
 		android:layout_marginVertical="16dp"
 		android:layout_marginStart="16dp"
-		android:background="@drawable/circle_background"
-		android:backgroundTint="@color/tb_gray_border"
-		android:padding="8dp"
+		app:withBorder="false"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent">
-
-		<com.google.android.material.imageview.ShapeableImageView
-			android:id="@+id/player_image"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:scaleType="centerCrop"
-			android:src="@drawable/user"
-			android:visibility="visible"
-			app:shapeAppearanceOverlay="@style/roundedImageViewRounded" />
-	</FrameLayout>
+		app:layout_constraintTop_toTopOf="parent"/>
 
 	<TextView
 		android:id="@+id/name_surname"

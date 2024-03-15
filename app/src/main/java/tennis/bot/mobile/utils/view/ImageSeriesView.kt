@@ -108,6 +108,23 @@ class ImageSeriesView @JvmOverloads constructor(
         requestLayout()
     }
 
+    fun setImage(avatarImage: AvatarImage) {
+        val drawables = drawables // to avoid index out of bounds exception when set images called twice
+        drawables[0] = TextShapeDrawable(avatarImage.shortName, getColor(context, R.color.tb_gray_border))
+        val imageLoader = ImageLoader(context)
+        val request = ImageRequest.Builder(context)
+            .data(buildImageRequest(avatarImage.imageUrl))
+            .target { result ->
+                drawables[0] = result
+                invalidate()
+            }
+            .placeholder(R.drawable.circle_background)
+            .transformations(CircleCropTransformation())
+            .build()
+        imageLoader.enqueue(request)
+        requestLayout()
+    }
+
     fun setImages(avatarImages: List<AvatarImage>, additionalCount: Int) {
         if (this.avatarImages == avatarImages && this.additionalCount == additionalCount) {
             return
@@ -119,7 +136,7 @@ class ImageSeriesView @JvmOverloads constructor(
         val drawablesCount = avatarImages.size + if (additionalCount == 0) 0 else 1
         drawables = Array(drawablesCount) { null }
         if (additionalCount > 0) {
-            drawables[drawables.lastIndex] = TextShapeDrawable("+${additionalCount}", Color.BLUE)
+            drawables[drawables.lastIndex] = TextShapeDrawable("+${additionalCount}", Color.LTGRAY)
         }
 
         avatarImages.forEachIndexed { index, avatarImage ->
@@ -144,7 +161,7 @@ class ImageSeriesView @JvmOverloads constructor(
         requestLayout()
     }
 
-    private fun buildImageRequest(profileImageUrl: String?): Any? {
+    private fun buildImageRequest(profileImageUrl: String?): Any? { // loads a null before an actual profile pic. should we tweak the behavior to change that?
         var result: Any? = null
 
         if (profileImageUrl == null) {

@@ -4,20 +4,17 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.view.setPadding
 import androidx.fragment.app.viewModels
-import coil.load
 import dagger.hilt.android.AndroidEntryPoint
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentFeedBottomNavigationBinding
 import tennis.bot.mobile.feed.addscore.AddScoreFragment
-import tennis.bot.mobile.profile.account.AccountPageAdapter
 import tennis.bot.mobile.profile.account.AccountPageFragment
-import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
 import tennis.bot.mobile.utils.dpToPx
 import tennis.bot.mobile.utils.goToAnotherSectionFragment
+import tennis.bot.mobile.utils.view.AvatarImage
 
 @AndroidEntryPoint
 class FeedBottomNavigationFragment : CoreFragment<FragmentFeedBottomNavigationBinding>() {
@@ -45,23 +42,8 @@ class FeedBottomNavigationFragment : CoreFragment<FragmentFeedBottomNavigationBi
 		}
 
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: FeedBottomNavigationUiState ->
-			loadProfilePicture(uiState.playerPicture)
-		}
-	}
-
-	private fun loadProfilePicture(profileImageUrl: String?) {
-		if (profileImageUrl == null) return
-
-		binding.playerImage.load(R.drawable.user) { crossfade(true) }
-		binding.playerPhoto.setPadding(binding.playerPhoto.context.dpToPx(10))
-
-		if (profileImageUrl.contains("default")) {
-			val resourceId = getDefaultDrawableResourceId(binding.playerImage.context, profileImageUrl.removeSuffix(".png"))
-			if (resourceId != null) binding.playerImage.load(resourceId)
-			binding.playerPhoto.setPadding(0)
-		} else {
-			binding.playerImage.load(AccountPageAdapter.IMAGES_LINK + profileImageUrl) { crossfade(true) }
-			binding.playerPhoto.setPadding(0)
+			binding.playerPhoto.setImage(AvatarImage(uiState.playerPicture))
+			binding.playerPhoto.drawableSize = requireContext().dpToPx(32)
 		}
 	}
 

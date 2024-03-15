@@ -191,6 +191,7 @@
 	<string name="score_type_tournament">Турнирный</string>
 	<string name="score_type_friendly">Дружеский</string>
 	<string name="player_info_panel">%d/%d · %s | %s</string>
+	<string name="player_new_info_panel">%d · %s | %s</string>
 	<string name="opponents_single_hint_text">Введите данные в строке \nпоиска. Выберите игрока и \nнажмите \"Далее\"</string>
 	<string name="opponents_single_hint_title">Найдите соперника по фамилии</string>
 	<string name="opponents_double_hint_title_1">Найдите партнера по фамилии</string>
@@ -234,5 +235,16 @@
 	<string name="side_note_item_value_3">20 баллов</string>
 	<string name="side_note_item_value_4">x2/x3</string>
 	<string name="insert_score_doubles_names">%s/%s</string>
+	<string name="day_and_time">14:00 – 22:00\nЧетверг</string>
+	<string name="rating_and_skill">1280\nПродвинутый</string>
+	<string name="request_comment_placeholder">Всем привет! Давайте сыграем матч, оплата пополам. Одиночная</string>
+	<string name="match_result">Результат матча</string>
+	<string name="lost_to_subtitle">Проиграл Name Surname</string>
+	<string name="time_ago">3 часа назад</string>
+	<string name="month_text">Май</string>
+	<string name="post_two_subtitle">Игра на северо-западе</string>
+	<string name="post_type_2">Заявки</string>
+	<string name="new_player">Новый игрок</string>
+	<string name="post_type_1">Анкета</string>
 
 </resources>

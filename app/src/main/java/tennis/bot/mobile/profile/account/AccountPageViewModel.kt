@@ -93,7 +93,6 @@ class AccountPageViewModel @Inject constructor(
 	}
 
 	private suspend fun onProvidingGameData(profileData: ProfileData): List<SurveyResultItem> {
-		val enumTypesList = repository.getEnums()
 		val defaultGameData = repository.defaultGameData
 		val isRightHandInt = if (profileData.isRightHand == true) 1 else if (profileData.isRightHand == false) 0 else null
 		val isOneBackhandInt = if (profileData.isOneBackhand == true) 1 else if (profileData.isOneBackhand == false) 0 else null

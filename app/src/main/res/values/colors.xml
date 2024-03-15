@@ -2,12 +2,15 @@
 <resources>
 
     <color name="tb_black">#262729</color>
+    <color name="tb_black_semi_transparent">#B3000000</color>
     <color name="tb_black_card">#E6202022</color>
     <color name="tb_white">#FFFFFF</color>
+    <color name="tb_white_semi_transparent">#33FFFFFF</color>
 
     <color name="tb_gray_active">#ADAFB7</color>
     <color name="tb_gray_dark">#6E7077</color>
     <color name="tb_gray_border">#F4F6F8</color>
+    <color name="tb_gray_border_new">#ECEDEE</color>
     <color name="tb_gray_choose">#E9EBF1</color>
     <color name="tb_gray_light">#CDCFD2</color>
     <color name="tb_gray_gray">#B1B4B8</color>
