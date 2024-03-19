@@ -15,8 +15,7 @@ import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 import kotlinx.parcelize.Parcelize
 import tennis.bot.mobile.R
-import tennis.bot.mobile.profile.account.AccountPageAdapter
-import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
+import tennis.bot.mobile.utils.buildImageRequest
 import tennis.bot.mobile.utils.dpToPx
 import kotlin.math.roundToInt
 
@@ -113,7 +112,7 @@ class ImageSeriesView @JvmOverloads constructor(
         drawables[0] = TextShapeDrawable(avatarImage.shortName, getColor(context, R.color.tb_gray_border))
         val imageLoader = ImageLoader(context)
         val request = ImageRequest.Builder(context)
-            .data(buildImageRequest(avatarImage.imageUrl))
+            .data(buildImageRequest(context, avatarImage.imageUrl))
             .target { result ->
                 drawables[0] = result
                 invalidate()
@@ -144,7 +143,7 @@ class ImageSeriesView @JvmOverloads constructor(
             drawables[index] = TextShapeDrawable(avatarImage.shortName, getColor(context, R.color.tb_gray_border))
             val imageLoader = ImageLoader(context)
             val request = ImageRequest.Builder(context)
-                .data(buildImageRequest(avatarImage.imageUrl))
+                .data(buildImageRequest(context, avatarImage.imageUrl))
                 .target { result ->
                     drawables[index] = result
                     invalidate()
@@ -161,20 +160,6 @@ class ImageSeriesView @JvmOverloads constructor(
         requestLayout()
     }
 
-    private fun buildImageRequest(profileImageUrl: String?): Any? { // loads a null before an actual profile pic. should we tweak the behavior to change that?
-        var result: Any? = null
-
-        if (profileImageUrl == null) {
-            result = R.drawable.null_placeholder
-        } else if (profileImageUrl.contains("default")) {
-            val resourceId = getDefaultDrawableResourceId(context, profileImageUrl.removeSuffix(".png"))
-            if (resourceId != null) result = resourceId
-        } else {
-            result = AccountPageAdapter.IMAGES_LINK + profileImageUrl
-        }
-
-        return result
-    }
 
     private companion object {
         private const val DEFAULT_VIEW_OFFSET_FACTOR = 0.66f

@@ -3,15 +3,27 @@ package tennis.bot.mobile.utils
 import android.content.Context
 import android.database.Cursor
 import android.icu.text.SimpleDateFormat
+import android.icu.util.Calendar
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
 import androidx.annotation.WorkerThread
+import tennis.bot.mobile.R
 import tennis.bot.mobile.onboarding.location.LocationRepository
+import tennis.bot.mobile.profile.account.AccountPageAdapter
+import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
 import java.io.File
 import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 const val DEFAULT_DATE_TIME = "0001-01-01T00:00:00Z"
+
+data class FormattedDate(
+	val time: String,
+	val day: Int,
+	val dayOfWeek: String,
+	val month: String
+)
 
 fun convertDateAndTime(dateString: String): String? {
 	val formats = listOf(
@@ -32,6 +44,62 @@ fun convertDateAndTime(dateString: String): String? {
 		}
 	}
 	return null
+}
+
+fun formatDateForMatchPostItem(timestampString: String): FormattedDate {
+	val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ", Locale.getDefault())
+	val date = dateFormat.parse(timestampString) ?: throw IllegalArgumentException("Invalid timestamp format")
+
+	val calendar = Calendar.getInstance().apply { time = date }
+
+	val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+	val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
+	val dayOfWeek = SimpleDateFormat("EEEE", Locale.getDefault()).format(date)
+	val month = SimpleDateFormat("MMMM", Locale.getDefault()).format(date)
+
+	return FormattedDate(
+		time = timeFormat.format(date),
+		day = dayOfMonth,
+		dayOfWeek = dayOfWeek,
+		month = month
+	)
+}
+
+fun formatDateForFeed(dateString: String): String {
+	val dateTimeFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ", Locale.getDefault())
+	val timeStampMs = dateTimeFormatter.parse(dateString).time
+
+	val currentTime = System.currentTimeMillis()
+	val diffInMillis = currentTime - timeStampMs
+
+	val minutes = TimeUnit.MILLISECONDS.toMinutes(diffInMillis)
+	val hours = TimeUnit.MILLISECONDS.toHours(diffInMillis)
+	val days = TimeUnit.MILLISECONDS.toDays(diffInMillis)
+
+	return when { // todo сделать что-то с окончаниями
+		days > 365 -> "${days/365} год назад"
+		days > 60 -> "${days/30} месяцев назад"
+		days > 30 -> "${days/30} месяц назад"
+		days > 0 -> "$days дней назад"
+		hours > 0 -> "$hours часов назад"
+		minutes > 0 -> "$minutes минут назад"
+		else -> "Только что"
+	}
+}
+
+fun buildImageRequest( context: Context, profileImageUrl: String?): Any? { // loads a null before an actual profile pic. should we tweak the behavior to change that?
+	var result: Any? = null
+
+	if (profileImageUrl == null) {
+		result = R.drawable.null_placeholder
+	} else if (profileImageUrl.contains("default")) {
+		val resourceId = getDefaultDrawableResourceId(context, profileImageUrl.removeSuffix(".png"))
+		if (resourceId != null) result = resourceId
+	} else {
+		result = AccountPageAdapter.IMAGES_LINK + profileImageUrl
+	}
+
+	return result
 }
 
 @WorkerThread

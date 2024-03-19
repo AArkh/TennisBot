@@ -235,16 +235,26 @@
 	<string name="side_note_item_value_3">20 баллов</string>
 	<string name="side_note_item_value_4">x2/x3</string>
 	<string name="insert_score_doubles_names">%s/%s</string>
-	<string name="day_and_time">14:00 – 22:00\nЧетверг</string>
-	<string name="rating_and_skill">1280\nПродвинутый</string>
+	<string name="day_and_time">%s\n%s</string>
+	<string name="rating_and_skill">%d\n%s</string>
+	<string name="two_ratings">1280\n1280</string>
 	<string name="request_comment_placeholder">Всем привет! Давайте сыграем матч, оплата пополам. Одиночная</string>
-	<string name="match_result">Результат матча</string>
-	<string name="lost_to_subtitle">Проиграл Name Surname</string>
+	<string name="match_result_single">Результат матча</string>
+	<string name="match_result_double">Результат парного матча</string>
+	<string name="match_result_friendly">Результат дружеского матча</string>
+	<string name="won_subtitle">Выиграл %s</string>
+	<string name="lost_to_subtitle">Проиграл %s</string>
+	<string name="won_doubles_subtitle">Выиграл %s / %s</string>
+	<string name="lost_doubles_subtitle">Проиграл %s / %s</string>
 	<string name="time_ago">3 часа назад</string>
 	<string name="month_text">Май</string>
-	<string name="post_two_subtitle">Игра на северо-западе</string>
+	<string name="post_two_location_subtitle">%s, игра на %s</string>
 	<string name="post_type_2">Заявки</string>
 	<string name="new_player">Новый игрок</string>
 	<string name="post_type_1">Анкета</string>
+	<string name="meetings">Встречи</string>
+	<string name="single_meetings">Личные встречи</string>
+	<string name="placeholder_date">21 июня, 8:34 · #asv</string>
+	<string name="post_three_doubles_title">%s / %s</string>
 
 </resources>
