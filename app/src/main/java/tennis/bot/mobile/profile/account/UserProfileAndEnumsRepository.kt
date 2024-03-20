@@ -106,12 +106,12 @@ class UserProfileAndEnumsRepository @Inject constructor(
 		enumsDao.insert(response!!)
 		enumsDao.insert(listOf(
 			EnumType(IS_RIGHTHAND_TITLE, listOf(
-				EnumData(0, "левая", "left"),
-				EnumData(1, "правая", "right")
+				EnumData(0, "Левая", "left"),
+				EnumData(1, "Правая", "right")
 			)),
 			EnumType(IS_ONE_BACKHAND_TITLE, listOf(
-				EnumData(0, "двуручный", "two-handed"),
-				EnumData(1, "одноручный", "one-handed")
+				EnumData(0, "Двуручный", "two-handed"),
+				EnumData(1, "Одноручный", "one-handed")
 			)),
 		))
 		return response
@@ -135,7 +135,7 @@ class UserProfileAndEnumsRepository @Inject constructor(
 
 			if (id != null) {
 				val enum = enumType?.enums?.find { return@find it.id == id }
-				if (enum != null) decodedList.add(enum.name.replaceFirstChar { it.uppercase() })
+				if (enum != null) decodedList.add(enum.name)
 			} else {
 				decodedList.add(context.getString(R.string.survey_option_null))
 			}

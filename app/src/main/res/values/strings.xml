@@ -237,7 +237,7 @@
 	<string name="insert_score_doubles_names">%s/%s</string>
 	<string name="day_and_time">%s\n%s</string>
 	<string name="rating_and_skill">%d\n%s</string>
-	<string name="two_ratings">1280\n1280</string>
+	<string name="two_ratings">%d\n%d</string>
 	<string name="request_comment_placeholder">Всем привет! Давайте сыграем матч, оплата пополам. Одиночная</string>
 	<string name="match_result_single">Результат матча</string>
 	<string name="match_result_double">Результат парного матча</string>

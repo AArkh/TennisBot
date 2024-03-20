@@ -19,6 +19,7 @@ import tennis.bot.mobile.databinding.RecyclerMatchItemBinding
 import tennis.bot.mobile.profile.account.AccountPageAdapter
 import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
 import tennis.bot.mobile.utils.dpToPx
+import tennis.bot.mobile.utils.formRatingChange
 import javax.inject.Inject
 
 class MatchesAdapter @Inject constructor(): PagingDataAdapter<MatchItem, MatchItemViewHolder>(MATCHES_COMPARATOR) {
@@ -73,19 +74,7 @@ class MatchesAdapter @Inject constructor(): PagingDataAdapter<MatchItem, MatchIt
 			if (isPlayer1) match.playerOnePreviousRating else match.playerTwoPreviousRating
 		)
 
-		if (difference.contains("-")) {
-			playerScoreChange.backgroundTintList = getColorStateList(playerScoreChange.context, R.color.tb_bland_red)
-			playerScoreChange.setTextColor(getColor(playerScoreChange.context, R.color.tb_red))
-			val drawable: Drawable? = getDrawable(playerScoreChange.context, R.drawable.vector_down)
-			playerScoreChange.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
-		} else {
-			playerScoreChange.backgroundTintList = getColorStateList(playerScoreChange.context, R.color.tb_bland_green)
-			playerScoreChange.setTextColor(getColor(playerScoreChange.context, R.color.tb_primary_green))
-			val drawable: Drawable? = getDrawable(playerScoreChange.context, R.drawable.vector_up)
-			playerScoreChange.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
-		}
-
-		playerScoreChange.text = difference.trimStart('-')
+		playerScoreChange.formRatingChange(difference)
 	}
 
 	private fun MatchItemViewHolder.loadPlayerImage(match: MatchItem, isPlayer1: Boolean) {
@@ -114,7 +103,7 @@ class MatchesAdapter @Inject constructor(): PagingDataAdapter<MatchItem, MatchIt
 	}
 }
 
-fun ratingChange(currentRating: String, previousRating:String): String {
+fun ratingChange(currentRating: String, previousRating: String): String {
 	return (currentRating.toInt() - previousRating.toInt()).toString()
 }
 

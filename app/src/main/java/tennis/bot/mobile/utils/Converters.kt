@@ -2,12 +2,16 @@ package tennis.bot.mobile.utils
 
 import android.content.Context
 import android.database.Cursor
+import android.graphics.drawable.Drawable
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.TextView
 import androidx.annotation.WorkerThread
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import tennis.bot.mobile.R
 import tennis.bot.mobile.onboarding.location.LocationRepository
 import tennis.bot.mobile.profile.account.AccountPageAdapter
@@ -85,6 +89,21 @@ fun formatDateForFeed(dateString: String): String {
 		minutes > 0 -> "$minutes минут назад"
 		else -> "Только что"
 	}
+}
+
+fun TextView.formRatingChange(difference: String) {
+	if (difference.contains("-")) {
+		backgroundTintList = ContextCompat.getColorStateList(context, R.color.tb_bland_red)
+		setTextColor(ContextCompat.getColor(context, R.color.tb_red))
+		val drawable: Drawable? = AppCompatResources.getDrawable(context, R.drawable.vector_down)
+		setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
+	} else {
+		backgroundTintList = ContextCompat.getColorStateList(context, R.color.tb_bland_green)
+		setTextColor(ContextCompat.getColor(context, R.color.tb_primary_green))
+		val drawable: Drawable? = AppCompatResources.getDrawable(context, R.drawable.vector_up)
+		setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
+	}
+	text = difference.trimStart('-')
 }
 
 fun buildImageRequest( context: Context, profileImageUrl: String?): Any? { // loads a null before an actual profile pic. should we tweak the behavior to change that?

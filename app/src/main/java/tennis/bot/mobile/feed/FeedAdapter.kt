@@ -13,6 +13,7 @@ import tennis.bot.mobile.databinding.FeedPostThreeMatchScoreBinding
 import tennis.bot.mobile.databinding.FeedPostTwoMatchRequestBinding
 import tennis.bot.mobile.databinding.RecyclerEmptyItemBinding
 import tennis.bot.mobile.profile.account.EmptyItemViewHolder
+import tennis.bot.mobile.profile.matches.ratingChange
 import tennis.bot.mobile.utils.FormattedDate
 import tennis.bot.mobile.utils.buildImageRequest
 import tennis.bot.mobile.utils.formatDateForFeed
@@ -30,7 +31,11 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>() 
 	}
 
 	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: Any) {
-		TODO("Not yet implemented")
+		when(holder) {
+			is NewPlayerPostItemViewHolder -> bindNewPlayerPost(item, holder)
+			is MatchRequestPostItemViewHolder -> bindMatchRequestPost(item, holder)
+			is ScorePostItemViewHolder -> bindScorePost(item, holder)
+		}
 	}
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -54,7 +59,6 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>() 
 				EmptyItemViewHolder(binding)
 			}
 		}
-
 	}
 
 	private fun bindNewPlayerPost(item: Any, holder: NewPlayerPostItemViewHolder) {
@@ -154,9 +158,52 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>() 
 			}
 		}
 
+		val matchResultsAdapter = MatchResultsAdapter()
+		holder.binding.resultsContainer.adapter = matchResultsAdapter
+		matchResultsAdapter.submitList(formMatchResultsList(scorePostItem))
+	}
 
+	private fun formMatchResultsList(item: ScorePostItem): List<CoreUtilsItem> {
+		val theList: MutableList<CoreUtilsItem> = mutableListOf()
 
+		val (winner, loser) = if (item.scorePost.matchWon) {
+			item.scorePost.player1!! to item.scorePost.player2!!
+		} else {
+			item.scorePost.player2!! to item.scorePost.player1!!
+		}
 
+		theList.add(MatchScoreItem(
+			winnerName = winner.name,
+			loserName = loser.name,
+			sets = item.scorePost.sets
+		))
+		theList.add(RatingItem(
+			player1Rating = winner.powerNew,
+			player2Rating = loser.powerNew,
+			player1RatingDifference = ratingChange(winner.powerNew.toString(), winner.powerOld.toString()),
+			player2RatingDifference = ratingChange(loser.powerNew.toString(), loser.powerOld.toString())
+		))
+		if (item.scorePost.player3 == null) {
+			theList.add(HeadToHeadItem(
+				score = "${item.scorePost.player1.headToHead} - ${item.scorePost.player2.headToHead}",
+				playersLeftPhotos = listOf(AvatarImage(item.scorePost.player1.photo)),
+				playersRightPhotos = listOf(AvatarImage(item.scorePost.player2.photo)),
+				))
+		} else {
+			theList.add(HeadToHeadItem(
+				score = "${item.scorePost.player1.headToHead} - ${item.scorePost.player2.headToHead}",
+				playersLeftPhotos = listOf(AvatarImage(item.scorePost.player1.photo), AvatarImage(item.scorePost.player2.photo)),
+				playersRightPhotos = listOf(AvatarImage(item.scorePost.player3.photo), AvatarImage(item.scorePost.player4?.photo)),
+			))
+		}
+		theList.add(BonusItem(
+			player1Bonus = winner.bonus,
+			player2Bonus = loser.bonus,
+			player1BonusDifference = winner.bonusChange,
+			player2BonusDifference = loser.bonusChange
+		))
+
+		return theList
 	}
 
 	override fun getItemViewType(position: Int): Int {
@@ -198,4 +245,4 @@ data class MatchRequestPostItem(
 data class ScorePostItem(
 	val postItem: PostData,
 	val scorePost: ScorePost
-)
+): CoreUtilsItem()
