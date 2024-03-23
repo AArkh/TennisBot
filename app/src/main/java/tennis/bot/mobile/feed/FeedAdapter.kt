@@ -25,9 +25,9 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>() 
 
 	companion object {
 		private const val OTHER = 0
-		private const val NEW_PLAYER = 1
-		private const val MATCH_REQUEST = 2
-		private const val SCORE = 3
+		const val NEW_PLAYER = 1
+		const val MATCH_REQUEST = 2
+		const val SCORE = 3
 	}
 
 	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: Any) {
@@ -230,19 +230,19 @@ class ScorePostItemViewHolder(
 
 data class NewPlayerPostItem(
 	val postData: PostData,
-	val newPlayerPost: NewPlayerPost,
+	val newPlayerPost: PostParent.NewPlayerPost,
 	val location: String,
 	val experience: String,
 ): CoreUtilsItem()
 
 data class MatchRequestPostItem(
 	val postData: PostData,
-	val matchRequestPost: MatchRequestPost,
+	val matchRequestPost: PostParent.MatchRequestPost,
 	val locationSubTitle: String,
 	val experience: String
 ): CoreUtilsItem()
 
 data class ScorePostItem(
 	val postItem: PostData,
-	val scorePost: ScorePost
+	val scorePost: PostParent.ScorePost
 ): CoreUtilsItem()

@@ -12,6 +12,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Converter
 import retrofit2.Retrofit
 import tennis.bot.mobile.core.AuthInterceptor
+import tennis.bot.mobile.feed.FeedApi
 import tennis.bot.mobile.feed.insertscore.InsertScoreApi
 import tennis.bot.mobile.feed.insertscore.MediaApi
 import tennis.bot.mobile.feed.searchopponent.OpponentsApi
@@ -303,7 +304,13 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideMediaApiClient(
-        @Named(INSERT_SCORE) retrofit: Retrofit
+        @Named(INSERT_SCORE) retrofit: Retrofit // should we rewrite everything to use a single retrofit fun?
     ): MediaApi = retrofit.create(MediaApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideFeedApiClient(
+        @Named(INSERT_SCORE) retrofit: Retrofit
+    ): FeedApi = retrofit.create(FeedApi::class.java)
 }
 

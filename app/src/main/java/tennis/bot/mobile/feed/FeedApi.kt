@@ -1,26 +1,32 @@
 package tennis.bot.mobile.feed
 
+import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 import tennis.bot.mobile.core.CoreUtilsItem
-import tennis.bot.mobile.profile.matches.MatchBasicResponse
 import tennis.bot.mobile.profile.matches.TennisSetNetwork
 
 interface FeedApi {
 
-	@GET("api/games/activity")
+	@GET("api/activity")
 	suspend fun getActivities(
 		@Query("skip") skip:Int = DEFAULT_SKIP,
 		@Query("limit") limit:Int = DEFAULT_LIMIT
-	): Response<MatchBasicResponse>
+	): Response<ActivityBasicResponse>
 
 	companion object{
 		const val DEFAULT_SKIP = 0
 		const val DEFAULT_LIMIT = 20
 	}
 }
+
+@Serializable
+data class ActivityBasicResponse(
+	val totalCount: Int,
+	val items: List<PostData>
+)
 
 @Serializable
 data class PostData(
@@ -33,7 +39,8 @@ data class PostData(
 ): CoreUtilsItem()
 
 @Serializable
-sealed class PostParent
+@Polymorphic
+sealed class PostParent {
 
 @Serializable
 data class NewPlayerPost(
@@ -108,3 +115,4 @@ data class PlayerPostData(
 	val powerPositionNew: Int,
 	val headToHead: Int
 )
+}

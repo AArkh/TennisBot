@@ -52,6 +52,15 @@ class UserProfileAndEnumsRepository @Inject constructor(
 		SurveyResultItem(context.getString(R.string.accountpage_gamedata_racquetStrings), getString(context, R.string.survey_option_null), noUnderline = true),
 	)
 
+	companion object {
+		const val NAME_TITLE = "name"
+		const val BIRTHDAY_TITLE = "birthday"
+		const val CITY_ID_TITLE = "cityId"
+		const val DISTRICT_ID_TITLE = "districtId"
+		const val PHONE_NUMBER_TITLE = "phoneNumber"
+		const val TELEGRAM_TITLE = "telegram"
+	}
+
 	@WorkerThread
 	fun precacheProfile(): ProfileData {
 		val response = userProfileApi.getProfile().execute()
@@ -70,12 +79,12 @@ class UserProfileAndEnumsRepository @Inject constructor(
 
 	fun updateCachedProfile(key: String, value: String) {
 		return when(key){
-			"name" -> { cachedProfileData = cachedProfileData.copy(name = value) } // extract to const
-			"birthday" -> { cachedProfileData = cachedProfileData.copy(birthday = value) }
-			"cityId" -> { cachedProfileData = cachedProfileData.copy(cityId = value.toInt()) }
-			"districtId" -> { cachedProfileData = cachedProfileData.copy(districtId = value.toInt()) }
-			"phoneNumber" -> { recordPhone(value) }
-			"telegram" -> { cachedProfileData = cachedProfileData.copy(telegram = value) }
+			NAME_TITLE -> { cachedProfileData = cachedProfileData.copy(name = value) } // extract to const
+			BIRTHDAY_TITLE -> { cachedProfileData = cachedProfileData.copy(birthday = value) }
+			CITY_ID_TITLE -> { cachedProfileData = cachedProfileData.copy(cityId = value.toInt()) }
+			DISTRICT_ID_TITLE -> { cachedProfileData = cachedProfileData.copy(districtId = value.toInt()) }
+			PHONE_NUMBER_TITLE -> { recordPhone(value) }
+			TELEGRAM_TITLE -> { cachedProfileData = cachedProfileData.copy(telegram = value) }
 			IS_RIGHTHAND_TITLE -> {}
 			IS_ONE_BACKHAND_TITLE -> {}
 			SURFACE_TITLE -> {}
@@ -88,8 +97,8 @@ class UserProfileAndEnumsRepository @Inject constructor(
 
 	private fun updateCachedProfile(key: String, value: Int) {
 		return when(key){
-			"cityId" -> { cachedProfileData = cachedProfileData.copy(cityId = value) }
-			"districtId" -> { cachedProfileData = cachedProfileData.copy(districtId = value) }
+			CITY_ID_TITLE -> { cachedProfileData = cachedProfileData.copy(cityId = value) }
+			DISTRICT_ID_TITLE -> { cachedProfileData = cachedProfileData.copy(districtId = value) }
 			IS_RIGHTHAND_TITLE -> { cachedProfileData = cachedProfileData.copy(isRightHand = value == 1) }
 			IS_ONE_BACKHAND_TITLE -> {  cachedProfileData = cachedProfileData.copy(isOneBackhand = value == 1) }
 			SURFACE_TITLE -> { cachedProfileData = cachedProfileData.copy(surface = value) }
@@ -124,6 +133,21 @@ class UserProfileAndEnumsRepository @Inject constructor(
 			return cachedAllEnums
 		}
 		return precacheEnums()
+	}
+
+	suspend fun getEnumById(selectedEnumTypeAndId: Pair<String, Int?>): String {
+		val allEnums = getEnums()
+
+		val enumType = allEnums.find { return@find it.type == selectedEnumTypeAndId.first }
+
+		if (selectedEnumTypeAndId.second != null) {
+			val enum = enumType?.enums?.find { return@find it.id == selectedEnumTypeAndId.second }
+			if (enum != null) return enum.name
+		} else {
+			return context.getString(R.string.survey_option_null)
+		}
+
+		return ""
 	}
 
 	suspend fun getEnumsById(selectedEnumTypesAndIds: List<Pair<String, Int?>>): List<String> {

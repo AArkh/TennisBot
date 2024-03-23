@@ -20,6 +20,7 @@ import tennis.bot.mobile.utils.view.AvatarImage
 class FeedBottomNavigationFragment : CoreFragment<FragmentFeedBottomNavigationBinding>() {
 	override val bindingInflation: Inflation<FragmentFeedBottomNavigationBinding> = FragmentFeedBottomNavigationBinding::inflate
 	private val viewModel: FeedBottomNavigationViewModel by viewModels()
+	lateinit var adapter: FeedAdapter
 
 	companion object {
 		const val ADD_SCORE_INDEX = 0
@@ -44,6 +45,7 @@ class FeedBottomNavigationFragment : CoreFragment<FragmentFeedBottomNavigationBi
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: FeedBottomNavigationUiState ->
 			binding.playerPhoto.setImage(AvatarImage(uiState.playerPicture))
 			binding.playerPhoto.drawableSize = requireContext().dpToPx(32)
+			viewModel.onFetchingActivities()
 		}
 	}
 
