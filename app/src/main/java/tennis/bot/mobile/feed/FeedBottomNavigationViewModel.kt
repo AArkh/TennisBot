@@ -59,9 +59,9 @@ class FeedBottomNavigationViewModel @Inject constructor(
 
 			for(postData in list) {
 				when(postData.postType) {
-					FeedAdapter.NEW_PLAYER -> { convertNewPlayerToItem(postData) }
-					FeedAdapter.MATCH_REQUEST -> { convertMatchScoreToItem(postData) }
-					FeedAdapter.SCORE -> { ScorePostItem(postData, postData.post as PostParent.ScorePost) }
+					FeedAdapter.NEW_PLAYER -> { listOfItems.add(convertNewPlayerToItem(postData)) }
+					FeedAdapter.MATCH_REQUEST -> {  listOfItems.add(convertMatchScoreToItem(postData)) }
+					FeedAdapter.SCORE -> {  listOfItems.add(ScorePostItem(postData, postData.post as PostParent.ScorePost)) }
 				}
 			}
 

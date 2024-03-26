@@ -31,11 +31,14 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
 
+
+
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
 
     companion object {
+        private const val BASE_URL = "https://bugz.su:8443/core/"
         const val WITH_AUTHENTICATION = "WITH_AUTHENTICATION"
         const val SMS_CODES = "BALANCES_ALLOWANCES"
         const val NEW_REGISTRATION = "NEW_REGISTRATION"
@@ -47,6 +50,7 @@ class NetworkModule {
         const val EDIT_GAMEDATA = "EDIT_GAMEDATA"
         const val SEARCH_OPPONENTS = "SEARCH_OPPONENTS"
         const val INSERT_SCORE = "INSERT_SCORE"
+        const val ACTIVITY_FEED = "ACTIVITY_FEED"
     }
 
     @Provides
@@ -81,12 +85,20 @@ class NetworkModule {
         ignoreUnknownKeys = true //need to ignore keys, which are not in response class
         isLenient = true //ignores RFC-4627 specification by default to parse parse quite freely-formatted data
         explicitNulls = false //enables nullable fields for responses
+        classDiscriminator = "type"
     }
 
     @Provides
     @Singleton
     fun provideJsonConverterFactory(json: Json): Converter.Factory {
         return json.asConverterFactory("application/json".toMediaType())
+    }
+
+    @Provides
+    @Singleton
+    @Named("POST_DATA")
+    fun provideFeedJsonConverterFactory(json: Json): Converter.Factory {
+        return PostDataConverterFactory(json)
     }
 
     @Provides
@@ -98,7 +110,7 @@ class NetworkModule {
     ): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl("https://bugz.su:8443/core/") //todo вынести debug && prod url в gradle build config
+            .baseUrl(BASE_URL) //todo вынести debug && prod url в gradle build config
             .addConverterFactory(converterFactory)
             .build()
     }
@@ -112,7 +124,7 @@ class NetworkModule {
     ): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl("https://bugz.su:8443/core/") //todo вынести debug && prod url в gradle build config
+            .baseUrl(BASE_URL) //todo вынести debug && prod url в gradle build config
             .addConverterFactory(converterFactory)
             .build()
     }
@@ -126,7 +138,7 @@ class NetworkModule {
     ): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl("https://bugz.su:8443/core/") //todo вынести debug && prod url в gradle build config
+            .baseUrl(BASE_URL) //todo вынести debug && prod url в gradle build config
             .addConverterFactory(converterFactory)
             .build()
     }
@@ -140,7 +152,7 @@ class NetworkModule {
     ): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl("https://bugz.su:8443/core/") //todo вынести debug && prod url в gradle build config
+            .baseUrl(BASE_URL) //todo вынести debug && prod url в gradle build config
             .addConverterFactory(converterFactory)
             .build()
     }
@@ -154,7 +166,7 @@ class NetworkModule {
     ): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl("https://bugz.su:8443/core/") //todo вынести debug && prod url в gradle build config
+            .baseUrl(BASE_URL) //todo вынести debug && prod url в gradle build config
             .addConverterFactory(converterFactory)
             .build()
     }
@@ -168,7 +180,7 @@ class NetworkModule {
     ): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl("https://bugz.su:8443/core/") //todo вынести debug && prod url в gradle build config
+            .baseUrl(BASE_URL) //todo вынести debug && prod url в gradle build config
             .addConverterFactory(converterFactory)
             .build()
     }
@@ -182,7 +194,7 @@ class NetworkModule {
     ): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl("https://bugz.su:8443/core/") //todo вынести debug && prod url в gradle build config
+            .baseUrl(BASE_URL) //todo вынести debug && prod url в gradle build config
             .addConverterFactory(converterFactory)
             .build()
     }
@@ -196,7 +208,7 @@ class NetworkModule {
     ): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl("https://bugz.su:8443/core/") //todo вынести debug && prod url в gradle build config
+            .baseUrl(BASE_URL) //todo вынести debug && prod url в gradle build config
             .addConverterFactory(converterFactory)
             .build()
     }
@@ -210,7 +222,7 @@ class NetworkModule {
     ): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl("https://bugz.su:8443/core/") //todo вынести debug && prod url в gradle build config
+            .baseUrl(BASE_URL) //todo вынести debug && prod url в gradle build config
             .addConverterFactory(converterFactory)
             .build()
     }
@@ -224,8 +236,24 @@ class NetworkModule {
     ): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl("https://bugz.su:8443/core/") //todo вынести debug && prod url в gradle build config
+            .baseUrl(BASE_URL) //todo вынести debug && prod url в gradle build config
             .addConverterFactory(converterFactory)
+            .build()
+    }
+
+    @Provides
+    @Named(ACTIVITY_FEED)
+    @Singleton
+    fun provideFeedRetrofit(
+        @Named(WITH_AUTHENTICATION) okHttpClient: OkHttpClient,
+        converterFactory: Converter.Factory,
+        @Named("POST_DATA")postDataConverterFactory: Converter.Factory
+    ): Retrofit {
+        return Retrofit.Builder()
+            .client(okHttpClient)
+            .baseUrl(BASE_URL) //todo вынести debug && prod url в gradle build config
+            .addConverterFactory(converterFactory)
+//            .addConverterFactory(postDataConverterFactory)
             .build()
     }
 
@@ -310,7 +338,7 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideFeedApiClient(
-        @Named(INSERT_SCORE) retrofit: Retrofit
+        @Named(ACTIVITY_FEED) retrofit: Retrofit
     ): FeedApi = retrofit.create(FeedApi::class.java)
 }
 

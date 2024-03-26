@@ -207,7 +207,7 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>() 
 	}
 
 	override fun getItemViewType(position: Int): Int {
-		return when((items[position] as PostData).postType) {
+		return when((items[position] as PostParent).postType) {
 			1 -> NEW_PLAYER
 			2 -> MATCH_REQUEST
 			3 -> SCORE

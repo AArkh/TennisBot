@@ -1,6 +1,7 @@
 package tennis.bot.mobile.feed
 
 import kotlinx.serialization.Polymorphic
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import retrofit2.Response
 import retrofit2.http.GET
@@ -34,18 +35,20 @@ data class PostData(
 	val postType: Int,
 	val totalLikes: Int,
 	val liked: Boolean,
-	val post: PostParent,
+	val post: PostParent?,
 	val addedAt: String?
 ): CoreUtilsItem()
 
 @Serializable
-@Polymorphic
-sealed class PostParent {
+sealed class PostParent(
+//	val postType: Int
+) {
 
 @Serializable
+@SerialName("1")
 data class NewPlayerPost(
 	val type: Int, // 1
-	val id: Int,
+	val id: Long,
 	val name: String,
 	val isMale: Boolean,
 	val cityId: Int,
@@ -60,6 +63,7 @@ data class NewPlayerPost(
 ): PostParent()
 
 @Serializable
+@SerialName("2")
 data class MatchRequestPost(
 	val type: Int, // 2
 	val pay: Int,
@@ -68,7 +72,7 @@ data class MatchRequestPost(
 	val districtId: Int,
 	val comment: String,
 	val gameType: Int,
-	val playerId: Int,
+	val playerId: Long,
 	val playerName: String,
 	val playerPhoto: String,
 	val playerExperience: Int,
@@ -83,9 +87,10 @@ data class MatchRequestPost(
 ): PostParent()
 
 @Serializable
+@SerialName("3")
 data class ScorePost(
 	val type: Int, // 3
-	val id: Int,
+	val id: Long,
 	val creatorId: Long,
 	val photo: String?,
 	val video: String?,

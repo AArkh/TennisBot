@@ -4,5 +4,5 @@ import tennis.bot.mobile.core.CoreUtilsItem
 
 data class FeedBottomNavigationUiState(
 	val playerPicture: String?,
-	val postItems: List<CoreUtilsItem>? = null
+	val postItems: List<CoreUtilsItem> = emptyList()
 )

@@ -5,6 +5,7 @@ import android.view.Gravity
 import android.view.View
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
@@ -15,11 +16,13 @@ import tennis.bot.mobile.profile.account.AccountPageFragment
 import tennis.bot.mobile.utils.dpToPx
 import tennis.bot.mobile.utils.goToAnotherSectionFragment
 import tennis.bot.mobile.utils.view.AvatarImage
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FeedBottomNavigationFragment : CoreFragment<FragmentFeedBottomNavigationBinding>() {
 	override val bindingInflation: Inflation<FragmentFeedBottomNavigationBinding> = FragmentFeedBottomNavigationBinding::inflate
 	private val viewModel: FeedBottomNavigationViewModel by viewModels()
+	@Inject
 	lateinit var adapter: FeedAdapter
 
 	companion object {
@@ -29,6 +32,9 @@ class FeedBottomNavigationFragment : CoreFragment<FragmentFeedBottomNavigationBi
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+
+		binding.container.adapter = adapter
+		binding.container.layoutManager = LinearLayoutManager(context)
 
 		binding.playerPhoto.setOnClickListener {
 			parentFragmentManager.beginTransaction()
@@ -46,6 +52,7 @@ class FeedBottomNavigationFragment : CoreFragment<FragmentFeedBottomNavigationBi
 			binding.playerPhoto.setImage(AvatarImage(uiState.playerPicture))
 			binding.playerPhoto.drawableSize = requireContext().dpToPx(32)
 			viewModel.onFetchingActivities()
+			adapter.submitList(uiState.postItems)
 		}
 	}
 
