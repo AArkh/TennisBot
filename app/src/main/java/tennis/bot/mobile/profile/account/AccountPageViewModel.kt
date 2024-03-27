@@ -30,7 +30,7 @@ class AccountPageViewModel @Inject constructor(
 		const val SHOES_TITLE = "shoes"
 		const val RACQUET_TITLE = "racquet"
 		const val RACQUET_STRINGS_TITLE = "strings"
-		const val EXPERIENCE_TITLE = "experience"
+		const val EXPERIENCE_TITLE = "playerExperience"
 	}
 
 	private val _uiStateFlow = MutableStateFlow<AccountPageUiState>(

@@ -60,7 +60,7 @@ class FeedBottomNavigationViewModel @Inject constructor(
 			for(postData in list) {
 				when(postData.postType) {
 					FeedAdapter.NEW_PLAYER -> { listOfItems.add(convertNewPlayerToItem(postData)) }
-					FeedAdapter.MATCH_REQUEST -> {  listOfItems.add(convertMatchScoreToItem(postData)) }
+					FeedAdapter.MATCH_REQUEST -> {  listOfItems.add(convertMatchRequestToItem(postData)) }
 					FeedAdapter.SCORE -> {  listOfItems.add(ScorePostItem(postData, postData.post as PostParent.ScorePost)) }
 				}
 			}
@@ -69,7 +69,7 @@ class FeedBottomNavigationViewModel @Inject constructor(
 		}
 	}
 
-	suspend fun formatLocationDataForPost(cityId: Int, districtId: Int?): String? {
+	private suspend fun formatLocationDataForPost(cityId: Int, districtId: Int?): String? {
 		val locations = locationRepository.getLocations()
 		val city = locationDataMapper.findCityString(locations, cityId)
 		val district = if (districtId != null) {
@@ -77,7 +77,7 @@ class FeedBottomNavigationViewModel @Inject constructor(
 		} else {
 			null
 		}
-		val location = if (districtId == null) {
+		val location = if (district == null) {
 			city
 		} else {
 			"$city(${district})"
@@ -97,7 +97,7 @@ class FeedBottomNavigationViewModel @Inject constructor(
 		)
 	}
 
-	private suspend fun convertMatchScoreToItem(postData: PostData): MatchRequestPostItem {
+	private suspend fun convertMatchRequestToItem(postData: PostData): MatchRequestPostItem {
 		val matchRequestPost = postData.post as PostParent.MatchRequestPost
 
 		return MatchRequestPostItem(

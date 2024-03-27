@@ -249,12 +249,13 @@
 	<string name="time_ago">3 часа назад</string>
 	<string name="month_text">Май</string>
 	<string name="post_two_location_subtitle">%s, игра на %s</string>
-	<string name="post_type_2">Заявки</string>
+	<string name="post_type_2">Заявка на игру</string>
 	<string name="new_player">Новый игрок</string>
 	<string name="post_type_1">Анкета</string>
 	<string name="meetings">Встречи</string>
 	<string name="single_meetings">Личные встречи</string>
 	<string name="placeholder_date">21 июня, 8:34 · #asv</string>
 	<string name="post_three_doubles_title">%s / %s</string>
+	<string name="bonuses_change">+%d\n+%d</string>
 
 </resources>

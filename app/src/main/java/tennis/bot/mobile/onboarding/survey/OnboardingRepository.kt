@@ -156,13 +156,13 @@ class OnboardingRepository @Inject constructor(
 	}
 
     @WorkerThread
-    suspend fun postProfilePicture(): Int {
+    suspend fun postProfilePicture(isRegister: Boolean): Int {
         val file = uriToFile(context, getUserPickedPictureUri()!!.toUri())
         val requestFile = file?.asRequestBody("multipart/form-data".toMediaTypeOrNull())
         val imagePart = MultipartBody.Part.createFormData("Content", file?.name, requestFile!!)
 
         val response = photoPickApi.postProfilePicture(
-            registerPhoto = true,
+            registerPhoto = isRegister,
             Content = imagePart,
             name = "",
             authHeader = tokenRepo.getAccessToken() ?: ""

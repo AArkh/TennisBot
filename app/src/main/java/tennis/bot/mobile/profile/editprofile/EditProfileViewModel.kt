@@ -211,7 +211,7 @@ class EditProfileViewModel @Inject constructor(
 	fun onPickedProfilePic(uri: Uri) {
 		onboardingRepository.recordUserPickedPictureUri(uri.toString())
 		viewModelScope.launch(Dispatchers.IO) {
-			onboardingRepository.postProfilePicture()
+			onboardingRepository.postProfilePicture(userProfileRepo.getProfile().photo == null)
 			userProfileRepo.precacheProfile() // only way to update photo link
 			onStartup()
 		}

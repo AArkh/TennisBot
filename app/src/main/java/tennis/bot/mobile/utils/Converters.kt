@@ -51,7 +51,7 @@ fun convertDateAndTime(dateString: String): String? {
 }
 
 fun formatDateForMatchPostItem(timestampString: String): FormattedDate {
-	val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ", Locale.getDefault())
+	val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'", Locale.getDefault())
 	val date = dateFormat.parse(timestampString) ?: throw IllegalArgumentException("Invalid timestamp format")
 
 	val calendar = Calendar.getInstance().apply { time = date }

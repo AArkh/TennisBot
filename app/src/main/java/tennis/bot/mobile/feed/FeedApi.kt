@@ -1,6 +1,5 @@
 package tennis.bot.mobile.feed
 
-import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import retrofit2.Response

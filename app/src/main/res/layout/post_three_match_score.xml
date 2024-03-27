@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="wrap_content"
-	android:layout_height="wrap_content"
+	android:layout_height="52dp"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_marginStart="16dp"
 	android:background="@drawable/background_corners_8dp"
@@ -44,7 +44,7 @@
 		android:orientation="horizontal"
 		app:reverseLayout="true"
 		app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-		tools:listitem="@layout/recycler_set_result_item_alt"
+		tools:listitem="@layout/recycler_set_result_item"
 		tools:itemCount="3"
 		app:layout_constraintStart_toEndOf="@id/player1_name_surname"
 		app:layout_constraintTop_toTopOf="@id/player1_name_surname"

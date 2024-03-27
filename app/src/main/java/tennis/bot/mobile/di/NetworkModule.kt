@@ -95,13 +95,6 @@ class NetworkModule {
     }
 
     @Provides
-    @Singleton
-    @Named("POST_DATA")
-    fun provideFeedJsonConverterFactory(json: Json): Converter.Factory {
-        return PostDataConverterFactory(json)
-    }
-
-    @Provides
     @Named(SMS_CODES)
     @Singleton
     fun provideSmsCodesRetrofit(
@@ -247,13 +240,11 @@ class NetworkModule {
     fun provideFeedRetrofit(
         @Named(WITH_AUTHENTICATION) okHttpClient: OkHttpClient,
         converterFactory: Converter.Factory,
-        @Named("POST_DATA")postDataConverterFactory: Converter.Factory
     ): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
             .baseUrl(BASE_URL) //todo вынести debug && prod url в gradle build config
             .addConverterFactory(converterFactory)
-//            .addConverterFactory(postDataConverterFactory)
             .build()
     }
 

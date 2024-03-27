@@ -32,7 +32,7 @@
 			android:layout_gravity="bottom|center"
 			android:text="29"
 			android:textColor="@color/tb_white"
-			android:textSize="22sp" />
+			android:textSize="24sp" />
 	</FrameLayout>
 
 	<TextView
@@ -40,6 +40,7 @@
 		android:layout_width="0dp"
 		android:layout_height="0dp"
 		android:layout_marginStart="8dp"
+		android:gravity="center|start"
 		android:text="@string/day_and_time"
 		android:textColor="@color/tb_white"
 		android:textSize="14sp"
@@ -79,6 +80,7 @@
 		android:layout_width="0dp"
 		android:layout_height="0dp"
 		android:layout_marginStart="8dp"
+		android:gravity="center|start"
 		android:text="@string/rating_and_skill"
 		android:textColor="@color/tb_white"
 		android:textSize="14sp"

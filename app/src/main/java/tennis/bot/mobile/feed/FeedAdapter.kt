@@ -2,6 +2,7 @@ package tennis.bot.mobile.feed
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.content.ContextCompat.getColor
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -12,13 +13,16 @@ import tennis.bot.mobile.databinding.FeedPostOneNewPlayerBinding
 import tennis.bot.mobile.databinding.FeedPostThreeMatchScoreBinding
 import tennis.bot.mobile.databinding.FeedPostTwoMatchRequestBinding
 import tennis.bot.mobile.databinding.RecyclerEmptyItemBinding
+import tennis.bot.mobile.profile.account.AccountPageAdapter
 import tennis.bot.mobile.profile.account.EmptyItemViewHolder
+import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
 import tennis.bot.mobile.profile.matches.ratingChange
 import tennis.bot.mobile.utils.FormattedDate
-import tennis.bot.mobile.utils.buildImageRequest
+import tennis.bot.mobile.utils.dpToPx
 import tennis.bot.mobile.utils.formatDateForFeed
 import tennis.bot.mobile.utils.formatDateForMatchPostItem
 import tennis.bot.mobile.utils.view.AvatarImage
+import tennis.bot.mobile.utils.view.ImageSeriesView
 import javax.inject.Inject
 
 class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>() {
@@ -64,7 +68,7 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>() 
 	private fun bindNewPlayerPost(item: Any, holder: NewPlayerPostItemViewHolder) {
 		val newPlayerItem = item as? NewPlayerPostItem ?: throw IllegalArgumentException("Item must be NewPlayerPostItem")
 
-		holder.binding.playerPhoto.setImage(AvatarImage(newPlayerItem.newPlayerPost.picFile))
+		holder.binding.playerPhoto.showPlayerPhoto(newPlayerItem.newPlayerPost.picFile, holder.binding.itemPicture)
 		holder.binding.nameSurname.text = newPlayerItem.newPlayerPost.name
 		holder.binding.infoPanel.text = holder.binding.infoPanel.context.getString(
 			R.string.player_new_info_panel,
@@ -87,15 +91,9 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>() 
 		val matchRequestItem = item as? MatchRequestPostItem ?: throw IllegalArgumentException("Item must be MatchRequestPostItem")
 		val formattedMatchDate = matchRequestItem.matchRequestPost.date?.let { formatDateForMatchPostItem(it) }
 
-		holder.binding.playerPhoto.setImage(AvatarImage(matchRequestItem.matchRequestPost.playerPhoto))
+		holder.binding.playerPhoto.showPlayerPhoto(matchRequestItem.matchRequestPost.playerPhoto, holder.binding.itemPicture)
 		holder.binding.nameSurname.text = matchRequestItem.matchRequestPost.playerName
 		holder.binding.locationSubTitle.text = matchRequestItem.locationSubTitle
-//			holder.binding.locationSubTitle.context.getString( // more to ViewModel
-//			R.string.post_two_location_subtitle,
-//			matchResultItem.cityId,
-//			matchResultItem.districtId)
-
-		holder.binding.itemPicture.load(buildImageRequest(holder.binding.itemPicture.context, matchRequestItem.matchRequestPost.playerPhoto))
 
 		holder.bindInfoPanel(formattedMatchDate, matchRequestItem)
 		holder.binding.requestComment.text = matchRequestItem.matchRequestPost.comment
@@ -132,7 +130,7 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>() 
 	private fun bindScorePost(item: Any, holder: ScorePostItemViewHolder) {
 		val scorePostItem = item as? ScorePostItem ?: throw IllegalArgumentException("Item must be ScorePostItem")
 
-		holder.binding.playerPhoto.setImage(AvatarImage(scorePostItem.scorePost.player1?.photo))
+		holder.binding.playerPhoto.showPlayerPhoto(scorePostItem.scorePost.player1?.photo, holder.binding.itemPicture)
 		if (scorePostItem.scorePost.player3 == null) {
 			holder.binding.nameSurname.text = scorePostItem.scorePost.player1?.name
 			if (scorePostItem.scorePost.matchWon) {
@@ -161,6 +159,23 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>() 
 		val matchResultsAdapter = MatchResultsAdapter()
 		holder.binding.resultsContainer.adapter = matchResultsAdapter
 		matchResultsAdapter.submitList(formMatchResultsList(scorePostItem))
+	}
+
+	private fun ImageSeriesView.showPlayerPhoto(profileImageUrl: String?, itemPicture: ImageView) {
+		setImage(AvatarImage(profileImageUrl))
+		drawableSize = context.dpToPx(40)
+
+		if (profileImageUrl == null) {
+			itemPicture.load(R.drawable.null_placeholder)
+			return
+		}
+
+		if (profileImageUrl.contains("default")) {
+			val resourceId = getDefaultDrawableResourceId(itemPicture.context, profileImageUrl.removeSuffix(".png"))
+			if (resourceId != null) itemPicture.load(resourceId)
+		} else {
+			itemPicture.load(AccountPageAdapter.IMAGES_LINK + profileImageUrl)
+		}
 	}
 
 	private fun formMatchResultsList(item: ScorePostItem): List<CoreUtilsItem> {
@@ -207,10 +222,10 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>() 
 	}
 
 	override fun getItemViewType(position: Int): Int {
-		return when((items[position] as PostParent).postType) {
-			1 -> NEW_PLAYER
-			2 -> MATCH_REQUEST
-			3 -> SCORE
+		return when (items[position]) {
+			is NewPlayerPostItem -> NEW_PLAYER
+			is MatchRequestPostItem -> MATCH_REQUEST
+			is ScorePostItem -> SCORE
 			else -> OTHER
 		}
 	}

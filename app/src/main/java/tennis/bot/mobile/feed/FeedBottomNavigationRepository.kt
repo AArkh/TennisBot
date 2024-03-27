@@ -3,7 +3,6 @@ package tennis.bot.mobile.feed
 import android.content.Context
 import androidx.annotation.WorkerThread
 import dagger.hilt.android.qualifiers.ApplicationContext
-import tennis.bot.mobile.core.CoreUtilsItem
 import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 import javax.inject.Singleton

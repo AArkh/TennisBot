@@ -12,7 +12,6 @@ import tennis.bot.mobile.databinding.PostThreeMatchScoreBinding
 import tennis.bot.mobile.databinding.PostThreeRatingBinding
 import tennis.bot.mobile.databinding.RecyclerEmptyItemBinding
 import tennis.bot.mobile.profile.account.EmptyItemViewHolder
-import tennis.bot.mobile.profile.matches.GameSetsAdapter
 import tennis.bot.mobile.profile.matches.TennisSetNetwork
 import tennis.bot.mobile.utils.formRatingChange
 import tennis.bot.mobile.utils.view.AvatarImage
@@ -70,7 +69,7 @@ class MatchResultsAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHo
 		holder.binding.player1NameSurname.text = matchScoreItem.winnerName
 		holder.binding.player2NameSurname.text = matchScoreItem.loserName
 
-		val gameSetsAdapter = GameSetsAdapter()
+		val gameSetsAdapter = FeedGameSetsAdapter()
 		holder.binding.gameSetsContainer.adapter = gameSetsAdapter
 		gameSetsAdapter.submitList(matchScoreItem.sets)
 	}
@@ -83,6 +82,8 @@ class MatchResultsAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHo
 			ratingItem.player1Rating,
 			ratingItem.player2Rating)
 		holder.binding.player1ScoreChange.formRatingChange(ratingItem.player1RatingDifference)
+		holder.binding.player2ScoreChange.formRatingChange(ratingItem.player2RatingDifference)
+
 	}
 
 	private fun bindHeadToHead(item: Any, holder: HeadToHeadItemViewHolder) {
@@ -95,11 +96,16 @@ class MatchResultsAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHo
 
 	private fun bindBonus(item: Any, holder: BonusItemViewHolder) {
 		val bonusItem = item as? BonusItem ?: throw IllegalArgumentException("Item must be BonusItem")
+		val context = holder.binding.bonuses.context
 
-		holder.binding.ratings.text = holder.binding.ratings.context.getString(
+		holder.binding.bonuses.text = holder.binding.bonuses.context.getString(
 			R.string.two_ratings,
 			bonusItem.player1Bonus,
 			bonusItem.player2Bonus,)
+		holder.binding.bonusesChange.text = context.getString(
+			R.string.bonuses_change,
+			bonusItem.player1BonusDifference,
+			bonusItem.player2BonusDifference)
 	}
 
 	override fun getItemViewType(position: Int): Int {
