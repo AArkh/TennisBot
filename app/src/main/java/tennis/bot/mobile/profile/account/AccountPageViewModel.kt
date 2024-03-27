@@ -24,6 +24,7 @@ class AccountPageViewModel @Inject constructor(
 	companion object {
 		const val EMPTY_STRING = ""
 		const val ZERO = 0
+		const val GAME_STYLE_TITLE = "gameStyle"
 		const val IS_RIGHTHAND_TITLE = "isRightHand"
 		const val IS_ONE_BACKHAND_TITLE = "isOneBackhand"
 		const val SURFACE_TITLE = "surface"
@@ -99,6 +100,7 @@ class AccountPageViewModel @Inject constructor(
 		val isOneBackhandInt = if (profileData.isOneBackhand == true) 1 else if (profileData.isOneBackhand == false) 0 else null
 		val decodedIds = repository.getEnumsById(
 			listOf(
+				Pair(GAME_STYLE_TITLE, profileData.gameStyle),
 				Pair(IS_RIGHTHAND_TITLE, isRightHandInt),
 				Pair(IS_ONE_BACKHAND_TITLE, isOneBackhandInt),
 				Pair(SURFACE_TITLE, profileData.surface),

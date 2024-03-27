@@ -8,6 +8,8 @@ import retrofit2.http.PUT
 interface EditGameDataApi {
 
 	@PUT("api/tennis-players")
+	fun putGameStyle(@Body gameStyle: GameStyleNetwork): Call<Unit>
+	@PUT("api/tennis-players")
 	fun putIsRightHand(@Body isRightHand: IsRightHandNetwork): Call<Unit>
 
 	@PUT("api/tennis-players")
@@ -26,6 +28,8 @@ interface EditGameDataApi {
 	fun putRacquetStrings(@Body racquetStrings: RacquetStringsNetwork): Call<Unit>
 }
 
+@Serializable
+data class GameStyleNetwork(val gameStyle: Int?)
 @Serializable
 data class IsRightHandNetwork(val isRightHand: Boolean?)
 

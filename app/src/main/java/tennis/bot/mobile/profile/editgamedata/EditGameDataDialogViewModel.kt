@@ -14,6 +14,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tennis.bot.mobile.profile.account.AccountPageViewModel
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
+import tennis.bot.mobile.profile.editgamedata.EditGameDataFragment.Companion.GAMEDATA_DIALOG_PICKED_POSITION
+import tennis.bot.mobile.profile.editgamedata.EditGameDataFragment.Companion.GAMEDATA_DIALOG_TITLE
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,22 +36,25 @@ class EditGameDataDialogViewModel @Inject constructor(
 
 	private fun onLoadingSelectedList() {
 		when (currentAction) {
-			EditGameDataAdapter.IS_RIGHT_HAND -> {
+			GAME_STYLE -> {
+				loadOptionsListByTitle(AccountPageViewModel.GAME_STYLE_TITLE)
+			}
+			IS_RIGHT_HAND -> {
 				loadOptionsListByTitle(AccountPageViewModel.IS_RIGHTHAND_TITLE)
 			}
-			EditGameDataAdapter.IS_ONE_BACKHAND -> {
+			IS_ONE_BACKHAND -> {
 				loadOptionsListByTitle(AccountPageViewModel.IS_ONE_BACKHAND_TITLE)
 			}
-			EditGameDataAdapter.SURFACE -> {
+			SURFACE -> {
 				loadOptionsListByTitle(AccountPageViewModel.SURFACE_TITLE)
 			}
-			EditGameDataAdapter.SHOES -> {
+			SHOES -> {
 				loadOptionsListByTitle(AccountPageViewModel.SHOES_TITLE)
 			}
-			EditGameDataAdapter.RACQUET -> {
+			RACQUET -> {
 				loadOptionsListByTitle(AccountPageViewModel.RACQUET_TITLE)
 			}
-			EditGameDataAdapter.RACQUET_STRINGS -> {
+			RACQUET_STRINGS -> {
 				loadOptionsListByTitle(AccountPageViewModel.RACQUET_STRINGS_TITLE)
 			}
 		}
@@ -62,7 +67,7 @@ class EditGameDataDialogViewModel @Inject constructor(
 				val enumOptionsList = enumList?.map { enumData ->
 					TextOnlyItem(
 						id = enumData.id,
-						title = enumData.name.replaceFirstChar { it.uppercase() }
+						title = enumData.name
 					)
 				}
 				if (enumOptionsList != null) {
@@ -79,9 +84,20 @@ class EditGameDataDialogViewModel @Inject constructor(
 		activity.supportFragmentManager.setFragmentResult(
 			EditGameDataFragment.GAMEDATA_DIALOG_REQUEST_KEY,
 			Bundle().apply {
-				putString("title", title)
-				putInt("position", position)
+				putString(GAMEDATA_DIALOG_TITLE, title)
+				putInt(GAMEDATA_DIALOG_PICKED_POSITION, position)
 			}
 		)
 	}
+
+	companion object {
+		private const val GAME_STYLE = 0
+		private const val IS_RIGHT_HAND = 1
+		private const val IS_ONE_BACKHAND = 2
+		private const val SURFACE = 3
+		private const val SHOES = 4
+		private const val RACQUET = 5
+		private const val RACQUET_STRINGS = 6
+	}
 }
+

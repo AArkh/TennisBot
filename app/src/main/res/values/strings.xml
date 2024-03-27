@@ -150,6 +150,7 @@
 	<string name="position_number">%s</string>
 	<string name="faq">FAQ</string>
 	<string name="survey_option_null">Не указано</string>
+	<string name="accountpage_gamedata_style">Стиль игры</string>
 	<string name="accountpage_gamedata_hand">Ведущая рука</string>
 	<string name="accountpage_gamedata_backhand">Бэкхенд</string>
 	<string name="accountpage_gamedata_surface">Основное покрытие</string>

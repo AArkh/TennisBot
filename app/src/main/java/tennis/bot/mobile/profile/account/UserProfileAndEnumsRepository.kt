@@ -10,11 +10,13 @@ import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.IS_ONE_B
 import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.IS_RIGHTHAND_TITLE
 import tennis.bot.mobile.onboarding.survey.SurveyResultItem
 import tennis.bot.mobile.onboarding.survey.toApiNumericFormat
+import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.GAME_STYLE_TITLE
 import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.RACQUET_STRINGS_TITLE
 import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.RACQUET_TITLE
 import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.SHOES_TITLE
 import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.SURFACE_TITLE
 import tennis.bot.mobile.profile.editgamedata.EditGameDataApi
+import tennis.bot.mobile.profile.editgamedata.GameStyleNetwork
 import tennis.bot.mobile.profile.editgamedata.IsOneBackhandNetwork
 import tennis.bot.mobile.profile.editgamedata.IsRightHandNetwork
 import tennis.bot.mobile.profile.editgamedata.RacquetNetwork
@@ -44,6 +46,7 @@ class UserProfileAndEnumsRepository @Inject constructor(
 	private val sharedPreferences = context.getSharedPreferences("UserProfile", Context.MODE_PRIVATE)
 
 	val defaultGameData = listOf(
+		SurveyResultItem(context.getString(R.string.accountpage_gamedata_style), getString(context, R.string.survey_option_null)),
 		SurveyResultItem(context.getString(R.string.accountpage_gamedata_hand), getString(context, R.string.survey_option_null)),
 		SurveyResultItem(context.getString(R.string.accountpage_gamedata_backhand), getString(context, R.string.survey_option_null)),
 		SurveyResultItem(context.getString(R.string.accountpage_gamedata_surface), getString(context, R.string.survey_option_null)),
@@ -97,6 +100,7 @@ class UserProfileAndEnumsRepository @Inject constructor(
 
 	private fun updateCachedProfile(key: String, value: Int) {
 		return when(key){
+			GAME_STYLE_TITLE -> {cachedProfileData = cachedProfileData.copy(gameStyle = value)}
 			CITY_ID_TITLE -> { cachedProfileData = cachedProfileData.copy(cityId = value) }
 			DISTRICT_ID_TITLE -> { cachedProfileData = cachedProfileData.copy(districtId = value) }
 			IS_RIGHTHAND_TITLE -> { cachedProfileData = cachedProfileData.copy(isRightHand = value == 1) }
@@ -175,12 +179,13 @@ class UserProfileAndEnumsRepository @Inject constructor(
 
 	fun getEnumTitle(enumType: String): String {
 		return when(enumType) {
-			IS_RIGHTHAND_TITLE -> { defaultGameData[0].resultTitle }
-			IS_ONE_BACKHAND_TITLE -> { defaultGameData[1].resultTitle }
-			SURFACE_TITLE -> { defaultGameData[2].resultTitle }
-			SHOES_TITLE -> { defaultGameData[3].resultTitle }
-			RACQUET_TITLE -> { defaultGameData[4].resultTitle }
-			RACQUET_STRINGS_TITLE -> { defaultGameData[5].resultTitle }
+			GAME_STYLE_TITLE -> { defaultGameData[0].resultTitle }
+			IS_RIGHTHAND_TITLE -> { defaultGameData[1].resultTitle }
+			IS_ONE_BACKHAND_TITLE -> { defaultGameData[2].resultTitle }
+			SURFACE_TITLE -> { defaultGameData[3].resultTitle }
+			SHOES_TITLE -> { defaultGameData[4].resultTitle }
+			RACQUET_TITLE -> { defaultGameData[5].resultTitle }
+			RACQUET_STRINGS_TITLE -> { defaultGameData[6].resultTitle }
 			else -> { AccountPageAdapter.NULL_STRING }
 		}
 	}
@@ -190,40 +195,47 @@ class UserProfileAndEnumsRepository @Inject constructor(
 		when(gameDataType) {
 			defaultGameData[0].resultTitle -> {
 				kotlin.runCatching {
+					gameDataApi.putGameStyle(GameStyleNetwork(value)).execute()
+				}.onSuccess {
+					updateCachedProfile(GAME_STYLE_TITLE, value)
+				}.onFailure { context.showToast("Failed to update the value. Please, try again later") }
+			}
+			defaultGameData[1].resultTitle -> {
+				kotlin.runCatching {
 					gameDataApi.putIsRightHand(IsRightHandNetwork(value == 1)).execute()
 				}.onSuccess {
 					updateCachedProfile(IS_RIGHTHAND_TITLE, value)
 				}.onFailure { context.showToast("Failed to update the value. Please, try again later") }
 			}
-			defaultGameData[1].resultTitle -> {
+			defaultGameData[2].resultTitle -> {
 				kotlin.runCatching {
 				gameDataApi.putIsOneBackhand(IsOneBackhandNetwork(value == 1)).execute()
 				}.onSuccess {
 					updateCachedProfile(IS_ONE_BACKHAND_TITLE, value)
 				}.onFailure { context.showToast("Failed to update the value. Please, try again later") }
 			}
-			defaultGameData[2].resultTitle -> {
+			defaultGameData[3].resultTitle -> {
 				kotlin.runCatching {
 				gameDataApi.putSurface(SurfaceNetwork(value)).execute()
 				}.onSuccess {
 					updateCachedProfile(SURFACE_TITLE, value)
 				}.onFailure { context.showToast("Failed to update the value. Please, try again later") }
 			}
-			defaultGameData[3].resultTitle -> {
+			defaultGameData[4].resultTitle -> {
 				kotlin.runCatching {
 				gameDataApi.putShoes(ShoesNetwork(value)).execute()
 				}.onSuccess {
 					updateCachedProfile(SHOES_TITLE, value)
 				}.onFailure { context.showToast("Failed to update the value. Please, try again later") }
 			}
-			defaultGameData[4].resultTitle -> {
+			defaultGameData[5].resultTitle -> {
 				kotlin.runCatching {
 				gameDataApi.putRacquet(RacquetNetwork(value)).execute()
 				}.onSuccess {
 					updateCachedProfile(RACQUET_TITLE, value)
 				}.onFailure { context.showToast("Failed to update the value. Please, try again later") }
 			}
-			defaultGameData[5].resultTitle -> {
+			defaultGameData[6].resultTitle -> {
 				kotlin.runCatching {
 				gameDataApi.putRacquetStrings(RacquetStringsNetwork(value)).execute()
 				}.onSuccess {

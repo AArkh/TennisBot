@@ -34,6 +34,7 @@ class EditGameDataViewModel @Inject constructor(
 				val isOneBackhandInt = if (profileData.isOneBackhand == true) 1 else if (profileData.isOneBackhand == false) 0 else null
 				val decodedIds = repository.getEnumsById(
 					listOf(
+						Pair(AccountPageViewModel.GAME_STYLE_TITLE, profileData.gameStyle),
 						Pair(AccountPageViewModel.IS_RIGHTHAND_TITLE, isRightHandInt),
 						Pair(AccountPageViewModel.IS_ONE_BACKHAND_TITLE, isOneBackhandInt),
 						Pair(AccountPageViewModel.SURFACE_TITLE, profileData.surface),

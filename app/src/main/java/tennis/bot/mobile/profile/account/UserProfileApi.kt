@@ -38,6 +38,7 @@ data class ProfileData(
 	val bonusRank: Int?,
 	val primaryLocation: Int?,
 	val secondaryLocation: Int?,
+	val gameStyle: Int?,
 	val racquet: Int?,
 	val racquetDetail: String?,
 	val shoes: Int?,
