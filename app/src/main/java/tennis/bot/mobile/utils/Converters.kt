@@ -2,9 +2,11 @@ package tennis.bot.mobile.utils
 
 import android.content.Context
 import android.database.Cursor
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
+import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
@@ -21,6 +23,7 @@ import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 const val DEFAULT_DATE_TIME = "0001-01-01T00:00:00Z"
+const val CONTENT_LINK = "http://bugz.su:9000/publiccontent/"
 
 data class FormattedDate(
 	val time: String,
@@ -106,16 +109,18 @@ fun TextView.formRatingChange(difference: String) {
 	text = difference.trimStart('-')
 }
 
-fun buildImageRequest( context: Context, profileImageUrl: String?): Any? { // loads a null before an actual profile pic. should we tweak the behavior to change that?
+fun buildImageRequest(context: Context, imageUrl: String?): Any? { // loads a null before an actual profile pic. should we tweak the behavior to change that?
 	var result: Any? = null
 
-	if (profileImageUrl == null) {
+	if (imageUrl == null) {
 		result = R.drawable.null_placeholder
-	} else if (profileImageUrl.contains("default")) {
-		val resourceId = getDefaultDrawableResourceId(context, profileImageUrl.removeSuffix(".png"))
+	} else if (imageUrl.contains("default")) {
+		val resourceId = getDefaultDrawableResourceId(context, imageUrl.removeSuffix(".png"))
 		if (resourceId != null) result = resourceId
+	} else if(imageUrl.contains("pics") || imageUrl.contains("movies")) {
+		result = CONTENT_LINK + imageUrl
 	} else {
-		result = AccountPageAdapter.IMAGES_LINK + profileImageUrl
+		result = AccountPageAdapter.IMAGES_LINK + imageUrl
 	}
 
 	return result

@@ -117,6 +117,7 @@ class ImageSeriesView @JvmOverloads constructor(
                 drawables[0] = result
                 invalidate()
             }
+            .crossfade(true)
             .placeholder(R.drawable.circle_background)
             .transformations(CircleCropTransformation())
             .build()
@@ -148,6 +149,7 @@ class ImageSeriesView @JvmOverloads constructor(
                     drawables[index] = result
                     invalidate()
                 }
+                .crossfade(true)
                 .transformations(CircleCropTransformation())
                 .build()
             imageLoader.enqueue(request)

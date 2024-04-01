@@ -2,6 +2,7 @@ package tennis.bot.mobile.feed
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -92,7 +93,7 @@ data class ScorePost(
 	val id: Long,
 	val creatorId: Long,
 	val photo: String?,
-	val video: String?,
+	@SerialName("Video") val video: String?,
 	val sets: List<TennisSetNetwork>,
 	val player1: PlayerPostData?,
 	val player2: PlayerPostData?,
@@ -102,7 +103,7 @@ data class ScorePost(
 	val duration: String?,
 	val matchball: Int,
 	val matchWon: Boolean,
-	val averageScore: Double?
+	val averageScore: String?
 ): PostParent()
 
 @Serializable
