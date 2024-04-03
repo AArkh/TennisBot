@@ -28,7 +28,7 @@ import tennis.bot.mobile.profile.editprofile.EditProfileApi
 import tennis.bot.mobile.profile.editprofile.LocationNetwork
 import tennis.bot.mobile.profile.editprofile.NameSurnameNetwork
 import tennis.bot.mobile.profile.editprofile.PhoneNumberNetwork
-import tennis.bot.mobile.profile.editprofile.TelegramIdNetwork
+import tennis.bot.mobile.profile.editprofile.TelegramNetwork
 import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -270,8 +270,8 @@ class UserProfileAndEnumsRepository @Inject constructor(
 	}
 
 	@WorkerThread
-	fun putTelegramIdNetwork(telegramId: String): Boolean {
-		val response =  kotlin.runCatching { editProfileApi.putTelegramId(TelegramIdNetwork(telegramId)).execute() }.getOrElse { return false }
+	fun putTelegramNetwork(telegram: String): Boolean {
+		val response =  kotlin.runCatching { editProfileApi.putTelegram(TelegramNetwork(telegram)).execute() }.getOrElse { return false }
 		return response.isSuccessful
 	}
 

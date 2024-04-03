@@ -2,6 +2,8 @@ package tennis.bot.mobile.feed
 
 import android.animation.ObjectAnimator
 import android.content.Context
+import android.graphics.Bitmap
+import android.media.MediaMetadataRetriever
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +12,6 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
 import coil.load
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -26,6 +27,7 @@ import tennis.bot.mobile.profile.account.EmptyItemViewHolder
 import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
 import tennis.bot.mobile.profile.matches.TennisSetNetwork
 import tennis.bot.mobile.profile.matches.ratingChange
+import tennis.bot.mobile.utils.CONTENT_LINK
 import tennis.bot.mobile.utils.FormattedDate
 import tennis.bot.mobile.utils.dpToPx
 import tennis.bot.mobile.utils.formatDateForFeed
@@ -42,6 +44,8 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>(),
 		const val MATCH_REQUEST = 2
 		const val SCORE = 3
 	}
+	val mediaSliderAdapter = ImageSliderAdapter()
+	private val matchResultsAdapter = MatchResultsAdapter()
 
 	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: Any) {
 		when(holder) {
@@ -130,7 +134,9 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>(),
 		holder.binding.playerPhoto.showPlayerPhoto(scorePostItem.scorePost.player1?.photo, null)
 		holder.binding.itemPicture.isVisible = false
 		holder.binding.itemPicturesPager.isVisible = true
-		holder.binding.itemPicturesPager.initializeImagesAdapter(createListOfImages(scorePostItem.scorePost))
+		holder.binding.itemPicturesPager.adapter = mediaSliderAdapter
+		mediaSliderAdapter.submitList(createListOfMedia(scorePostItem.scorePost))
+
 		TabLayoutMediator(holder.binding.tabLayout, holder.binding.itemPicturesPager) { tab, _ ->
 			tab.setCustomView(R.layout.tab_image_switch_indicator)
 		}.attach()
@@ -165,25 +171,23 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>(),
 
 		holder.binding.likeButton.isLikeActive(scorePostItem.postData.liked, scorePostItem.postData.totalLikes)
 
-		val matchResultsAdapter = MatchResultsAdapter()
 		holder.binding.resultsContainer.adapter = matchResultsAdapter
 		matchResultsAdapter.submitList(formMatchResultsList(scorePostItem, holder.binding.resultsContainer.context))
 	}
 
-	private fun ViewPager2.initializeImagesAdapter(listOfImages: List<MediaItem>) {
-		val adapter = ImageSliderAdapter()
-		this.adapter = adapter
-		orientation = ViewPager2.ORIENTATION_HORIZONTAL
-		adapter.submitList(listOfImages)
-	}
-
-	private fun createListOfImages(item: PostParent.ScorePost): List<MediaItem> {
+	private fun createListOfMedia(item: PostParent.ScorePost): List<MediaItem> {
 		val theList = mutableListOf<MediaItem>()
 		if (item.video != null && item.photo != null) {
-			theList.add(MediaItem(item.video, isVideo = true))
+			theList.add(MediaItem(
+				videoThumbnail = getVideoThumbnailFromString(CONTENT_LINK + item.video),
+				duration = getVideoDuration(CONTENT_LINK + item.video),
+				isVideo = true))
 			theList.add(MediaItem(item.photo))
 		} else if (item.video != null) {
-			theList.add(MediaItem(item.video, isVideo = true))
+			theList.add(MediaItem(
+				videoThumbnail = getVideoThumbnailFromString(CONTENT_LINK + item.video),
+				duration = getVideoDuration(CONTENT_LINK + item.video),
+				isVideo = true))
 		} else if (item.photo != null) {
 			theList.add(MediaItem(item.photo))
 		}
@@ -226,7 +230,37 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>(),
 				itemPicture.load(AccountPageAdapter.IMAGES_LINK + profileImageUrl)
 			}
 		}
+	}
 
+	private fun getVideoThumbnailFromString(videoUrl: String?): Bitmap? {
+		val retriever = MediaMetadataRetriever()
+		retriever.setDataSource(videoUrl)
+		val bitmap: Bitmap? = retriever.frameAtTime
+		retriever.release()
+
+		return bitmap
+	}
+
+	private fun getVideoDuration(videoUrl: String?): String {
+		val retriever = MediaMetadataRetriever()
+		retriever.setDataSource(videoUrl)
+
+		try {
+			val durationString = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+			val durationInMillis = durationString?.toLongOrNull() ?: 0
+
+			val minutes = (durationInMillis / 1000 / 60).toInt()
+			val seconds = (durationInMillis / 1000 % 60).toInt()
+
+			retriever.release()
+
+			return String.format("%02d:%02d", minutes, seconds)
+		} catch (e: Exception) {
+			e.printStackTrace()
+		} finally {
+			retriever.release()
+		}
+		return "00:00"
 	}
 
 	private fun formMatchResultsList(item: ScorePostItem, context: Context): List<CoreUtilsItem> {

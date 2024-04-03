@@ -69,6 +69,7 @@ class FeedBottomNavigationViewModel @Inject constructor(
 		}
 	}
 
+
 	private suspend fun formatLocationDataForPost(cityId: Int, districtId: Int?): String? {
 		val locations = locationRepository.getLocations()
 		val city = locationDataMapper.findCityString(locations, cityId)

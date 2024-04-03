@@ -58,7 +58,7 @@ data class NewPlayer(
     val countryId: Int,
     val cityId: Int?, //nullable
     val districtId: Int?,
-    val telegramId: String,
+    val telegram: String,
     val surveyAnswer: SurveyAnswers
 ) {
     @Serializable

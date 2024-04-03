@@ -116,8 +116,8 @@ class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHol
 		holder.binding.nameSurname.text = basicInfoAndRating.nameSurname
 		holder.binding.ratingLayout.singleRatingValue.text = basicInfoAndRating.singleRating
 		holder.showImage(basicInfoAndRating.profileImageUrl)
-		if (basicInfoAndRating.telegramId != NULL_STRING) {
-			holder.binding.telegramId.text = basicInfoAndRating.telegramId
+		if (basicInfoAndRating.telegram != NULL_STRING) {
+			holder.binding.telegramId.text = basicInfoAndRating.telegram
 		} else {
 			holder.binding.telegramId.visibility = View.GONE
 		}
@@ -255,7 +255,7 @@ class EmptyItemViewHolder(
 data class BasicInfoAndRating(
 	val profileImageUrl: String?,
 	val nameSurname: String,
-	val telegramId: String?,
+	val telegram: String?,
 	val singleRating: String,
 	val doublesRating: String?
 ) : CoreUtilsItem()

@@ -124,16 +124,16 @@ class EditProfileViewModel @Inject constructor(
 				EditProfileAdapter.CHANGE_BIRTHDAY_INDEX -> { updateBirthday(value) }
 				EditProfileAdapter.CHANGE_LOCATION_INDEX -> { updateLocation(value) }
 				EditProfileAdapter.CHANGE_PHONE_INDEX -> { updatePhoneNumber(value) }
-				EditProfileAdapter.CHANGE_TELEGRAM_INDEX -> { updateTelegramId(value) }
+				EditProfileAdapter.CHANGE_TELEGRAM_INDEX -> { updateTelegram(value) }
 			}
 			onStartup()
 		}
 	}
 
-	private suspend fun updateTelegramId(value: String) {
+	private suspend fun updateTelegram(value: String) {
 		kotlin.runCatching {
 			withContext(Dispatchers.IO) {
-				userProfileRepo.putTelegramIdNetwork(value)
+				userProfileRepo.putTelegramNetwork(value)
 			}
 		}.onFailure {
 			Log.d("123456", "CHANGE_TELEGRAM_INDEX - failure")

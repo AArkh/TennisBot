@@ -20,7 +20,7 @@ interface EditProfileApi {
 	fun putPhoneNumber(@Body phoneNumber: PhoneNumberNetwork): Call<Unit>
 
 	@PUT("api/tennis-players")
-	fun putTelegramId(@Body telegramId: TelegramIdNetwork): Call<Unit>
+	fun putTelegram(@Body telegram: TelegramNetwork): Call<Unit>
 }
 
 @Serializable
@@ -46,7 +46,7 @@ data class PhoneNumberNetwork (
 )
 
 @Serializable
-data class TelegramIdNetwork (
+data class TelegramNetwork (
 	val telegram: String
 )
 

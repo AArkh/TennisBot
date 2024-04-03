@@ -134,7 +134,7 @@ class OnboardingRepository @Inject constructor(
 					countryId = getCountryId(),
 					cityId = if (getCityId() == 0) null else getCityId(),
 					districtId = if (getDistrictId() == 0) null else getDistrictId(),
-					telegramId = getTelegramId().toString(),
+					telegram = getTelegram().toString(),
 					surveyAnswer = NewPlayer.SurveyAnswers(
 						experience = surveyData["experience"] ?: 0,
 						forehand = surveyData["forehand"] ?: 0,
@@ -261,8 +261,8 @@ class OnboardingRepository @Inject constructor(
         return sharedPreferences.getInt(DISTRICT_ID_HEADER, 0)
     }
 
-    fun getTelegramId(): String? {
-        return sharedPreferences.getString(TELEGRAM_ID_HEADER, null)
+    fun getTelegram(): String? {
+        return sharedPreferences.getString(TELEGRAM_HEADER, null)
     }
 
     fun getPreselectedProfilePictureId(): Int {
@@ -287,7 +287,7 @@ class OnboardingRepository @Inject constructor(
         const val COUNTRY_ID_HEADER = "countryId"
         const val CITY_ID_HEADER = "cityId"
         const val DISTRICT_ID_HEADER = "districtId"
-        const val TELEGRAM_ID_HEADER = "telegram"
+        const val TELEGRAM_HEADER = "telegram"
         const val PRESELECTED_PROFILE_PICTURE_ID = "profilePictureId"
         const val USER_PROFILE_PICTURE = "userProfilePicture"
 

@@ -55,8 +55,9 @@ class AccountPageViewModel @Inject constructor(
 					),
 					Calibration(
 						if (gamesRemain < 10) context.getString(R.string.calibration_title) else context.getString(R.string.calibration_finished_title),
-						progressBarProgress(if (profileData.games!! <= 10) profileData.games else 10 ),
-						context.getString(R.string.calibration_matches_remain, if (profileData.games <= 10) profileData.games else 10 ),
+						progressBarProgress(if (profileData.games == null) 0 else if (profileData.games <= 10) profileData.games else 10 ),
+						context.getString(R.string.calibration_matches_remain,
+							if (profileData.games == null) 0 else if (profileData.games <= 10) profileData.games else 10 ),
 						when(gamesRemain){
 							0 -> context.getString(R.string.calibration_start)
 							in 1..9 -> context.getString(R.string.calibration_rounds_remain_text, gamesRemain)
