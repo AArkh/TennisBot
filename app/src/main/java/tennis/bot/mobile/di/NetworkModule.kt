@@ -26,6 +26,7 @@ import tennis.bot.mobile.onboarding.survey.NewPlayerApi
 import tennis.bot.mobile.profile.editgamedata.EditGameDataApi
 import tennis.bot.mobile.profile.editprofile.EditProfileApi
 import tennis.bot.mobile.profile.matches.MatchesApi
+import tennis.bot.mobile.utils.InfoInterceptor
 import tennis.bot.mobile.utils.LoggingInterceptor
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
@@ -55,9 +56,12 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(loggingInterceptor: LoggingInterceptor): OkHttpClient {
+    fun provideOkHttpClient(
+        loggingInterceptor: LoggingInterceptor,
+        infoInterceptor: InfoInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
+            .addInterceptor(infoInterceptor)
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(15, TimeUnit.SECONDS)
             .build()
@@ -68,10 +72,12 @@ class NetworkModule {
     @Named(WITH_AUTHENTICATION)
     fun provideNewRegistrationOkHttpClient(
         loggingInterceptor: LoggingInterceptor,
+        infoInterceptor: InfoInterceptor,
         authInterceptor: AuthInterceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
+            .addInterceptor(infoInterceptor)
             .addInterceptor(authInterceptor)
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(15, TimeUnit.SECONDS)

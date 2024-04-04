@@ -2,7 +2,6 @@ package tennis.bot.mobile.onboarding.photopick
 
 import okhttp3.MultipartBody
 import retrofit2.Response
-import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -20,6 +19,13 @@ interface PhotoPickApi {
 		@Part("Name") name: String,
 		@Header("Authorization") authHeader: String
 	): Response<Unit> // 204 means good
+
+	@Multipart
+	@POST("api/content-manager/upload-profile-picture")
+	suspend fun postRegistrationProfilePicture(
+		@Part Content: MultipartBody.Part,
+		@Part("Name") name: String,
+	): Response<String> // 200 means good
 
 	@POST("api/tennis-players/set-default-profile-picture/{defaultPhotoId}")
 	suspend fun postDefaultProfilePictureId(

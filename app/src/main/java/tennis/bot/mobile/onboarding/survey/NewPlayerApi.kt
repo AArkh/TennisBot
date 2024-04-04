@@ -9,7 +9,7 @@ import retrofit2.http.POST
 
 interface NewPlayerApi {
 
-    @POST("api/new-player")
+    @POST("api/new-player/with-photo")
     suspend fun postNewPlayer(@Body newPlayer: NewPlayer, @Header("Authorization") authHeader: String): Response<NewPlayerResponse>
 }
 
@@ -53,6 +53,7 @@ data class NewPlayer(
     val name: String,
     val surName: String,
     val phoneNumber: String?,
+    val photo: String?,
     val birthday: String,
     val isMale: Boolean,
     val countryId: Int,

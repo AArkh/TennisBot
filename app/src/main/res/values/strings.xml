@@ -258,5 +258,6 @@
 	<string name="placeholder_date">21 июня, 8:34 · #asv</string>
 	<string name="post_three_doubles_title">%s / %s</string>
 	<string name="bonuses_change">+%d\n+%d</string>
+	<string name="default_photo_name">default%d.png</string>
 
 </resources>

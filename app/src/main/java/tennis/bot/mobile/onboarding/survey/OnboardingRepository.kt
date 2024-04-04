@@ -1,6 +1,7 @@
 package tennis.bot.mobile.onboarding.survey
 
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.core.net.toUri
@@ -130,6 +131,7 @@ class OnboardingRepository @Inject constructor(
 					surName = getSurName().toString(),
 					phoneNumber = getPhoneNumber().toString(),
 					birthday = registerResponse.creationTime,
+                    photo = getUserPicture(),
 					isMale = isMale(),
 					countryId = getCountryId(),
 					cityId = if (getCityId() == 0) null else getCityId(),
@@ -150,14 +152,34 @@ class OnboardingRepository @Inject constructor(
 			)
 		}.onSuccess {
             postLogin()
-            postDefaultProfilePictureId()
         }.getOrElse { return false }
 		return response.isSuccessful
 	}
 
     @WorkerThread
-    suspend fun postProfilePicture(isRegister: Boolean): Int {
-        val file = uriToFile(context, getUserPickedPictureUri()!!.toUri())
+    suspend fun postRegistrationProfilePicture(pickedPhotoUri: Uri): Int {
+        val file = uriToFile(context, pickedPhotoUri)
+        val requestFile = file?.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+        val imagePart = MultipartBody.Part.createFormData("Content", file?.name, requestFile!!)
+
+        val response = photoPickApi.postRegistrationProfilePicture(
+            Content = imagePart,
+            name = ""
+        )
+
+        if (response.code() == 200) {
+            response.body()?.let { recordUserPicture(it) }
+            Log.d("123456", "profilePic has been received and recorded")
+        } else if (response.code() == 400) {
+            Log.d("123456", "profilePic has crashed and burned")
+        }
+
+        return response.code()
+    }
+
+    @WorkerThread
+    suspend fun postProfilePicture(profilePhotoUri: String, isRegister: Boolean): Int {
+        val file = uriToFile(context, profilePhotoUri.toUri())
         val requestFile = file?.asRequestBody("multipart/form-data".toMediaTypeOrNull())
         val imagePart = MultipartBody.Part.createFormData("Content", file?.name, requestFile!!)
 
@@ -198,14 +220,8 @@ class OnboardingRepository @Inject constructor(
 		sharedPreferences.edit().putString(SMS_VERIFY_CODE_HEADER, smsVerifyCode).apply()
 	}
 
-    fun recordPreselectedPictureId(pictureId: Int?) {
-        if (pictureId != null) {
-            sharedPreferences.edit().putInt(PRESELECTED_PROFILE_PICTURE_ID, pictureId).apply()
-        }
-    }
-
-    fun recordUserPickedPictureUri(userPictureUri: String) {
-        sharedPreferences.edit().putString(USER_PROFILE_PICTURE, userPictureUri).apply()
+    fun recordUserPicture(userPicture: String) {
+        sharedPreferences.edit().putString(USER_PROFILE_PICTURE, userPicture).apply()
     }
 
     fun recordNameSurnameAndGender(name: String, surname: String, gender: Int) {
@@ -269,7 +285,7 @@ class OnboardingRepository @Inject constructor(
         return sharedPreferences.getInt(PRESELECTED_PROFILE_PICTURE_ID, 0)
     }
 
-    fun getUserPickedPictureUri(): String? {
+    fun getUserPicture(): String? {
         return sharedPreferences.getString(USER_PROFILE_PICTURE, null)
     }
 
