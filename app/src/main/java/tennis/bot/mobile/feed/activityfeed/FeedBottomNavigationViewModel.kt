@@ -75,7 +75,7 @@ class FeedBottomNavigationViewModel @Inject constructor(
 			val newList = _uiStateFlow.value.postItems.map { scorePostItem ->
 				when (scorePostItem) {
 					is ScorePostItem -> {
-						scorePostItem.copy(mediaItemsList = createListOfMedia(scorePostItem))
+						scorePostItem.copy(feedMediaItemsList = createListOfMedia(scorePostItem))
 					}
 					else -> scorePostItem
 				}
@@ -84,33 +84,35 @@ class FeedBottomNavigationViewModel @Inject constructor(
 		}
 	}
 
-	private fun createListOfMedia(item: ScorePostItem): List<MediaItem> {
-		val theList = mutableListOf<MediaItem>()
+	private fun createListOfMedia(item: ScorePostItem): List<FeedMediaItem> {
+		val theList = mutableListOf<FeedMediaItem>()
 		if (item.video != null && item.photo != null) {
-			val (thumbnail, duration) = getVideoThumbnailAndDuration(item.video)
+//			val (thumbnail, duration) = getVideoThumbnailAndDuration(item.video)
 			theList.add(
-				MediaItem(
-					videoThumbnail = thumbnail,
-					duration = duration,
+				FeedMediaItem(
+					mediaUrl = item.video,
+//					videoThumbnail = thumbnail,
+//					duration = duration,
 					isVideo = true)
 			)
-			theList.add(MediaItem(item.photo))
+			theList.add(FeedMediaItem(item.photo))
 		} else if (item.video != null) {
-			val (thumbnail, duration) = getVideoThumbnailAndDuration(item.video)
+//			val (thumbnail, duration) = getVideoThumbnailAndDuration(item.video)
 			theList.add(
-				MediaItem(
-					videoThumbnail = thumbnail,
-					duration = duration,
+				FeedMediaItem(
+					mediaUrl = item.video,
+//					videoThumbnail = thumbnail,
+//					duration = duration,
 					isVideo = true)
 			)
 		} else if (item.photo != null) {
-			theList.add(MediaItem(item.photo))
+			theList.add(FeedMediaItem(item.photo))
 		}
-		theList.add(MediaItem(item.player1?.photo))
-		theList.add(MediaItem(item.player2?.photo))
+		theList.add(FeedMediaItem(item.player1?.photo))
+		theList.add(FeedMediaItem(item.player2?.photo))
 		if (item.player3 != null) {
-			theList.add(MediaItem(item.player3.photo))
-			theList.add(MediaItem(item.player4?.photo))
+			theList.add(FeedMediaItem(item.player3.photo))
+			theList.add(FeedMediaItem(item.player4?.photo))
 		}
 
 		return theList.toList()

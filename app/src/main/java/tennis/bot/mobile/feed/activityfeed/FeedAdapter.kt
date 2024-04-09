@@ -126,7 +126,7 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>(),
 		holder.binding.itemPicture.isVisible = false
 		holder.binding.itemPicturesPager.isVisible = true
 		holder.binding.itemPicturesPager.adapter = mediaSliderAdapter
-		mediaSliderAdapter.submitList(scorePostItem.mediaItemsList)
+		mediaSliderAdapter.submitList(scorePostItem.feedMediaItemsList)
 
 		TabLayoutMediator(holder.binding.tabLayout, holder.binding.itemPicturesPager) { tab, _ ->
 			tab.setCustomView(R.layout.tab_image_switch_indicator)
@@ -279,6 +279,6 @@ data class ScorePostItem( // 3
 	val duration: String?,
 	val matchWon: Boolean,
 	val sets: List<TennisSetNetwork>,
-	val mediaItemsList: List<MediaItem>,
+	val feedMediaItemsList: List<FeedMediaItem>,
 	val matchResultsList: List<CoreUtilsItem>
 ): CoreUtilsItem()

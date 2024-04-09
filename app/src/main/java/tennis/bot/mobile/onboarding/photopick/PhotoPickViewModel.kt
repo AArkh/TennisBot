@@ -77,7 +77,7 @@ class PhotoPickViewModel @Inject constructor(
 
             is PhotoPickUiState.PickedUserImage -> {
                 viewModelScope.launch {
-                    onboardingRepository.postRegistrationProfilePicture((uiStateFlow.value as PhotoPickUiState.PickedUserImage).userPickedImage)
+                    onboardingRepository.postRegistrationProfilePicture((uiStateFlow.value as PhotoPickUiState.PickedUserImage).userPickedImage!!)
                 }
             }
 
@@ -85,5 +85,7 @@ class PhotoPickViewModel @Inject constructor(
         }
         navigationCallback.invoke()
     }
+
+
 
 }

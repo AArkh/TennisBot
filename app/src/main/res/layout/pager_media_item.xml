@@ -13,6 +13,12 @@
 		android:scaleType="centerCrop"
 		tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
+	<androidx.media3.ui.PlayerView
+		android:id="@+id/video_player"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:visibility="invisible"/>
+
 	<ImageView
 		android:id="@+id/play_video_button"
 		android:layout_width="wrap_content"

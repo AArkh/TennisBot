@@ -83,7 +83,7 @@ class FeedPostsMapper @Inject constructor(
 			duration = scorePost.duration,
 			matchWon = scorePost.matchWon,
 			sets = scorePost.sets,
-			mediaItemsList = emptyList(),
+			feedMediaItemsList = emptyList(),
 			matchResultsList = formMatchResultsList(scorePost, context)
 		)
 	}
