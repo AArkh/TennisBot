@@ -15,8 +15,7 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentLoginBinding
-import tennis.bot.mobile.feed.FeedBottomNavigationFragment
-import tennis.bot.mobile.profile.account.AccountPageFragment
+import tennis.bot.mobile.feed.activityfeed.FeedBottomNavigationFragment
 import tennis.bot.mobile.onboarding.phone.CountryCodesDialogFragment
 import tennis.bot.mobile.utils.hideKeyboard
 

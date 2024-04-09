@@ -12,7 +12,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Converter
 import retrofit2.Retrofit
 import tennis.bot.mobile.core.AuthInterceptor
-import tennis.bot.mobile.feed.FeedApi
+import tennis.bot.mobile.feed.activityfeed.FeedApi
 import tennis.bot.mobile.feed.insertscore.InsertScoreApi
 import tennis.bot.mobile.feed.insertscore.MediaApi
 import tennis.bot.mobile.feed.searchopponent.OpponentsApi

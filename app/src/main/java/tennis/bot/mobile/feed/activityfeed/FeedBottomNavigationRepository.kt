@@ -1,4 +1,4 @@
-package tennis.bot.mobile.feed
+package tennis.bot.mobile.feed.activityfeed
 
 import android.content.Context
 import androidx.annotation.WorkerThread

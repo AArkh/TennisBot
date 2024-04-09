@@ -1,8 +1,7 @@
-package tennis.bot.mobile.feed
+package tennis.bot.mobile.feed.activityfeed
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -95,8 +94,8 @@ data class ScorePost(
 	val photo: String?,
 	val video: String?,
 	val sets: List<TennisSetNetwork>,
-	val player1: PlayerPostData?,
-	val player2: PlayerPostData?,
+	val player1: PlayerPostData,
+	val player2: PlayerPostData,
 	val player3: PlayerPostData?,
 	val player4: PlayerPostData?,
 	val surface: String?,

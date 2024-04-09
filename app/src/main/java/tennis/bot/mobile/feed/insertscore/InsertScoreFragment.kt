@@ -14,7 +14,7 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentInsertScoreBinding
-import tennis.bot.mobile.feed.FeedBottomNavigationFragment
+import tennis.bot.mobile.feed.activityfeed.FeedBottomNavigationFragment
 import tennis.bot.mobile.feed.addscore.AddScoreFragment
 import tennis.bot.mobile.feed.searchopponent.OpponentItem
 import tennis.bot.mobile.feed.searchopponent.SearchOpponentsFragment

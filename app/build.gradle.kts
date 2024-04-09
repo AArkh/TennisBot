@@ -93,6 +93,11 @@ dependencies {
     // Ui
     implementation("com.airbnb.android:lottie:6.2.0")
 
+    // Video Player
+    implementation("androidx.media3:media3-exoplayer:1.3.0")
+    implementation("androidx.media3:media3-exoplayer-dash:1.3.0")
+    implementation("androidx.media3:media3-ui:1.3.0")
+
     //Paging
     implementation ("androidx.paging:paging-runtime-ktx:3.2.1")
 
