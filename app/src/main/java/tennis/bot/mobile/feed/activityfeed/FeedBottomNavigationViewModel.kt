@@ -1,8 +1,6 @@
 package tennis.bot.mobile.feed.activityfeed
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.media.MediaMetadataRetriever
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -87,23 +85,19 @@ class FeedBottomNavigationViewModel @Inject constructor(
 	private fun createListOfMedia(item: ScorePostItem): List<FeedMediaItem> {
 		val theList = mutableListOf<FeedMediaItem>()
 		if (item.video != null && item.photo != null) {
-//			val (thumbnail, duration) = getVideoThumbnailAndDuration(item.video)
 			theList.add(
 				FeedMediaItem(
 					mediaUrl = item.video,
-//					videoThumbnail = thumbnail,
-//					duration = duration,
-					isVideo = true)
+					isVideo = true
+				)
 			)
 			theList.add(FeedMediaItem(item.photo))
 		} else if (item.video != null) {
-//			val (thumbnail, duration) = getVideoThumbnailAndDuration(item.video)
 			theList.add(
 				FeedMediaItem(
 					mediaUrl = item.video,
-//					videoThumbnail = thumbnail,
-//					duration = duration,
-					isVideo = true)
+					isVideo = true
+				)
 			)
 		} else if (item.photo != null) {
 			theList.add(FeedMediaItem(item.photo))
@@ -116,28 +110,5 @@ class FeedBottomNavigationViewModel @Inject constructor(
 		}
 
 		return theList.toList()
-	}
-
-	private fun getVideoThumbnailAndDuration(videoUrl: String?): Pair<Bitmap?, String> {
-		val retriever = MediaMetadataRetriever()
-		retriever.setDataSource(videoUrl)
-		val bitmap: Bitmap? = retriever.frameAtTime
-
-		try {
-			val durationString = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
-			val durationInMillis = durationString?.toLongOrNull() ?: 0
-
-			val minutes = (durationInMillis / 1000 / 60).toInt()
-			val seconds = (durationInMillis / 1000 % 60).toInt()
-
-			retriever.release()
-
-			return Pair(bitmap, String.format("%02d:%02d", minutes, seconds))
-		} catch (e: Exception) {
-			e.printStackTrace()
-		} finally {
-			retriever.release()
-		}
-		return Pair(bitmap, "00:00")
 	}
 }

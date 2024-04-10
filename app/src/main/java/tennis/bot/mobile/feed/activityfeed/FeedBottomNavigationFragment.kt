@@ -51,7 +51,6 @@ class FeedBottomNavigationFragment : CoreFragment<FragmentFeedBottomNavigationBi
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: FeedBottomNavigationUiState ->
 			binding.playerPhoto.setImage(AvatarImage(uiState.playerPicture))
 			binding.playerPhoto.drawableSize = requireContext().dpToPx(32)
-			viewModel.onFetchingActivities()
 			adapter.submitList(uiState.postItems)
 		}
 	}
