@@ -189,10 +189,19 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>(),
 			}
 
 			if (profileImageUrl.contains("default")) {
-				val resourceId = getDefaultDrawableResourceId(itemPicture.context, profileImageUrl.removeSuffix(".png"))
+				val resourceId = if (profileImageUrl.contains("http")) {
+					getDefaultDrawableResourceId(itemPicture.context,
+						profileImageUrl.removeSuffix(".png").removePrefix("http://bugz.su:9000/profilepictures/"))
+				} else {
+					getDefaultDrawableResourceId(context, profileImageUrl.removeSuffix(".png"))
+				}
 				if (resourceId != null) itemPicture.load(resourceId)
 			} else {
-				itemPicture.load(AccountPageAdapter.IMAGES_LINK + profileImageUrl)
+				if (profileImageUrl.contains("http")) {
+					itemPicture.load(profileImageUrl)
+				} else {
+					itemPicture.load(AccountPageAdapter.IMAGES_LINK + profileImageUrl)
+				}
 			}
 		}
 	}

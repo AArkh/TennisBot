@@ -40,13 +40,14 @@
 
 	<TextView
 		android:id="@+id/name_surname"
-		android:layout_width="wrap_content"
+		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:text="@string/name_surname_default"
 		android:textColor="@color/tb_black"
 		android:textSize="14sp"
 		android:layout_marginStart="12dp"
 		app:layout_constraintStart_toEndOf="@id/player_photo"
+		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintTop_toTopOf="@id/player_photo"
 		app:layout_constraintBottom_toTopOf="@id/sub_title"/>
 

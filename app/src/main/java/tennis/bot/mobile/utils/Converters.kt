@@ -115,12 +115,26 @@ fun buildImageRequest(context: Context, imageUrl: String?): Any? { // loads a nu
 	if (imageUrl == null) {
 		result = R.drawable.null_placeholder
 	} else if (imageUrl.contains("default")) {
-		val resourceId = getDefaultDrawableResourceId(context, imageUrl.removeSuffix(".png"))
+		val resourceId = if (imageUrl.contains("http")) {
+			getDefaultDrawableResourceId(context,
+				imageUrl.removeSuffix(".png").removePrefix("http://bugz.su:9000/profilepictures/"))
+		} else {
+			getDefaultDrawableResourceId(context, imageUrl.removeSuffix(".png"))
+		}
+
 		if (resourceId != null) result = resourceId
 	} else if(imageUrl.contains("pics") || imageUrl.contains("movies")) {
-		result = CONTENT_LINK + imageUrl
+		result = if (imageUrl.contains("http")) {
+			imageUrl
+		} else {
+			CONTENT_LINK + imageUrl
+		}
 	} else {
-		result = AccountPageAdapter.IMAGES_LINK + imageUrl
+		result = if (imageUrl.contains("http")) {
+			imageUrl
+		} else {
+			AccountPageAdapter.IMAGES_LINK + imageUrl
+		}
 	}
 
 	return result

@@ -74,7 +74,6 @@ class ImageSliderAdapter @Inject constructor(): CoreAdapter<ImageItemViewHolder>
 		val seconds = totalSeconds % 60
 		return String.format("%02d:%02d", minutes, seconds)
 	}
-
 }
 
 class ImageItemViewHolder(
