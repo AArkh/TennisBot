@@ -1,15 +1,18 @@
 package tennis.bot.mobile.feed.activityfeed
 
+import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import tennis.bot.mobile.R
@@ -19,6 +22,8 @@ import tennis.bot.mobile.databinding.FeedPostOneNewPlayerBinding
 import tennis.bot.mobile.databinding.FeedPostThreeMatchScoreBinding
 import tennis.bot.mobile.databinding.FeedPostTwoMatchRequestBinding
 import tennis.bot.mobile.databinding.RecyclerEmptyItemBinding
+import tennis.bot.mobile.feed.activityfeed.FeedBottomNavigationFragment.Companion.LIKE
+import tennis.bot.mobile.feed.activityfeed.FeedBottomNavigationFragment.Companion.UNLIKE
 import tennis.bot.mobile.profile.account.AccountPageAdapter
 import tennis.bot.mobile.profile.account.EmptyItemViewHolder
 import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
@@ -39,8 +44,7 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>(),
 		const val MATCH_REQUEST = 2
 		const val SCORE = 3
 	}
-	val mediaSliderAdapter = ImageSliderAdapter()
-	private val matchResultsAdapter = MatchResultsAdapter()
+	var clickListener: ((command: String, id: Long) -> Unit)? = null
 
 	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: Any) {
 		when(holder) {
@@ -121,12 +125,15 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>(),
 
 	private fun bindScorePost(item: Any, holder: ScorePostItemViewHolder) {
 		val scorePostItem = item as? ScorePostItem ?: throw IllegalArgumentException("Item must be ScorePostItem")
+		val mediaSliderAdapter = ImageSliderAdapter()
+		val matchResultsAdapter = MatchResultsAdapter()
 
 		holder.binding.playerPhoto.showPlayerPhoto(scorePostItem.player1?.photo, null)
 		holder.binding.itemPicture.isVisible = false
 		holder.binding.itemPicturesPager.isVisible = true
 		holder.binding.itemPicturesPager.adapter = mediaSliderAdapter
 		mediaSliderAdapter.submitList(scorePostItem.feedMediaItemsList)
+		holder.binding.itemPicturesPager.currentItem
 
 		TabLayoutMediator(holder.binding.tabLayout, holder.binding.itemPicturesPager) { tab, _ ->
 			tab.setCustomView(R.layout.tab_image_switch_indicator)
@@ -161,9 +168,55 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>(),
 		}
 
 		holder.binding.likeButton.isLikeActive(scorePostItem.liked, scorePostItem.totalLikes)
+		holder.binding.likeButton.setOnClickListener {
+			holder.binding.likeButton.onLikePressed(
+				scorePostItem.liked,
+				holder.binding.likeAnim,
+				scorePostItem.id,
+				scorePostItem.totalLikes)
+		}
 
 		holder.binding.resultsContainer.adapter = matchResultsAdapter
 		matchResultsAdapter.submitList(scorePostItem.matchResultsList)
+	}
+
+	private fun TextView.onLikePressed(isLiked: Boolean, likeAnimation: LottieAnimationView, postId: Long, totalLikes: Int) {
+		if (!isLiked) {
+			setCompoundDrawablesWithIntrinsicBounds(R.drawable.fire_active, 0, 0, 0)
+			setTextColor(getColor(context, R.color.tb_red))
+			text = (totalLikes + 1).toString()
+			likeAnimation.playAnimation()
+			likeAnimation.addAnimatorListener(object: Animator.AnimatorListener  {
+				override fun onAnimationStart(animation: Animator) {}
+				override fun onAnimationEnd(animation: Animator) {
+					likeAnimation.animate()
+						.alpha(0f)
+						.scaleX(0.5f)
+						.scaleY(0.5f)
+						.setInterpolator(AccelerateDecelerateInterpolator())
+						.setDuration(300)
+						.start()
+				}
+				override fun onAnimationCancel(animation: Animator) {
+					resetAnimation(likeAnimation)
+				}
+				override fun onAnimationRepeat(animation: Animator) {}
+
+			})
+			clickListener?.invoke(LIKE, postId)
+		} else {
+			setCompoundDrawablesWithIntrinsicBounds(R.drawable.fire, 0, 0, 0)
+			setTextColor(getColor(context, R.color.tb_gray_gray))
+			text = if (totalLikes == 1) "" else (totalLikes - 1).toString()
+			clickListener?.invoke(UNLIKE, postId)
+		}
+	}
+
+	private fun resetAnimation(animationView: LottieAnimationView) {
+		animationView.frame = 0
+		animationView.alpha = 1f
+		animationView.scaleX = 1f
+		animationView.scaleY = 1f
 	}
 
 	private fun TextView.isLikeActive(isLiked: Boolean, totalLikes: Int?) {
@@ -172,7 +225,7 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>(),
 			setTextColor(getColor(context, R.color.tb_red))
 		} else {
 			setCompoundDrawablesWithIntrinsicBounds(R.drawable.fire, 0, 0, 0)
-
+			setTextColor(getColor(context, R.color.tb_gray_gray))
 		}
 
 		text = if (totalLikes != null && totalLikes != 0) totalLikes.toString() else ""

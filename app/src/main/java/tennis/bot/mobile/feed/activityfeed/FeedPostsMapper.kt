@@ -32,7 +32,7 @@ class FeedPostsMapper @Inject constructor(
 				formatLocationDataForPost(newPlayerPost.cityId, null))
 
 			return NewPlayerPostItem(
-				id = newPlayerPost.id,
+				id = postData.id,
 				postType = postData.postType,
 				totalLikes = postData.totalLikes,
 				liked = postData.liked,
@@ -48,7 +48,7 @@ class FeedPostsMapper @Inject constructor(
 		val matchRequestPost = postData.post as? PostParent.MatchRequestPost ?: throw IllegalArgumentException("Item must be MatchRequestPost")
 
 		return MatchRequestPostItem(
-			id = matchRequestPost.playerId,
+			id = postData.id,
 			postType = matchRequestPost.type,
 			totalLikes = postData.totalLikes,
 			liked = postData.liked,
@@ -67,7 +67,7 @@ class FeedPostsMapper @Inject constructor(
 		val scorePost = postData.post as? PostParent.ScorePost ?: throw IllegalArgumentException("Item must be ScorePost")
 
 		return ScorePostItem(
-			id = scorePost.id,
+			id = postData.id,
 			postType = scorePost.type,
 			totalLikes = postData.totalLikes,
 			liked = postData.liked,
@@ -83,9 +83,39 @@ class FeedPostsMapper @Inject constructor(
 			duration = scorePost.duration,
 			matchWon = scorePost.matchWon,
 			sets = scorePost.sets,
-			feedMediaItemsList = emptyList(),
+			feedMediaItemsList = createListOfMedia(scorePost),
 			matchResultsList = formMatchResultsList(scorePost, context)
 		)
+	}
+
+	fun createListOfMedia(item: PostParent.ScorePost): List<FeedMediaItem> {
+		val theList = mutableListOf<FeedMediaItem>()
+		if (item.video != null && item.photo != null) {
+			theList.add(
+				FeedMediaItem(
+					mediaUrl = item.video,
+					isVideo = true
+				)
+			)
+			theList.add(FeedMediaItem(item.photo))
+		} else if (item.video != null) {
+			theList.add(
+				FeedMediaItem(
+					mediaUrl = item.video,
+					isVideo = true
+				)
+			)
+		} else if (item.photo != null) {
+			theList.add(FeedMediaItem(item.photo))
+		}
+		theList.add(FeedMediaItem(item.player1.photo))
+		theList.add(FeedMediaItem(item.player2.photo))
+		if (item.player3 != null) {
+			theList.add(FeedMediaItem(item.player3.photo))
+			theList.add(FeedMediaItem(item.player4?.photo))
+		}
+
+		return theList.toList()
 	}
 
 	private suspend fun formatLocationDataForPost(cityId: Int, districtId: Int?): String? {

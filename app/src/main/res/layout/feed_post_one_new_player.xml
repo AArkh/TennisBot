@@ -104,6 +104,7 @@
 		android:layout_marginBottom="18dp"
 		android:gravity="center"
 		android:text="99"
+		android:textColor="@color/tb_gray_gray"
 		app:drawableLeftCompat="@drawable/fire"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintStart_toStartOf="parent"

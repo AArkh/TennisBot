@@ -35,13 +35,27 @@ class FeedBottomNavigationViewModel @Inject constructor(
 	}
 	val addScoreOptions = listOf(context.getString(R.string.add_score_title), context.getString(R.string.create_game_title))
 
+	fun onLikeButtonPressed(isLike: Boolean, postId: Long) {
+		viewModelScope.launch {
+			kotlin.runCatching {
+				if (isLike) {
+					repository.postLike(postId)
+				} else {
+					repository.postUnlike(postId)
+				}
+			}.onSuccess {
+				onFetchingActivities()
+			}
+		}
+	}
+
 	private fun onFetchingProfilePicture(){
 		viewModelScope.launch(Dispatchers.IO) {
 			_uiStateFlow.value = _uiStateFlow.value.copy(playerPicture = userProfileRepository.getProfile().photo)
 		}
 	}
 
-	fun onFetchingActivities() {
+	private fun onFetchingActivities() {
 		viewModelScope.launch (Dispatchers.IO) {
 			val activityPosts = repository.getActivities()
 			convertPostsToItems(activityPosts)
@@ -63,7 +77,7 @@ class FeedBottomNavigationViewModel @Inject constructor(
 			}
 
 			_uiStateFlow.value = _uiStateFlow.value.copy(postItems = listOfItems)
-			loadMediaContent()
+//			loadMediaContent()
 		}
 	}
 
@@ -82,7 +96,7 @@ class FeedBottomNavigationViewModel @Inject constructor(
 		}
 	}
 
-	private fun createListOfMedia(item: ScorePostItem): List<FeedMediaItem> {
+	fun createListOfMedia(item: ScorePostItem): List<FeedMediaItem> {
 		val theList = mutableListOf<FeedMediaItem>()
 		if (item.video != null && item.photo != null) {
 			theList.add(

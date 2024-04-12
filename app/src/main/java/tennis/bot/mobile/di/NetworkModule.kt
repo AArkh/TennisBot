@@ -13,6 +13,7 @@ import retrofit2.Converter
 import retrofit2.Retrofit
 import tennis.bot.mobile.core.AuthInterceptor
 import tennis.bot.mobile.feed.activityfeed.FeedApi
+import tennis.bot.mobile.feed.activityfeed.LikesApi
 import tennis.bot.mobile.feed.insertscore.InsertScoreApi
 import tennis.bot.mobile.feed.insertscore.MediaApi
 import tennis.bot.mobile.feed.searchopponent.OpponentsApi
@@ -337,5 +338,11 @@ class NetworkModule {
     fun provideFeedApiClient(
         @Named(ACTIVITY_FEED) retrofit: Retrofit
     ): FeedApi = retrofit.create(FeedApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideLikesApiClient(
+        @Named(ACTIVITY_FEED) retrofit: Retrofit
+    ): LikesApi = retrofit.create(LikesApi::class.java)
 }
 

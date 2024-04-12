@@ -28,13 +28,27 @@ class FeedBottomNavigationFragment : CoreFragment<FragmentFeedBottomNavigationBi
 	companion object {
 		const val ADD_SCORE_INDEX = 0
 		const val CREATE_GAME_ITEM = 1
+		const val LIKE = "LIKE"
+		const val UNLIKE = "UNLIKE"
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 
 		binding.container.adapter = adapter
+		binding.container.itemAnimator = null
 		binding.container.layoutManager = LinearLayoutManager(context)
+
+		adapter.clickListener = { command, postId ->
+			when(command) {
+				LIKE -> {
+					viewModel.onLikeButtonPressed(true, postId)
+				}
+				UNLIKE -> {
+					viewModel.onLikeButtonPressed(false, postId)
+				}
+			}
+		}
 
 		binding.playerPhoto.setOnClickListener {
 			parentFragmentManager.beginTransaction()

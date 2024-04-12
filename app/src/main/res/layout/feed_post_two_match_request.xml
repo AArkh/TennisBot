@@ -98,6 +98,7 @@
 		android:layout_marginStart="16dp"
 		android:layout_marginBottom="18dp"
 		android:text="99"
+		android:textColor="@color/tb_gray_gray"
 		android:gravity="center"
 		app:layout_constraintTop_toBottomOf="@id/request_comment"
 		app:layout_constraintStart_toStartOf="parent"
