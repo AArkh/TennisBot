@@ -19,8 +19,6 @@
 	<string name="location_district">Район</string>
 	<string name="location_city">Город</string>
 	<string name="location_country">Страна</string>
-	<!-- TODO: Remove or change this placeholder text -->
-	<string name="hello_blank_fragment">Hello blank fragment</string>
 	<string name="photopick_title">Добавь фотографию</string>
 	<string name="button_skip">Пропустить</string>
 	<string name="photopick_title_second">Или выбери из базы</string>
@@ -31,7 +29,7 @@
 	<string name="onboarding_sms_input_failed_to_validate_sms">Не верный код подтверждения</string>
 
 	<!-- general messages -->
-	<string name="error_no_network_message">Ошибка, проверьте подключение в сети интернет</string>
+	<string name="error_no_network_message">Ошибка, проверьте подключение к сети интернет</string>
 
 	<!-- password -->
 	<string name="password_title">Придумай пароль</string>
@@ -94,15 +92,6 @@
 	<string name="survey_dialog_text">Сейчас система оценит ваш уровень \nсилы. Отвечайте на вопросы честно.</string>
 	<string name="survey_dialog_title">Теннис бот опрос</string>
 
-	<string name="sport_title">Теннис</string>
-
-	<string name="namegender_title">Расскажи о себе</string>
-	<string name="namesurname_female">Девушка</string>
-	<string name="namesurname_male">Мужчина</string>
-	<string name="namesurname_name">Имя</string>
-	<string name="namesurname_surname">Фамилия</string>
-	<string name="namesurname_error_text">Поле должно содержать не менее 3-х символов</string>
-
 	<string name="survey_results_title_1">Уровень игры</string>
 	<string name="survey_results_title_2">Уровень Форхенд</string>
 	<string name="survey_results_title_3">Уровень Бэкхенд</string>
@@ -114,6 +103,18 @@
 	<string name="survey_results_title_9">Занимал призовые \nместа</string>
 	<string name="survey_result_small_title">Опрос завершен</string>
 	<string name="survey_result_title">Все ли верно?</string>
+
+	<!-- sports -->
+	<string name="sport_title">Теннис</string>
+
+	<!-- name_gender -->
+	<string name="namegender_title">Расскажи о себе</string>
+	<string name="namesurname_female">Девушка</string>
+	<string name="namesurname_male">Мужчина</string>
+	<string name="namesurname_name">Имя</string>
+	<string name="namesurname_surname">Фамилия</string>
+	<string name="namesurname_error_text">Поле должно содержать не менее 3-х символов</string>
+
 	<string name="button_continue">Продолжить</string>
 	<string name="button_try_again">Пройти еще раз</string>
 
@@ -247,7 +248,38 @@
 	<string name="lost_to_subtitle">Проиграл %s</string>
 	<string name="won_doubles_subtitle">Выиграл %s / %s</string>
 	<string name="lost_doubles_subtitle">Проиграл %s / %s</string>
-	<string name="time_ago">3 часа назад</string>
+	<string name="mock_time_ago">3 часа назад</string>
+	<plurals name="minutes_ago">
+		<item quantity="one">%d минуту назад</item>
+		<item quantity="few">%d минуты назад</item>
+		<item quantity="many">%d минут назад</item>
+		<item quantity="other">%d минут назад</item>
+	</plurals>
+	<plurals name="hours_ago">
+		<item quantity="one">%d час назад</item>
+		<item quantity="few">%d часа назад</item>
+		<item quantity="many">%d часов назад</item>
+		<item quantity="other">%d часов назад</item>
+	</plurals>
+	<plurals name="days_ago">
+		<item quantity="one">%d день назад</item>
+		<item quantity="few">%d дня назад</item>
+		<item quantity="many">%d дней назад</item>
+		<item quantity="other">%d дней назад</item>
+	</plurals>
+	<plurals name="weeks_ago">
+		<item quantity="one">%d неделю назад</item>
+		<item quantity="few">%d недели назад</item>
+		<item quantity="many">%d недель назад</item>
+		<item quantity="other">%d недель назад</item>
+	</plurals>
+	<plurals name="months_ago">
+		<item quantity="one">%d месяц назад</item>
+		<item quantity="few">%d месяца назад</item>
+		<item quantity="many">%d месяцев назад</item>
+		<item quantity="other">%d месяцев назад</item>
+	</plurals>
+
 	<string name="month_text">Май</string>
 	<string name="post_two_location_subtitle">%s, игра на %s</string>
 	<string name="post_type_2">Заявка на игру</string>

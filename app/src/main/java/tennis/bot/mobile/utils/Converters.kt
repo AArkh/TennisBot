@@ -72,7 +72,7 @@ fun formatDateForMatchPostItem(timestampString: String): FormattedDate {
 	)
 }
 
-fun formatDateForFeed(dateString: String): String {
+fun formatDateForFeed(dateString: String, context: Context): String {
 	val dateTimeFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ", Locale.getDefault())
 	val timeStampMs = dateTimeFormatter.parse(dateString).time
 
@@ -85,11 +85,10 @@ fun formatDateForFeed(dateString: String): String {
 
 	return when { // todo сделать что-то с окончаниями
 		days > 365 -> "${days/365} год назад"
-		days > 60 -> "${days/30} месяцев назад"
-		days > 30 -> "${days/30} месяц назад"
-		days > 0 -> "$days дней назад"
-		hours > 0 -> "$hours часов назад"
-		minutes > 0 -> "$minutes минут назад"
+		days > 30 -> context.resources.getQuantityString(R.plurals.minutes_ago, (days/30).toInt(), (days/30).toInt())
+		days > 0 -> context.resources.getQuantityString(R.plurals.days_ago, days.toInt(),  days.toInt())
+		hours > 0 -> context.resources.getQuantityString(R.plurals.hours_ago, hours.toInt(), hours.toInt())
+		minutes > 0 -> context.resources.getQuantityString(R.plurals.minutes_ago, minutes.toInt(), minutes.toInt())
 		else -> "Только что"
 	}
 }

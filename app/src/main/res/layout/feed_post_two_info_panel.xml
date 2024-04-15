@@ -22,6 +22,8 @@
 			android:layout_gravity="top|center"
 			android:padding="2dp"
 			android:text="@string/month_text"
+			android:maxLines="1"
+			android:ellipsize="end"
 			android:textColor="@color/tb_white"
 			android:textSize="11sp" />
 
@@ -31,6 +33,8 @@
 			android:layout_height="wrap_content"
 			android:layout_gravity="bottom|center"
 			android:text="29"
+			android:maxLines="1"
+			android:ellipsize="end"
 			android:textColor="@color/tb_white"
 			android:textSize="24sp" />
 	</FrameLayout>
@@ -44,6 +48,8 @@
 		android:text="@string/day_and_time"
 		android:textColor="@color/tb_white"
 		android:textSize="14sp"
+		android:maxLines="2"
+		android:ellipsize="end"
 		app:layout_constraintBottom_toBottomOf="@id/day_month_layout"
 		app:layout_constraintEnd_toStartOf="@+id/separator"
 		app:layout_constraintStart_toEndOf="@+id/day_month_layout"
@@ -84,6 +90,8 @@
 		android:text="@string/rating_and_skill"
 		android:textColor="@color/tb_white"
 		android:textSize="14sp"
+		android:maxLines="2"
+		android:ellipsize="end"
 		app:layout_constraintStart_toEndOf="@+id/rating_icon"
 		app:layout_constraintTop_toTopOf="@id/day_month_layout"
 		app:layout_constraintBottom_toBottomOf="@id/day_month_layout"

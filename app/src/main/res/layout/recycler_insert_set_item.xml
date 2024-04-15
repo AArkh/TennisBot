@@ -32,7 +32,7 @@
 		android:paddingVertical="6dp"
 		android:clickable="true"
 		android:focusable="true"
-		android:foreground="@drawable/ripple_gray_circle"
+		android:foreground="@drawable/ripple_gray_corners_100dp"
 		android:background="@drawable/outline_100dp"
 		app:drawableEndCompat="@drawable/chevron_right_wide"
 		app:layout_constraintTop_toTopOf="@id/title"

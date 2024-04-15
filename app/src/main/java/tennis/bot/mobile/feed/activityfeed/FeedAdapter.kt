@@ -86,7 +86,7 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>(),
 
 		holder.binding.likeButton.isLikeActive(newPlayerItem.liked, newPlayerItem.totalLikes)
 
-		holder.binding.date.text = newPlayerItem.addedAt?.let { formatDateForFeed(it) }
+		holder.binding.date.text = newPlayerItem.addedAt?.let { formatDateForFeed(it, holder.binding.date.context) }
 	}
 
 	private fun bindMatchRequestPost(item: Any,holder: MatchRequestPostItemViewHolder) {
@@ -102,19 +102,19 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>(),
 
 		holder.binding.likeButton.isLikeActive(matchRequestItem.liked, matchRequestItem.totalLikes)
 
-		holder.binding.date.text = matchRequestItem.addedAt?.let { formatDateForFeed(it) }
+		holder.binding.date.text = matchRequestItem.addedAt?.let { formatDateForFeed(it, holder.binding.date.context) }
 	}
 
 	private fun MatchRequestPostItemViewHolder.bindInfoPanel(
 		formattedMatchDate: FormattedDate?,
 		matchRequestItem: MatchRequestPostItem
 	) {
-		binding.infoPanel.month.text = formattedMatchDate?.month
+		binding.infoPanel.month.text = formattedMatchDate?.month?.replaceFirstChar { it.uppercase() }
 		binding.infoPanel.day.text = formattedMatchDate?.day.toString()
 		binding.infoPanel.timeAndDay.text = binding.infoPanel.timeAndDay.context.getString(
 			R.string.day_and_time,
 			formattedMatchDate?.time,
-			formattedMatchDate?.dayOfWeek
+			formattedMatchDate?.dayOfWeek.toString().replaceFirstChar { it.uppercase() }
 		)
 		binding.infoPanel.ratingAndSkill.text = binding.infoPanel.ratingAndSkill.context.getString(
 			R.string.rating_and_skill,
@@ -178,6 +178,7 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>(),
 
 		holder.binding.resultsContainer.adapter = matchResultsAdapter
 		matchResultsAdapter.submitList(scorePostItem.matchResultsList)
+		holder.binding.date.text = scorePostItem.addedAt?.let { formatDateForFeed(it, holder.binding.date.context) }
 	}
 
 	private fun TextView.onLikePressed(isLiked: Boolean, likeAnimation: LottieAnimationView, postId: Long, totalLikes: Int) {

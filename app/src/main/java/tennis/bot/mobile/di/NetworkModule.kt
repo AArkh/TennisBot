@@ -12,6 +12,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Converter
 import retrofit2.Retrofit
 import tennis.bot.mobile.core.AuthInterceptor
+import tennis.bot.mobile.core.CrashTestInterceptor
 import tennis.bot.mobile.feed.activityfeed.FeedApi
 import tennis.bot.mobile.feed.activityfeed.LikesApi
 import tennis.bot.mobile.feed.insertscore.InsertScoreApi
@@ -74,12 +75,14 @@ class NetworkModule {
     fun provideNewRegistrationOkHttpClient(
         loggingInterceptor: LoggingInterceptor,
         infoInterceptor: InfoInterceptor,
-        authInterceptor: AuthInterceptor
+        authInterceptor: AuthInterceptor,
+        crashTestInterceptor: CrashTestInterceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .addInterceptor(infoInterceptor)
             .addInterceptor(authInterceptor)
+            .addInterceptor(crashTestInterceptor) // a debug thing to spot blind spots in my server error handling flow
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(15, TimeUnit.SECONDS)
             .build()

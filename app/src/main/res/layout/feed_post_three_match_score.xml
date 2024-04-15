@@ -157,7 +157,7 @@
 		android:layout_marginTop="12dp"
 		android:layout_marginEnd="16dp"
 		android:layout_marginBottom="18dp"
-		android:text="@string/time_ago"
+		android:text="@string/mock_time_ago"
 		android:textSize="12sp"
 		android:textColor="@color/tb_gray_gray"
 		android:gravity="center"

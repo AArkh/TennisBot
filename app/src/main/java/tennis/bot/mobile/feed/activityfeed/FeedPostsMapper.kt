@@ -88,7 +88,7 @@ class FeedPostsMapper @Inject constructor(
 		)
 	}
 
-	fun createListOfMedia(item: PostParent.ScorePost): List<FeedMediaItem> {
+	private fun createListOfMedia(item: PostParent.ScorePost): List<FeedMediaItem> {
 		val theList = mutableListOf<FeedMediaItem>()
 		if (item.video != null && item.photo != null) {
 			theList.add(

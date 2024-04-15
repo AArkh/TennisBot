@@ -77,52 +77,6 @@ class FeedBottomNavigationViewModel @Inject constructor(
 			}
 
 			_uiStateFlow.value = _uiStateFlow.value.copy(postItems = listOfItems)
-//			loadMediaContent()
 		}
-	}
-
-	@WorkerThread
-	private fun loadMediaContent() {
-		viewModelScope.launch(Dispatchers.IO) {
-			val newList = _uiStateFlow.value.postItems.map { scorePostItem ->
-				when (scorePostItem) {
-					is ScorePostItem -> {
-						scorePostItem.copy(feedMediaItemsList = createListOfMedia(scorePostItem))
-					}
-					else -> scorePostItem
-				}
-			}
-			_uiStateFlow.value = _uiStateFlow.value.copy(postItems = newList)
-		}
-	}
-
-	fun createListOfMedia(item: ScorePostItem): List<FeedMediaItem> {
-		val theList = mutableListOf<FeedMediaItem>()
-		if (item.video != null && item.photo != null) {
-			theList.add(
-				FeedMediaItem(
-					mediaUrl = item.video,
-					isVideo = true
-				)
-			)
-			theList.add(FeedMediaItem(item.photo))
-		} else if (item.video != null) {
-			theList.add(
-				FeedMediaItem(
-					mediaUrl = item.video,
-					isVideo = true
-				)
-			)
-		} else if (item.photo != null) {
-			theList.add(FeedMediaItem(item.photo))
-		}
-		theList.add(FeedMediaItem(item.player1?.photo))
-		theList.add(FeedMediaItem(item.player2?.photo))
-		if (item.player3 != null) {
-			theList.add(FeedMediaItem(item.player3.photo))
-			theList.add(FeedMediaItem(item.player4?.photo))
-		}
-
-		return theList.toList()
 	}
 }
