@@ -1,4 +1,7 @@
-<resources>
+<resources
+	xmlns:tools="http://schemas.android.com/tools"
+	tools:locale="ru"
+	tools:ignore="MissingTranslation">
 	<string name="app_name">Tennis bot</string>
 	<string name="onboarding_text_title">Ракеточная Эко-Система</string>
 	<string name="onboarding_text">Тысячи игроков, в разных странах мира уже нашли себе равных партнеров, друзей и присоединились к самому большому сообществу «Теннис бот»</string>
