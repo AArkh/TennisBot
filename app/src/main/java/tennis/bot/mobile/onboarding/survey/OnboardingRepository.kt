@@ -9,7 +9,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import tennis.bot.mobile.core.AuthTokenRepository
+import tennis.bot.mobile.core.authentication.AuthTokenRepository
 import tennis.bot.mobile.onboarding.photopick.PhotoPickApi
 import tennis.bot.mobile.utils.uriToFile
 import javax.inject.Inject
@@ -18,11 +18,11 @@ import javax.inject.Singleton
 
 @Singleton
 class OnboardingRepository @Inject constructor(
-    @ApplicationContext private val context: Context,
-    private val registerAndLoginApi: RegisterAndLoginApi,
-    private val newPlayerApi: NewPlayerApi,
-    private val photoPickApi: PhotoPickApi,
-    private val tokenRepo: AuthTokenRepository,
+	@ApplicationContext private val context: Context,
+	private val registerAndLoginApi: RegisterAndLoginApi,
+	private val newPlayerApi: NewPlayerApi,
+	private val photoPickApi: PhotoPickApi,
+	private val tokenRepo: AuthTokenRepository,
 ) {
 
     private val sharedPreferences = context.getSharedPreferences("AccountInfo", Context.MODE_PRIVATE)

@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit
 
 const val DEFAULT_DATE_TIME = "0001-01-01T00:00:00Z"
 const val CONTENT_LINK = "http://bugz.su:9000/publiccontent/"
+const val DEFAULT_PICS_PREFIX = "https://s3.aeza.cloud/perfect-wine/DEV/avatars/"
 
 data class FormattedDate(
 	val time: String,
@@ -83,13 +84,13 @@ fun formatDateForFeed(dateString: String, context: Context): String {
 	val hours = TimeUnit.MILLISECONDS.toHours(diffInMillis)
 	val days = TimeUnit.MILLISECONDS.toDays(diffInMillis)
 
-	return when { // todo сделать что-то с окончаниями
-		days > 365 -> "${days/365} год назад"
+	return when {
+		days > 365 -> context.getString(R.string.year_ago, (days / 365))
 		days > 30 -> context.resources.getQuantityString(R.plurals.minutes_ago, (days/30).toInt(), (days/30).toInt())
 		days > 0 -> context.resources.getQuantityString(R.plurals.days_ago, days.toInt(),  days.toInt())
 		hours > 0 -> context.resources.getQuantityString(R.plurals.hours_ago, hours.toInt(), hours.toInt())
 		minutes > 0 -> context.resources.getQuantityString(R.plurals.minutes_ago, minutes.toInt(), minutes.toInt())
-		else -> "Только что"
+		else -> context.getString(R.string.just_now)
 	}
 }
 
@@ -108,28 +109,30 @@ fun TextView.formRatingChange(difference: String) {
 	text = difference.trimStart('-')
 }
 
+
+
 fun buildImageRequest(context: Context, imageUrl: String?): Any? { // loads a null before an actual profile pic. should we tweak the behavior to change that?
 	var result: Any? = null
 
 	if (imageUrl == null) {
 		result = R.drawable.null_placeholder
 	} else if (imageUrl.contains("default")) {
-		val resourceId = if (imageUrl.contains("http")) {
+		val resourceId = if (imageUrl.contains("https")) {
 			getDefaultDrawableResourceId(context,
-				imageUrl.removeSuffix(".png").removePrefix("http://bugz.su:9000/profilepictures/"))
+				imageUrl.removeSuffix(".png").removePrefix(DEFAULT_PICS_PREFIX))
 		} else {
 			getDefaultDrawableResourceId(context, imageUrl.removeSuffix(".png"))
 		}
 
 		if (resourceId != null) result = resourceId
 	} else if(imageUrl.contains("pics") || imageUrl.contains("movies")) {
-		result = if (imageUrl.contains("http")) {
+		result = if (imageUrl.contains("https")) {
 			imageUrl
 		} else {
 			CONTENT_LINK + imageUrl
 		}
 	} else {
-		result = if (imageUrl.contains("http")) {
+		result = if (imageUrl.contains("https")) {
 			imageUrl
 		} else {
 			AccountPageAdapter.IMAGES_LINK + imageUrl

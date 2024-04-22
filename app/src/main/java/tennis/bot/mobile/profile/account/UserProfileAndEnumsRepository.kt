@@ -70,7 +70,7 @@ class UserProfileAndEnumsRepository @Inject constructor(
 		if (response.code() == 200) {
 			cachedProfileData = response.body()!!
 		}
-		return response.body()!!
+		return response.body()!! // todo fix the crash. blows up when server returns a failure
 	}
 
 	fun getProfile() : ProfileData {

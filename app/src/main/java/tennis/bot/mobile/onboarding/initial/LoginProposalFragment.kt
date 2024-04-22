@@ -52,11 +52,11 @@ class LoginProposalFragment : CoreFragment<FragmentLoginProposalBinding>() {
                 .commit()
         }
         binding.buttonWithoutRegistration.setOnClickListener {
-//            requireContext().showToast("To be implemented yet")
-            parentFragmentManager.beginTransaction()
-                .addToBackStack(this::class.java.name)
-                .replace(R.id.fragment_container_view, PhotoPickFragment())
-                .commit()
+            requireContext().showToast("To be implemented yet")
+//            parentFragmentManager.beginTransaction()
+//                .addToBackStack(this::class.java.name)
+//                .replace(R.id.fragment_container_view, PhotoPickFragment())
+//                .commit()
         }
         binding.buttonLogin.setOnClickListener {
             parentFragmentManager.beginTransaction()

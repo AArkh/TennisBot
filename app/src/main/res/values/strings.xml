@@ -291,5 +291,7 @@
 	<string name="post_three_doubles_title">%s / %s</string>
 	<string name="bonuses_change">+%d\n+%d</string>
 	<string name="default_photo_name">default%d.png</string>
+	<string name="year_ago">%1$d год назад</string>
+	<string name="just_now">Только что</string>
 
 </resources>

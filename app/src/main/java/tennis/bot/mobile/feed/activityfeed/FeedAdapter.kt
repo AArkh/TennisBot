@@ -28,6 +28,7 @@ import tennis.bot.mobile.profile.account.AccountPageAdapter
 import tennis.bot.mobile.profile.account.EmptyItemViewHolder
 import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
 import tennis.bot.mobile.profile.matches.TennisSetNetwork
+import tennis.bot.mobile.utils.DEFAULT_PICS_PREFIX
 import tennis.bot.mobile.utils.FormattedDate
 import tennis.bot.mobile.utils.dpToPx
 import tennis.bot.mobile.utils.formatDateForFeed
@@ -245,7 +246,7 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>(),
 			if (profileImageUrl.contains("default")) {
 				val resourceId = if (profileImageUrl.contains("http")) {
 					getDefaultDrawableResourceId(itemPicture.context,
-						profileImageUrl.removeSuffix(".png").removePrefix("http://bugz.su:9000/profilepictures/"))
+						profileImageUrl.removeSuffix(".png").removePrefix(DEFAULT_PICS_PREFIX))
 				} else {
 					getDefaultDrawableResourceId(context, profileImageUrl.removeSuffix(".png"))
 				}

@@ -1,4 +1,4 @@
-package tennis.bot.mobile.core
+package tennis.bot.mobile.core.authentication
 
 import okhttp3.Interceptor
 import okhttp3.Request

@@ -10,6 +10,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
+import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
 import tennis.bot.mobile.databinding.FragmentFeedBottomNavigationBinding
 import tennis.bot.mobile.feed.addscore.AddScoreFragment
 import tennis.bot.mobile.profile.account.AccountPageFragment
@@ -19,7 +20,7 @@ import tennis.bot.mobile.utils.view.AvatarImage
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FeedBottomNavigationFragment : CoreFragment<FragmentFeedBottomNavigationBinding>() {
+class FeedBottomNavigationFragment : AuthorizedCoreFragment<FragmentFeedBottomNavigationBinding>() {
 	override val bindingInflation: Inflation<FragmentFeedBottomNavigationBinding> = FragmentFeedBottomNavigationBinding::inflate
 	private val viewModel: FeedBottomNavigationViewModel by viewModels()
 	@Inject

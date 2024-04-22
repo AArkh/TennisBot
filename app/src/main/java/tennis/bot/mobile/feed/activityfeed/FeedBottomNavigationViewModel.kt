@@ -50,9 +50,7 @@ class FeedBottomNavigationViewModel @Inject constructor(
 	}
 
 	private fun onFetchingProfilePicture(){
-		viewModelScope.launch(Dispatchers.IO) {
-			_uiStateFlow.value = _uiStateFlow.value.copy(playerPicture = userProfileRepository.getProfile().photo)
-		}
+		_uiStateFlow.value = _uiStateFlow.value.copy(playerPicture = userProfileRepository.getProfile().photo)
 	}
 
 	private fun onFetchingActivities() {
@@ -62,21 +60,25 @@ class FeedBottomNavigationViewModel @Inject constructor(
 		}
 	}
 
-	private fun convertPostsToItems(list: List<PostData>?) {
+	private suspend fun convertPostsToItems(list: List<PostData>?) {
 		if (list == null) return
+		val listOfItems = mutableListOf<CoreUtilsItem>()
 
-		viewModelScope.launch(Dispatchers.IO) {
-			val listOfItems = mutableListOf<CoreUtilsItem>()
+		for (postData in list) {
+			when (postData.postType) {
+				FeedAdapter.NEW_PLAYER -> {
+					listOfItems.add(feedPostsMapper.convertToNewPlayerPostItem(postData))
+				}
 
-			for(postData in list) {
-				when(postData.postType) {
-					FeedAdapter.NEW_PLAYER -> { listOfItems.add(feedPostsMapper.convertToNewPlayerPostItem(postData)) }
-					FeedAdapter.MATCH_REQUEST -> {  listOfItems.add(feedPostsMapper.convertToMatchRequestPostItem(postData)) }
-					FeedAdapter.SCORE -> {  listOfItems.add(feedPostsMapper.convertToScorePostItem(postData)) }
+				FeedAdapter.MATCH_REQUEST -> {
+					listOfItems.add(feedPostsMapper.convertToMatchRequestPostItem(postData))
+				}
+
+				FeedAdapter.SCORE -> {
+					listOfItems.add(feedPostsMapper.convertToScorePostItem(postData))
 				}
 			}
-
-			_uiStateFlow.value = _uiStateFlow.value.copy(postItems = listOfItems)
 		}
+		_uiStateFlow.value = _uiStateFlow.value.copy(postItems = listOfItems)
 	}
 }

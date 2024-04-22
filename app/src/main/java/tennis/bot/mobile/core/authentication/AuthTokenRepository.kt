@@ -1,4 +1,4 @@
-package tennis.bot.mobile.core
+package tennis.bot.mobile.core.authentication
 
 import android.content.Context
 import android.util.Log

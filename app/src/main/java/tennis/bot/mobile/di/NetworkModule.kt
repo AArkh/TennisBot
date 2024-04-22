@@ -11,7 +11,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Converter
 import retrofit2.Retrofit
-import tennis.bot.mobile.core.AuthInterceptor
+import tennis.bot.mobile.core.authentication.AuthInterceptor
 import tennis.bot.mobile.core.CrashTestInterceptor
 import tennis.bot.mobile.feed.activityfeed.FeedApi
 import tennis.bot.mobile.feed.activityfeed.LikesApi

@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import tennis.bot.mobile.core.AuthTokenRepository
+import tennis.bot.mobile.core.authentication.AuthTokenRepository
 import tennis.bot.mobile.databinding.ActivityMainBinding
 import tennis.bot.mobile.feed.activityfeed.FeedBottomNavigationFragment
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
