@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
+import tennis.bot.mobile.core.authentication.AuthTokenRepository
 import tennis.bot.mobile.onboarding.survey.SurveyResultItem
 import tennis.bot.mobile.utils.DEFAULT_DATE_TIME
 import tennis.bot.mobile.utils.convertDateAndTime
@@ -18,7 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AccountPageViewModel @Inject constructor(
 	@ApplicationContext private val context: Context,
-	private val repository: UserProfileAndEnumsRepository
+	private val repository: UserProfileAndEnumsRepository,
+	private val authTokenRepository: AuthTokenRepository
 ): ViewModel() {
 
 	companion object {
@@ -41,6 +43,9 @@ class AccountPageViewModel @Inject constructor(
 
 	fun onFetchingProfileData(){
 		viewModelScope.launch(Dispatchers.IO) {
+			kotlin.runCatching {
+
+
 				val profileData = repository.getProfile()
 				val difference = (10 - (profileData.games ?: 10))
 				val gamesRemain = if (difference in 0..9) difference else 10
@@ -91,7 +96,9 @@ class AccountPageViewModel @Inject constructor(
 
 				_uiStateFlow.value =
 					AccountPageUiState.ProfileDataReceived(basicLayout, gameDataList, emptyList())
-
+			}.onFailure {
+				onLogoutPressed(true)
+			}
 		}
 	}
 
@@ -118,6 +125,12 @@ class AccountPageViewModel @Inject constructor(
 		}
 
 		return modifiedGameData
+	}
+
+	fun onLogoutPressed(isExpired: Boolean){
+		viewModelScope.launch(Dispatchers.Main) {
+			authTokenRepository.triggerUnAuthFlow(isExpired)
+		}
 	}
 
 	fun onTryAgainPressed(){

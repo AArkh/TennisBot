@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources
+	xmlns:tools="http://schemas.android.com/tools"
+	tools:locale="en">
 	<plurals name="hours_ago">
 		<item quantity="one">%d hour ago</item>
 		<item quantity="other">%d hours ago</item>

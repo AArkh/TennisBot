@@ -54,6 +54,8 @@ class MainActivity : AppCompatActivity() {
                     locationRepository.precacheLocations()
                 } catch (iOException: IOException) {
                     Log.d("1234567", "Network error: ${iOException.message}")
+                } catch (nullPointerException: NullPointerException) {
+                    locationRepository.getLocations()
                 }
             }
         }
@@ -63,6 +65,8 @@ class MainActivity : AppCompatActivity() {
                     userProfileAndEnumsRepository.precacheEnums()
                 } catch (iOException: IOException) {
                     Log.d("1234567", "Network error: ${iOException.message}")
+                } catch (nullPointerException: NullPointerException) {
+                    userProfileAndEnumsRepository.getEnums()
                 }
             }
         }

@@ -1,5 +1,6 @@
 package tennis.bot.mobile.core.authentication
 
+import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
@@ -26,8 +27,9 @@ class AuthViewModel @Inject constructor(
 		authorizedFragment.lifecycleScope.launch (Dispatchers.Main) {
 			authorizedFragment.lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
 				repository.unAuthEventsFlow.collectLatest {
-					authorizedFragment.parentFragmentManager.destroyBackstack()
-					authorizedFragment.parentFragmentManager.goToAnotherSectionFragment(LoginProposalFragment())
+					Log.d("123456", "something happening here")
+					fragment?.parentFragmentManager?.destroyBackstack()
+					fragment?.parentFragmentManager?.goToAnotherSectionFragment(LoginProposalFragment())
 				}
 			}
 		}

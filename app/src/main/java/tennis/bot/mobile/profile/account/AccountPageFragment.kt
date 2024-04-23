@@ -13,13 +13,13 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentAccountPageBinding
-import tennis.bot.mobile.onboarding.initial.LoginProposalFragment
 import tennis.bot.mobile.profile.appsetttings.AppSettingsFragment
 import tennis.bot.mobile.profile.editgamedata.EditGameDataFragment
 import tennis.bot.mobile.profile.editprofile.EditProfileFragment
 import tennis.bot.mobile.profile.matches.MatchesFragment
-import tennis.bot.mobile.utils.destroyBackstack
 import tennis.bot.mobile.utils.goToAnotherSectionFragment
+import tennis.bot.mobile.utils.showInDevelopmentDialog
+import tennis.bot.mobile.utils.showInDevelopmentToast
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -61,8 +61,7 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 						parentFragmentManager.goToAnotherSectionFragment(AppSettingsFragment())
 					}
 					OptionsDialogFragment.LOGOUT -> { // for some reason remains a white screen + i do nothing about refresh token
-						parentFragmentManager.destroyBackstack()
-						parentFragmentManager.goToAnotherSectionFragment(LoginProposalFragment())
+						viewModel.onLogoutPressed(false)
 					}
 				}
 			}
@@ -103,8 +102,14 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 									.commit()
 							}
 							GO_TO_TOURNAMENTS -> {
-								val dialog = InDevelopmentDialog()
+								val dialog = TournamentDialog()
 								dialog.show(childFragmentManager, dialog.tag)
+							}
+							GO_TO_FRIENDS -> {
+								childFragmentManager.showInDevelopmentDialog()
+							}
+							GO_TO_CHART, GO_TO_FAQ -> {
+								requireContext().showInDevelopmentToast()
 							}
 						}
 					}
@@ -125,6 +130,9 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 	}
 
 	companion object {
+		const val GO_TO_FRIENDS = "GO_TO_FRIENDS"
+		const val GO_TO_FAQ = "GO_TO_FAQ"
+		const val GO_TO_CHART = "GO_TO_CHART"
 		const val GO_TO_MATCHES = "GO_TO_MATCHES"
 		const val INFLATE_CONTACTS = "INFLATE_CONTACTS"
 		const val INFLATE_GAMEDATA = "INFLATE_GAMEDATA"

@@ -65,19 +65,21 @@ class UserProfileAndEnumsRepository @Inject constructor(
 	}
 
 	@WorkerThread
-	fun precacheProfile(): ProfileData {
+	fun precacheProfile(): ProfileData? {
 		val response = userProfileApi.getProfile().execute()
 		if (response.code() == 200) {
 			cachedProfileData = response.body()!!
 		}
-		return response.body()!! // todo fix the crash. blows up when server returns a failure
+		return response.body() // todo fix the crash. blows up when server returns a failure
 	}
 
 	fun getProfile() : ProfileData {
 		if (::cachedProfileData.isInitialized) {
 			return cachedProfileData
+		} else {
+			precacheProfile()
 		}
-		return precacheProfile()
+		return cachedProfileData
 	}
 
 	fun updateCachedProfile(key: String, value: String) {

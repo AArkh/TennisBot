@@ -199,22 +199,6 @@ class OnboardingRepository @Inject constructor(
         return response.code()
     }
 
-    @WorkerThread
-    suspend fun postDefaultProfilePictureId(): Int {
-        val response = photoPickApi.postDefaultProfilePictureId(
-            defaultPhotoId = getPreselectedProfilePictureId(),
-            authHeader = tokenRepo.getAccessToken() ?: ""
-        )
-
-        if (response.code() == 204) {
-            Log.d("123456", "profilePic was posted")
-        } else if (response.code() == 400) {
-            Log.d("123456", "profilePic has crashed and burned")
-        }
-
-        return response.code()
-    }
-
 	fun recordPhoneNumberAndSmsCode(phoneNumber: String, smsVerifyCode: String) {
 		sharedPreferences.edit().putString(PHONE_NUMBER_HEADER, phoneNumber.toApiNumericFormat()).apply()
 		sharedPreferences.edit().putString(SMS_VERIFY_CODE_HEADER, smsVerifyCode).apply()
@@ -281,10 +265,6 @@ class OnboardingRepository @Inject constructor(
         return sharedPreferences.getString(TELEGRAM_HEADER, null)
     }
 
-    fun getPreselectedProfilePictureId(): Int {
-        return sharedPreferences.getInt(PRESELECTED_PROFILE_PICTURE_ID, 0)
-    }
-
     fun getUserPicture(): String? {
         return sharedPreferences.getString(USER_PROFILE_PICTURE, null)
     }
@@ -304,7 +284,6 @@ class OnboardingRepository @Inject constructor(
         const val CITY_ID_HEADER = "cityId"
         const val DISTRICT_ID_HEADER = "districtId"
         const val TELEGRAM_HEADER = "telegram"
-        const val PRESELECTED_PROFILE_PICTURE_ID = "profilePictureId"
         const val USER_PROFILE_PICTURE = "userProfilePicture"
 
         private const val CLIENT_SECRET = "Aitq2BWbQDR8pOiOwFS5SXGlss93xLlY"

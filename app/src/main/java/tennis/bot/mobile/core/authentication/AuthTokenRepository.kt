@@ -7,8 +7,10 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import tennis.bot.mobile.R
 import tennis.bot.mobile.onboarding.survey.RegisterAndLoginApi
 import tennis.bot.mobile.onboarding.survey.TokenResponse
+import tennis.bot.mobile.utils.showToast
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -50,6 +52,12 @@ class AuthTokenRepository @Inject constructor(
 
 	private val _unAuthEventsFlow = MutableSharedFlow<Unit>()
 	val unAuthEventsFlow: SharedFlow<Unit> = _unAuthEventsFlow.asSharedFlow()
+
+	suspend fun triggerUnAuthFlow(isExpired: Boolean) {
+		if (isExpired) context.showToast(context.getString(R.string.session_expired))
+		_unAuthEventsFlow.emit(Unit)
+		removeToken()
+	}
 
 	@Synchronized
 	fun recordToken(token: TokenResponse?) {
@@ -98,12 +106,10 @@ class AuthTokenRepository @Inject constructor(
 					refreshToken = response.body()!!.refreshToken
 				)
 			)
-		} else {
-			removeToken()
 		}
 	}
 
-	fun removeToken() {
-		sharedPreferences.edit().remove(REFRESH_TOKEN_KEY).apply()
+	private fun removeToken() {
+		sharedPreferences.edit().clear().apply()
 	}
 }

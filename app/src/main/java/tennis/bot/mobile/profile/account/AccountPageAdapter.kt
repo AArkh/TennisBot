@@ -67,6 +67,9 @@ class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHol
 				holder.binding.points.text = pointsAndPosition.points
 				holder.binding.tournamentTitle.text = pointsAndPosition.tournamentTitle
 				holder.binding.positionNumber.text = pointsAndPosition.positionNumber
+				holder.binding.root.setOnClickListener {
+					clickListener?.invoke(AccountPageFragment.GO_TO_TOURNAMENTS)
+				}
 			}
 			is AccountTournamentsItemViewHolder -> {
 				val tournaments = item as? Tournaments ?: throw IllegalArgumentException("Item must be MatchesPlayed")
@@ -87,6 +90,9 @@ class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHol
 					holder.binding.friendsElse.setBackgroundColor(getColor(holder.binding.friendsElse.context, R.color.tb_bg_card))
 				}
 				holder.binding.friendsElseNumber.text = friends.friendsElseNumber
+				holder.binding.root.setOnClickListener {
+					clickListener?.invoke(AccountPageFragment.GO_TO_FRIENDS)
+				}
 			}
 			is AccountButtonSwitchViewHolder -> {
 				holder.binding.recyclerView.adapter = childAdapter
@@ -128,10 +134,10 @@ class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHol
 		}
 
 		holder.binding.chartButton.setOnClickListener {
-			// todo going to Chart
+			clickListener?.invoke(AccountPageFragment.GO_TO_CHART)
 		}
 		holder.binding.faqButton.setOnClickListener {
-			// todo going to FAQ
+			clickListener?.invoke(AccountPageFragment.GO_TO_FAQ)
 		}
 		holder.binding.accountPhotoFrame.setOnClickListener {
 			clickListener?.invoke(AccountPageFragment.PICK_IMAGE)

@@ -8,7 +8,10 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.DimenRes
 import androidx.annotation.StringRes
+import androidx.fragment.app.FragmentManager
 import kotlinx.coroutines.launch
+import tennis.bot.mobile.R
+import tennis.bot.mobile.profile.account.InDevelopmentDialog
 import kotlin.math.roundToInt
 
 fun Context.dpToPx(dp: Int): Int = dpToPx(dp.toFloat()).roundToInt()
@@ -25,6 +28,17 @@ fun Context.showToast(@StringRes messageRes: Int) {
     AppCoroutineScopes.mainScope.launch {
         Toast.makeText(this@showToast, messageRes, Toast.LENGTH_SHORT).show()
     }
+}
+
+fun Context.showInDevelopmentToast() {
+    AppCoroutineScopes.mainScope.launch {
+        Toast.makeText(this@showInDevelopmentToast, getString(R.string.in_development_title), Toast.LENGTH_SHORT).show()
+    }
+}
+
+fun FragmentManager.showInDevelopmentDialog() {
+    val dialog = InDevelopmentDialog()
+    dialog.show(this, dialog.tag)
 }
 
 fun Context.toActivitySafe(): Activity? {

@@ -1,7 +1,7 @@
 package tennis.bot.mobile.feed.activityfeed
 
 import android.content.Context
-import androidx.annotation.WorkerThread
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,12 +13,14 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreUtilsItem
+import tennis.bot.mobile.core.authentication.AuthTokenRepository
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class FeedBottomNavigationViewModel @Inject constructor(
 	private val userProfileRepository: UserProfileAndEnumsRepository,
+	private val tokenRepository: AuthTokenRepository,
 	private val repository: FeedBottomNavigationRepository,
 	private val feedPostsMapper: FeedPostsMapper,
 	@ApplicationContext private val context: Context
@@ -50,7 +52,14 @@ class FeedBottomNavigationViewModel @Inject constructor(
 	}
 
 	private fun onFetchingProfilePicture(){
-		_uiStateFlow.value = _uiStateFlow.value.copy(playerPicture = userProfileRepository.getProfile().photo)
+		kotlin.runCatching {
+			_uiStateFlow.value = _uiStateFlow.value.copy(playerPicture = userProfileRepository.getProfile().photo)
+		}.onFailure {
+			Log.d("123456", "we have a problem")
+			viewModelScope.launch (Dispatchers.Main) {
+				tokenRepository.triggerUnAuthFlow(true)
+			}
+		}
 	}
 
 	private fun onFetchingActivities() {
