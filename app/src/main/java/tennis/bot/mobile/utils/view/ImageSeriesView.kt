@@ -107,9 +107,15 @@ class ImageSeriesView @JvmOverloads constructor(
         requestLayout()
     }
 
+    private var prevAvatar: AvatarImage? = null
+
     fun setImage(avatarImage: AvatarImage) {
         val drawables = drawables // to avoid index out of bounds exception when set images called twice
         drawables[0] = TextShapeDrawable(avatarImage.shortName, getColor(context, R.color.tb_gray_border))
+
+        if (avatarImage == prevAvatar) {
+            return
+        }
         val imageLoader = ImageLoader(context)
         val request = ImageRequest.Builder(context)
             .data(buildImageRequest(context, avatarImage.imageUrl))
@@ -120,6 +126,11 @@ class ImageSeriesView @JvmOverloads constructor(
             .crossfade(true)
             .placeholder(R.drawable.circle_background)
             .transformations(CircleCropTransformation())
+            .listener(
+                onError = { request, throwable -> prevAvatar = null },
+                onCancel = {prevAvatar = null },
+                onSuccess = { request, metadata -> prevAvatar = avatarImage }
+            )
             .build()
         imageLoader.enqueue(request)
         requestLayout()

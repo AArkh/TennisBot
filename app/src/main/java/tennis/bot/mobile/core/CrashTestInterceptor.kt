@@ -17,15 +17,15 @@ class CrashTestInterceptor @Inject constructor() : Interceptor { // basic implem
 	}
 
 	override fun intercept(chain: Interceptor.Chain): Response {
-		if (Random.nextFloat() < 0.3) { // 30% chance to fail
-			return Response.Builder()
-				.request(chain.request())
-				.protocol(Protocol.HTTP_1_1)
-				.code(chooseErrorCode()) // Randomly choose between 400 and 500
-				.message("Simulated error")
-				.body("Error content".toResponseBody(null))
-				.build()
-		}
+//		if (Random.nextFloat() < 0.3) { // 30% chance to fail
+//			return Response.Builder()
+//				.request(chain.request())
+//				.protocol(Protocol.HTTP_1_1)
+//				.code(chooseErrorCode()) // Randomly choose between 400 and 500
+//				.message("Simulated error")
+//				.body("Error content".toResponseBody(null))
+//				.build()
+//		}
 
 		// Proceed with the actual network call
 		return interceptor.intercept(chain)
