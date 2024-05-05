@@ -55,6 +55,7 @@ fun convertDateAndTime(dateString: String): String? {
 }
 
 fun formatDateForMatchPostItem(timestampString: String): FormattedDate {
+	// todo тут крэш  Caused by: java.text.ParseException: Unparseable date: "2025-12-25T16:50:26.85Z"
 	val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'", Locale.getDefault())
 	val date = dateFormat.parse(timestampString) ?: throw IllegalArgumentException("Invalid timestamp format")
 
