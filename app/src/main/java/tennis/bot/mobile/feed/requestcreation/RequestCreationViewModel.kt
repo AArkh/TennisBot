@@ -23,13 +23,16 @@ class RequestCreationViewModel @Inject constructor(
 	private val _uiStateFlow = MutableStateFlow(
 		RequestCreationUiState(
 			emptyList()
+			// rate
 		)
 	)
 	val uiStateFlow = _uiStateFlow.asStateFlow()
 
+	var profileRating: Int = 0
+
 	fun onStartup() {
 		viewModelScope.launch {
-			val profileRating = repository.getProfile().rating
+			profileRating = repository.getProfile().rating
 			val recommendedValues = "${profileRating - 150} - ${profileRating + 150}"
 
 			val layoutList = listOf(

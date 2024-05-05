@@ -2,9 +2,11 @@ package tennis.bot.mobile.feed.requestcreation
 
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import tennis.bot.mobile.R
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
 import tennis.bot.mobile.databinding.FragmentRequestBinding
@@ -29,10 +31,15 @@ class RequestCreationFragment : AuthorizedCoreFragment<FragmentRequestBinding>()
 		binding.container.layoutManager = LinearLayoutManager(requireContext())
 		viewModel.onStartup()
 
+		adapter.onRateChange = { rating ->
+			// todo мы так делаем, чтобы лишний раз не дергать обновление всего списка и не терять touch event
+			// при adapter.submitList
+			binding.root.findViewById<TextView>(R.id.comment_text).text = "some text + $rating"
+			viewModel.updateRating(rating) // не должно быть сайдэффекта с обновлением viewModel.uiStateFlow
+		}
+
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState ->
 			adapter.submitList(uiState.layoutItemsList)
 		}
 	}
-
-
 }
