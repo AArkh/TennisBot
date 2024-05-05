@@ -32,9 +32,18 @@ class RequestAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>
 		}
 	}
 
-	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EditGameDataItemViewHolder {
-		val binding = RecyclerGamedataItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-		return EditGameDataItemViewHolder(binding)
+	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+		return when (viewType) {
+			REGULAR_ITEM -> {
+				val binding = RecyclerGamedataItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+				EditGameDataItemViewHolder(binding)
+			}
+			RATING_SLIDER -> {
+				val binding = RecyclerGaugeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+				GaugeItemViewHolder(binding)
+			}
+			else -> throw IllegalArgumentException("Unknown view type: $viewType")
+		}
 	}
 
 	override fun getItemViewType(position: Int): Int {
