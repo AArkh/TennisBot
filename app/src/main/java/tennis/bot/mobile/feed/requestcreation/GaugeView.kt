@@ -11,6 +11,7 @@ import android.view.View
 import tennis.bot.mobile.R
 import kotlin.math.atan2
 import kotlin.math.cos
+import kotlin.math.max
 import kotlin.math.sin
 
 class GaugeView(context: Context, attrs: AttributeSet) : View(context, attrs) {
@@ -23,7 +24,8 @@ class GaugeView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 	private val arcColors = intArrayOf(
 		context.getColor(R.color.tb_yellow),
 		context.getColor(R.color.tb_new_green),
-		context.getColor(R.color.tb_red_new))
+		context.getColor(R.color.tb_red_new)
+	)
 	private val gapAngle = 5f // Angle for the gaps between colored arcs
 	private var isDragging = false
 
@@ -55,7 +57,27 @@ class GaugeView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 		attributes.recycle()
 	}
 
+//	override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+//		val widthMode = MeasureSpec.getMode(widthMeasureSpec)
+//		val widthSize = MeasureSpec.getSize(widthMeasureSpec)
+//		val heightMode = MeasureSpec.getMode(heightMeasureSpec)
+//		val heightSize = MeasureSpec.getSize(heightMeasureSpec)
+//
+//		// Calculate desired size based on arc radius and indicator size
+//		// fixme это не работает, потому что onSizeChanged вызывается ПОСЛЕ onMeasure, на этот момент radius = 0
+//		val desiredDiameter = 2 * radius + paddingLeft + paddingRight + indicatorPaint.strokeWidth
+//		val desiredWidth = (desiredDiameter + paddingLeft + paddingRight).toInt()
+//		val desiredHeight = (radius + paddingTop + paddingBottom + indicatorPaint.strokeWidth / 2).toInt()
+//
+//		// Ensure desired size is not smaller than suggested minimum
+//		val width = resolveSize(max(desiredWidth, suggestedMinimumWidth), widthMeasureSpec)
+//		val height = resolveSize(max(desiredHeight, suggestedMinimumHeight), heightMeasureSpec)
+//
+//		setMeasuredDimension(width, height)
+//	}
+
 	override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+		// fixme все эти переменные нужно выставлять в onMeasure, а этот метод убрать
 		centerX = w / 2f
 		centerY = h / 2f
 		radius = minOf(w, h) / 2f * 0.8f // Calculate radius based on smaller dimension
