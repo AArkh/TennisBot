@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
+import androidx.fragment.app.replace
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -77,7 +78,8 @@ class MainActivity : AppCompatActivity() {
                 supportFragmentManager.fragments.forEach {
                     transaction.remove(it)
                 }
-                transaction.add(binding.fragmentContainerView.id, LoginProposalFragment()).commit()
+
+                transaction.replace(binding.fragmentContainerView.id, LoginProposalFragment()).commit()
             }
         }
     }

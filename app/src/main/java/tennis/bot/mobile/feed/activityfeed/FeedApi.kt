@@ -39,84 +39,99 @@ data class PostData(
 ): CoreUtilsItem()
 
 @Serializable
-sealed class PostParent(
-//	val postType: Int
-) {
+sealed class PostParent {
 
-@Serializable
-@SerialName("1")
-data class NewPlayerPost(
-	val type: Int, // 1
-	val id: Long,
-	val name: String,
-	val isMale: Boolean,
-	val cityId: Int,
-	val primaryLocation: Int?,
-	val secondaryLocation: Int?,
-	val cityOther: String?,
-	val experience: Int,
-	val rating: Int,
-	val btrp: Double,
-	val username: String?,
-	val picFile: String?
-): PostParent()
+	@Serializable
+	@SerialName("1")
+	data class NewPlayerPost(
+		val type: Int, // 1
+		val id: Long,
+		val name: String,
+		val isMale: Boolean,
+		val cityId: Int,
+		val primaryLocation: Int?,
+		val secondaryLocation: Int?,
+		val cityOther: String?,
+		val experience: Int,
+		val rating: Int,
+		val btrp: Double,
+		val username: String?,
+		val picFile: String?
+	) : PostParent()
 
-@Serializable
-@SerialName("2")
-data class MatchRequestPost(
-	val type: Int, // 2
-	val pay: Int,
-	val btrp: Double,
-	val cityId: Int,
-	val districtId: Int?,
-	val comment: String,
-	val gameType: Int,
-	val playerId: Long,
-	val playerName: String,
-	val playerPhoto: String?,
-	val playerExperience: Int?,
-	val playerIsMale: Boolean,
-	val playerUsername: String?,
-	val playerRating: Int,
-	val matchesPlayed: Int,
-	val opponentsCount: Int,
-	val opponentsPower: Int,
-	val date: String?,
-	val gameOrderId: Int
-): PostParent()
+	@Serializable
+	@SerialName("2")
+	data class MatchRequestPost(
+		val type: Int, // 2
+		val pay: Int,
+		val btrp: Double,
+		val cityId: Int,
+		val districtId: Int?,
+		val comment: String,
+		val gameType: Int,
+		val playerId: Long,
+		val playerName: String,
+		val playerPhoto: String?,
+		val playerExperience: Int?,
+		val playerIsMale: Boolean,
+		val playerUsername: String?,
+		val playerRating: Int,
+		val matchesPlayed: Int,
+		val opponentsCount: Int,
+		val opponentsPower: Int,
+		val date: String?,
+		val gameOrderId: Int
+	) : PostParent()
 
-@Serializable
-@SerialName("3")
-data class ScorePost(
-	val type: Int, // 3
-	val id: Long,
-	val creatorId: Long,
-	val photo: String?,
-	val video: String?,
-	val sets: List<TennisSetNetwork>,
-	val player1: PlayerPostData,
-	val player2: PlayerPostData,
-	val player3: PlayerPostData?,
-	val player4: PlayerPostData?,
-	val surface: String?,
-	val duration: String?,
-	val matchball: Int,
-	val matchWon: Boolean,
-	val averageScore: String?
-): PostParent()
+	@Serializable
+	@SerialName("3")
+	data class ScorePost(
+		val type: Int, // 3
+		val id: Long,
+		val creatorId: Long,
+		val photo: String?,
+		val video: String?,
+		val sets: List<TennisSetNetwork>,
+		val player1: PlayerPostData,
+		val player2: PlayerPostData,
+		val player3: PlayerPostData?,
+		val player4: PlayerPostData?,
+		val surface: String?,
+		val duration: String?,
+		val matchball: Int,
+		val matchWon: Boolean,
+		val averageScore: String?
+	) : PostParent()
 
-@Serializable
-data class PlayerPostData(
-	val id: Long,
-	val name: String,
-	val photo: String?,
-	val isMale: Boolean,
-	val bonus: Int,
-	val bonusChange: Int,
-	val powerOld: Int,
-	val powerNew: Int,
-	val powerPositionOld: Int,
-	val powerPositionNew: Int,
-	val headToHead: Int
-)
+	@Serializable
+	data class PlayerPostData(
+		val id: Long,
+		val name: String,
+		val photo: String?,
+		val isMale: Boolean,
+		val bonus: Int,
+		val bonusChange: Int,
+		val powerOld: Int,
+		val powerNew: Int,
+		val powerPositionOld: Int,
+		val powerPositionNew: Int,
+		val headToHead: Int
+	)
+
+	@Serializable
+	@SerialName("4")
+	data class FriendlyScorePost(
+		val type: Int, // 4
+		val photo: String?,
+		val video: String?,
+		val creatorId: Long,
+		val players: List<FriendlyPlayerPostData>
+	): PostParent()
+
+	@Serializable
+	data class FriendlyPlayerPostData(
+		val id: Long,
+		val name: String,
+		val photo: String?,
+	)
 }

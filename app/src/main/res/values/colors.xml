@@ -21,11 +21,14 @@
     <color name="tb_new_green">#15CC79</color>
     <color name="tb_bland_green">#EBFBED</color>
 
+    <color name="tb_yellow">#FFD024</color>
+
     <color name="tb_light_orange">#FFEDE1</color>
     <color name="tb_orange">#FF793F</color>
     <color name="tb_new_orange">#FF8642</color>
 
     <color name="tb_red">#F04848</color>
+    <color name="tb_red_new">#F44343</color>
     <color name="tb_bland_red">#FCE5E5</color>
 
     <color name="tb_blue">#6B95CC</color>

@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class EditGameDataDialogViewModel @Inject constructor(
 	private val repository: UserProfileAndEnumsRepository,
-	private val savedStateHandle: SavedStateHandle,
+	savedStateHandle: SavedStateHandle,
 ): ViewModel() {
 
 	private val currentAction = savedStateHandle.get<Int>(EditGameDataFragment.GAMEDATA_DIALOG_SELECT_ACTION_KEY) ?: ""

@@ -40,7 +40,6 @@ class EditGameDataFragment : CoreFragment<FragmentEditGameDataBinding>() {
 		setFragmentResultListener(GAMEDATA_DIALOG_REQUEST_KEY) { _, result ->
 			val title = result.getString(GAMEDATA_DIALOG_TITLE)
 			val position = result.getInt(GAMEDATA_DIALOG_PICKED_POSITION)
-			Log.d("123456", "Result received: $title, $position")
 
 			if (title != null) {
 				viewModel.onValueChanged(title, position)

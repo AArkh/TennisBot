@@ -71,7 +71,6 @@ class PasswordFragment : CoreFragment<FragmentPasswordBinding>() {
 				}
 				is PasswordUiState.Error -> {}
 			}
-
 		}
 	}
 }

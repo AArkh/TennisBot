@@ -166,6 +166,8 @@ open class SearchOpponentsViewModel @Inject constructor(
 				return LoadResult.Error(exception)
 			} catch (exception: HttpException) {
 				return LoadResult.Error(exception)
+			} catch (exception: NullPointerException) {
+				return LoadResult.Error(exception)
 			}
 		}
 	}

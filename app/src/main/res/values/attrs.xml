@@ -4,4 +4,7 @@
 		<attr name="imageOffsetFactor" format="float" />
 		<attr name="withBorder" format="boolean" />
 	</declare-styleable>
+	<declare-styleable name="GaugeView">
+		<attr name="showRatingText" format="boolean" />
+	</declare-styleable>
 </resources>

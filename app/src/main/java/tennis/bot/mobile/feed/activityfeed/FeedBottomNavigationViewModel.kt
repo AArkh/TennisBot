@@ -52,11 +52,11 @@ class FeedBottomNavigationViewModel @Inject constructor(
 	}
 
 	private fun onFetchingProfilePicture(){
-		kotlin.runCatching {
-			_uiStateFlow.value = _uiStateFlow.value.copy(playerPicture = userProfileRepository.getProfile().photo)
-		}.onFailure {
-			Log.d("123456", "we have a problem")
-			viewModelScope.launch (Dispatchers.Main) {
+		viewModelScope.launch (Dispatchers.IO) {
+			kotlin.runCatching {
+				_uiStateFlow.value = _uiStateFlow.value.copy(playerPicture = userProfileRepository.getProfile().photo)
+			}.onFailure {
+				Log.d("123456", "we have a problem")
 				tokenRepository.triggerUnAuthFlow(true)
 			}
 		}

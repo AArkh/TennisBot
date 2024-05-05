@@ -16,6 +16,8 @@ import tennis.bot.mobile.utils.LetterInputFilter
 
 @AndroidEntryPoint
 class NameGenderFragment : CoreFragment<FragmentNameGenderBinding>() {
+
+	override var adjustToKeyboard: Boolean = true
 	override val bindingInflation: Inflation<FragmentNameGenderBinding> = FragmentNameGenderBinding::inflate
 	private val viewModel: NameGenderViewModel by viewModels()
 

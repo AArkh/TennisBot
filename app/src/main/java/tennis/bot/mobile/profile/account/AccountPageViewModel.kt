@@ -44,8 +44,6 @@ class AccountPageViewModel @Inject constructor(
 	fun onFetchingProfileData(){
 		viewModelScope.launch(Dispatchers.IO) {
 			kotlin.runCatching {
-
-
 				val profileData = repository.getProfile()
 				val difference = (10 - (profileData.games ?: 10))
 				val gamesRemain = if (difference in 0..9) difference else 10

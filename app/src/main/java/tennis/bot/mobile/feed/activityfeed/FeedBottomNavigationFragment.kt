@@ -12,6 +12,7 @@ import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
 import tennis.bot.mobile.databinding.FragmentFeedBottomNavigationBinding
 import tennis.bot.mobile.feed.addscore.AddScoreFragment
+import tennis.bot.mobile.feed.requestcreation.RequestCreationFragment
 import tennis.bot.mobile.profile.account.AccountPageFragment
 import tennis.bot.mobile.utils.dpToPx
 import tennis.bot.mobile.utils.goToAnotherSectionFragment
@@ -79,7 +80,9 @@ class FeedBottomNavigationFragment : AuthorizedCoreFragment<FragmentFeedBottomNa
 				ADD_SCORE_INDEX -> {
 					parentFragmentManager.goToAnotherSectionFragment(AddScoreFragment())
 				}
-				CREATE_GAME_ITEM -> {}
+				CREATE_GAME_ITEM -> {
+					parentFragmentManager.goToAnotherSectionFragment(RequestCreationFragment())
+				}
 				else -> {}
 			}
 			true
