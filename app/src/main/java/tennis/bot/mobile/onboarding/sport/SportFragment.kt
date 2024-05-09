@@ -10,6 +10,7 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentSportBinding
 import tennis.bot.mobile.onboarding.namegender.NameGenderFragment
+import tennis.bot.mobile.utils.traverseToAnotherFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -31,10 +32,7 @@ class SportFragment : CoreFragment<FragmentSportBinding>() {
 		}
 
 		binding.buttonNext.setOnClickListener {
-			parentFragmentManager.beginTransaction()
-				.replace(R.id.fragment_container_view, NameGenderFragment())
-				.addToBackStack(NameGenderFragment::class.java.name)
-				.commit()
+			parentFragmentManager.traverseToAnotherFragment(NameGenderFragment())
 		}
 
 

@@ -15,6 +15,7 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentPhoneInputBinding
 import tennis.bot.mobile.utils.hideKeyboard
+import tennis.bot.mobile.utils.traverseToAnotherFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -73,10 +74,7 @@ open class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
 
         binding.buttonNext.setOnClickListener {
             phoneInputViewModel.onNextClicked {
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container_view, SmsCodeFragment.newInstance(it))
-                    .addToBackStack(SmsCodeFragment::class.java.name)
-                    .commit()
+                parentFragmentManager.traverseToAnotherFragment(SmsCodeFragment.newInstance(it))
             }
         }
     }

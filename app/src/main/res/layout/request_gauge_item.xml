@@ -12,7 +12,7 @@
 		android:text="@string/power"
 		android:textSize="14sp"
 		android:textStyle="bold"
-		android:textColor="@color/tb_black"
+		android:textColor="@color/tb_gray_active"
 		android:layout_marginTop="15dp"
 		android:layout_marginStart="12dp"
 		app:layout_constraintTop_toTopOf="parent"

@@ -14,6 +14,7 @@ import tennis.bot.mobile.databinding.RecyclerGamedataItemBinding
 import tennis.bot.mobile.databinding.RecyclerGaugeItemBinding
 import tennis.bot.mobile.onboarding.survey.SurveyResultItem
 import tennis.bot.mobile.profile.editgamedata.EditGameDataItemViewHolder
+import tennis.bot.mobile.utils.dpToPx
 import javax.inject.Inject
 
 class RequestAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>() {
@@ -24,6 +25,7 @@ class RequestAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>
 		const val RATING_SLIDER = 2
 	}
 	var clickListener: ((item: Int) -> Unit)? = null
+	var listener: GaugeItemTouchListener? = null
 
 	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: Any) {
 		when(holder) {
@@ -32,9 +34,18 @@ class RequestAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>
 		}
 	}
 
-	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EditGameDataItemViewHolder {
-		val binding = RecyclerGamedataItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-		return EditGameDataItemViewHolder(binding)
+	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+		return when (viewType) {
+			REGULAR_ITEM -> {
+				val binding = RecyclerGamedataItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+				EditGameDataItemViewHolder(binding)
+			}
+			RATING_SLIDER -> {
+				val binding = RecyclerGaugeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+				GaugeItemViewHolder(binding)
+			}
+			else -> throw IllegalArgumentException("Unknown view type: $viewType")
+		}
 	}
 
 	override fun getItemViewType(position: Int): Int {
@@ -47,9 +58,12 @@ class RequestAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>
 
 	private fun bindRegularItem(holder: EditGameDataItemViewHolder, item: Any) {
 		val regularItem = item as? SurveyResultItem ?: throw IllegalArgumentException("Item must be SurveyResultItem")
+		val layoutParams = holder.binding.root.layoutParams as ViewGroup.MarginLayoutParams
+		val margin = holder.binding.title.context.dpToPx(16)
 
 		holder.binding.title.text = regularItem.resultTitle
 		holder.binding.value.text = regularItem.resultOption
+		layoutParams.setMargins(margin, margin, margin, 0)
 
 		holder.binding.root.setOnClickListener {
 			clickListener?.invoke(holder.bindingAdapterPosition)
@@ -65,6 +79,8 @@ class RequestAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>
 		holder.binding.gaugeItem.recommendedValues.text = formatTextToTwoColors(context, gaugeAndCommentItem.recommendedValues)
 		holder.binding.gaugeItem.higherValues.text = formatTextToTwoColors(context, gaugeAndCommentItem.higherValues)
 		holder.binding.commentText.setText(gaugeAndCommentItem.comment)
+
+		listener = GaugeItemTouchListener(holder.binding.gaugeItem.gaugeView)
 	}
 
 	private fun formatTextToTwoColors(context: Context, formattedText: String): SpannableString {
@@ -72,7 +88,7 @@ class RequestAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>
 		val startIndex = formattedText.indexOf("\n")
 
 		if (startIndex != -1) {
-			val endIndex = formattedText.lastIndex
+			val endIndex = formattedText.lastIndex + 1
 
 			if (endIndex != -1) {
 				val color = context.getColor(R.color.tb_gray_active)

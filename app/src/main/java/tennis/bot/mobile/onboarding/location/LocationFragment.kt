@@ -11,6 +11,7 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentLocationBinding
 import tennis.bot.mobile.onboarding.photopick.PhotoPickFragment
+import tennis.bot.mobile.utils.traverseToAnotherFragment
 
 @AndroidEntryPoint
 open class LocationFragment : CoreFragment<FragmentLocationBinding>() {
@@ -109,10 +110,7 @@ open class LocationFragment : CoreFragment<FragmentLocationBinding>() {
                 selectedCity = binding.cityTv.text.toString(),
                 selectedDistrict = binding.districtTv.text.toString()
             )
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_view, PhotoPickFragment())
-                .addToBackStack(PhotoPickFragment::class.java.name)
-                .commit()
+            parentFragmentManager.traverseToAnotherFragment(PhotoPickFragment())
         }
 
         subscribeToFlowOn(viewModel.uiStateFlow) { uiState: LocationUiState ->

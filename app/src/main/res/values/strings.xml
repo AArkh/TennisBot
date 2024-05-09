@@ -302,9 +302,9 @@
 	<string name="stay_in_the_app">Остаться в приложении</string>
 	<string name="create_request_title">Создание заявки</string>
 	<string name="request_creation_comment">Всем привет. Ищу игрока силы: %s. Оплата корта: %s. Покрытие %s</string>
-	<string name="request_lower_values">Слабее\nменьше %d</string>
+	<string name="request_lower_values">Слабее\nменьше %s</string>
 	<string name="request_recommended_values">Бот рекомендует\n %s</string>
-	<string name="request_higher_values">Сильнее\nбольше %d</string>
+	<string name="request_higher_values">Сильнее\nбольше %s</string>
 	<string name="power">Сила</string>
 	<string name="district_title">Округ</string>
 	<string name="gametype_title">Тип игры</string>
@@ -312,5 +312,6 @@
 	<string name="date_title">Дата</string>
 	<string name="time_title">Время</string>
 	<string name="payment_split">Оплата пополам</string>
+	<string name="create">Создать</string>
 
 </resources>

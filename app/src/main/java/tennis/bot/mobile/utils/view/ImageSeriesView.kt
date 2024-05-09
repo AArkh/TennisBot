@@ -46,6 +46,7 @@ class ImageSeriesView @JvmOverloads constructor(
     private var withBorder: Boolean = false
 
     private var avatarImages: List<AvatarImage>? = null
+    private var prevAvatar: AvatarImage? = null
     private var additionalCount = 0
 
     init {
@@ -108,6 +109,9 @@ class ImageSeriesView @JvmOverloads constructor(
     }
 
     fun setImage(avatarImage: AvatarImage) {
+        if (avatarImage == prevAvatar) {
+            return
+        }
         val drawables = drawables // to avoid index out of bounds exception when set images called twice
         drawables[0] = TextShapeDrawable(avatarImage.shortName, getColor(context, R.color.tb_gray_border))
         val imageLoader = ImageLoader(context)
@@ -119,6 +123,11 @@ class ImageSeriesView @JvmOverloads constructor(
             }
             .crossfade(true)
             .placeholder(R.drawable.circle_background)
+            .listener(
+                onError = { _, _ -> prevAvatar = null },
+                onCancel = {prevAvatar = null },
+                onSuccess = { _, _ -> prevAvatar = avatarImage }
+            )
             .transformations(CircleCropTransformation())
             .build()
         imageLoader.enqueue(request)
@@ -129,7 +138,6 @@ class ImageSeriesView @JvmOverloads constructor(
         if (this.avatarImages == avatarImages && this.additionalCount == additionalCount) {
             return
         }
-
         this.avatarImages = avatarImages
         this.additionalCount = additionalCount
 

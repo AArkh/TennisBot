@@ -13,6 +13,7 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.databinding.FragmentLoginProposalBinding
 import tennis.bot.mobile.onboarding.login.LoginFragment
 import tennis.bot.mobile.onboarding.phone.PhoneInputFragment
+import tennis.bot.mobile.utils.goToAnotherSectionFragment
 import tennis.bot.mobile.utils.showInDevelopmentToast
 import javax.inject.Inject
 
@@ -44,10 +45,7 @@ class LoginProposalFragment : CoreFragment<FragmentLoginProposalBinding>() {
         TabLayoutMediator(binding.tabLayout, binding.descriptionViewPager) { _, _ -> }.attach()
 
         binding.buttonStart.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .addToBackStack(this::class.java.name)
-                .replace(R.id.fragment_container_view, PhoneInputFragment())
-                .commit()
+            parentFragmentManager.goToAnotherSectionFragment(PhoneInputFragment())
         }
         binding.buttonWithoutRegistration.setOnClickListener {
             requireContext().showInDevelopmentToast()
@@ -57,10 +55,7 @@ class LoginProposalFragment : CoreFragment<FragmentLoginProposalBinding>() {
 //                .commit()
         }
         binding.buttonLogin.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .addToBackStack(this::class.java.name)
-                .replace(R.id.fragment_container_view, LoginFragment())
-                .commit()
+            parentFragmentManager.goToAnotherSectionFragment(LoginFragment())
         }
 
         textAdapter.setListAndNotify(listOf(

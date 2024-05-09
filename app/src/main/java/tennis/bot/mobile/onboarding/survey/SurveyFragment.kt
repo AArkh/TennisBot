@@ -11,6 +11,7 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentSurveyBinding
+import tennis.bot.mobile.utils.traverseToAnotherFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -50,10 +51,7 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 				viewModel.onPickedOption(selectedOptionId, selectedOptionTitle)
 			} else if ((viewModel.surveyUiState.value.selectedPage == 7 && selectedOptionId == 0) || viewModel.surveyUiState.value.selectedPage == 8) {
 				viewModel.onLastPickedOption(selectedOptionId, selectedOptionTitle)
-				parentFragmentManager.beginTransaction()
-					.replace(R.id.fragment_container_view, SurveyResultsFragment())
-					.addToBackStack(SurveyResultsFragment::class.java.name)
-					.commit()
+				parentFragmentManager.traverseToAnotherFragment(SurveyResultsFragment())
 			}
 
 		}

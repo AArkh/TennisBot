@@ -29,15 +29,13 @@ class SurveyResultsFragment : CoreFragment<FragmentSurveyResultsBinding>() {
 		binding.answersRecycler.adapter = surveyResultsAdapter
 
 		binding.buttonTryAgain.setOnClickListener {
-			parentFragmentManager.beginTransaction()
-				.replace(R.id.fragment_container_view, SurveyFragment())
-				.addToBackStack(SurveyFragment::class.java.name)
-				.commit()
+			parentFragmentManager.traverseToAnotherFragment(SurveyFragment())
 		}
 
 		requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
 			parentFragmentManager.beginTransaction()
 				.remove(this@SurveyResultsFragment)
+				.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
 				.replace(R.id.fragment_container_view, SurveyFragment())
 				.addToBackStack(SurveyFragment::class.java.name)
 				.commit()

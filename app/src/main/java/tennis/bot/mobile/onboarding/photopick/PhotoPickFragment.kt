@@ -22,6 +22,7 @@ import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentPhotoPickBinding
 import tennis.bot.mobile.onboarding.password.PasswordFragment
 import tennis.bot.mobile.utils.dpToPx
+import tennis.bot.mobile.utils.traverseToAnotherFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -65,10 +66,7 @@ class PhotoPickFragment : CoreFragment<FragmentPhotoPickBinding>() {
 
         binding.buttonNext.setOnClickListener {
             viewModel.onButtonNextClicked {
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container_view, PasswordFragment())
-                    .addToBackStack(PasswordFragment::class.java.name)
-                    .commit()
+                parentFragmentManager.traverseToAnotherFragment(PasswordFragment())
             }
         }
 

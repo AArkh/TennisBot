@@ -96,10 +96,7 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 								accountPageAdapter.childAdapter.submitList(uiState.contactsList)
 							}
 							GO_TO_MATCHES -> {
-								parentFragmentManager.beginTransaction()
-									.replace(R.id.fragment_container_view, MatchesFragment())
-									.addToBackStack(MatchesFragment::class.java.name)
-									.commit()
+								parentFragmentManager.goToAnotherSectionFragment(MatchesFragment())
 							}
 							GO_TO_TOURNAMENTS -> {
 								val dialog = TournamentDialog()

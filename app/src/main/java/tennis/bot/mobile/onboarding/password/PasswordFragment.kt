@@ -13,6 +13,7 @@ import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentPasswordBinding
 import tennis.bot.mobile.onboarding.login.LoginViewModel
 import tennis.bot.mobile.onboarding.survey.SurveyFragment
+import tennis.bot.mobile.utils.goToAnotherSectionFragment
 
 @AndroidEntryPoint
 class PasswordFragment : CoreFragment<FragmentPasswordBinding>() {
@@ -43,10 +44,7 @@ class PasswordFragment : CoreFragment<FragmentPasswordBinding>() {
 
 		binding.buttonNext.setOnClickListener {
 			viewModel.onNextButtonClicked{
-				parentFragmentManager.beginTransaction()
-					.replace(R.id.fragment_container_view, SurveyFragment())
-					.addToBackStack(SurveyFragment::class.java.name)
-					.commit()
+				parentFragmentManager.goToAnotherSectionFragment(SurveyFragment())
 			}
 		}
 

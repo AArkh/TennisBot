@@ -13,6 +13,7 @@ import tennis.bot.mobile.onboarding.location.LocationFragment
 import tennis.bot.mobile.onboarding.namegender.Const.FEMALE
 import tennis.bot.mobile.onboarding.namegender.Const.MALE
 import tennis.bot.mobile.utils.LetterInputFilter
+import tennis.bot.mobile.utils.traverseToAnotherFragment
 
 @AndroidEntryPoint
 class NameGenderFragment : CoreFragment<FragmentNameGenderBinding>() {
@@ -55,10 +56,7 @@ class NameGenderFragment : CoreFragment<FragmentNameGenderBinding>() {
 
 		binding.buttonNext.setOnClickListener {
 			viewModel.onNextButtonClicked()
-			parentFragmentManager.beginTransaction()
-				.replace(R.id.fragment_container_view, LocationFragment())
-				.addToBackStack(LocationFragment::class.java.name)
-				.commit()
+			parentFragmentManager.traverseToAnotherFragment(LocationFragment())
 		}
 
 		subscribeToFlowOn(viewModel.uiStateFlow) {uiState ->

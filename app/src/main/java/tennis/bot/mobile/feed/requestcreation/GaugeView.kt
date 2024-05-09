@@ -8,10 +8,13 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import tennis.bot.mobile.R
 import kotlin.math.atan2
 import kotlin.math.cos
+import kotlin.math.pow
 import kotlin.math.sin
+import kotlin.math.sqrt
 
 class GaugeView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
@@ -55,13 +58,32 @@ class GaugeView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 		attributes.recycle()
 	}
 
+//	override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+//		val widthMode = MeasureSpec.getMode(widthMeasureSpec)
+//		val widthSize = MeasureSpec.getSize(widthMeasureSpec)
+//		val heightMode = MeasureSpec.getMode(heightMeasureSpec)
+//		val heightSize = MeasureSpec.getSize(heightMeasureSpec)
+//
+//		// Calculate desired size based on arc radius and indicator size
+//		// fixme это не работает, потому что onSizeChanged вызывается ПОСЛЕ onMeasure, на этот момент radius = 0
+//		val desiredDiameter = 2 * radius + paddingLeft + paddingRight + indicatorPaint.strokeWidth
+//		val desiredWidth = (desiredDiameter + paddingLeft + paddingRight).toInt()
+//		val desiredHeight = (radius + paddingTop + paddingBottom + indicatorPaint.strokeWidth / 2).toInt()
+//
+//		// Ensure desired size is not smaller than suggested minimum
+//		val width = resolveSize(max(desiredWidth, suggestedMinimumWidth), widthMeasureSpec)
+//		val height = resolveSize(max(desiredHeight, suggestedMinimumHeight), heightMeasureSpec)
+//
+//		setMeasuredDimension(width, height)
+//	}
+
 	override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+		// fixme все эти переменные нужно выставлять в onMeasure, а этот метод убрать
 		centerX = w / 2f
 		centerY = h / 2f
 		radius = minOf(w, h) / 2f * 0.8f // Calculate radius based on smaller dimension
 		indicatorRadius = radius * 0.10f  // Calculate indicator radius as a proportion of view radius
 	}
-
 
 	override fun onDraw(canvas: Canvas) {
 		// Draw background arc
@@ -102,7 +124,7 @@ class GaugeView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 					updateIndicator(event.x, event.y)
 				}
 			}
-			MotionEvent.ACTION_UP -> {
+			MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
 				isDragging = false // End dragging mode
 			}
 		}
@@ -141,5 +163,10 @@ class GaugeView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 		}
 
 		return rating + valueOffset
+	}
+
+	fun isTouchWithinGauge(x: Float, y: Float): Boolean {
+		val distanceToCenter = sqrt((x - centerX).pow(2) + (y - centerY).pow(2))
+		return distanceToCenter in (radius - indicatorRadius - 20f)..(radius + indicatorRadius + 20f)
 	}
 }

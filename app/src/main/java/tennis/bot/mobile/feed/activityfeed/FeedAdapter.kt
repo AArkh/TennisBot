@@ -86,6 +86,13 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>(),
 		holder.binding.infoPanel.text = newPlayerItem.infoPanel
 
 		holder.binding.likeButton.isLikeActive(newPlayerItem.liked, newPlayerItem.totalLikes)
+		holder.binding.likeButton.setOnClickListener {
+			holder.binding.likeButton.onLikePressed(
+				newPlayerItem.liked,
+				holder.binding.likeAnim,
+				newPlayerItem.id,
+				newPlayerItem.totalLikes)
+		}
 
 		holder.binding.date.text = newPlayerItem.addedAt?.let { formatDateForFeed(it, holder.binding.date.context) }
 	}
@@ -102,6 +109,13 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>(),
 		holder.binding.requestComment.text = matchRequestItem.comment
 
 		holder.binding.likeButton.isLikeActive(matchRequestItem.liked, matchRequestItem.totalLikes)
+		holder.binding.likeButton.setOnClickListener {
+			holder.binding.likeButton.onLikePressed(
+				matchRequestItem.liked,
+				holder.binding.likeAnim,
+				matchRequestItem.id,
+				matchRequestItem.totalLikes)
+		}
 
 		holder.binding.date.text = matchRequestItem.addedAt?.let { formatDateForFeed(it, holder.binding.date.context) }
 	}

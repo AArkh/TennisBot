@@ -2,11 +2,9 @@ package tennis.bot.mobile.utils
 
 import android.content.Context
 import android.database.Cursor
-import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
-import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
@@ -25,6 +23,11 @@ import java.util.concurrent.TimeUnit
 const val DEFAULT_DATE_TIME = "0001-01-01T00:00:00Z"
 const val CONTENT_LINK = "http://bugz.su:9000/publiccontent/"
 const val DEFAULT_PICS_PREFIX = "https://s3.aeza.cloud/perfect-wine/DEV/avatars/"
+val dateFormats = listOf(
+	"yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ",
+	"yyyy-MM-dd'T'hh:mm:ss'Z'",
+	"dd/MM/yy"
+)
 
 data class FormattedDate(
 	val time: String,
@@ -34,14 +37,9 @@ data class FormattedDate(
 )
 
 fun convertDateAndTime(dateString: String): String? {
-	val formats = listOf(
-		"yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ",
-		"yyyy-MM-dd'T'hh:mm:ss'Z'",
-		"dd/MM/yy"
-	)
 	if (dateString == DEFAULT_DATE_TIME) return null
 
-	for (format in formats) {
+	for (format in dateFormats) {
 		try {
 			val dateTimeFormatter = SimpleDateFormat(format, Locale.getDefault())
 			val timeStampMs = dateTimeFormatter.parse(dateString)
@@ -55,21 +53,21 @@ fun convertDateAndTime(dateString: String): String? {
 }
 
 fun formatDateForMatchPostItem(timestampString: String): FormattedDate {
-	val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'", Locale.getDefault())
-	val date = dateFormat.parse(timestampString) ?: throw IllegalArgumentException("Invalid timestamp format")
+	val formattedDateString = convertDateAndTime(timestampString)
+		?: throw IllegalArgumentException("Invalid timestamp format")
+
+	val dateFormat = SimpleDateFormat("d MMMM yyyy", Locale("ru", "RU"))
+	val date = dateFormat.parse(formattedDateString) ?: throw IllegalArgumentException("Invalid date format")
 
 	val calendar = Calendar.getInstance().apply { time = date }
 
 	val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-	val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
-	val dayOfWeek = SimpleDateFormat("EEEE", Locale.getDefault()).format(date)
-	val month = SimpleDateFormat("MMMM", Locale.getDefault()).format(date)
 
 	return FormattedDate(
 		time = timeFormat.format(date),
-		day = dayOfMonth,
-		dayOfWeek = dayOfWeek,
-		month = month
+		day = calendar.get(Calendar.DAY_OF_MONTH),
+		dayOfWeek = SimpleDateFormat("EEEE", Locale.getDefault()).format(date),
+		month = SimpleDateFormat("MMMM", Locale.getDefault()).format(date)
 	)
 }
 

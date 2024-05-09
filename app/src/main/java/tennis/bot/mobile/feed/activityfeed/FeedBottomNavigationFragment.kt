@@ -52,11 +52,7 @@ class FeedBottomNavigationFragment : AuthorizedCoreFragment<FragmentFeedBottomNa
 		}
 
 		binding.playerPhoto.setOnClickListener {
-			parentFragmentManager.beginTransaction()
-				.setCustomAnimations(R.anim.slide_in, R.anim.fade_out, R.anim.fade_in, R.anim.slide_out)
-				.replace(R.id.fragment_container_view, AccountPageFragment())
-				.addToBackStack(AccountPageFragment::class.java.name)
-				.commit()
+			parentFragmentManager.goToAnotherSectionFragment(AccountPageFragment())
 		}
 
 		binding.addScoreButton.setOnClickListener {

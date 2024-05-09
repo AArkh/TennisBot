@@ -17,6 +17,7 @@ class RequestCreationFragment : AuthorizedCoreFragment<FragmentRequestBinding>()
 	private val viewModel: RequestCreationViewModel by viewModels()
 	@Inject
 	lateinit var adapter: RequestAdapter
+	override var adjustToKeyboard: Boolean = true
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
@@ -27,6 +28,7 @@ class RequestCreationFragment : AuthorizedCoreFragment<FragmentRequestBinding>()
 
 		binding.container.adapter = adapter
 		binding.container.layoutManager = LinearLayoutManager(requireContext())
+		adapter.listener?.let { binding.container.addOnItemTouchListener(it) }
 		viewModel.onStartup()
 
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState ->

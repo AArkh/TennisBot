@@ -82,7 +82,7 @@ class NetworkModule {
             .addInterceptor(loggingInterceptor)
             .addInterceptor(infoInterceptor)
             .addInterceptor(authInterceptor)
-            .addInterceptor(crashTestInterceptor) // a debug thing to spot blind spots in my server error handling flow
+//            .addInterceptor(crashTestInterceptor) // a debug thing to spot blind spots in my server error handling flow
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(15, TimeUnit.SECONDS)
             .build()
