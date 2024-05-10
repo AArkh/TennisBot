@@ -24,7 +24,7 @@ class RequestAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>
 		const val REGULAR_ITEM = 1
 		const val RATING_SLIDER = 2
 	}
-	var clickListener: ((item: Int) -> Unit)? = null
+	var clickListener: ((position: Int) -> Unit)? = null
 	var listener: GaugeItemTouchListener? = null
 
 	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: Any) {

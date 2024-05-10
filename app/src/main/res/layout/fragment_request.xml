@@ -38,11 +38,13 @@
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		android:layout_marginTop="26dp"
+		android:layout_marginBottom="8dp"
 		tools:listitem="@layout/recycler_gamedata_item"
 		tools:itemCount="5"
 		app:layout_constraintTop_toBottomOf="@id/title"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintEnd_toEndOf="parent"/>
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintBottom_toTopOf="@id/buttonCreate"/>
 
 	<Button
 		android:id="@+id/buttonCreate"
@@ -51,13 +53,12 @@
 		android:layout_height="wrap_content"
 		android:layout_gravity="bottom|center_horizontal"
 		android:layout_marginHorizontal="20dp"
-		android:layout_marginTop="8dp"
 		android:layout_marginBottom="8dp"
 		android:enabled="false"
 		android:text="@string/create"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/container" />
+		app:layout_constraintBottom_toBottomOf="parent"/>
 
 	<ProgressBar
 		android:id="@+id/button_loading_anim"

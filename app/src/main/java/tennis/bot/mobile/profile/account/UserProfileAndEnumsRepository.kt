@@ -142,6 +142,7 @@ class UserProfileAndEnumsRepository @Inject constructor(
 		return precacheEnums()
 	}
 
+	@WorkerThread
 	suspend fun getEnumById(selectedEnumTypeAndId: Pair<String, Int?>): String {
 		val allEnums = getEnums()
 

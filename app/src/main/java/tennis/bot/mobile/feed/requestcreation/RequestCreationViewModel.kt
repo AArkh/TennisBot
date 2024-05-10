@@ -10,9 +10,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
+import tennis.bot.mobile.feed.insertscore.InsertScoreMediaItem
 import tennis.bot.mobile.onboarding.survey.SurveyResultItem
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import java.util.Locale
@@ -51,19 +51,37 @@ class RequestCreationViewModel @Inject constructor(
 					context.getString(R.string.request_creation_comment,
 						recommendedValues,
 						context.getString(R.string.payment_split),
-						"Хард")
+						"Хард") // кандидат на удаление (покрытие не выставляем)
 				)
 			)
 
 			_uiStateFlow.value = uiStateFlow.value.copy(layoutItemsList = layoutList)
 		}
 	}
+	fun onValueChanged(title: String, value: String) {
+		val list = uiStateFlow.value.layoutItemsList
+		val item = list.find { (it as? SurveyResultItem)?.resultTitle == title }
+		item?.let {
+			val itemIndex = list.indexOf(it)
+			val updatedList = list.mapIndexed { index, item ->
+				if (index == itemIndex) item.let{ (item as SurveyResultItem).copy(resultOption = value) } else item
+			}
+			_uiStateFlow.value = uiStateFlow.value.copy(layoutItemsList = updatedList)
+		}
+	}
+
+	fun onDatePicked(date: String) {
+		onValueChanged(context.getString(R.string.date_title), date)
+	}
+
+	fun onTimePicked(time:String) {
+		onValueChanged(context.getString(R.string.time_title), time)
+	}
+
 
 	private fun getCurrentDateAndTime(): Pair<String, String> {
 		val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
 		val dateTime = dateFormat.format(Calendar.getInstance().time)
 		return Pair(dateTime.substringBefore(" "), dateTime.substringAfter(" "))
 	}
-
-
 }
