@@ -11,8 +11,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EditLocationViewModel @Inject constructor(
-	private val locationRepository: LocationRepository,
-	private val onboardingRepository: OnboardingRepository
+	locationRepository: LocationRepository,
+	onboardingRepository: OnboardingRepository
 ) : LocationViewModel(locationRepository, onboardingRepository) {
 
 	fun onChangeLocation(activity: FragmentActivity, country: String?, city: String?, district: String?, navigationCallback: () -> Unit) {

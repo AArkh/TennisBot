@@ -93,6 +93,7 @@ dependencies {
 
     // Ui
     implementation("com.airbnb.android:lottie:6.2.0")
+    implementation ("com.wdullaer:materialdatetimepicker:4.2.3")
 
     // Video Player
     implementation("androidx.media3:media3-exoplayer:1.3.0")

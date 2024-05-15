@@ -1,7 +1,6 @@
 package tennis.bot.mobile.feed.requestcreation
 
 import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.icu.util.Calendar
 import android.os.Bundle
 import android.util.Log
@@ -11,12 +10,11 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import dagger.hilt.android.AndroidEntryPoint
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
 import tennis.bot.mobile.databinding.FragmentRequestBinding
-import tennis.bot.mobile.profile.editgamedata.EditGameDataDialog
-import tennis.bot.mobile.profile.editprofile.EditProfileAdapter
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -104,23 +102,10 @@ class RequestCreationFragment : AuthorizedCoreFragment<FragmentRequestBinding>()
 	}
 
 	private fun showTimePickerDialog() {
-		val calendar = Calendar.getInstance()
-		val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
-		val currentMinute = calendar.get(Calendar.MINUTE)
-
-		val timePickerDialog = ThirtyMinutesTimePickerDialog(
-			requireContext(),
-			{ _, hourOfDay, minute ->
-				val selectedTime = "$hourOfDay:${String.format("%02d", minute)}"
-				Log.d("123456", "Selected Time: $selectedTime")
-				viewModel.onTimePicked(selectedTime)
-			},
-			currentHour,
-			currentMinute,
-			false
-		)
-
-
-		timePickerDialog.show()
+		val startTimePicker = TimePickerDialog.newInstance({ _, selectedHour, roundedMinute, _ ->
+			viewModel.onTimePicked(String.format("%02d:%02d", selectedHour, roundedMinute))
+		},true)
+		startTimePicker.setTimeInterval(1, 30)
+		startTimePicker.show(parentFragmentManager, "Timepicker")
 	}
 }

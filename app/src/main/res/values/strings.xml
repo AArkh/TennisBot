@@ -313,5 +313,6 @@
 	<string name="time_title">Время</string>
 	<string name="payment_split">Оплата пополам</string>
 	<string name="create">Создать</string>
+	<string name="comment_text_hint">Напишите коментарий</string>
 
 </resources>

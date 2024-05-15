@@ -219,10 +219,12 @@ class OnboardingRepository @Inject constructor(
         sharedPreferences.edit().putBoolean(IS_MALE_HEADER, booleanValue).apply()
     }
 
-    fun recordLocationData(countryId: Int, cityId: Int, districtId: Int) {
+    fun recordLocationData(countryId: Int, cityId: Int, districtId: Int?) {
         sharedPreferences.edit().putInt(COUNTRY_ID_HEADER, countryId).apply()
         sharedPreferences.edit().putInt(CITY_ID_HEADER, cityId).apply()
-        sharedPreferences.edit().putInt(DISTRICT_ID_HEADER, districtId).apply()
+        if (districtId != null) {
+            sharedPreferences.edit().putInt(DISTRICT_ID_HEADER, districtId).apply()
+        }
     }
 
     fun recordPassword(password: String) {
