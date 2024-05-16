@@ -4,6 +4,7 @@ import android.content.Context
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -25,7 +26,7 @@ class RequestAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>
 		const val RATING_SLIDER = 2
 	}
 	var clickListener: ((position: Int) -> Unit)? = null
-	var listener: GaugeItemTouchListener? = null
+	var currentRating: ((rating: Int) -> Unit)? = null
 
 	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: Any) {
 		when(holder) {
@@ -80,7 +81,11 @@ class RequestAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>
 		holder.binding.gaugeItem.higherValues.text = formatTextToTwoColors(context, gaugeAndCommentItem.higherValues)
 		holder.binding.commentText.setText(gaugeAndCommentItem.comment)
 
-		listener = GaugeItemTouchListener(holder.binding.gaugeItem.gaugeView)
+		holder.binding.gaugeItem.gaugeView.setOnIndicatorChangeListener(object : OnIndicatorChangeListener {
+			override fun onIndicatorChanged(newRating: Int) {
+				currentRating?.invoke(holder.binding.gaugeItem.gaugeView.currentRating)
+			}
+		})
 	}
 
 	private fun formatTextToTwoColors(context: Context, formattedText: String): SpannableString {

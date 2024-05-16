@@ -6,15 +6,19 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.DatePicker
+import android.widget.EditText
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
+import com.wdullaer.materialdatetimepicker.time.Timepoint
 import dagger.hilt.android.AndroidEntryPoint
+import tennis.bot.mobile.R
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
 import tennis.bot.mobile.databinding.FragmentRequestBinding
+import tennis.bot.mobile.onboarding.location.LocationDialogViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -46,23 +50,33 @@ class RequestCreationFragment : AuthorizedCoreFragment<FragmentRequestBinding>()
 
 		binding.container.adapter = adapter
 		binding.container.layoutManager = LinearLayoutManager(requireContext())
-		adapter.listener?.let { binding.container.addOnItemTouchListener(it) }
 		viewModel.onStartup()
 		adapter.clickListener = { position ->
 			when (position) {
-				DISTRICT -> {}
+				DISTRICT -> { viewModel.onDistrictPressed(childFragmentManager) }
 				GAME_TYPE -> { startDialogWithKey(position) }
 				GAME_PAY -> { startDialogWithKey(position) }
 				DATE -> { showDatePickerDialog() }
 				TIME -> { showTimePickerDialog() }
 			}
 		}
+		adapter.currentRating = { rating ->
+			// todo мы так делаем, чтобы лишний раз не дергать обновление всего списка и не терять touch event при adapter.submitList
+			viewModel.updateRating(binding.root.findViewById(R.id.comment_text), rating) // не должно быть сайдэффекта с обновлением viewModel.uiStateFlow
+		}
+
+
+		setFragmentResultListener(
+			LocationDialogViewModel.DISTRICT_REQUEST_KEY
+		) { _, result ->
+			viewModel.onDistrictPicked(
+				result.getString(LocationDialogViewModel.SELECTED_DISTRICT_KEY, requireContext().getString(R.string.survey_option_null))
+			)
+		}
 
 		setFragmentResultListener(REQUEST_DIALOG_REQUEST_KEY) { _, result ->
 			val title = result.getString(REQUEST_DIALOG_TITLE)
 			val option = result.getString(REQUEST_DIALOG_PICKED_OPTION)
-
-			Log.d("123456", "Result is received: $title $option")
 
 			if (title != null && option != null) {
 				viewModel.onValueChanged(title, option)
@@ -102,10 +116,16 @@ class RequestCreationFragment : AuthorizedCoreFragment<FragmentRequestBinding>()
 	}
 
 	private fun showTimePickerDialog() {
-		val startTimePicker = TimePickerDialog.newInstance({ _, selectedHour, roundedMinute, _ ->
+		val currentTime = Calendar.getInstance()
+		val currentHour = currentTime.get(Calendar.HOUR_OF_DAY)
+		val currentMinute = currentTime.get(Calendar.MINUTE)
+
+		val timePickerDialog = TimePickerDialog.newInstance({ _, selectedHour, roundedMinute, _ ->
 			viewModel.onTimePicked(String.format("%02d:%02d", selectedHour, roundedMinute))
-		},true)
-		startTimePicker.setTimeInterval(1, 30)
-		startTimePicker.show(parentFragmentManager, "Timepicker")
+		}, currentHour, currentMinute, true)
+
+		timePickerDialog.setMinTime(Timepoint(currentHour, currentMinute))
+		timePickerDialog.setTimeInterval(1, 30)
+		timePickerDialog.show(parentFragmentManager, "Timepicker")
 	}
 }

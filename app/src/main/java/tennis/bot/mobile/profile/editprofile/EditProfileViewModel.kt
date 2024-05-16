@@ -80,7 +80,7 @@ class EditProfileViewModel @Inject constructor(
 				val country = locationDataMapper.findCountryFromCity(locations, currentProfileData.cityId)
 				val city = locationDataMapper.findCityString(locations, currentProfileData.cityId)
 				val district = if (currentProfileData.districtId != null) {
-					locationDataMapper.findDistrictFromCity(locations, currentProfileData.cityId, currentProfileData.districtId)
+					locationDataMapper.findDistrictStringFromCity(locations, currentProfileData.cityId, currentProfileData.districtId)
 				} else {
 					null
 				}
@@ -159,7 +159,7 @@ class EditProfileViewModel @Inject constructor(
 	private suspend fun updateLocation(value: String) {
 		kotlin.runCatching {
 			withContext(Dispatchers.IO) {
-				val cityString = value.split(", ")[1]
+				val cityString = value.split(", ")[1].substringBefore("(")
 				val districtString = extractDistrictFromParentheses(value)
 				val locations = locationRepo.getLocations()
 				val cityInt = locationDataMapper.findCityIntFromString(locations, cityString)

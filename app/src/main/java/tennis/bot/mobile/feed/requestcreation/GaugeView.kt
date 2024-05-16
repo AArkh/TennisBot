@@ -18,9 +18,8 @@ import kotlin.math.sqrt
 
 class GaugeView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
-	var rating = 1400
-
 	private var arcPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+
 	private var indicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 	private var textPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 	private val arcColors = intArrayOf(
@@ -29,15 +28,17 @@ class GaugeView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 		context.getColor(R.color.tb_red_new))
 	private val gapAngle = 5f // Angle for the gaps between colored arcs
 	private var isDragging = false
-
 	private var centerX = 0f
+
 	private var centerY = 0f
 	private var radius = 0f
 	private var indicatorRadius = 0f
-
 	private var currentAngle = 270f // Initial angle (top)
-	var currentRating = 1400
+
 	private var showRatingText = true // Default: show the rating text
+
+	var rating = 1400
+	var currentRating = 1400
 
 	init {
 		arcPaint.style = Paint.Style.STROKE
@@ -56,6 +57,12 @@ class GaugeView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 		val attributes = context.obtainStyledAttributes(attrs, R.styleable.GaugeView)
 		showRatingText = attributes.getBoolean(R.styleable.GaugeView_showRatingText, true)
 		attributes.recycle()
+	}
+
+	private var listener: OnIndicatorChangeListener? = null
+
+	fun setOnIndicatorChangeListener(listener: OnIndicatorChangeListener) {
+		this.listener = listener
 	}
 
 //	override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -114,6 +121,8 @@ class GaugeView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 	}
 
 	override fun onTouchEvent(event: MotionEvent): Boolean {
+		listener?.onIndicatorChanged(currentRating)
+
 		when (event.action) {
 			MotionEvent.ACTION_DOWN -> {
 				isDragging = true // Start dragging mode
@@ -169,4 +178,8 @@ class GaugeView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 		val distanceToCenter = sqrt((x - centerX).pow(2) + (y - centerY).pow(2))
 		return distanceToCenter in (radius - indicatorRadius - 20f)..(radius + indicatorRadius + 20f)
 	}
+}
+
+interface OnIndicatorChangeListener {
+	fun onIndicatorChanged(newRating: Int)
 }

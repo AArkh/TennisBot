@@ -122,7 +122,7 @@ class FeedPostsMapper @Inject constructor(
 		val locations = locationRepository.getLocations()
 		val city = locationDataMapper.findCityString(locations, cityId)
 		val district = if (districtId != null) {
-			locationDataMapper.findDistrictFromCity(locations, cityId, districtId)
+			locationDataMapper.findDistrictStringFromCity(locations, cityId, districtId)
 		} else {
 			null
 		}

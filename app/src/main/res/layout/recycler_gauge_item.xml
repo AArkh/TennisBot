@@ -19,9 +19,12 @@
 	<EditText
 		android:id="@+id/comment_text"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
+		android:layout_height="100dp"
 		android:text="@string/request_creation_comment"
 		android:textSize="14sp"
+		android:gravity="start"
+		android:hint="@string/comment_text_hint"
+		android:textColorHint="@color/tb_gray_gray"
 		android:layout_marginTop="16dp"
 		android:layout_marginHorizontal="16dp"
 		android:layout_marginBottom="16dp"
