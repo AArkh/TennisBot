@@ -17,6 +17,7 @@ import tennis.bot.mobile.feed.activityfeed.FeedApi
 import tennis.bot.mobile.feed.activityfeed.LikesApi
 import tennis.bot.mobile.feed.insertscore.InsertScoreApi
 import tennis.bot.mobile.feed.insertscore.MediaApi
+import tennis.bot.mobile.feed.requestcreation.RequestCreationApi
 import tennis.bot.mobile.feed.searchopponent.OpponentsApi
 import tennis.bot.mobile.profile.account.EnumsApi
 import tennis.bot.mobile.profile.account.UserProfileApi
@@ -347,5 +348,11 @@ class NetworkModule {
     fun provideLikesApiClient(
         @Named(ACTIVITY_FEED) retrofit: Retrofit
     ): LikesApi = retrofit.create(LikesApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideRequestCreationApiClient(
+        @Named(ACTIVITY_FEED) retrofit: Retrofit
+    ): RequestCreationApi = retrofit.create(RequestCreationApi::class.java)
 }
 

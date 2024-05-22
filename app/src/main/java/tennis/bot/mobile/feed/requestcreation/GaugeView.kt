@@ -8,13 +8,10 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import androidx.recyclerview.widget.RecyclerView
 import tennis.bot.mobile.R
 import kotlin.math.atan2
 import kotlin.math.cos
-import kotlin.math.pow
 import kotlin.math.sin
-import kotlin.math.sqrt
 
 class GaugeView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
@@ -65,31 +62,29 @@ class GaugeView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 		this.listener = listener
 	}
 
-//	override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-//		val widthMode = MeasureSpec.getMode(widthMeasureSpec)
-//		val widthSize = MeasureSpec.getSize(widthMeasureSpec)
-//		val heightMode = MeasureSpec.getMode(heightMeasureSpec)
-//		val heightSize = MeasureSpec.getSize(heightMeasureSpec)
-//
-//		// Calculate desired size based on arc radius and indicator size
-//		// fixme это не работает, потому что onSizeChanged вызывается ПОСЛЕ onMeasure, на этот момент radius = 0
-//		val desiredDiameter = 2 * radius + paddingLeft + paddingRight + indicatorPaint.strokeWidth
-//		val desiredWidth = (desiredDiameter + paddingLeft + paddingRight).toInt()
-//		val desiredHeight = (radius + paddingTop + paddingBottom + indicatorPaint.strokeWidth / 2).toInt()
-//
-//		// Ensure desired size is not smaller than suggested minimum
-//		val width = resolveSize(max(desiredWidth, suggestedMinimumWidth), widthMeasureSpec)
-//		val height = resolveSize(max(desiredHeight, suggestedMinimumHeight), heightMeasureSpec)
-//
-//		setMeasuredDimension(width, height)
-//	}
+	override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+		val arcStrokeWidth = arcPaint.strokeWidth
+		val padding = 20f // Additional padding if needed
+		val desiredDiameter = (2 * (arcStrokeWidth + padding)).toInt()
 
-	override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-		// fixme все эти переменные нужно выставлять в onMeasure, а этот метод убрать
-		centerX = w / 2f
-		centerY = h / 2f
-		radius = minOf(w, h) / 2f * 0.8f // Calculate radius based on smaller dimension
-		indicatorRadius = radius * 0.10f  // Calculate indicator radius as a proportion of view radius
+		// Determine desired size
+		val desiredWidth = desiredDiameter + paddingLeft + paddingRight
+		val desiredHeight = (desiredDiameter / 2) + paddingTop + paddingBottom
+
+		// Resolve the size
+		val width = resolveSize(desiredWidth, widthMeasureSpec)
+		val height = resolveSize(desiredHeight, heightMeasureSpec)
+
+		// Calculate center and radius based on resolved size
+		val smallerDimension = minOf(width, height * 2) // Multiply height by 2 to consider half-circle
+		radius = smallerDimension / 2f * 0.8f // Calculate radius based on smaller dimension
+		centerX = width / 2f
+		centerY = height / 1.25f
+		indicatorRadius = radius * 0.10f // Calculate indicator radius as a proportion of view radius
+
+		Log.d("GaugeView", "onMeasure: width=$width, height=$height, radius=$radius")
+
+		setMeasuredDimension(width, height)
 	}
 
 	override fun onDraw(canvas: Canvas) {
@@ -115,7 +110,7 @@ class GaugeView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 		canvas.drawCircle(indicatorX, indicatorY, indicatorRadius, indicatorPaint)
 
 		if (showRatingText) {
-			canvas.drawText(currentRating.toString(), centerX, centerY, textPaint)
+			canvas.drawText(currentRating.toString(), centerX, centerY - (radius / 2) - 20f, textPaint) // Adjusted text position
 		}
 
 	}
@@ -172,11 +167,6 @@ class GaugeView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 		}
 
 		return rating + valueOffset
-	}
-
-	fun isTouchWithinGauge(x: Float, y: Float): Boolean {
-		val distanceToCenter = sqrt((x - centerX).pow(2) + (y - centerY).pow(2))
-		return distanceToCenter in (radius - indicatorRadius - 20f)..(radius + indicatorRadius + 20f)
 	}
 }
 

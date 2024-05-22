@@ -85,6 +85,7 @@ class RequestCreationDialogViewModel @Inject constructor(
 				RequestCreationFragment.REQUEST_DIALOG_REQUEST_KEY,
 				Bundle().apply {
 					putString(RequestCreationFragment.REQUEST_DIALOG_TITLE, title)
+					putInt(RequestCreationFragment.REQUEST_DIALOG_PICKED_OPTION_ID, optionInt)
 					putString(RequestCreationFragment.REQUEST_DIALOG_PICKED_OPTION, option)
 				}
 			)

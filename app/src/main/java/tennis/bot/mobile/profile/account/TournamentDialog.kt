@@ -1,5 +1,6 @@
 package tennis.bot.mobile.profile.account
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat.getColor
@@ -14,7 +15,7 @@ class TournamentDialog: LoginDialogFragment() {
 		binding.dartsAnimation.setAnimation(R.raw.telegram)
 		binding.dialogTitle.text = getString(R.string.tournament_dialog_title)
 		binding.dialogText.text = getString(R.string.tournament_dialog_text)
-		binding.buttonGreen.setBackgroundColor(getColor(requireContext(), R.color.tb_blue_telegram))
+		binding.buttonGreen.backgroundTintList = ColorStateList.valueOf(getColor(requireContext(), R.color.tb_blue_telegram))
 		binding.buttonGreen.text = getString(R.string.button_go_to_telegram)
 		binding.buttonGrey.text = getString(R.string.stay_in_the_app)
 
