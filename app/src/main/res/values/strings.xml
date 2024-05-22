@@ -314,5 +314,10 @@
 	<string name="payment_split">Оплата пополам</string>
 	<string name="create">Создать</string>
 	<string name="comment_text_hint">Напишите коментарий</string>
+	<string name="you_have_request">У вас уже есть заявка</string>
+	<string name="you_have_request_dialog_text"><![CDATA[В первой версии приложения, вы можете создавать только одну заявку. Чтобы удалить или отредактировать текущую заявку, зайдите в раздел \"Игра\" -> \"Исходящее\", выберите \"...\" сверху карточки.]]></string>
+	<string name="understood">Понятно</string>
+	<string name="request_creation_success_title">Ваша заявка создана</string>
+	<string name="request_creation_success_text">Посмотрите актуальные заявки других игроков в ленте</string>
 
 </resources>

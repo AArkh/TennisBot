@@ -10,6 +10,15 @@ class RequestCreationRepository @Inject constructor(
 ) {
 
 	@WorkerThread
+	suspend fun getPermissionToCreate(): Boolean? {
+		val response = kotlin.runCatching {
+		api.getPermissionToCreate()
+		}.getOrElse { return false }
+
+		return response.body()
+	}
+
+	@WorkerThread
 	suspend fun postAddRequest(postBody: RequestNetwork): Boolean {
 		val response = kotlin.runCatching {
 			api.postNewRequest(postBody)

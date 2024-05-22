@@ -3,9 +3,13 @@ package tennis.bot.mobile.feed.requestcreation
 import kotlinx.serialization.Serializable
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface RequestCreationApi {
+
+	@GET("api/game-orders/permission-to-create")
+	suspend fun getPermissionToCreate(): Response<Boolean>
 
 	@POST("api/game-orders")
 	suspend fun postNewRequest(

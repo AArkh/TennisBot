@@ -32,6 +32,8 @@ import tennis.bot.mobile.utils.showToast
 import java.util.Locale
 import javax.inject.Inject
 
+private const val GAUGE_AND_COMMENT_ITEM_POSITION = 5
+
 @HiltViewModel
 class RequestCreationViewModel @Inject constructor(
 	private val repository: RequestCreationRepository,
@@ -54,8 +56,20 @@ class RequestCreationViewModel @Inject constructor(
 	private var currentGamePayId: Int = 1
 	private var currentGameTypeId: Int = 1
 
-	fun onStartup() {
+	private fun checkForActiveRequests(): Boolean {
+		var result = false
 		viewModelScope.launch (Dispatchers.IO) {
+			result = repository.getPermissionToCreate() == true
+		}
+		return result
+	}
+
+	fun onStartup(navigationCallback: () -> Unit) {
+		viewModelScope.launch (Dispatchers.IO) {
+			if (!checkForActiveRequests()) {
+				navigationCallback.invoke()
+			}
+
 			val profileRating = userProfileAndEnumsRepository.getProfile().rating
 			val recommendedValues = "${profileRating - 150} - ${profileRating + 150}"
 			val dateTime = getCurrentDateAndTime()
@@ -79,24 +93,6 @@ class RequestCreationViewModel @Inject constructor(
 			)
 
 			_uiStateFlow.value = uiStateFlow.value.copy(layoutItemsList = layoutList)
-		}
-	}
-	fun onValueChanged(title: String, value: String, valueId: Int) {
-		if (title == context.getString(R.string.payment_title)) { //todo узнать у Андрея насколько это норм вариант так сделать. После последних изменений выглядит совсем грустно
-			currentGamePay = value
-			currentGamePayId = valueId
-		} else if (title == context.getString(R.string.gametype_title)) {
-			currentGameTypeId = valueId
-		}
-
-		val list = uiStateFlow.value.layoutItemsList
-		val item = list.find { (it as? SurveyResultItem)?.resultTitle == title }
-		item?.let {
-			val itemIndex = list.indexOf(it)
-			val updatedList = list.mapIndexed { index, item ->
-				if (index == itemIndex) item.let{ (item as SurveyResultItem).copy(resultOption = value) } else item
-			}
-			_uiStateFlow.value = uiStateFlow.value.copy(layoutItemsList = updatedList)
 		}
 	}
 
@@ -124,11 +120,30 @@ class RequestCreationViewModel @Inject constructor(
 		}
 	}
 
+	fun onValueChanged(title: String, value: String, valueId: Int) {
+		if (title == context.getString(R.string.payment_title)) { //todo узнать у Андрея насколько это норм вариант так сделать. После последних изменений выглядит немного janky
+			currentGamePay = value
+			currentGamePayId = valueId
+		} else if (title == context.getString(R.string.gametype_title)) {
+			currentGameTypeId = valueId
+		}
+
+		val list = uiStateFlow.value.layoutItemsList
+		val item = list.find { (it as? SurveyResultItem)?.resultTitle == title }
+		item?.let {
+			val itemIndex = list.indexOf(it)
+			val updatedList = list.mapIndexed { index, item ->
+				if (index == itemIndex) item.let{ (item as SurveyResultItem).copy(resultOption = value) } else item
+			}
+			_uiStateFlow.value = uiStateFlow.value.copy(layoutItemsList = updatedList)
+		}
+	}
+
 	fun showDatePickerDialog(context: Context): DatePickerDialog {
-		val calendar = Calendar.getInstance()
-		val currentYear = calendar.get(Calendar.YEAR)
-		val currentMonth = calendar.get(Calendar.MONTH)
-		val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
+		val date = getCurrentDateAndTime().first
+		val currentDay = date.substringBefore(".").toInt()
+		val currentMonth = date.substringAfter(".").substringBefore(".").toInt() - 1
+		val currentYear = date.substringAfter(".").substringAfter(".").toInt()
 
 		val datePickerDialog = DatePickerDialog(
 			context,
@@ -146,10 +161,10 @@ class RequestCreationViewModel @Inject constructor(
 	}
 
 	fun showTimePickerDialog(): TimePickerDialog {
-		val calendar = Calendar.getInstance()
-		val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
-		val currentMinute = calendar.get(Calendar.MINUTE)
-		val currentDate = "${String.format("%02d", calendar.get(Calendar.DAY_OF_MONTH))}.${String.format("%02d", calendar.get(Calendar.MONTH) + 1)}.${calendar.get(Calendar.YEAR)}"
+		val dateAndTime = getCurrentDateAndTime()
+		val currentHour = dateAndTime.second.substringBefore(":").toInt()
+		val currentMinute = dateAndTime.second.substringAfter(":").toInt()
+		val currentDate = dateAndTime.first
 		val pickedDate = (uiStateFlow.value.layoutItemsList[3] as SurveyResultItem).resultOption
 
 		val timePickerDialog = TimePickerDialog.newInstance({ _, selectedHour, roundedMinute, _ ->
@@ -184,12 +199,16 @@ class RequestCreationViewModel @Inject constructor(
 
 	fun updateRating(commentItem: EditText, rating: Int) {
 		currentRating = rating
+		updateComment(commentItem)
+	}
+
+	fun updateComment(commentItem: EditText) {
 		val recommendedValues = "${currentRating - 150} - ${currentRating + 150}"
 		commentItem.text = SpannableStringBuilder.valueOf(
 			context.getString(R.string.request_creation_comment,
-			recommendedValues,
-			currentGamePay,
-			"Хард")
+				recommendedValues,
+				currentGamePay,
+				"Хард")
 		)
 	}
 
@@ -207,12 +226,12 @@ class RequestCreationViewModel @Inject constructor(
 		)
 	}
 
-	private fun formatDateAndTimeForRequest(date: String, time: String): String { // fixme
+	private fun formatDateAndTimeForRequest(date: String, time: String): String {
 		val dateTimeString = "$date $time"
-		val dateTimeFormat = SimpleDateFormat("dd.MM.yyyy HH:mm")
+		val dateTimeFormat = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
 		val dateTime = dateTimeFormat.parse(dateTimeString)
 
-		val isoDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+		val isoDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
 		isoDateFormat.timeZone = TimeZone.getTimeZone("UTC")
 
 		return isoDateFormat.format(dateTime)
@@ -240,7 +259,6 @@ class RequestCreationViewModel @Inject constructor(
 						currentGamePay,
 						"Хард") // кандидат на удаление (покрытие не выставляем),
 				))
-
 
 			}.onFailure {
 				onStopLoading()

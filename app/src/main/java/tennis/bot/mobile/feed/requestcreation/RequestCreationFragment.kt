@@ -1,9 +1,9 @@
 package tennis.bot.mobile.feed.requestcreation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,8 +12,9 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
 import tennis.bot.mobile.databinding.FragmentRequestBinding
+import tennis.bot.mobile.feed.activityfeed.FeedBottomNavigationFragment
 import tennis.bot.mobile.onboarding.location.LocationDialogViewModel
-import tennis.bot.mobile.utils.showToast
+import tennis.bot.mobile.utils.traverseToAnotherFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -30,6 +31,9 @@ class RequestCreationFragment : AuthorizedCoreFragment<FragmentRequestBinding>()
 		const val REQUEST_DIALOG_TITLE = "title"
 		const val REQUEST_DIALOG_PICKED_OPTION_ID = "optionId"
 		const val REQUEST_DIALOG_PICKED_OPTION = "option"
+		const val REQUEST_DENIED_DIALOG_KEY = "REQUEST_DENIED_DIALOG_KEY"
+		const val REQUEST_DENIED_DIALOG_PICKED_OPTION = "REQUEST_DENIED_DIALOG_PICKED_OPTION"
+
 		private const val DISTRICT = 0
 		private const val GAME_TYPE = 1
 		private const val GAME_PAY = 2
@@ -46,7 +50,10 @@ class RequestCreationFragment : AuthorizedCoreFragment<FragmentRequestBinding>()
 
 		binding.container.adapter = adapter
 		binding.container.layoutManager = LinearLayoutManager(requireContext())
-		viewModel.onStartup()
+		viewModel.onStartup {
+			val dialog = RequestCreationDeniedDialog()
+			dialog.show(childFragmentManager, dialog.tag)
+		}
 		adapter.clickListener = { position ->
 			when (position) {
 				DISTRICT -> { viewModel.onDistrictPressed(childFragmentManager) }
@@ -57,16 +64,23 @@ class RequestCreationFragment : AuthorizedCoreFragment<FragmentRequestBinding>()
 			}
 		}
 		adapter.currentRating = { rating ->
-			// todo мы так делаем, чтобы лишний раз не дергать обновление всего списка и не терять touch event при adapter.submitList
-			viewModel.updateRating(binding.root.findViewById(R.id.comment_text), rating) // не должно быть сайдэффекта с обновлением viewModel.uiStateFlow
+			viewModel.updateRating(binding.root.findViewById(R.id.comment_text), rating)
+		}
+		adapter.onGamePayChanged = {
+			viewModel.updateComment(binding.root.findViewById(R.id.comment_text))
 		}
 
 		binding.buttonCreate.setOnClickListener {
 			viewModel.onCreateButtonPressed {
-				requireContext().showToast("its a success")
+				val dialog = RequestCreationSuccessDialog()
+				dialog.show(childFragmentManager, dialog.tag)
 			}
 		}
 
+		setFragmentResultListener(REQUEST_DENIED_DIALOG_KEY) { _, _ ->
+			parentFragmentManager.clearBackStack(RequestCreationFragment::class.java.name) // do i need to clear them? seems they stick anyway (or maybe its just the dialog)
+			parentFragmentManager.traverseToAnotherFragment(FeedBottomNavigationFragment())
+		}
 
 		setFragmentResultListener(
 			LocationDialogViewModel.DISTRICT_REQUEST_KEY
@@ -80,20 +94,29 @@ class RequestCreationFragment : AuthorizedCoreFragment<FragmentRequestBinding>()
 			val title = result.getString(REQUEST_DIALOG_TITLE)
 			val option = result.getString(REQUEST_DIALOG_PICKED_OPTION)
 			val optionId = result.getInt(REQUEST_DIALOG_PICKED_OPTION_ID)
-			Log.d("REQUEST_DIALOG_REQUEST_KEY", "$title, $option")
 
 			if (title != null && option != null) {
 				viewModel.onValueChanged(title, option, optionId)
+
+				if (title == getString(R.string.payment_title)) { // выглядит не очень, но работает
+					adapter.onGamePayChanged!!.invoke()
+				}
 			}
 		}
 
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState ->
 			adapter.submitList(uiState.layoutItemsList)
+			binding.buttonLoadingAnim.isVisible = uiState.isLoading
 			binding.buttonCreate.isEnabled = uiState.isCreateButtonActive
 			val buttonBackground = if (uiState.isCreateButtonActive) {
 				R.drawable.btn_bkg_enabled
 			} else {
 				R.drawable.btn_bkg_disabled
+			}
+			if (!uiState.isLoading) {
+				binding.buttonCreate.text = requireContext().getString(R.string.create)
+			} else {
+				binding.buttonCreate.text = ""
 			}
 			binding.buttonCreate.setBackgroundResource(buttonBackground)
 		}
