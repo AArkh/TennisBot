@@ -106,14 +106,15 @@ class RequestCreationFragment : AuthorizedCoreFragment<FragmentRequestBinding>()
 
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState ->
 			adapter.submitList(uiState.layoutItemsList)
-			binding.buttonLoadingAnim.isVisible = uiState.isLoading
+			binding.loadingBar.isVisible = uiState.isLoading
+			binding.buttonLoadingAnim.isVisible = uiState.isCreateButtonLoading
 			binding.buttonCreate.isEnabled = uiState.isCreateButtonActive
 			val buttonBackground = if (uiState.isCreateButtonActive) {
 				R.drawable.btn_bkg_enabled
 			} else {
 				R.drawable.btn_bkg_disabled
 			}
-			if (!uiState.isLoading) {
+			if (!uiState.isCreateButtonLoading) {
 				binding.buttonCreate.text = requireContext().getString(R.string.create)
 			} else {
 				binding.buttonCreate.text = ""

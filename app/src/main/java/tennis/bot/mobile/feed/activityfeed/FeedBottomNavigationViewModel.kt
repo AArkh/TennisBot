@@ -15,6 +15,7 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreUtilsItem
 import tennis.bot.mobile.core.authentication.AuthTokenRepository
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
+import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
 @HiltViewModel
@@ -64,8 +65,12 @@ class FeedBottomNavigationViewModel @Inject constructor(
 
 	private fun onFetchingActivities() {
 		viewModelScope.launch (Dispatchers.IO) {
-			val activityPosts = repository.getActivities()
-			convertPostsToItems(activityPosts)
+			kotlin.runCatching {
+				val activityPosts = repository.getActivities()
+				convertPostsToItems(activityPosts)
+			}.onFailure {
+				context.showToast(context.getString(R.string.error_no_network_message))
+			}
 		}
 	}
 

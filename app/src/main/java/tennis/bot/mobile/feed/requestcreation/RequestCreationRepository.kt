@@ -1,5 +1,6 @@
 package tennis.bot.mobile.feed.requestcreation
 
+import android.util.Log
 import androidx.annotation.WorkerThread
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -20,9 +21,10 @@ class RequestCreationRepository @Inject constructor(
 
 	@WorkerThread
 	suspend fun postAddRequest(postBody: RequestNetwork): Boolean {
-		val response = kotlin.runCatching {
-			api.postNewRequest(postBody)
-		}.getOrElse { return false }
+		val response = api.postNewRequest(postBody)
+		if (!response.isSuccessful) {
+			throw Exception("Network request failed with code: ${response.code()}") // had to manually throw the exception because the regular way didn't work with 400 code
+		}
 
 		return response.isSuccessful
 	}

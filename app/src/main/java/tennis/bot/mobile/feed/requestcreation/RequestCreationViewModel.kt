@@ -32,8 +32,6 @@ import tennis.bot.mobile.utils.showToast
 import java.util.Locale
 import javax.inject.Inject
 
-private const val GAUGE_AND_COMMENT_ITEM_POSITION = 5
-
 @HiltViewModel
 class RequestCreationViewModel @Inject constructor(
 	private val repository: RequestCreationRepository,
@@ -46,7 +44,8 @@ class RequestCreationViewModel @Inject constructor(
 	private val _uiStateFlow = MutableStateFlow(
 		RequestCreationUiState(
 			layoutItemsList = emptyList(),
-			isLoading = false,
+			isLoading = true,
+			isCreateButtonLoading = false,
 			isCreateButtonActive = false
 		)
 	)
@@ -66,12 +65,12 @@ class RequestCreationViewModel @Inject constructor(
 
 	fun onStartup(navigationCallback: () -> Unit) {
 		viewModelScope.launch (Dispatchers.IO) {
-			if (!checkForActiveRequests()) {
-				navigationCallback.invoke()
-			}
+//			if (!checkForActiveRequests()) {
+//				navigationCallback.invoke()
+//			}
 
-			val profileRating = userProfileAndEnumsRepository.getProfile().rating
-			val recommendedValues = "${profileRating - 150} - ${profileRating + 150}"
+			currentRating = userProfileAndEnumsRepository.getProfile().rating
+			val recommendedValues = "${currentRating - 150} - ${currentRating + 150}"
 			val dateTime = getCurrentDateAndTime()
 
 			val layoutList = listOf(
@@ -81,7 +80,7 @@ class RequestCreationViewModel @Inject constructor(
 				SurveyResultItem(context.getString(R.string.date_title), dateTime.first), // today's date
 				SurveyResultItem(context.getString(R.string.time_title), dateTime.second), // current time
 				GaugeAndCommentItem(
-					profileRating,
+					currentRating,
 					context.getString(R.string.request_lower_values, recommendedValues.substringBefore(" ")),
 					context.getString(R.string.request_recommended_values, recommendedValues),
 					context.getString(R.string.request_higher_values, recommendedValues.substringAfter("- ")),
@@ -92,7 +91,9 @@ class RequestCreationViewModel @Inject constructor(
 				)
 			)
 
-			_uiStateFlow.value = uiStateFlow.value.copy(layoutItemsList = layoutList)
+			_uiStateFlow.value = uiStateFlow.value.copy(
+				layoutItemsList = layoutList,
+				isLoading = false)
 		}
 	}
 
@@ -121,7 +122,7 @@ class RequestCreationViewModel @Inject constructor(
 	}
 
 	fun onValueChanged(title: String, value: String, valueId: Int) {
-		if (title == context.getString(R.string.payment_title)) { //todo узнать у Андрея насколько это норм вариант так сделать. После последних изменений выглядит немного janky
+		if (title == context.getString(R.string.payment_title)) { //todo узнать у Андрея насколько это норм вариант так сделать (через переменнные). После последних изменений выглядит немного janky
 			currentGamePay = value
 			currentGamePayId = valueId
 		} else if (title == context.getString(R.string.gametype_title)) {
@@ -215,14 +216,14 @@ class RequestCreationViewModel @Inject constructor(
 	private fun showLoading() {
 		val currentState = _uiStateFlow.value
 		_uiStateFlow.value = currentState.copy(
-			isLoading = true
+			isCreateButtonLoading = true
 		)
 	}
 
 	private fun onStopLoading() {
 		val currentState = _uiStateFlow.value
 		_uiStateFlow.value = currentState.copy(
-			isLoading = false
+			isCreateButtonLoading = false
 		)
 	}
 
@@ -239,15 +240,14 @@ class RequestCreationViewModel @Inject constructor(
 
 	fun onCreateButtonPressed(navigationCallback: () -> Unit) {
 		viewModelScope.launch(Dispatchers.IO) {
+			showLoading()
+			val layoutList = uiStateFlow.value.layoutItemsList
+			val locations = locationRepository.getLocations()
+			val profileCityId = userProfileAndEnumsRepository.getProfile().cityId
+			val district = locationDataMapper.findDistrictIntFromString(locations, profileCityId, (layoutList[0] as SurveyResultItem).resultOption)
+			val date = formatDateAndTimeForRequest((layoutList[3] as SurveyResultItem).resultOption, (layoutList[4] as SurveyResultItem).resultOption)
+			val recommendedValues = "${currentRating - 150} - ${currentRating + 150}"
 			kotlin.runCatching {
-				showLoading()
-				val layoutList = uiStateFlow.value.layoutItemsList
-				val locations = locationRepository.getLocations()
-				val profileCityId = userProfileAndEnumsRepository.getProfile().cityId
-				val district = locationDataMapper.findDistrictIntFromString(locations, profileCityId, (layoutList[0] as SurveyResultItem).resultOption)
-				val date = formatDateAndTimeForRequest((layoutList[3] as SurveyResultItem).resultOption, (layoutList[4] as SurveyResultItem).resultOption)
-				val recommendedValues = "${currentRating - 150} - ${currentRating + 150}"
-
 				repository.postAddRequest(RequestNetwork(
 					cityId = profileCityId,
 					districtId = district,
@@ -259,7 +259,6 @@ class RequestCreationViewModel @Inject constructor(
 						currentGamePay,
 						"Хард") // кандидат на удаление (покрытие не выставляем),
 				))
-
 			}.onFailure {
 				onStopLoading()
 				context.showToast(context.getString(R.string.error_no_network_message))
