@@ -1,7 +1,6 @@
 package tennis.bot.mobile.feed.activityfeed
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,30 +12,22 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreUtilsItem
-import tennis.bot.mobile.core.authentication.AuthTokenRepository
-import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
 @HiltViewModel
-class FeedBottomNavigationViewModel @Inject constructor(
-	private val userProfileRepository: UserProfileAndEnumsRepository,
-	private val tokenRepository: AuthTokenRepository,
-	private val repository: FeedBottomNavigationRepository,
+class FeedViewModel @Inject constructor(
+	private val repository: FeedRepository,
 	private val feedPostsMapper: FeedPostsMapper,
 	@ApplicationContext private val context: Context
 ): ViewModel()  {
 
 	private val _uiStateFlow = MutableStateFlow(
-		FeedBottomNavigationUiState(
-			null
-		)
+		FeedUiState()
 	)
 	val uiStateFlow = _uiStateFlow.asStateFlow().onStart {
-		onFetchingProfilePicture()
 		onFetchingActivities()
 	}
-	val addScoreOptions = listOf(context.getString(R.string.add_score_title), context.getString(R.string.create_game_title))
 
 	fun onLikeButtonPressed(isLike: Boolean, postId: Long) {
 		viewModelScope.launch {
@@ -48,17 +39,6 @@ class FeedBottomNavigationViewModel @Inject constructor(
 				}
 			}.onSuccess {
 				onFetchingActivities()
-			}
-		}
-	}
-
-	private fun onFetchingProfilePicture(){
-		viewModelScope.launch (Dispatchers.IO) {
-			kotlin.runCatching {
-				_uiStateFlow.value = _uiStateFlow.value.copy(playerPicture = userProfileRepository.getProfile().photo)
-			}.onFailure {
-				Log.d("123456", "we have a problem")
-				tokenRepository.triggerUnAuthFlow(true)
 			}
 		}
 	}

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
-import androidx.fragment.app.replace
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tennis.bot.mobile.core.authentication.AuthTokenRepository
 import tennis.bot.mobile.databinding.ActivityMainBinding
-import tennis.bot.mobile.feed.activityfeed.FeedBottomNavigationFragment
+import tennis.bot.mobile.feed.activityfeed.BottomNavigationFragment
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.onboarding.initial.LoginProposalFragment
 import tennis.bot.mobile.onboarding.location.LocationRepository
@@ -38,9 +37,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         if (supportFragmentManager.fragments.isEmpty()) {
-            if (authTokenRepository.getRefreshToken() != null) { // blows up if there's no internet + when refresh has problems. todo think on how to act when there's no internet
+            if (authTokenRepository.getRefreshToken() != null) {
                 supportFragmentManager.beginTransaction()
-                    .add(binding.fragmentContainerView.id, FeedBottomNavigationFragment())
+                    .add(binding.fragmentContainerView.id, BottomNavigationFragment())
                     .commit()
             } else {
                 supportFragmentManager.beginTransaction()

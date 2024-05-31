@@ -10,9 +10,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import tennis.bot.mobile.onboarding.initial.LoginProposalFragment
-import tennis.bot.mobile.utils.destroyBackstack
-import tennis.bot.mobile.utils.goToAnotherSectionFragment
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,9 +24,8 @@ class AuthViewModel @Inject constructor(
 		authorizedFragment.lifecycleScope.launch (Dispatchers.Main) {
 			authorizedFragment.lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
 				repository.unAuthEventsFlow.collectLatest {
-					Log.d("123456", "something happening here")
-					fragment?.parentFragmentManager?.destroyBackstack()
-					fragment?.parentFragmentManager?.goToAnotherSectionFragment(LoginProposalFragment())
+					Log.d("AuthViewModel", "unAuthEventsFlow is triggered")
+					repository.triggerUnAuthFlow(true)
 				}
 			}
 		}

@@ -8,7 +8,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FeedBottomNavigationRepository @Inject constructor(
+class FeedRepository @Inject constructor(
 	private val feedApi: FeedApi,
 	private val likesApi: LikesApi,
 	@ApplicationContext private val context: Context

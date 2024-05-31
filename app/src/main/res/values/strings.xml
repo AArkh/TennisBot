@@ -319,5 +319,7 @@
 	<string name="understood">Понятно</string>
 	<string name="request_creation_success_title">Ваша заявка создана</string>
 	<string name="request_creation_success_text">Посмотрите актуальные заявки других игроков в ленте</string>
+	<!-- TODO: Remove or change this placeholder text -->
+	<string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

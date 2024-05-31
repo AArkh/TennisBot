@@ -2,54 +2,39 @@ package tennis.bot.mobile.feed.activityfeed
 
 import android.os.Bundle
 import android.view.Gravity
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.PopupMenu
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.navigation.NavigationBarView
 import dagger.hilt.android.AndroidEntryPoint
 import tennis.bot.mobile.R
+import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
-import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
-import tennis.bot.mobile.databinding.FragmentFeedBottomNavigationBinding
+import tennis.bot.mobile.databinding.FragmentBottomNavigationBinding
 import tennis.bot.mobile.feed.addscore.AddScoreFragment
+import tennis.bot.mobile.feed.game.GameFragment
 import tennis.bot.mobile.feed.requestcreation.RequestCreationFragment
 import tennis.bot.mobile.profile.account.AccountPageFragment
 import tennis.bot.mobile.utils.dpToPx
 import tennis.bot.mobile.utils.goToAnotherSectionFragment
 import tennis.bot.mobile.utils.view.AvatarImage
-import javax.inject.Inject
 
 @AndroidEntryPoint
-class FeedBottomNavigationFragment : AuthorizedCoreFragment<FragmentFeedBottomNavigationBinding>() {
-	override val bindingInflation: Inflation<FragmentFeedBottomNavigationBinding> = FragmentFeedBottomNavigationBinding::inflate
-	private val viewModel: FeedBottomNavigationViewModel by viewModels()
-	@Inject
-	lateinit var adapter: FeedAdapter
+class BottomNavigationFragment : CoreFragment<FragmentBottomNavigationBinding>(), NavigationBarView.OnItemSelectedListener {
 
-	companion object {
-		const val ADD_SCORE_INDEX = 0
-		const val CREATE_GAME_ITEM = 1
-		const val LIKE = "LIKE"
-		const val UNLIKE = "UNLIKE"
-	}
+	override val bindingInflation: Inflation<FragmentBottomNavigationBinding> = FragmentBottomNavigationBinding::inflate
+	private val viewModel: BottomNavigationViewModel by viewModels()
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 
-		binding.container.adapter = adapter
-		binding.container.itemAnimator = null
-		binding.container.layoutManager = LinearLayoutManager(context)
-
-		adapter.clickListener = { command, postId ->
-			when(command) {
-				LIKE -> {
-					viewModel.onLikeButtonPressed(true, postId)
-				}
-				UNLIKE -> {
-					viewModel.onLikeButtonPressed(false, postId)
-				}
-			}
+		if (savedInstanceState == null) {
+			replaceFragment(FeedFragment())
 		}
+
+		binding.bottomNavBar.setOnItemSelectedListener(this)
 
 		binding.playerPhoto.setOnClickListener {
 			parentFragmentManager.goToAnotherSectionFragment(AccountPageFragment())
@@ -59,11 +44,36 @@ class FeedBottomNavigationFragment : AuthorizedCoreFragment<FragmentFeedBottomNa
 			showAddScorePopup(it, viewModel.addScoreOptions)
 		}
 
-		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: FeedBottomNavigationUiState ->
+		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: BottomNavigationUiState ->
 			binding.playerPhoto.setImage(AvatarImage(uiState.playerPicture))
 			binding.playerPhoto.drawableSize = requireContext().dpToPx(32)
-			adapter.submitList(uiState.postItems)
 		}
+	}
+
+	override fun onNavigationItemSelected(item: MenuItem): Boolean {
+		return when (item.itemId) {
+			R.id.feed_item -> {
+				replaceFragment(FeedFragment())
+				true
+			}
+			R.id.game_item -> {
+				replaceFragment(GameFragment())
+				true
+			}
+			R.id.chat_item -> {
+				replaceFragment(InDevelopmentBottomNavFragment())
+				true
+			}
+			R.id.tournament_item -> {
+				replaceFragment(InDevelopmentBottomNavFragment())
+				true
+			}
+			else -> false
+		}
+	}
+
+	private fun replaceFragment(fragment: Fragment) {
+		childFragmentManager.beginTransaction().replace(R.id.container_view, fragment).commit()
 	}
 
 	private fun showAddScorePopup(view: View, items: List<String>) {
@@ -73,10 +83,10 @@ class FeedBottomNavigationFragment : AuthorizedCoreFragment<FragmentFeedBottomNa
 		}
 		menu.setOnMenuItemClickListener { menuItem ->
 			when(items.indexOf(menuItem.title.toString())) {
-				ADD_SCORE_INDEX -> {
+				FeedFragment.ADD_SCORE_INDEX -> {
 					parentFragmentManager.goToAnotherSectionFragment(AddScoreFragment())
 				}
-				CREATE_GAME_ITEM -> {
+				FeedFragment.CREATE_GAME_ITEM -> {
 					parentFragmentManager.goToAnotherSectionFragment(RequestCreationFragment())
 				}
 				else -> {}
@@ -85,5 +95,4 @@ class FeedBottomNavigationFragment : AuthorizedCoreFragment<FragmentFeedBottomNa
 		}
 		menu.show()
 	}
-
 }

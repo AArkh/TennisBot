@@ -22,8 +22,8 @@ import tennis.bot.mobile.databinding.FeedPostOneNewPlayerBinding
 import tennis.bot.mobile.databinding.FeedPostThreeMatchScoreBinding
 import tennis.bot.mobile.databinding.FeedPostTwoMatchRequestBinding
 import tennis.bot.mobile.databinding.RecyclerEmptyItemBinding
-import tennis.bot.mobile.feed.activityfeed.FeedBottomNavigationFragment.Companion.LIKE
-import tennis.bot.mobile.feed.activityfeed.FeedBottomNavigationFragment.Companion.UNLIKE
+import tennis.bot.mobile.feed.activityfeed.FeedFragment.Companion.LIKE
+import tennis.bot.mobile.feed.activityfeed.FeedFragment.Companion.UNLIKE
 import tennis.bot.mobile.profile.account.AccountPageAdapter
 import tennis.bot.mobile.profile.account.EmptyItemViewHolder
 import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
