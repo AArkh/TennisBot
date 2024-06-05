@@ -16,6 +16,7 @@ import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentInsertScoreBinding
 import tennis.bot.mobile.feed.activityfeed.FeedFragment
 import tennis.bot.mobile.feed.addscore.AddScoreFragment
+import tennis.bot.mobile.feed.bottomnavigation.BottomNavigationFragment
 import tennis.bot.mobile.feed.searchopponent.OpponentItem
 import tennis.bot.mobile.feed.searchopponent.SearchOpponentsFragment
 import tennis.bot.mobile.feed.searchopponent.SearchOpponentsViewModel
@@ -144,7 +145,7 @@ class InsertScoreFragment : CoreFragment<FragmentInsertScoreBinding>() {
 			parentFragmentManager.clearBackStack(InsertScoreFragment::class.java.name) // do i need to clear them?
 			parentFragmentManager.clearBackStack(SearchOpponentsFragment::class.java.name)
 			parentFragmentManager.clearBackStack(AddScoreFragment::class.java.name)
-			parentFragmentManager.traverseToAnotherFragment(FeedFragment())
+			parentFragmentManager.traverseToAnotherFragment(BottomNavigationFragment())
 		}
 
 		subscribeToFlowOn(viewModel.uiStateFlow){uiState: InsertScoreUiState ->

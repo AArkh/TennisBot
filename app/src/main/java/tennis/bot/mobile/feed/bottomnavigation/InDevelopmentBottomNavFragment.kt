@@ -1,4 +1,4 @@
-package tennis.bot.mobile.feed.activityfeed
+package tennis.bot.mobile.feed.bottomnavigation
 
 import android.os.Bundle
 import android.view.View

@@ -1,4 +1,4 @@
-package tennis.bot.mobile.feed.activityfeed
+package tennis.bot.mobile.feed.bottomnavigation
 
 import android.os.Bundle
 import android.view.Gravity
@@ -13,6 +13,7 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentBottomNavigationBinding
+import tennis.bot.mobile.feed.activityfeed.FeedFragment
 import tennis.bot.mobile.feed.addscore.AddScoreFragment
 import tennis.bot.mobile.feed.game.GameFragment
 import tennis.bot.mobile.feed.requestcreation.RequestCreationFragment
@@ -45,6 +46,7 @@ class BottomNavigationFragment : CoreFragment<FragmentBottomNavigationBinding>()
 		}
 
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: BottomNavigationUiState ->
+			binding.title.text = uiState.title
 			binding.playerPhoto.setImage(AvatarImage(uiState.playerPicture))
 			binding.playerPhoto.drawableSize = requireContext().dpToPx(32)
 		}
@@ -53,18 +55,22 @@ class BottomNavigationFragment : CoreFragment<FragmentBottomNavigationBinding>()
 	override fun onNavigationItemSelected(item: MenuItem): Boolean {
 		return when (item.itemId) {
 			R.id.feed_item -> {
+				viewModel.replaceTitle(BottomNavigationViewModel.FRAGMENT_FEED)
 				replaceFragment(FeedFragment())
 				true
 			}
 			R.id.game_item -> {
+				viewModel.replaceTitle(BottomNavigationViewModel.FRAGMENT_GAME)
 				replaceFragment(GameFragment())
 				true
 			}
 			R.id.chat_item -> {
+				viewModel.replaceTitle(BottomNavigationViewModel.FRAGMENT_EMPTY)
 				replaceFragment(InDevelopmentBottomNavFragment())
 				true
 			}
 			R.id.tournament_item -> {
+				viewModel.replaceTitle(BottomNavigationViewModel.FRAGMENT_EMPTY)
 				replaceFragment(InDevelopmentBottomNavFragment())
 				true
 			}

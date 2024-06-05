@@ -120,24 +120,6 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>(),
 		holder.binding.date.text = matchRequestItem.addedAt?.let { formatDateForFeed(it, holder.binding.date.context) }
 	}
 
-	private fun MatchRequestPostItemViewHolder.bindInfoPanel(
-		formattedMatchDate: FormattedDate?,
-		matchRequestItem: MatchRequestPostItem
-	) {
-		binding.infoPanel.month.text = formattedMatchDate?.month?.replaceFirstChar { it.uppercase() }
-		binding.infoPanel.day.text = formattedMatchDate?.day.toString()
-		binding.infoPanel.timeAndDay.text = binding.infoPanel.timeAndDay.context.getString(
-			R.string.day_and_time,
-			formattedMatchDate?.time,
-			formattedMatchDate?.dayOfWeek.toString().replaceFirstChar { it.uppercase() }
-		)
-		binding.infoPanel.ratingAndSkill.text = binding.infoPanel.ratingAndSkill.context.getString(
-			R.string.rating_and_skill,
-			matchRequestItem.playerRating,
-			matchRequestItem.experience
-		)
-	}
-
 	private fun bindScorePost(item: Any, holder: ScorePostItemViewHolder) {
 		val scorePostItem = item as? ScorePostItem ?: throw IllegalArgumentException("Item must be ScorePostItem")
 		val mediaSliderAdapter = ImageSliderAdapter()
@@ -247,34 +229,6 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>(),
 		text = if (totalLikes != null && totalLikes != 0) totalLikes.toString() else ""
 	}
 
-	private fun ImageSeriesView.showPlayerPhoto(profileImageUrl: String?, itemPicture: ImageView?) {
-		setImage(AvatarImage(profileImageUrl))
-		drawableSize = context.dpToPx(40)
-
-		if (itemPicture != null) {
-			if (profileImageUrl == null) {
-				itemPicture.load(R.drawable.null_placeholder)
-				return
-			}
-
-			if (profileImageUrl.contains("default")) {
-				val resourceId = if (profileImageUrl.contains("http")) {
-					getDefaultDrawableResourceId(itemPicture.context,
-						profileImageUrl.removeSuffix(".png").removePrefix(DEFAULT_PICS_PREFIX))
-				} else {
-					getDefaultDrawableResourceId(context, profileImageUrl.removeSuffix(".png"))
-				}
-				if (resourceId != null) itemPicture.load(resourceId)
-			} else {
-				if (profileImageUrl.contains("http")) {
-					itemPicture.load(profileImageUrl)
-				} else {
-					itemPicture.load(AccountPageAdapter.IMAGES_LINK + profileImageUrl)
-				}
-			}
-		}
-	}
-
 	override fun getItemViewType(position: Int): Int {
 		return when (items[position]) {
 			is NewPlayerPostItem -> NEW_PLAYER
@@ -300,6 +254,54 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>(),
 		alphaAnimator.start()
 	}
 }
+
+fun ImageSeriesView.showPlayerPhoto(profileImageUrl: String?, itemPicture: ImageView?) {
+	setImage(AvatarImage(profileImageUrl))
+	drawableSize = context.dpToPx(40)
+
+	if (itemPicture != null) {
+		if (profileImageUrl == null) {
+			itemPicture.load(R.drawable.null_placeholder)
+			return
+		}
+
+		if (profileImageUrl.contains("default")) {
+			val resourceId = if (profileImageUrl.contains("http")) {
+				getDefaultDrawableResourceId(itemPicture.context,
+					profileImageUrl.removeSuffix(".png").removePrefix(DEFAULT_PICS_PREFIX))
+			} else {
+				getDefaultDrawableResourceId(context, profileImageUrl.removeSuffix(".png"))
+			}
+			if (resourceId != null) itemPicture.load(resourceId)
+		} else {
+			if (profileImageUrl.contains("http")) {
+				itemPicture.load(profileImageUrl)
+			} else {
+				itemPicture.load(AccountPageAdapter.IMAGES_LINK + profileImageUrl)
+			}
+		}
+	}
+}
+
+
+fun MatchRequestPostItemViewHolder.bindInfoPanel(
+	formattedMatchDate: FormattedDate?,
+	matchRequestItem: MatchRequestPostItem
+) {
+	binding.infoPanel.month.text = formattedMatchDate?.month?.replaceFirstChar { it.uppercase() }
+	binding.infoPanel.day.text = formattedMatchDate?.day.toString()
+	binding.infoPanel.timeAndDay.text = binding.infoPanel.timeAndDay.context.getString(
+		R.string.day_and_time,
+		formattedMatchDate?.time,
+		formattedMatchDate?.dayOfWeek.toString().replaceFirstChar { it.uppercase() }
+	)
+	binding.infoPanel.ratingAndSkill.text = binding.infoPanel.ratingAndSkill.context.getString(
+		R.string.rating_and_skill,
+		matchRequestItem.playerRating,
+		matchRequestItem.experience
+	)
+}
+
 
 class NewPlayerPostItemViewHolder(
 	val binding: FeedPostOneNewPlayerBinding
@@ -337,7 +339,9 @@ data class MatchRequestPostItem( // 2
 	val playerRating: Int,
 	val locationSubTitle: String?,
 	val experience: String,
-	val comment: String
+	val comment: String,
+	val isOwned: Boolean? = null,
+	val isResponsed: Boolean? = null
 ): CoreUtilsItem()
 
 data class ScorePostItem( // 3

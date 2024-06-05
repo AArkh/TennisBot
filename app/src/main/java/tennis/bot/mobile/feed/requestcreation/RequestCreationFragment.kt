@@ -13,6 +13,7 @@ import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
 import tennis.bot.mobile.databinding.FragmentRequestBinding
 import tennis.bot.mobile.feed.activityfeed.FeedFragment
+import tennis.bot.mobile.feed.bottomnavigation.BottomNavigationFragment
 import tennis.bot.mobile.onboarding.location.LocationDialogViewModel
 import tennis.bot.mobile.utils.traverseToAnotherFragment
 import javax.inject.Inject
@@ -79,7 +80,7 @@ class RequestCreationFragment : AuthorizedCoreFragment<FragmentRequestBinding>()
 
 		setFragmentResultListener(REQUEST_DENIED_DIALOG_KEY) { _, _ ->
 			parentFragmentManager.clearBackStack(RequestCreationFragment::class.java.name) // do i need to clear them? seems they stick anyway (or maybe its just the dialog)
-			parentFragmentManager.traverseToAnotherFragment(FeedFragment())
+			parentFragmentManager.traverseToAnotherFragment(BottomNavigationFragment())
 		}
 
 		setFragmentResultListener(

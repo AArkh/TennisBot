@@ -229,3 +229,20 @@ class FeedPostsMapper @Inject constructor(
 	}
 }
 
+suspend fun formatLocationDataForPost(cityId: Int, districtId: Int?, locationRepository: LocationRepository, locationDataMapper: LocationDataMapper): String? {
+	val locations = locationRepository.getLocations()
+	val city = locationDataMapper.findCityString(locations, cityId)
+	val district = if (districtId != null) {
+		locationDataMapper.findDistrictStringFromCity(locations, cityId, districtId)
+	} else {
+		null
+	}
+	val location = if (district == null) {
+		city
+	} else {
+		"$city(${district})"
+	}
+
+	return location
+}
+

@@ -65,9 +65,9 @@ class RequestCreationViewModel @Inject constructor(
 
 	fun onStartup(navigationCallback: () -> Unit) {
 		viewModelScope.launch (Dispatchers.IO) {
-//			if (!checkForActiveRequests()) {
-//				navigationCallback.invoke()
-//			}
+			if (!checkForActiveRequests()) {
+				navigationCallback.invoke()
+			}
 
 			currentRating = userProfileAndEnumsRepository.getProfile().rating
 			val recommendedValues = "${currentRating - 150} - ${currentRating + 150}"

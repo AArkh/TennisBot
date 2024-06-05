@@ -180,6 +180,7 @@
 	<string name="contact_email">Связаться по почте</string>
 	<string name="contact_telegram">Связаться по Telegram</string>
 	<string name="feed_toolbar_title">Активность</string>
+	<string name="game_toolbar_title">Игра</string>
 	<string name="events_spinner_title">Все события</string>
 	<string name="sports_spinner_title">Вид спорта</string>
 	<string name="city_spinner_title">Город</string>
@@ -321,5 +322,7 @@
 	<string name="request_creation_success_text">Посмотрите актуальные заявки других игроков в ленте</string>
 	<!-- TODO: Remove or change this placeholder text -->
 	<string name="hello_blank_fragment">Hello blank fragment</string>
+	<string name="my_request">Моя заявка</string>
+	<string name="my_response">Мой отклик</string>
 
 </resources>

@@ -42,6 +42,4 @@ class FeedRepository @Inject constructor(
 		return response.isSuccessful
 
 	}
-
-
 }
