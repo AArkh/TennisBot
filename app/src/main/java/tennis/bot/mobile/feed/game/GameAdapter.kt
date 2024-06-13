@@ -16,6 +16,8 @@ import javax.inject.Inject
 
 class GameAdapter@Inject constructor(): CoreAdapter<MatchRequestPostItemViewHolder>() {
 
+	var clickListener: ((command: String, id: Long) -> Unit)? = null
+
 	override fun onBindViewHolder(holder: MatchRequestPostItemViewHolder, item: Any) {
 		bindGameRequestItem(item, holder)
 	}
@@ -37,16 +39,35 @@ class GameAdapter@Inject constructor(): CoreAdapter<MatchRequestPostItemViewHold
 		if (matchRequestItem.isOwned == true) {
 			holder.binding.postType.setTextColor(context.getColor(R.color.tb_red_new))
 			holder.binding.postType.text = context.getString(R.string.my_request)
+			holder.binding.optionsDots.isVisible = true
+			holder.binding.optionsDots.setOnClickListener {
+				clickListener?.invoke(REQUEST_OPTIONS_REQUEST, matchRequestItem.id)
+			}
 		} else if (matchRequestItem.isResponsed == true) {
 			holder.binding.postType.text = context.getString(R.string.my_response)
+			holder.binding.optionsDots.isVisible = true
+			holder.binding.optionsDots.setOnClickListener {
+				clickListener?.invoke(REQUEST_OPTIONS_RESPONSE, matchRequestItem.id)
+			}
 		} else {
 			holder.binding.postType.setTextColor(context.getColor(R.color.tb_gray_dark))
 			holder.binding.postType.text = context.getString(R.string.post_type_2).substringBefore(" ")
+			holder.binding.optionsDots.isVisible = false
 		}
 
 		holder.bindInfoPanel(formattedMatchDate, matchRequestItem)
 		holder.binding.requestComment.text = matchRequestItem.comment
 		holder.binding.date.text = matchRequestItem.addedAt?.let { formatDateForFeed(it, holder.binding.date.context) }
 		holder.binding.likeButton.isVisible = false
+
+		holder.binding.root.setOnClickListener {
+			clickListener?.invoke(REQUEST_RESPONSE, matchRequestItem.id)
+		}
+	}
+
+	companion object {
+		const val REQUEST_RESPONSE = "REQUEST_RESPONSE"
+		const val REQUEST_OPTIONS_REQUEST = "REQUEST_OPTIONS_REQUEST"
+		const val REQUEST_OPTIONS_RESPONSE = "REQUEST_OPTIONS_RESPONSE"
 	}
 }

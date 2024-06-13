@@ -1,13 +1,14 @@
 package tennis.bot.mobile.feed.game
 
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
-import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
+import android.util.Log
+import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.widget.PopupMenu
+import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,6 +17,7 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentGameBinding
 import tennis.bot.mobile.utils.animateButtonTransition
+import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -27,11 +29,32 @@ class GameFragment : CoreFragment<FragmentGameBinding>() {
 	lateinit var adapter: GameAdapter
 
 
+
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 
 		binding.container.adapter = adapter
 		binding.container.layoutManager = LinearLayoutManager(context)
+
+		binding.allFilter.setOnClickListener {
+			viewModel.onFetchingAllRequests()
+			onFilterOptionClicked(buttonClicked = binding.allFilter)
+		}
+
+		binding.incomingFilter.setOnClickListener {
+			viewModel.onFetchingIncomingRequests()
+			onFilterOptionClicked(buttonClicked = binding.incomingFilter)
+		}
+
+		binding.outcomingFilter.setOnClickListener {
+			viewModel.onFetchingOutcomingRequests()
+			onFilterOptionClicked(buttonClicked = binding.outcomingFilter)
+		}
+
+		binding.acceptedFilter.setOnClickListener {
+			viewModel.onFetchingAcceptedRequests()
+			onFilterOptionClicked(buttonClicked = binding.acceptedFilter)
+		}
 
 		binding.tabRequests.setOnClickListener {
 			onTabClick(binding.tabRequests, binding.underline)
@@ -39,6 +62,36 @@ class GameFragment : CoreFragment<FragmentGameBinding>() {
 
 		binding.tabPlayers.setOnClickListener {
 			onTabClick(binding.tabPlayers, binding.underline)
+		}
+
+		adapter.clickListener = { command, id ->
+			when(command) {
+				GameAdapter.REQUEST_OPTIONS_RESPONSE -> {
+					showDeletePopup(binding.root.findViewById(R.id.options_dots), GameAdapter.REQUEST_OPTIONS_RESPONSE, id)
+				}
+				GameAdapter.REQUEST_OPTIONS_REQUEST -> {
+					showDeletePopup(binding.root.findViewById(R.id.options_dots), GameAdapter.REQUEST_OPTIONS_REQUEST, id)
+				}
+				GameAdapter.REQUEST_RESPONSE -> {
+					val bottomDialog = GameOrderResponseDialogFragment()
+					bottomDialog.arguments = bundleOf(
+						GameOrderResponseDialogFragment.GAME_ORDER_ID to id,
+					)
+					bottomDialog.show(childFragmentManager, bottomDialog.tag)
+				}
+			}
+		}
+
+		setFragmentResultListener(GameOrderResponseDialogFragment.GAME_ORDER_RESPONSE_KEY) { _, result ->
+			Log.d("GameFragment", "Result received")
+			val id = result.getLong(GameOrderResponseDialogFragment.GAME_ORDER_ID)
+			val comment = result.getString(GameOrderResponseDialogFragment.GAME_ORDER_COMMENT)
+			Log.d("GameDialogResult", "gameOrderId is $id and comment is $comment")
+
+			viewModel.onSendingRequestResponse(
+				id = id,
+				comment = comment
+			)
 		}
 
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState ->
@@ -57,4 +110,40 @@ class GameFragment : CoreFragment<FragmentGameBinding>() {
 		animateButtonTransition(underline, selectedTab)
 	}
 
+	private fun onFilterOptionClicked(buttonClicked: TextView) {
+		binding.allFilter.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.invisible)
+		binding.allFilter.setTextColor(ContextCompat.getColor(requireContext(), R.color.tb_gray_gray))
+		binding.incomingFilter.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.invisible)
+		binding.incomingFilter.setTextColor(ContextCompat.getColor(requireContext(), R.color.tb_gray_gray))
+		binding.outcomingFilter.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.invisible)
+		binding.outcomingFilter.setTextColor(ContextCompat.getColor(requireContext(), R.color.tb_gray_gray))
+		binding.acceptedFilter.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.invisible)
+		binding.acceptedFilter.setTextColor(ContextCompat.getColor(requireContext(), R.color.tb_gray_gray))
+
+		buttonClicked.backgroundTintList = ContextCompat.getColorStateList(buttonClicked.context, R.color.tb_bg_card)
+		buttonClicked.setTextColor(ContextCompat.getColor(buttonClicked.context, R.color.tb_black))
+	}
+
+	private fun showDeletePopup(view: View, command: String, id: Long) {
+		val menu = PopupMenu(requireContext(), view, Gravity.BOTTOM, 0, R.style.PopupMenuStyle)
+
+		when(command) {
+			GameAdapter.REQUEST_OPTIONS_RESPONSE -> {
+				menu.menu.add("Удалить отклик")
+				menu.setOnMenuItemClickListener {
+					requireContext().showToast("Deleted response")
+					true
+				}
+			}
+			GameAdapter.REQUEST_OPTIONS_REQUEST -> {
+				menu.menu.add("Удалить заявку")
+				menu.setOnMenuItemClickListener {
+					viewModel.onDeletingGameRequest(id)
+					true
+				}
+			}
+			else -> {}
+		}
+		menu.show()
+	}
 }

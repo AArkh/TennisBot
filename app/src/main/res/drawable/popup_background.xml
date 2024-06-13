@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-	<solid android:color="@color/tb_white" />
-	<corners android:radius="12dp" />
-</shape>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+	<item>
+		<shape android:shape="rectangle">
+			<gradient
+				android:startColor="#40000000"
+				android:endColor="@android:color/transparent"
+				android:angle="135" />
+			<corners android:radius="12dp" />
+			<padding />
+		</shape>
+	</item>
+	<item android:right="1dp" android:bottom="2dp" >
+		<shape android:shape="rectangle">
+			<solid android:color="@android:color/white" />
+			<corners android:radius="12dp" />
+		</shape>
+	</item>
+</layer-list>

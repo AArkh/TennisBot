@@ -1,5 +1,4 @@
 package tennis.bot.mobile.feed.game
-
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -25,13 +24,74 @@ class GameViewModel @Inject constructor(
 	)
 	val uiStateFlow = _uiStateFlow.asStateFlow().onStart { onFetchingAllRequests() }
 
-	private fun onFetchingAllRequests() {
-		viewModelScope.launch (Dispatchers.IO) {
+	fun onFetchingAllRequests() {
+		viewModelScope.launch(Dispatchers.IO) {
+			kotlin.runCatching {
 				val activityPosts = repository.getAllRequests()
 				_uiStateFlow.value = _uiStateFlow.value.copy(itemsList = repository.mapGameToMatchRequestPostItem(activityPosts))
-//			}.onFailure {
-//				context.showToast(context.getString(R.string.error_no_network_message))
-//			}
+			}.onFailure {
+				context.showToast(context.getString(R.string.error_no_network_message))
+			}
 		}
 	}
+
+	fun onFetchingIncomingRequests() {
+		viewModelScope.launch(Dispatchers.IO) {
+			kotlin.runCatching {
+				val activityPosts = repository.getIncomingRequests()
+				_uiStateFlow.value = _uiStateFlow.value.copy(itemsList = repository.mapGameToMatchRequestPostItem(activityPosts))
+			}.onFailure {
+				context.showToast(context.getString(R.string.error_no_network_message))
+			}
+		}
+	}
+
+	fun onFetchingOutcomingRequests() {
+		viewModelScope.launch(Dispatchers.IO) {
+			kotlin.runCatching {
+				val activityPosts = repository.getOutcomingRequests()
+				_uiStateFlow.value = _uiStateFlow.value.copy(itemsList = repository.mapGameToMatchRequestPostItem(activityPosts))
+			}.onFailure {
+				context.showToast(context.getString(R.string.error_no_network_message))
+			}
+		}
+	}
+
+	fun onFetchingAcceptedRequests() {
+		viewModelScope.launch(Dispatchers.IO) {
+			kotlin.runCatching {
+				val activityPosts = repository.getAcceptedRequests()
+				_uiStateFlow.value = _uiStateFlow.value.copy(itemsList = repository.mapGameToMatchRequestPostItem(activityPosts))
+			}.onFailure {
+				context.showToast(context.getString(R.string.error_no_network_message))
+			}
+		}
+	}
+
+	fun onSendingRequestResponse(id: Long, comment: String?) {
+		viewModelScope.launch(Dispatchers.IO) {
+			kotlin.runCatching {
+				repository.postRequestResponse(id, comment)
+			}.onFailure {
+				context.showToast("Не удалось отправить ответ на заявку")
+			}.onSuccess {
+				context.showToast("Отклик на заявку успешно отправлен")
+			}
+		}
+	}
+
+	fun onDeletingGameRequest(id: Long) {
+		viewModelScope.launch(Dispatchers.IO) {
+			kotlin.runCatching {
+				repository.deleteGameRequest(id)
+			}.onFailure {
+				context.showToast("Не удалось удалить заявку")
+			}.onSuccess {
+				context.showToast("Заявка успешно удалена")
+				onFetchingOutcomingRequests()
+			}
+		}
+	}
+
 }
+

@@ -55,7 +55,23 @@
 		android:paddingHorizontal="12dp"
 		android:paddingVertical="6dp"
 		android:layout_marginStart="12dp"
+		app:layout_constraintStart_toEndOf="@id/name_surname"
+		app:layout_constraintEnd_toStartOf="@id/options_dots"
+		app:layout_constraintTop_toTopOf="@id/player_photo"
+		app:layout_constraintBottom_toBottomOf="@id/player_photo"/>
+
+	<ImageView
+		android:id="@+id/options_dots"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@drawable/options_dots"
+		android:layout_marginEnd="16dp"
+		android:clickable="true"
+		android:focusable="true"
+		android:visibility="gone"
+		android:foreground="@drawable/ripple_gray_circle"
 		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toEndOf="@id/post_type"
 		app:layout_constraintTop_toTopOf="@id/player_photo"
 		app:layout_constraintBottom_toBottomOf="@id/player_photo"/>
 

@@ -2,7 +2,10 @@ package tennis.bot.mobile.feed.game
 
 import kotlinx.serialization.Serializable
 import retrofit2.Response
+import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface GameApi {
@@ -13,11 +16,45 @@ interface GameApi {
 		@Query("limit") limit:Int = DEFAULT_LIMIT
 	): Response<GameBasicResponse>
 
+	@GET("api/game-orders/incoming-requests")
+	suspend fun getIncomingRequests(
+		@Query("skip") skip:Int = DEFAULT_SKIP,
+		@Query("limit") limit:Int = DEFAULT_LIMIT
+	): Response<GameBasicResponse>
+
+	@GET("api/game-orders/outcoming-requests")
+	suspend fun getOutcomingRequests(
+		@Query("skip") skip:Int = DEFAULT_SKIP,
+		@Query("limit") limit:Int = DEFAULT_LIMIT
+	): Response<GameBasicResponse>
+
+	@GET("api/game-orders/accepted-requests")
+	suspend fun getAcceptedRequests(
+		@Query("skip") skip:Int = DEFAULT_SKIP,
+		@Query("limit") limit:Int = DEFAULT_LIMIT
+	): Response<GameBasicResponse>
+
+	@POST("api/game-orders/{id}/response")
+	suspend fun postRequestResponse(
+		@Path("id") id: Long,
+		@Query("comment") comment: String?
+	): Response<GameRequestResponse>
+
+	@DELETE("api/game-orders/{id}")
+	suspend fun deleteGameRequest(
+		@Path("id") id: Long
+	): Response<GameRequestResponse>
+
 	companion object{
 		const val DEFAULT_SKIP = 0
 		const val DEFAULT_LIMIT = 20
 	}
 }
+
+@Serializable
+data class GameRequestResponse(
+	val id: Long
+)
 
 @Serializable
 data class GameBasicResponse(

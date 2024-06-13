@@ -18,6 +18,7 @@
 
 	<style name="PopupMenuStyle" parent="@android:style/Widget.PopupMenu">
 		<item name="android:popupBackground">@drawable/popup_background</item>
+		<item name="android:elevation">8dp</item>
 	</style>
 
 	<style name="Theme.TennisBot.NumberPicker">

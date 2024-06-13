@@ -32,6 +32,54 @@ class GameRepository @Inject constructor(
 		return emptyList()
 	}
 
+	@WorkerThread
+	suspend fun getIncomingRequests(): List<GamePostNetwork>? {
+		val response = gameApi.getIncomingRequests()
+
+		if (response.code() == 200) return response.body()?.items
+		if (response.code() == 404) context.showToast("Something went wrong")
+
+		return emptyList()
+	}
+
+	@WorkerThread
+	suspend fun getOutcomingRequests(): List<GamePostNetwork>? {
+		val response = gameApi.getOutcomingRequests()
+
+		if (response.code() == 200) return response.body()?.items
+		if (response.code() == 404) context.showToast("Something went wrong")
+
+		return emptyList()
+	}
+
+	@WorkerThread
+	suspend fun getAcceptedRequests(): List<GamePostNetwork>? {
+		val response = gameApi.getAcceptedRequests()
+
+		if (response.code() == 200) return response.body()?.items
+		if (response.code() == 404) context.showToast("Something went wrong")
+
+		return emptyList()
+	}
+
+	@WorkerThread
+	suspend fun postRequestResponse(id: Long, comment: String?): Boolean {
+		val response = kotlin.runCatching {
+			gameApi.postRequestResponse(id, comment)
+		}.getOrElse { return false }
+
+		return response.isSuccessful
+	}
+
+	@WorkerThread
+	suspend fun deleteGameRequest(id: Long): Boolean {
+		val response = kotlin.runCatching {
+			gameApi.deleteGameRequest(id)
+		}.getOrElse { return false }
+
+		return response.isSuccessful
+	}
+
 	suspend fun mapGameToMatchRequestPostItem(gameList: List<GamePostNetwork>?): List<MatchRequestPostItem> {
 		if (gameList?.isEmpty() == true) return emptyList()
 
