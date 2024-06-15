@@ -55,12 +55,8 @@ class RequestCreationViewModel @Inject constructor(
 	private var currentGamePayId: Int = 1
 	private var currentGameTypeId: Int = 1
 
-	private fun checkForActiveRequests(): Boolean {
-		var result = false
-		viewModelScope.launch (Dispatchers.IO) {
-			result = repository.getPermissionToCreate() == true
-		}
-		return result
+	private suspend fun checkForActiveRequests(): Boolean {
+		return repository.getPermissionToCreate() == true
 	}
 
 	fun onStartup(navigationCallback: () -> Unit) {

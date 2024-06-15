@@ -37,7 +37,7 @@ class BottomNavigationViewModel @Inject constructor(
 	private fun onFetchingProfilePicture(){
 		viewModelScope.launch (Dispatchers.IO) {
 			kotlin.runCatching {
-				_uiStateFlow.value = _uiStateFlow.value.copy(playerPicture = userProfileRepository.getProfile().photo)
+				_uiStateFlow.value = _uiStateFlow.value.copy(playerPicture = userProfileRepository.getProfile().photoUrl)
 			}.onFailure {
 				Log.d("123456", "we have a problem")
 				tokenRepository.triggerUnAuthFlow(true)

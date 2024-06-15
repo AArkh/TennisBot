@@ -171,6 +171,4 @@ open class SearchOpponentsViewModel @Inject constructor(
 			}
 		}
 	}
-
-
 }

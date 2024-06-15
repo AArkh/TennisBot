@@ -21,6 +21,7 @@ data class ProfileData(
 	val isInvited: Boolean?,
 	val telegram: String?,
 	val photo: String?,
+	val photoUrl: String?,
 	val countryId: Int?,
 	val cityId: Int,
 	val districtId: Int?,

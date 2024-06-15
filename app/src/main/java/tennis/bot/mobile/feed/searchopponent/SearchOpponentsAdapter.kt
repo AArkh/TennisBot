@@ -21,7 +21,6 @@ class SearchOpponentsAdapter @Inject constructor(): PagingDataAdapter<OpponentIt
 	var clickListener: ((item: OpponentItem) -> Unit)? = null
 	private var selectedItem = -1
 
-
 	companion object {
 		private val OPPONENTS_COMPARATOR = object : DiffUtil.ItemCallback<OpponentItem>() {
 			override fun areItemsTheSame(oldItem: OpponentItem, newItem: OpponentItem): Boolean =

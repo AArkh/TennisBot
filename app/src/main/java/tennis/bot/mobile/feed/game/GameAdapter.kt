@@ -3,6 +3,8 @@ package tennis.bot.mobile.feed.game
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreAdapter
 import tennis.bot.mobile.databinding.FeedPostTwoMatchRequestBinding
@@ -10,16 +12,31 @@ import tennis.bot.mobile.feed.activityfeed.MatchRequestPostItem
 import tennis.bot.mobile.feed.activityfeed.MatchRequestPostItemViewHolder
 import tennis.bot.mobile.feed.activityfeed.bindInfoPanel
 import tennis.bot.mobile.feed.activityfeed.showPlayerPhoto
+import tennis.bot.mobile.feed.searchopponent.OpponentItem
 import tennis.bot.mobile.utils.formatDateForFeed
 import tennis.bot.mobile.utils.formatDateForMatchPostItem
 import javax.inject.Inject
 
-class GameAdapter@Inject constructor(): CoreAdapter<MatchRequestPostItemViewHolder>() {
+class GameAdapter@Inject constructor(): PagingDataAdapter<MatchRequestPostItem, MatchRequestPostItemViewHolder>(GAMES_COMPARATOR) {
 
 	var clickListener: ((command: String, id: Long) -> Unit)? = null
+	companion object {
+		private val GAMES_COMPARATOR = object : DiffUtil.ItemCallback<MatchRequestPostItem>() {
+			override fun areItemsTheSame(oldItem: MatchRequestPostItem, newItem: MatchRequestPostItem): Boolean =
+				oldItem.id == newItem.id
 
-	override fun onBindViewHolder(holder: MatchRequestPostItemViewHolder, item: Any) {
-		bindGameRequestItem(item, holder)
+			override fun areContentsTheSame(oldItem: MatchRequestPostItem, newItem: MatchRequestPostItem): Boolean =
+				oldItem == newItem
+		}
+		const val REQUEST_RESPONSE = "REQUEST_RESPONSE"
+		const val REQUEST_OPTIONS_REQUEST = "REQUEST_OPTIONS_REQUEST"
+		const val REQUEST_OPTIONS_RESPONSE = "REQUEST_OPTIONS_RESPONSE"
+	}
+
+	override fun onBindViewHolder(holder: MatchRequestPostItemViewHolder, position: Int) {
+		getItem(position)?.let { item ->
+			bindGameRequestItem(item, holder)
+		}
 	}
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MatchRequestPostItemViewHolder {
@@ -63,11 +80,5 @@ class GameAdapter@Inject constructor(): CoreAdapter<MatchRequestPostItemViewHold
 		holder.binding.root.setOnClickListener {
 			clickListener?.invoke(REQUEST_RESPONSE, matchRequestItem.id)
 		}
-	}
-
-	companion object {
-		const val REQUEST_RESPONSE = "REQUEST_RESPONSE"
-		const val REQUEST_OPTIONS_REQUEST = "REQUEST_OPTIONS_REQUEST"
-		const val REQUEST_OPTIONS_RESPONSE = "REQUEST_OPTIONS_RESPONSE"
 	}
 }

@@ -22,6 +22,7 @@ import tennis.bot.mobile.databinding.AccountPointsAndPositionBinding
 import tennis.bot.mobile.databinding.AccountTournamentsBinding
 import tennis.bot.mobile.databinding.RecyclerEmptyItemBinding
 import tennis.bot.mobile.onboarding.survey.SurveyResultsAdapter
+import tennis.bot.mobile.utils.DEFAULT_PICS_PREFIX
 import tennis.bot.mobile.utils.animateButtonTransition
 import javax.inject.Inject
 
@@ -150,14 +151,14 @@ class AccountPageAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHol
 		if (profileImageUrl.contains("default")) {
 			val resourceId = getDefaultDrawableResourceId(
 				binding.accountPhoto.context,
-				profileImageUrl.removeSuffix(".png")
+				profileImageUrl.removePrefix(DEFAULT_PICS_PREFIX).removeSuffix(".png")
 			)
 			binding.accountPhoto.visibility = View.VISIBLE
 			if (resourceId != null) binding.accountPhoto.setImageResource(resourceId)
 			binding.placeholderPhoto.visibility = View.GONE
 		} else {
 			binding.accountPhoto.visibility = View.VISIBLE
-			binding.accountPhoto.load(IMAGES_LINK + profileImageUrl) { crossfade(true) }
+			binding.accountPhoto.load(profileImageUrl) { crossfade(true) }
 			binding.placeholderPhoto.visibility = View.GONE
 		}
 	}

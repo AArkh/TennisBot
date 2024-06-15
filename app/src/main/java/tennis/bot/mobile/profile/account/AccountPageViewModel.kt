@@ -11,6 +11,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.authentication.AuthTokenRepository
+import tennis.bot.mobile.feed.activityfeed.formatLocationDataForPost
+import tennis.bot.mobile.onboarding.location.LocationDataMapper
+import tennis.bot.mobile.onboarding.location.LocationRepository
 import tennis.bot.mobile.onboarding.survey.SurveyResultItem
 import tennis.bot.mobile.utils.DEFAULT_DATE_TIME
 import tennis.bot.mobile.utils.convertDateAndTime
@@ -20,7 +23,9 @@ import javax.inject.Inject
 class AccountPageViewModel @Inject constructor(
 	@ApplicationContext private val context: Context,
 	private val repository: UserProfileAndEnumsRepository,
-	private val authTokenRepository: AuthTokenRepository
+	private val authTokenRepository: AuthTokenRepository,
+	private val locationRepository: LocationRepository,
+	private val locationDataMapper: LocationDataMapper
 ): ViewModel() {
 
 	companion object {
@@ -50,9 +55,9 @@ class AccountPageViewModel @Inject constructor(
 
 				val basicLayout = listOf(
 					BasicInfoAndRating(
-						profileData.photo,
+						profileData.photoUrl,
 						profileData.name,
-						profileData.telegram,
+						formatLocationDataForPost(profileData.cityId, profileData.districtId, locationRepository, locationDataMapper),
 						profileData.rating.toString(),
 						profileData.universalDoublesRating.toString()
 					),

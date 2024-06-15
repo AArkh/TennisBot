@@ -36,14 +36,14 @@ data class FormattedDate(
 	val month: String
 )
 
-fun convertDateAndTime(dateString: String): String? {
+fun convertDateAndTime(dateString: String, formatPattern: String? = null): String? {
 	if (dateString == DEFAULT_DATE_TIME) return null
 
 	for (format in dateFormats) {
 		try {
 			val dateTimeFormatter = SimpleDateFormat(format, Locale.getDefault())
 			val timeStampMs = dateTimeFormatter.parse(dateString)
-			val someOtherFormatter = SimpleDateFormat("d MMMM yyyy", Locale("ru", "RU"))
+			val someOtherFormatter = SimpleDateFormat(formatPattern ?: "d MMMM yyyy", Locale.getDefault())
 			return someOtherFormatter.format(timeStampMs) ?: ""
 		} catch (e: Exception) {
 			// If parsing fails, try the next format
@@ -53,10 +53,10 @@ fun convertDateAndTime(dateString: String): String? {
 }
 
 fun formatDateForMatchPostItem(timestampString: String): FormattedDate {
-	val formattedDateString = convertDateAndTime(timestampString)
+	val formattedDateString = convertDateAndTime(timestampString, "d MMMM yyyy HH:mm")
 		?: throw IllegalArgumentException("Invalid timestamp format")
 
-	val dateFormat = SimpleDateFormat("d MMMM yyyy", Locale("ru", "RU"))
+	val dateFormat = SimpleDateFormat("d MMMM yyyy HH:mm", Locale.getDefault())
 	val date = dateFormat.parse(formattedDateString) ?: throw IllegalArgumentException("Invalid date format")
 
 	val calendar = Calendar.getInstance().apply { time = date }

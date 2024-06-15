@@ -10,15 +10,15 @@
 		android:title="@string/game_title"
 		android:enabled="true"
 		android:icon="@drawable/game"/>
-	<item
-		android:id="@+id/chat_item"
-		android:enabled="true"
-		android:title="@string/chat_title"
-		android:icon="@drawable/chat" />
-	<item
-		android:id="@+id/tournament_item"
-		android:enabled="true"
-		android:title="@string/tournaments_title"
-		android:icon="@drawable/nav_bar_trophy"/>
+<!--	<item-->
+<!--		android:id="@+id/chat_item"-->
+<!--		android:enabled="true"-->
+<!--		android:title="@string/chat_title"-->
+<!--		android:icon="@drawable/chat" />-->
+<!--	<item-->
+<!--		android:id="@+id/tournament_item"-->
+<!--		android:enabled="true"-->
+<!--		android:title="@string/tournaments_title"-->
+<!--		android:icon="@drawable/nav_bar_trophy"/>-->
 
 </menu>

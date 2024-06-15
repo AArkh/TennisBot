@@ -23,43 +23,43 @@ class GameRepository @Inject constructor(
 ) {
 
 	@WorkerThread
-	suspend fun getAllRequests(): List<GamePostNetwork>? {
+	suspend fun getAllRequests(): GameBasicResponse? {
 		val response = gameApi.getAllRequests()
 
-		if (response.code() == 200) return response.body()?.items
+		if (response.code() == 200) return response.body()
 		if (response.code() == 404) context.showToast("Something went wrong")
 
-		return emptyList()
+		return null
 	}
 
 	@WorkerThread
-	suspend fun getIncomingRequests(): List<GamePostNetwork>? {
+	suspend fun getIncomingRequests(): GameBasicResponse? {
 		val response = gameApi.getIncomingRequests()
 
-		if (response.code() == 200) return response.body()?.items
+		if (response.code() == 200) return response.body()
 		if (response.code() == 404) context.showToast("Something went wrong")
 
-		return emptyList()
+		return null
 	}
 
 	@WorkerThread
-	suspend fun getOutcomingRequests(): List<GamePostNetwork>? {
+	suspend fun getOutcomingRequests(): GameBasicResponse? {
 		val response = gameApi.getOutcomingRequests()
 
-		if (response.code() == 200) return response.body()?.items
+		if (response.code() == 200) return response.body()
 		if (response.code() == 404) context.showToast("Something went wrong")
 
-		return emptyList()
+		return null
 	}
 
 	@WorkerThread
-	suspend fun getAcceptedRequests(): List<GamePostNetwork>? {
+	suspend fun getAcceptedRequests(): GameBasicResponse? {
 		val response = gameApi.getAcceptedRequests()
 
-		if (response.code() == 200) return response.body()?.items
+		if (response.code() == 200) return response.body()
 		if (response.code() == 404) context.showToast("Something went wrong")
 
-		return emptyList()
+		return null
 	}
 
 	@WorkerThread

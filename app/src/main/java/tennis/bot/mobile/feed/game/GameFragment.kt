@@ -8,12 +8,19 @@ import android.widget.TextView
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
+import tennis.bot.mobile.core.DefaultLoadStateAdapter
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentGameBinding
 import tennis.bot.mobile.utils.animateButtonTransition
@@ -28,31 +35,53 @@ class GameFragment : CoreFragment<FragmentGameBinding>() {
 	@Inject
 	lateinit var adapter: GameAdapter
 
-
-
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 
-		binding.container.adapter = adapter
+		binding.container.adapter = adapter.withLoadStateHeaderAndFooter(
+			header = DefaultLoadStateAdapter { adapter.retry() },
+			footer = DefaultLoadStateAdapter { adapter.retry() }
+		)
 		binding.container.layoutManager = LinearLayoutManager(context)
+		lifecycleScope.launch(Dispatchers.IO) {
+			viewModel.onFetchingAllRequests().collectLatest {
+				adapter.submitData(it)
+			}
+		}
 
 		binding.allFilter.setOnClickListener {
-			viewModel.onFetchingAllRequests()
+			lifecycleScope.launch(Dispatchers.IO) {
+				viewModel.onFetchingAllRequests().collectLatest {
+					adapter.submitData(it)
+				}
+			}
 			onFilterOptionClicked(buttonClicked = binding.allFilter)
 		}
 
 		binding.incomingFilter.setOnClickListener {
-			viewModel.onFetchingIncomingRequests()
+			lifecycleScope.launch(Dispatchers.IO) {
+				viewModel.onFetchingIncomingRequests().collectLatest {
+					adapter.submitData(it)
+				}
+			}
 			onFilterOptionClicked(buttonClicked = binding.incomingFilter)
 		}
 
 		binding.outcomingFilter.setOnClickListener {
-			viewModel.onFetchingOutcomingRequests()
+			lifecycleScope.launch(Dispatchers.IO) {
+				viewModel.onFetchingOutcomingRequests().collectLatest {
+					adapter.submitData(it)
+				}
+			}
 			onFilterOptionClicked(buttonClicked = binding.outcomingFilter)
 		}
 
 		binding.acceptedFilter.setOnClickListener {
-			viewModel.onFetchingAcceptedRequests()
+			lifecycleScope.launch(Dispatchers.IO) {
+				viewModel.onFetchingAcceptedRequests().collectLatest {
+					adapter.submitData(it)
+				}
+			}
 			onFilterOptionClicked(buttonClicked = binding.acceptedFilter)
 		}
 
@@ -94,8 +123,9 @@ class GameFragment : CoreFragment<FragmentGameBinding>() {
 			)
 		}
 
-		subscribeToFlowOn(viewModel.uiStateFlow) { uiState ->
-			adapter.submitList(uiState.itemsList)
+		adapter.addLoadStateListener { loadState ->
+			binding.errorLayout.isVisible = loadState.source.refresh is LoadState.Error
+			binding.loadingBar.isVisible = loadState.source.refresh is LoadState.Loading
 		}
 
 	}
@@ -138,7 +168,7 @@ class GameFragment : CoreFragment<FragmentGameBinding>() {
 			GameAdapter.REQUEST_OPTIONS_REQUEST -> {
 				menu.menu.add("Удалить заявку")
 				menu.setOnMenuItemClickListener {
-					viewModel.onDeletingGameRequest(id)
+					viewModel.onDeletingGameRequest(adapter, id)
 					true
 				}
 			}

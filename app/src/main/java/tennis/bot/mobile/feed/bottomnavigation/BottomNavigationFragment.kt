@@ -64,16 +64,16 @@ class BottomNavigationFragment : CoreFragment<FragmentBottomNavigationBinding>()
 				replaceFragment(GameFragment())
 				true
 			}
-			R.id.chat_item -> {
-				viewModel.replaceTitle(BottomNavigationViewModel.FRAGMENT_EMPTY)
-				replaceFragment(InDevelopmentBottomNavFragment())
-				true
-			}
-			R.id.tournament_item -> {
-				viewModel.replaceTitle(BottomNavigationViewModel.FRAGMENT_EMPTY)
-				replaceFragment(InDevelopmentBottomNavFragment())
-				true
-			}
+//			R.id.chat_item -> {
+//				viewModel.replaceTitle(BottomNavigationViewModel.FRAGMENT_EMPTY)
+//				replaceFragment(InDevelopmentBottomNavFragment())
+//				true
+//			}
+//			R.id.tournament_item -> {
+//				viewModel.replaceTitle(BottomNavigationViewModel.FRAGMENT_EMPTY)
+//				replaceFragment(InDevelopmentBottomNavFragment())
+//				true
+//			}
 			else -> false
 		}
 	}
