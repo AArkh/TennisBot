@@ -2,9 +2,16 @@ package tennis.bot.mobile.feed.activityfeed
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import tennis.bot.mobile.core.DefaultLoadStateAdapter
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
 import tennis.bot.mobile.databinding.FragmentFeedBottomNavigationBinding
@@ -27,23 +34,33 @@ class FeedFragment : AuthorizedCoreFragment<FragmentFeedBottomNavigationBinding>
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 
-		binding.container.adapter = adapter
+		binding.container.adapter = adapter.withLoadStateHeaderAndFooter(
+			header = DefaultLoadStateAdapter { adapter.retry() },
+			footer = DefaultLoadStateAdapter { adapter.retry() }
+		)
 		binding.container.itemAnimator = null
 		binding.container.layoutManager = LinearLayoutManager(context)
 
 		adapter.clickListener = { command, postId ->
 			when(command) {
 				LIKE -> {
-					viewModel.onLikeButtonPressed(true, postId)
+					viewModel.onLikeButtonPressed(true, postId, adapter)
 				}
 				UNLIKE -> {
-					viewModel.onLikeButtonPressed(false, postId)
+					viewModel.onLikeButtonPressed(false, postId, adapter)
 				}
 			}
 		}
 
-		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: FeedUiState ->
-			adapter.submitList(uiState.postItems)
+		lifecycleScope.launch(Dispatchers.IO) {
+			viewModel.getFeedPaginationFlow().collectLatest {
+				adapter.submitData(it)
+			}
+		}
+
+		adapter.addLoadStateListener { loadState ->
+			binding.errorLayout.isVisible = loadState.source.refresh is LoadState.Error
+			binding.loadingBar.isVisible = loadState.source.refresh is LoadState.Loading
 		}
 	}
 }

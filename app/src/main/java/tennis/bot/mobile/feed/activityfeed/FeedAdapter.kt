@@ -10,13 +10,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.isVisible
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import tennis.bot.mobile.R
-import tennis.bot.mobile.core.CoreAdapter
 import tennis.bot.mobile.core.CoreUtilsItem
 import tennis.bot.mobile.databinding.FeedPostOneNewPlayerBinding
 import tennis.bot.mobile.databinding.FeedPostThreeMatchScoreBinding
@@ -37,9 +38,16 @@ import tennis.bot.mobile.utils.view.AvatarImage
 import tennis.bot.mobile.utils.view.ImageSeriesView
 import javax.inject.Inject
 
-class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>(), TabLayout.OnTabSelectedListener {
+class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, RecyclerView.ViewHolder>(FEED_COMPARATOR), TabLayout.OnTabSelectedListener {
 
 	companion object {
+		private val FEED_COMPARATOR = object : DiffUtil.ItemCallback<FeedSealedClass>() {
+			override fun areItemsTheSame(oldItem: FeedSealedClass, newItem: FeedSealedClass): Boolean =
+				oldItem.id == newItem.id
+
+			override fun areContentsTheSame(oldItem: FeedSealedClass, newItem: FeedSealedClass): Boolean =
+				oldItem == newItem
+		}
 		private const val OTHER = 0
 		const val NEW_PLAYER = 1
 		const val MATCH_REQUEST = 2
@@ -47,11 +55,13 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>(),
 	}
 	var clickListener: ((command: String, id: Long) -> Unit)? = null
 
-	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: Any) {
-		when(holder) {
-			is NewPlayerPostItemViewHolder -> bindNewPlayerPost(item, holder)
-			is MatchRequestPostItemViewHolder -> bindMatchRequestPost(item, holder)
-			is ScorePostItemViewHolder -> bindScorePost(item, holder)
+	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+		getItem(position)?.let { item ->
+			when(holder) {
+				is NewPlayerPostItemViewHolder -> bindNewPlayerPost(item, holder)
+				is MatchRequestPostItemViewHolder -> bindMatchRequestPost(item, holder)
+				is ScorePostItemViewHolder -> bindScorePost(item, holder)
+			}
 		}
 	}
 
@@ -230,7 +240,7 @@ class FeedAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>(),
 	}
 
 	override fun getItemViewType(position: Int): Int {
-		return when (items[position]) {
+		return when (getItem(position)) {
 			is NewPlayerPostItem -> NEW_PLAYER
 			is MatchRequestPostItem -> MATCH_REQUEST
 			is ScorePostItem -> SCORE
@@ -315,8 +325,12 @@ class ScorePostItemViewHolder(
 	val binding: FeedPostThreeMatchScoreBinding
 ) : RecyclerView.ViewHolder(binding.root)
 
+sealed class FeedSealedClass(
+	open val id: Long
+): CoreUtilsItem()
+
 data class NewPlayerPostItem( // 1
-	val id: Long, // i don't want to store two id's so for now let's pick the post one
+	override val id: Long, // i don't want to store two id's so for now let's pick the post one
 	val postType: Int,
 	val totalLikes: Int,
 	val liked: Boolean,
@@ -325,10 +339,10 @@ data class NewPlayerPostItem( // 1
 	val playerName: String,
 	val isMale: Boolean,
 	val playerPhoto: String?
-): CoreUtilsItem()
+): FeedSealedClass(id)
 
 data class MatchRequestPostItem( // 2
-	val id: Long, // i don't want to store two id's so for now let's pick the post one
+	override val id: Long, // i don't want to store two id's so for now let's pick the post one
 	val postType: Int,
 	val totalLikes: Int,
 	val liked: Boolean,
@@ -342,10 +356,10 @@ data class MatchRequestPostItem( // 2
 	val comment: String,
 	val isOwned: Boolean? = null,
 	val isResponsed: Boolean? = null
-): CoreUtilsItem()
+): FeedSealedClass(id)
 
 data class ScorePostItem( // 3
-	val id: Long, // i don't want to store two id's so for now let's pick the post one
+	override val id: Long, // i don't want to store two id's so for now let's pick the post one
 	val postType: Int,
 	val totalLikes: Int,
 	val liked: Boolean,
@@ -363,4 +377,4 @@ data class ScorePostItem( // 3
 	val sets: List<TennisSetNetwork>,
 	val feedMediaItemsList: List<FeedMediaItem>,
 	val matchResultsList: List<CoreUtilsItem>
-): CoreUtilsItem()
+): FeedSealedClass(id)

@@ -14,13 +14,13 @@ class FeedRepository @Inject constructor(
 	@ApplicationContext private val context: Context
 ) {
 	@WorkerThread
-	suspend fun getActivities(): List<PostData>? {
-		val response = feedApi.getActivities()
+	suspend fun getActivities(position: Int): ActivityBasicResponse? {
+		val response = feedApi.getActivities(skip = position)
 
-		if (response.code() == 200) return response.body()?.items
+		if (response.code() == 200) return response.body()
 		if (response.code() == 404) context.showToast("Something went wrong")
 
-		return emptyList()
+		return null
 	}
 
 	@WorkerThread

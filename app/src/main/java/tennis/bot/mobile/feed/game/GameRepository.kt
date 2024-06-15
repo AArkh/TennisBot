@@ -23,8 +23,8 @@ class GameRepository @Inject constructor(
 ) {
 
 	@WorkerThread
-	suspend fun getAllRequests(): GameBasicResponse? {
-		val response = gameApi.getAllRequests()
+	suspend fun getAllRequests(position: Int): GameBasicResponse? {
+		val response = gameApi.getAllRequests(skip = position)
 
 		if (response.code() == 200) return response.body()
 		if (response.code() == 404) context.showToast("Something went wrong")
@@ -33,8 +33,8 @@ class GameRepository @Inject constructor(
 	}
 
 	@WorkerThread
-	suspend fun getIncomingRequests(): GameBasicResponse? {
-		val response = gameApi.getIncomingRequests()
+	suspend fun getIncomingRequests(position: Int): GameBasicResponse? {
+		val response = gameApi.getIncomingRequests(skip = position)
 
 		if (response.code() == 200) return response.body()
 		if (response.code() == 404) context.showToast("Something went wrong")
@@ -43,8 +43,8 @@ class GameRepository @Inject constructor(
 	}
 
 	@WorkerThread
-	suspend fun getOutcomingRequests(): GameBasicResponse? {
-		val response = gameApi.getOutcomingRequests()
+	suspend fun getOutcomingRequests(position: Int): GameBasicResponse? {
+		val response = gameApi.getOutcomingRequests(skip = position)
 
 		if (response.code() == 200) return response.body()
 		if (response.code() == 404) context.showToast("Something went wrong")
@@ -53,8 +53,8 @@ class GameRepository @Inject constructor(
 	}
 
 	@WorkerThread
-	suspend fun getAcceptedRequests(): GameBasicResponse? {
-		val response = gameApi.getAcceptedRequests()
+	suspend fun getAcceptedRequests(position: Int): GameBasicResponse? {
+		val response = gameApi.getAcceptedRequests(skip = position)
 
 		if (response.code() == 200) return response.body()
 		if (response.code() == 404) context.showToast("Something went wrong")

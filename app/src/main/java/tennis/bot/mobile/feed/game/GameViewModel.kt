@@ -1,6 +1,5 @@
 package tennis.bot.mobile.feed.game
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -53,51 +52,57 @@ class GameViewModel @Inject constructor(
 				context.showToast("Не удалось удалить заявку")
 			}.onSuccess {
 				context.showToast("Заявка успешно удалена")
-				adapter.retry()
+				adapter.refresh()
 //				onFetchingOutcomingRequests() // find an alternative way to update the list
 			}
 		}
 	}
 
-	suspend fun onFetchingAllRequests(): Flow<PagingData<MatchRequestPostItem>> {
-		return getGamesPaginationFlow(repository.getAllRequests())
+	fun onFetchingAllRequests(): Flow<PagingData<MatchRequestPostItem>> {
+		return getGamesPaginationFlow(ALL_REQUESTS)
 	}
 
-	suspend fun onFetchingIncomingRequests(): Flow<PagingData<MatchRequestPostItem>> {
-		return getGamesPaginationFlow(repository.getIncomingRequests())
+	fun onFetchingIncomingRequests(): Flow<PagingData<MatchRequestPostItem>> {
+		return getGamesPaginationFlow(INCOMING_REQUESTS)
 	}
 
-	suspend fun onFetchingOutcomingRequests(): Flow<PagingData<MatchRequestPostItem>> {
-		return getGamesPaginationFlow(repository.getOutcomingRequests())
+	fun onFetchingOutcomingRequests(): Flow<PagingData<MatchRequestPostItem>> {
+		return getGamesPaginationFlow(OUTCOMING_REQUESTS)
 	}
 
-	suspend fun onFetchingAcceptedRequests(): Flow<PagingData<MatchRequestPostItem>> {
-		return getGamesPaginationFlow(repository.getAcceptedRequests())
+	fun onFetchingAcceptedRequests(): Flow<PagingData<MatchRequestPostItem>> {
+		return getGamesPaginationFlow(ACCEPTED_REQUESTS)
 	}
 
-	private fun getGamesPaginationFlow(response: GameBasicResponse?): Flow<PagingData<MatchRequestPostItem>> {
-		Log.d("1234567", "New page")
+	private fun getGamesPaginationFlow(filter: String?): Flow<PagingData<MatchRequestPostItem>> {
 		return Pager(
 			config = PagingConfig(
 				pageSize = SearchOpponentsViewModel.PAGE_SIZE,
 				maxSize = SearchOpponentsViewModel.PAGE_SIZE + (SearchOpponentsViewModel.PAGE_SIZE * 2),
 				enablePlaceholders = true
 			),
-			pagingSourceFactory = { GameDataSource(response) }
+			pagingSourceFactory = { GameDataSource(filter) }
 		).flow
 	}
 
-	inner class GameDataSource(val response: GameBasicResponse?) : PagingSource<Int, MatchRequestPostItem>() {
+	inner class GameDataSource(private val filter: String?) : PagingSource<Int, MatchRequestPostItem>() {
 		override fun getRefreshKey(state: PagingState<Int, MatchRequestPostItem>): Int { return 0 }
 
 		override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MatchRequestPostItem> {
 			val position = params.key ?: 0
 
 			return try {
+				val response: GameBasicResponse? = when (filter) {
+					ALL_REQUESTS -> { repository.getAllRequests(position) }
+					INCOMING_REQUESTS -> { repository.getIncomingRequests(position) }
+					OUTCOMING_REQUESTS -> { repository.getOutcomingRequests(position) }
+					ACCEPTED_REQUESTS -> { repository.getAcceptedRequests(position) }
+					else -> { null }
+
+				}
 				val itemsList = response?.items?.let { repository.mapGameToMatchRequestPostItem(it) }
 				val nextPosition = position + 20
 
-				Log.d("GameDataSource", "Loading page starting from position: $nextPosition")
 				LoadResult.Page(
 					data = itemsList ?: emptyList(),
 					prevKey = if (position == 0) null else position - params.loadSize,
@@ -112,6 +117,13 @@ class GameViewModel @Inject constructor(
 				return LoadResult.Error(exception)
 			}
 		}
+	}
+
+	companion object {
+		private const val ALL_REQUESTS = "ALL_REQUESTS"
+		private const val INCOMING_REQUESTS = "INCOMING_REQUESTS"
+		private const val OUTCOMING_REQUESTS = "OUTCOMING_REQUESTS"
+		private const val ACCEPTED_REQUESTS = "ACCEPTED_REQUESTS"
 	}
 }
 

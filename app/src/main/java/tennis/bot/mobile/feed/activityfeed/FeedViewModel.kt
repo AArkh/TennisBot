@@ -1,18 +1,21 @@
 package tennis.bot.mobile.feed.activityfeed
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.PagingSource
+import androidx.paging.PagingState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import tennis.bot.mobile.R
-import tennis.bot.mobile.core.CoreUtilsItem
-import tennis.bot.mobile.utils.showToast
+import retrofit2.HttpException
+import tennis.bot.mobile.feed.searchopponent.SearchOpponentsViewModel
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,14 +25,7 @@ class FeedViewModel @Inject constructor(
 	@ApplicationContext private val context: Context
 ): ViewModel()  {
 
-	private val _uiStateFlow = MutableStateFlow(
-		FeedUiState()
-	)
-	val uiStateFlow = _uiStateFlow.asStateFlow().onStart {
-		onFetchingActivities()
-	}
-
-	fun onLikeButtonPressed(isLike: Boolean, postId: Long) {
+	fun onLikeButtonPressed(isLike: Boolean, postId: Long, adapter: FeedAdapter) {
 		viewModelScope.launch {
 			kotlin.runCatching {
 				if (isLike) {
@@ -38,25 +34,14 @@ class FeedViewModel @Inject constructor(
 					repository.postUnlike(postId)
 				}
 			}.onSuccess {
-				onFetchingActivities()
+				adapter.refresh() // find a way to make it seamless, not having a big delay and visible loading
 			}
 		}
 	}
 
-	private fun onFetchingActivities() {
-		viewModelScope.launch (Dispatchers.IO) {
-			kotlin.runCatching {
-				val activityPosts = repository.getActivities()
-				convertPostsToItems(activityPosts)
-			}.onFailure {
-				context.showToast(context.getString(R.string.error_no_network_message))
-			}
-		}
-	}
-
-	private suspend fun convertPostsToItems(list: List<PostData>?) {
-		if (list == null) return
-		val listOfItems = mutableListOf<CoreUtilsItem>()
+	private suspend fun convertPostsToItems(list: List<PostData>?): List<FeedSealedClass> {
+		if (list == null) return emptyList()
+		val listOfItems = mutableListOf<FeedSealedClass>()
 
 		for (postData in list) {
 			when (postData.postType) {
@@ -73,6 +58,46 @@ class FeedViewModel @Inject constructor(
 				}
 			}
 		}
-		_uiStateFlow.value = _uiStateFlow.value.copy(postItems = listOfItems)
+		return listOfItems.toList()
 	}
+
+	fun getFeedPaginationFlow(): Flow<PagingData<FeedSealedClass>> {
+		return Pager(
+			config = PagingConfig(
+				pageSize = SearchOpponentsViewModel.PAGE_SIZE,
+				maxSize = SearchOpponentsViewModel.PAGE_SIZE + (SearchOpponentsViewModel.PAGE_SIZE * 2),
+				enablePlaceholders = true
+			),
+			pagingSourceFactory = { FeedDataSource() }
+		).flow
+	}
+
+	inner class FeedDataSource : PagingSource<Int, FeedSealedClass>() {
+		override fun getRefreshKey(state: PagingState<Int, FeedSealedClass>): Int { return 0 }
+
+		override suspend fun load(params: LoadParams<Int>): LoadResult<Int, FeedSealedClass> {
+			val position = params.key ?: 0
+
+			return try {
+				val response = repository.getActivities(position)
+				val itemsList = response?.items?.let { convertPostsToItems(it) }
+				val nextPosition = position + 20
+
+				Log.d("FeedDataSource", "Loading page starting from position: $nextPosition")
+				LoadResult.Page(
+					data = itemsList ?: emptyList(),
+					prevKey = if (position == 0) null else position - params.loadSize,
+					nextKey = if (nextPosition >= (response?.totalCount ?: 0)) null else nextPosition
+				)
+
+			} catch (exception: IOException) {
+				return LoadResult.Error(exception)
+			} catch (exception: HttpException) {
+				return LoadResult.Error(exception)
+			} catch (exception: NullPointerException) {
+				return LoadResult.Error(exception)
+			}
+		}
+	}
+
 }
