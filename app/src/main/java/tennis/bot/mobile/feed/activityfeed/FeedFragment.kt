@@ -44,10 +44,10 @@ class FeedFragment : AuthorizedCoreFragment<FragmentFeedBottomNavigationBinding>
 		adapter.clickListener = { command, postId ->
 			when(command) {
 				LIKE -> {
-					viewModel.onLikeButtonPressed(true, postId, adapter)
+					viewModel.onLikeButtonPressed(true, postId)
 				}
 				UNLIKE -> {
-					viewModel.onLikeButtonPressed(false, postId, adapter)
+					viewModel.onLikeButtonPressed(false, postId)
 				}
 			}
 		}

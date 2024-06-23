@@ -88,6 +88,17 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 		}
 	}
 
+	private fun updateLikeUi(item: FeedSealedClass) {
+		item.liked = !item.liked
+		if (item.liked) item.totalLikes += 1 else if (!item.liked) item.totalLikes -= 1 else item.totalLikes = 0
+
+		val currentList = snapshot().items
+		val index = currentList.indexOfFirst { it.id == item.id }
+		if (index != -1) {
+			notifyItemChanged(index)
+		}
+	}
+
 	private fun bindNewPlayerPost(item: Any, holder: NewPlayerPostItemViewHolder) {
 		val newPlayerItem = item as? NewPlayerPostItem ?: throw IllegalArgumentException("Item must be NewPlayerPostItem")
 
@@ -102,6 +113,7 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 				holder.binding.likeAnim,
 				newPlayerItem.id,
 				newPlayerItem.totalLikes)
+			updateLikeUi(newPlayerItem)
 		}
 
 		holder.binding.date.text = newPlayerItem.addedAt?.let { formatDateForFeed(it, holder.binding.date.context) }
@@ -125,8 +137,8 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 				holder.binding.likeAnim,
 				matchRequestItem.id,
 				matchRequestItem.totalLikes)
+			updateLikeUi(matchRequestItem)
 		}
-
 		holder.binding.date.text = matchRequestItem.addedAt?.let { formatDateForFeed(it, holder.binding.date.context) }
 	}
 
@@ -181,6 +193,7 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 				holder.binding.likeAnim,
 				scorePostItem.id,
 				scorePostItem.totalLikes)
+			updateLikeUi(scorePostItem)
 		}
 
 		holder.binding.resultsContainer.adapter = matchResultsAdapter
@@ -326,26 +339,28 @@ class ScorePostItemViewHolder(
 ) : RecyclerView.ViewHolder(binding.root)
 
 sealed class FeedSealedClass(
-	open val id: Long
+	open val id: Long,
+	open var totalLikes: Int,
+	open var liked: Boolean
 ): CoreUtilsItem()
 
 data class NewPlayerPostItem( // 1
 	override val id: Long, // i don't want to store two id's so for now let's pick the post one
 	val postType: Int,
-	val totalLikes: Int,
-	val liked: Boolean,
+	override var totalLikes: Int,
+	override var liked: Boolean,
 	val addedAt: String?,
 	val infoPanel: String, // location, experience and rating are here
 	val playerName: String,
 	val isMale: Boolean,
 	val playerPhoto: String?
-): FeedSealedClass(id)
+): FeedSealedClass(id, totalLikes, liked)
 
 data class MatchRequestPostItem( // 2
 	override val id: Long, // i don't want to store two id's so for now let's pick the post one
 	val postType: Int,
-	val totalLikes: Int,
-	val liked: Boolean,
+	override var totalLikes: Int,
+	override var liked: Boolean,
 	val addedAt: String?,
 	val matchDate: String?,
 	val playerPhoto: String?,
@@ -356,13 +371,13 @@ data class MatchRequestPostItem( // 2
 	val comment: String,
 	val isOwned: Boolean? = null,
 	val isResponsed: Boolean? = null
-): FeedSealedClass(id)
+): FeedSealedClass(id, totalLikes, liked)
 
 data class ScorePostItem( // 3
 	override val id: Long, // i don't want to store two id's so for now let's pick the post one
 	val postType: Int,
-	val totalLikes: Int,
-	val liked: Boolean,
+	override var totalLikes: Int,
+	override var liked: Boolean,
 	val addedAt: String?,
 	val creatorId: Long,
 	val photo: String?,
@@ -377,4 +392,4 @@ data class ScorePostItem( // 3
 	val sets: List<TennisSetNetwork>,
 	val feedMediaItemsList: List<FeedMediaItem>,
 	val matchResultsList: List<CoreUtilsItem>
-): FeedSealedClass(id)
+): FeedSealedClass(id, totalLikes, liked)
