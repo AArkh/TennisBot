@@ -3,23 +3,24 @@ package tennis.bot.mobile.profile.matches
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.setPadding
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreUtilsItem
 import tennis.bot.mobile.databinding.RecyclerMatchItemBinding
-import tennis.bot.mobile.profile.account.AccountPageAdapter
-import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
 import tennis.bot.mobile.utils.dpToPx
 import tennis.bot.mobile.utils.formRatingChange
+import tennis.bot.mobile.utils.view.AvatarImage
 import javax.inject.Inject
+
+
 
 class MatchesAdapter @Inject constructor(): PagingDataAdapter<MatchItem, MatchItemViewHolder>(MATCHES_COMPARATOR) {
 	companion object {
+		private const val IMAGE_SIZE = 56
+
 		private val MATCHES_COMPARATOR = object : DiffUtil.ItemCallback<MatchItem>() {
 			override fun areItemsTheSame(oldItem: MatchItem, newItem: MatchItem): Boolean =
 				oldItem.id == newItem.id
@@ -31,16 +32,11 @@ class MatchesAdapter @Inject constructor(): PagingDataAdapter<MatchItem, MatchIt
 
 	override fun onBindViewHolder(holder: MatchItemViewHolder, position: Int) {
 		getItem(position)?.let {match ->
-			holder.loadPlayerImage(match, true)
-			holder.binding.player1Layout.playerName.text = match.playerOneName.substringBefore(" ")
-			holder.binding.player1NameSurname.text = match.playerOneName
-			holder.binding.player1Layout.playerRatingValue.text = match.playerOneCurrentRating
+
+			holder.bindPlayerPhotosNamesAndRating(match, isPlayer1 = true)
 			holder.onBindingRating(match, true)
 
-			holder.loadPlayerImage(match, false)
-			holder.binding.player2Layout.playerName.text = match.playerTwoName.substringBefore(" ")
-			holder.binding.player2NameSurname.text = match.playerTwoName
-			holder.binding.player2Layout.playerRatingValue.text = match.playerTwoCurrentRating
+			holder.bindPlayerPhotosNamesAndRating(match, isPlayer1 = false)
 			holder.onBindingRating(match, false)
 
 			if(match.isWin) {
@@ -65,31 +61,59 @@ class MatchesAdapter @Inject constructor(): PagingDataAdapter<MatchItem, MatchIt
 	private fun MatchItemViewHolder.onBindingRating(match: MatchItem, isPlayer1: Boolean) {
 		val playerScoreChange = if (isPlayer1) binding.player1Layout.playerScoreChange else binding.player2Layout.playerScoreChange
 
-		val difference = ratingChange(
-			if (isPlayer1) match.playerOneCurrentRating else match.playerTwoCurrentRating,
-			if (isPlayer1) match.playerOnePreviousRating else match.playerTwoPreviousRating
-		)
+		val difference = if (!match.isDouble) {
+			ratingChange(
+				if (isPlayer1) match.player1.rating.toString() else match.player2.rating.toString(),
+				if (isPlayer1) match.player1.oldRating.toString() else match.player2.oldRating.toString()
+			)
+		} else {
+			ratingChange(
+				if (isPlayer1) match.player1.rating.toString() else match.player3?.rating.toString(), // use p3 for now
+				if (isPlayer1) match.player1.oldRating.toString() else match.player3?.oldRating.toString()
+			)
+		}
 
 		playerScoreChange.formRatingChange(difference)
 	}
 
-	private fun MatchItemViewHolder.loadPlayerImage(match: MatchItem, isPlayer1: Boolean) {
-		val playerImage = if (isPlayer1) binding.player1Layout.playerImage else binding.player2Layout.playerImage
+	private fun MatchItemViewHolder.bindPlayerPhotosNamesAndRating(match: MatchItem, isPlayer1: Boolean) { // player 1 is the left one
+		val context = binding.root.context
 		val playerPhoto = if (isPlayer1) binding.player1Layout.playerPhoto else binding.player2Layout.playerPhoto
-		val playerProfilePic = if (isPlayer1) match.playerOneProfilePic else match.playerTwoProfilePic
+		val playerNameTitle = if (isPlayer1) binding.player1Layout.playerName else binding.player2Layout.playerName
+		val playerNameSets = if (isPlayer1) binding.player1NameSurname else binding.player2NameSurname
+		val playerRating = if (isPlayer1) binding.player1Layout.playerRatingValue else binding.player2Layout.playerRatingValue
 
-		playerImage.load(R.drawable.user) { crossfade(true) }
-		playerPhoto.setPadding(playerPhoto.context.dpToPx(15))
-		
-		if (playerProfilePic != null) {
-			if (playerProfilePic.contains("default")) {
-				val resourceId = getDefaultDrawableResourceId(playerImage.context, playerProfilePic.removeSuffix(".png"))
-				if (resourceId != null) playerImage.load(resourceId)
-				playerPhoto.setPadding(0)
-			} else {
-				playerImage.load(AccountPageAdapter.IMAGES_LINK + playerProfilePic) { crossfade(true) }
-				playerPhoto.setPadding(0)
-			}
+		if (!match.isDouble){
+			val playerProfilePic = if (isPlayer1) match.player1.photoUrl else match.player2.photoUrl
+			val playerName = if (isPlayer1) match.player1.name else match.player2.name
+			val playerRatingValue = if (isPlayer1) match.player1.rating.toString() else match.player2.rating.toString()
+
+			playerPhoto.setImages(listOf(AvatarImage(playerProfilePic)), 0)
+			playerPhoto.drawableSize = context.dpToPx(IMAGE_SIZE)
+			playerNameTitle.text = playerName.substringBefore(" ")
+			playerNameSets.text = playerName
+			playerRating.text = playerRatingValue
+		} else {
+			val playerFirstPhoto = if (isPlayer1) match.player1.photoUrl else match.player3?.photoUrl
+			val playerSecondPhoto = if (isPlayer1) match.player2.photoUrl else match.player4?.photoUrl
+			val playerFirstName = if (isPlayer1) match.player1.name else match.player3?.name
+			val playerSecondName = if (isPlayer1) match.player2.name else match.player4?.name
+			val playerRatingValue = if (isPlayer1) match.player1.rating.toString() else match.player3?.rating.toString() // for now we use p1 and p3
+
+			playerPhoto.setImages(
+				listOf(AvatarImage(playerFirstPhoto), AvatarImage(playerSecondPhoto)), 0)
+			playerPhoto.drawableSize = context.dpToPx(IMAGE_SIZE)
+			playerNameTitle.text = context.getString(
+				R.string.insert_score_doubles_names,
+				playerFirstName?.substringBefore(" "),
+				playerSecondName?.substringBefore(" ")
+			)
+			playerNameSets.text = context.getString(
+				R.string.insert_score_doubles_names,
+				playerFirstName?.substringBefore(" "),
+				playerSecondName?.substringBefore(" ")
+			)
+			playerRating.text = playerRatingValue
 		}
 	}
 
@@ -111,14 +135,10 @@ data class MatchItem(
 	val id: Int,
 	val isWin: Boolean,
 	val isDouble: Boolean,
-	val playerOneProfilePic: String?,
-	val playerOneName: String,
-	val playerOneCurrentRating: String,
-	val playerOnePreviousRating:String,
-	val playerTwoProfilePic: String?,
-	val playerTwoName: String,
-	val playerTwoCurrentRating: String,
-	val playerTwoPreviousRating:String,
+	val player1: Player,
+	val player2: Player,
+	val player3: Player? = null,
+	val player4: Player? = null,
 	val score: String,
 	val tennisSets: List<TennisSetNetwork>,
 	val dateTime: String

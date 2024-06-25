@@ -121,9 +121,9 @@ fun buildImageRequest(context: Context, imageUrl: String?): Any? { // loads a nu
 		} else {
 			getDefaultDrawableResourceId(context, imageUrl.removeSuffix(".png"))
 		}
-
 		if (resourceId != null) result = resourceId
-	} else if(imageUrl.contains("pics") || imageUrl.contains("movies")) {
+
+	} else if(imageUrl.contains("pics") || imageUrl.contains("movies") || imageUrl.contains("avatars")) {
 		result = if (imageUrl.contains("https")) {
 			imageUrl
 		} else {

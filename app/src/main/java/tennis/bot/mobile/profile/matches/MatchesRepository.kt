@@ -1,15 +1,11 @@
 package tennis.bot.mobile.profile.matches
 
-import android.content.Context
 import android.icu.text.SimpleDateFormat
 import android.util.Log
-import androidx.annotation.WorkerThread
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import dagger.hilt.android.qualifiers.ApplicationContext
 import retrofit2.HttpException
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
-import tennis.bot.mobile.utils.showToast
 import java.io.IOException
 import java.util.Locale
 import javax.inject.Inject
@@ -18,8 +14,7 @@ import javax.inject.Singleton
 @Singleton
 class MatchesRepository @Inject constructor(
 	private val api: MatchesApi,
-	private val userProfileAndEnumsRepository: UserProfileAndEnumsRepository,
-	@ApplicationContext private val context: Context
+	private val userProfileAndEnumsRepository: UserProfileAndEnumsRepository
 ) {
 
 	private val someOtherFormatter = SimpleDateFormat("d MMMM, HH:mm", Locale("ru", "RU"))
@@ -28,37 +23,21 @@ class MatchesRepository @Inject constructor(
 		"yyyy-MM-dd'T'hh:mm:ss'Z'"
 	)
 
-	@WorkerThread
-	suspend fun getMatches() : MatchBasicResponse? {
-		val response = api.getScores(userProfileAndEnumsRepository.getProfile().id)
-		if (response.code() == 200) return response.body()
-		if (response.code() == 404) context.showToast("Something went wrong")
-
-		return MatchBasicResponse(0, emptyList())
-	}
-
 	private fun List<MatchResponseItem>.convertToMatchItemList(): List<MatchItem> {
 		return map { matchResponseItem ->
-			val playerOneProfilePic = matchResponseItem.players.getOrNull(0)?.photo
-			val playerTwoProfilePic = matchResponseItem.players.getOrNull(1)?.photo
-
 			val dateTime = convertDateAndTime(matchResponseItem.playedAt)
 
 			MatchItem(
-				matchResponseItem.id,
-				matchResponseItem.win,
-				matchResponseItem.isDouble,
-				playerOneProfilePic,
-				matchResponseItem.players.getOrNull(0)?.name ?: "",
-				matchResponseItem.players.getOrNull(0)?.rating.toString(),
-				matchResponseItem.players.getOrNull(0)?.oldRating.toString(),
-				playerTwoProfilePic,
-				matchResponseItem.players.getOrNull(1)?.name ?: "",
-				matchResponseItem.players.getOrNull(1)?.rating.toString(),
-				matchResponseItem.players.getOrNull(1)?.oldRating.toString(),
-				"${matchResponseItem.headToHead1} - ${matchResponseItem.headToHead2}",
-				matchResponseItem.gameSets,
-				dateTime
+				id = matchResponseItem.id,
+				isWin = matchResponseItem.win,
+				isDouble = matchResponseItem.isDouble,
+				player1 = matchResponseItem.players.getOrNull(0)!!,
+				player2 = matchResponseItem.players.getOrNull(1)!!,
+				player3 = matchResponseItem.players.getOrNull(2),
+				player4 = matchResponseItem.players.getOrNull(3),
+				score = "${matchResponseItem.headToHead1} - ${matchResponseItem.headToHead2}",
+				tennisSets = matchResponseItem.gameSets,
+				dateTime = dateTime
 			)
 		}
 	}
@@ -77,8 +56,8 @@ class MatchesRepository @Inject constructor(
 
 	inner class MatchesDataSource : PagingSource<Int, MatchItem>() {
 
-		override fun getRefreshKey(state: PagingState<Int, MatchItem>): Int? {
-			TODO("Not yet implemented")
+		override fun getRefreshKey(state: PagingState<Int, MatchItem>): Int {
+			return 0
 		}
 
 		override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MatchItem> {

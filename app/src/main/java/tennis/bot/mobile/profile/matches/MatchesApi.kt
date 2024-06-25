@@ -54,6 +54,7 @@ data class Player(
 	val id: Long,
 	val name: String,
 	val photo: String?,
+	val photoUrl: String?,
 	val oldRating: Int,
 	val rating: Int
 )

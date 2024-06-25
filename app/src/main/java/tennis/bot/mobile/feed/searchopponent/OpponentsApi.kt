@@ -34,6 +34,7 @@ data class OpponentResponseItem(
 	val isMale: Boolean?,
 	val telegram: String?,
 	val photo: String?,
+	val photoUrl: String?,
 	val countryID: Int?,
 	val cityId: Int?,
 	val districtId: Int?,

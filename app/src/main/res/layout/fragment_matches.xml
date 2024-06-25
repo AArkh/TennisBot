@@ -86,12 +86,11 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="4dp"
-					android:background="@drawable/search_background"
-					android:backgroundTint="@color/tb_gray_choose"
+					android:background="@drawable/background_corners_100dp"
 					android:paddingHorizontal="12dp"
 					android:paddingVertical="6dp"
 					android:text="@string/all_matches"
-					android:textColor="@color/tb_gray_dark" />
+					android:textColor="@color/tb_black" />
 
 				<TextView
 					android:id="@+id/won_matches_button"

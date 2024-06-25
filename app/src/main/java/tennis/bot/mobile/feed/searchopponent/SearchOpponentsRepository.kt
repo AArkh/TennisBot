@@ -37,7 +37,7 @@ class SearchOpponentsRepository @Inject constructor(
 
 			OpponentItem(
 				id = opponentResponseItem.id,
-				profilePicture = opponentResponseItem.photo,
+				profilePicture = opponentResponseItem.photoUrl,
 				nameSurname = opponentResponseItem.name,
 				infoPanel = context.getString(
 					R.string.player_info_panel,

@@ -11,8 +11,8 @@ import coil.load
 import kotlinx.parcelize.Parcelize
 import tennis.bot.mobile.R
 import tennis.bot.mobile.databinding.RecyclerOpponentItemBinding
-import tennis.bot.mobile.profile.account.AccountPageAdapter
 import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
+import tennis.bot.mobile.utils.DEFAULT_PICS_PREFIX
 import tennis.bot.mobile.utils.dpToPx
 import tennis.bot.mobile.utils.view.AvatarImage
 import javax.inject.Inject
@@ -74,10 +74,11 @@ private fun OpponentItemViewHolder.showPlayerPhoto(profileImageUrl: String?) {
 	}
 
 	if (profileImageUrl.contains("default")) {
-		val resourceId = getDefaultDrawableResourceId(binding.itemPicture.context, profileImageUrl.removeSuffix(".png"))
+		val resourceId = getDefaultDrawableResourceId(binding.itemPicture.context,
+			profileImageUrl.removeSuffix(".png").removePrefix(DEFAULT_PICS_PREFIX))
 		if (resourceId != null) binding.itemPicture.load(resourceId)
 	} else {
-		binding.itemPicture.load(AccountPageAdapter.IMAGES_LINK + profileImageUrl)
+		binding.itemPicture.load(profileImageUrl)
 	}
 }
 
