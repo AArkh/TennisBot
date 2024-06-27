@@ -45,6 +45,11 @@ interface GameApi {
 		@Path("id") id: Long
 	): Response<GameRequestResponse>
 
+	@DELETE("api/game-orders/{id}/my-response")
+	suspend fun deleteMyGameResponse(
+		@Path("id") id: Long
+	): Response<GameRequestResponse>
+
 	companion object{
 		const val DEFAULT_SKIP = 0
 		const val DEFAULT_LIMIT = 20
@@ -82,7 +87,7 @@ data class GamePostNetwork(
 
 @Serializable
 data class GamePlayer(
-	val games: Int,
+	val games: Int? = null,
 	val id: Long,
 	val name: String,
 	val surName: String?,

@@ -53,7 +53,19 @@ class GameViewModel @Inject constructor(
 			}.onSuccess {
 				context.showToast("Заявка успешно удалена")
 				adapter.refresh()
-//				onFetchingOutcomingRequests() // find an alternative way to update the list
+			}
+		}
+	}
+
+	fun onDeletingMyGameResponse(adapter: GameAdapter, id: Long) {
+		viewModelScope.launch(Dispatchers.IO) {
+			kotlin.runCatching {
+				repository.deleteMyGameResponse(id)
+			}.onFailure {
+				context.showToast("Не удалось удалить отклик")
+			}.onSuccess {
+				context.showToast("Отклик успешно удален")
+				adapter.refresh()
 			}
 		}
 	}

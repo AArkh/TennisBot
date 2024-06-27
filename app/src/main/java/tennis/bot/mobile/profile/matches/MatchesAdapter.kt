@@ -3,6 +3,7 @@ package tennis.bot.mobile.profile.matches
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -60,20 +61,24 @@ class MatchesAdapter @Inject constructor(): PagingDataAdapter<MatchItem, MatchIt
 
 	private fun MatchItemViewHolder.onBindingRating(match: MatchItem, isPlayer1: Boolean) {
 		val playerScoreChange = if (isPlayer1) binding.player1Layout.playerScoreChange else binding.player2Layout.playerScoreChange
+		val secondPlayerScoreChange = if (isPlayer1) binding.player1Layout.secondPlayerScoreChange else binding.player2Layout.secondPlayerScoreChange
 
-		val difference = if (!match.isDouble) {
-			ratingChange(
+		if (!match.isDouble) {
+			playerScoreChange.formRatingChange(ratingChange(
 				if (isPlayer1) match.player1.rating.toString() else match.player2.rating.toString(),
 				if (isPlayer1) match.player1.oldRating.toString() else match.player2.oldRating.toString()
-			)
+			))
 		} else {
-			ratingChange(
-				if (isPlayer1) match.player1.rating.toString() else match.player3?.rating.toString(), // use p3 for now
+			playerScoreChange.formRatingChange(ratingChange(
+				if (isPlayer1) match.player1.rating.toString() else match.player3?.rating.toString(),
 				if (isPlayer1) match.player1.oldRating.toString() else match.player3?.oldRating.toString()
-			)
+			))
+			secondPlayerScoreChange.formRatingChange(
+				ratingChange(
+					if (isPlayer1) match.player2.rating.toString() else match.player4?.rating.toString(),
+					if (isPlayer1) match.player2.oldRating.toString() else match.player4?.oldRating.toString()
+				))
 		}
-
-		playerScoreChange.formRatingChange(difference)
 	}
 
 	private fun MatchItemViewHolder.bindPlayerPhotosNamesAndRating(match: MatchItem, isPlayer1: Boolean) { // player 1 is the left one
@@ -82,6 +87,8 @@ class MatchesAdapter @Inject constructor(): PagingDataAdapter<MatchItem, MatchIt
 		val playerNameTitle = if (isPlayer1) binding.player1Layout.playerName else binding.player2Layout.playerName
 		val playerNameSets = if (isPlayer1) binding.player1NameSurname else binding.player2NameSurname
 		val playerRating = if (isPlayer1) binding.player1Layout.playerRatingValue else binding.player2Layout.playerRatingValue
+		val secondPlayerRatingIcon = if (isPlayer1) binding.player1Layout.secondPlayerRatingImage else binding.player2Layout.secondPlayerRatingImage
+		val secondPlayerRating = if (isPlayer1) binding.player1Layout.secondPlayerRatingValue else binding.player2Layout.secondPlayerRatingValue
 
 		if (!match.isDouble){
 			val playerProfilePic = if (isPlayer1) match.player1.photoUrl else match.player2.photoUrl
@@ -93,12 +100,14 @@ class MatchesAdapter @Inject constructor(): PagingDataAdapter<MatchItem, MatchIt
 			playerNameTitle.text = playerName.substringBefore(" ")
 			playerNameSets.text = playerName
 			playerRating.text = playerRatingValue
+			secondPlayerRatingIcon.isVisible = false
 		} else {
 			val playerFirstPhoto = if (isPlayer1) match.player1.photoUrl else match.player3?.photoUrl
 			val playerSecondPhoto = if (isPlayer1) match.player2.photoUrl else match.player4?.photoUrl
 			val playerFirstName = if (isPlayer1) match.player1.name else match.player3?.name
 			val playerSecondName = if (isPlayer1) match.player2.name else match.player4?.name
-			val playerRatingValue = if (isPlayer1) match.player1.rating.toString() else match.player3?.rating.toString() // for now we use p1 and p3
+			val playerRatingValue = if (isPlayer1) match.player1.rating.toString() else match.player3?.rating.toString()
+			val secondPlayerRatingValue = if (isPlayer1) match.player2.rating.toString() else match.player4?.rating.toString()
 
 			playerPhoto.setImages(
 				listOf(AvatarImage(playerFirstPhoto), AvatarImage(playerSecondPhoto)), 0)
@@ -114,6 +123,8 @@ class MatchesAdapter @Inject constructor(): PagingDataAdapter<MatchItem, MatchIt
 				playerSecondName?.substringBefore(" ")
 			)
 			playerRating.text = playerRatingValue
+			secondPlayerRatingIcon.isVisible = true
+			secondPlayerRating.text = secondPlayerRatingValue
 		}
 	}
 

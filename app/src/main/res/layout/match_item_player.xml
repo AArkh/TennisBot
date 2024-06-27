@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
-	xmlns:app="http://schemas.android.com/apk/res-auto">
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools">
 
 	<tennis.bot.mobile.utils.view.ImageSeriesView
 		android:id="@+id/player_photo"
@@ -94,5 +94,56 @@
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toEndOf="@id/player_rating_value"
 		app:layout_constraintTop_toTopOf="@id/player_rating_value" />
+
+	<ImageView
+		android:id="@+id/second_player_rating_image"
+		android:layout_width="20dp"
+		android:layout_height="20dp"
+		android:layout_marginTop="4dp"
+		android:background="@drawable/rating_power_background"
+		android:padding="3dp"
+		android:visibility="gone"
+		tools:visibility="visible"
+		android:src="@drawable/rating_power"
+		app:layout_constraintBottom_toBottomOf="@id/second_player_rating_value"
+		app:layout_constraintEnd_toStartOf="@id/second_player_rating_value"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/player_rating_image"
+		app:layout_constraintHorizontal_chainStyle="packed"/>
+
+	<TextView
+		android:id="@+id/second_player_rating_value"
+		android:layout_width="wrap_content"
+		android:layout_height="0dp"
+		android:layout_marginStart="4dp"
+		android:gravity="center"
+		android:text="1817"
+		android:textColor="@color/tb_black"
+		android:textSize="13sp"
+		android:textStyle="bold"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintStart_toEndOf="@id/second_player_rating_image"
+		app:layout_constraintEnd_toStartOf="@id/second_player_score_change"
+		app:layout_constraintTop_toTopOf="@id/second_player_rating_image" />
+
+	<TextView
+		android:id="@+id/second_player_score_change"
+		android:layout_width="wrap_content"
+		android:layout_height="0dp"
+		android:layout_marginStart="4dp"
+		android:background="@drawable/background_corners_4dp"
+		android:backgroundTint="@color/tb_bland_green"
+		android:drawablePadding="2dp"
+		android:gravity="center"
+		android:paddingStart="5dp"
+		android:paddingEnd="6dp"
+		android:text="365"
+		android:textColor="@color/tb_primary_green"
+		android:textSize="11sp"
+		app:drawableStartCompat="@drawable/vector_up"
+		app:layout_constraintBottom_toBottomOf="@id/second_player_rating_value"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toEndOf="@id/second_player_rating_value"
+		app:layout_constraintTop_toTopOf="@id/second_player_rating_value" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

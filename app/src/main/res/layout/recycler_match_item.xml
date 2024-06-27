@@ -57,10 +57,10 @@
 		android:id="@+id/score_board"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
-		android:layout_marginTop="46dp"
+		android:layout_marginTop="12dp"
 		android:layout_marginHorizontal="12dp"
 		android:background="@drawable/search_background"
-		app:layout_constraintTop_toBottomOf="@id/match_title"
+		app:layout_constraintTop_toBottomOf="@id/player1_layout"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintEnd_toStartOf="parent"
 		app:layout_constraintBottom_toTopOf="@id/date_time"/>

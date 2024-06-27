@@ -1,7 +1,6 @@
 package tennis.bot.mobile.feed.game
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.TextView
@@ -19,16 +18,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
-import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.DefaultLoadStateAdapter
 import tennis.bot.mobile.core.Inflation
+import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
 import tennis.bot.mobile.databinding.FragmentGameBinding
 import tennis.bot.mobile.utils.animateButtonTransition
-import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class GameFragment : CoreFragment<FragmentGameBinding>() {
+class GameFragment : AuthorizedCoreFragment<FragmentGameBinding>() {
 
 	override val bindingInflation: Inflation<FragmentGameBinding> = FragmentGameBinding::inflate
 	private val viewModel: GameViewModel by viewModels()
@@ -104,22 +102,18 @@ class GameFragment : CoreFragment<FragmentGameBinding>() {
 				GameAdapter.REQUEST_RESPONSE -> {
 					val bottomDialog = GameOrderResponseDialogFragment()
 					bottomDialog.arguments = bundleOf(
-						GameOrderResponseDialogFragment.GAME_ORDER_ID to id,
+						GAME_ORDER_ID to id,
 					)
 					bottomDialog.show(childFragmentManager, bottomDialog.tag)
+
 				}
 			}
 		}
 
-		setFragmentResultListener(GameOrderResponseDialogFragment.GAME_ORDER_RESPONSE_KEY) { _, result ->
-			Log.d("GameFragment", "Result received")
-			val id = result.getLong(GameOrderResponseDialogFragment.GAME_ORDER_ID)
-			val comment = result.getString(GameOrderResponseDialogFragment.GAME_ORDER_COMMENT)
-			Log.d("GameDialogResult", "gameOrderId is $id and comment is $comment")
-
+		setFragmentResultListener(GAME_ORDER_RESPONSE_KEY) { _, result ->
 			viewModel.onSendingRequestResponse(
-				id = id,
-				comment = comment
+				id = result.getLong(GAME_ORDER_ID),
+				comment = result.getString(GAME_ORDER_COMMENT)
 			)
 		}
 
@@ -161,7 +155,7 @@ class GameFragment : CoreFragment<FragmentGameBinding>() {
 			GameAdapter.REQUEST_OPTIONS_RESPONSE -> {
 				menu.menu.add("Удалить отклик")
 				menu.setOnMenuItemClickListener {
-					requireContext().showToast("Deleted response")
+					viewModel.onDeletingMyGameResponse(adapter, id)
 					true
 				}
 			}
@@ -175,5 +169,11 @@ class GameFragment : CoreFragment<FragmentGameBinding>() {
 			else -> {}
 		}
 		menu.show()
+	}
+
+	companion object {
+		const val GAME_ORDER_RESPONSE_KEY = "GAME_ORDER_RESPONSE_KEY"
+		const val GAME_ORDER_ID = "GAME_ORDER_ID"
+		const val GAME_ORDER_COMMENT = "GAME_ORDER_COMMENT"
 	}
 }

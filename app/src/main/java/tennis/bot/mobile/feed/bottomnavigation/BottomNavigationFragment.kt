@@ -79,7 +79,7 @@ class BottomNavigationFragment : CoreFragment<FragmentBottomNavigationBinding>()
 	}
 
 	private fun replaceFragment(fragment: Fragment) {
-		childFragmentManager.beginTransaction().replace(R.id.container_view, fragment).commit()
+		parentFragmentManager.beginTransaction().replace(R.id.container_view, fragment).commit()
 	}
 
 	private fun showAddScorePopup(view: View, items: List<String>) {

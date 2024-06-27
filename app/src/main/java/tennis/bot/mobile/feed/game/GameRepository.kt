@@ -80,6 +80,15 @@ class GameRepository @Inject constructor(
 		return response.isSuccessful
 	}
 
+	@WorkerThread
+	suspend fun deleteMyGameResponse(id: Long): Boolean {
+		val response = kotlin.runCatching {
+			gameApi.deleteMyGameResponse(id)
+		}.getOrElse { return false }
+
+		return response.isSuccessful
+	}
+
 	suspend fun mapGameToMatchRequestPostItem(gameList: List<GamePostNetwork>?): List<MatchRequestPostItem> {
 		if (gameList?.isEmpty() == true) return emptyList()
 
