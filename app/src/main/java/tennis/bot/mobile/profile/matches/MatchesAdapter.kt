@@ -34,10 +34,14 @@ class MatchesAdapter @Inject constructor(): PagingDataAdapter<MatchItem, MatchIt
 	override fun onBindViewHolder(holder: MatchItemViewHolder, position: Int) {
 		getItem(position)?.let {match ->
 
-			holder.bindPlayerPhotosNamesAndRating(match, isPlayer1 = true)
+			holder.bindPlayerPhotos(match, isPlayer1 = true)
+			holder.bindPlayerNames(match, isPlayer1 = true)
+			holder.bindPlayerRating(match, isPlayer1 = true)
 			holder.onBindingRating(match, true)
 
-			holder.bindPlayerPhotosNamesAndRating(match, isPlayer1 = false)
+			holder.bindPlayerPhotos(match, isPlayer1 = false)
+			holder.bindPlayerNames(match, isPlayer1 = false)
+			holder.bindPlayerRating(match, isPlayer1 = false)
 			holder.onBindingRating(match, false)
 
 			if(match.isWin) {
@@ -81,37 +85,38 @@ class MatchesAdapter @Inject constructor(): PagingDataAdapter<MatchItem, MatchIt
 		}
 	}
 
-	private fun MatchItemViewHolder.bindPlayerPhotosNamesAndRating(match: MatchItem, isPlayer1: Boolean) { // player 1 is the left one
+	private fun MatchItemViewHolder.bindPlayerPhotos(match: MatchItem, isPlayer1: Boolean) { // player 1 is the left one
 		val context = binding.root.context
 		val playerPhoto = if (isPlayer1) binding.player1Layout.playerPhoto else binding.player2Layout.playerPhoto
-		val playerNameTitle = if (isPlayer1) binding.player1Layout.playerName else binding.player2Layout.playerName
-		val playerNameSets = if (isPlayer1) binding.player1NameSurname else binding.player2NameSurname
-		val playerRating = if (isPlayer1) binding.player1Layout.playerRatingValue else binding.player2Layout.playerRatingValue
-		val secondPlayerRatingIcon = if (isPlayer1) binding.player1Layout.secondPlayerRatingImage else binding.player2Layout.secondPlayerRatingImage
-		val secondPlayerRating = if (isPlayer1) binding.player1Layout.secondPlayerRatingValue else binding.player2Layout.secondPlayerRatingValue
 
 		if (!match.isDouble){
 			val playerProfilePic = if (isPlayer1) match.player1.photoUrl else match.player2.photoUrl
-			val playerName = if (isPlayer1) match.player1.name else match.player2.name
-			val playerRatingValue = if (isPlayer1) match.player1.rating.toString() else match.player2.rating.toString()
 
 			playerPhoto.setImages(listOf(AvatarImage(playerProfilePic)), 0)
 			playerPhoto.drawableSize = context.dpToPx(IMAGE_SIZE)
-			playerNameTitle.text = playerName.substringBefore(" ")
-			playerNameSets.text = playerName
-			playerRating.text = playerRatingValue
-			secondPlayerRatingIcon.isVisible = false
 		} else {
 			val playerFirstPhoto = if (isPlayer1) match.player1.photoUrl else match.player3?.photoUrl
 			val playerSecondPhoto = if (isPlayer1) match.player2.photoUrl else match.player4?.photoUrl
-			val playerFirstName = if (isPlayer1) match.player1.name else match.player3?.name
-			val playerSecondName = if (isPlayer1) match.player2.name else match.player4?.name
-			val playerRatingValue = if (isPlayer1) match.player1.rating.toString() else match.player3?.rating.toString()
-			val secondPlayerRatingValue = if (isPlayer1) match.player2.rating.toString() else match.player4?.rating.toString()
 
 			playerPhoto.setImages(
 				listOf(AvatarImage(playerFirstPhoto), AvatarImage(playerSecondPhoto)), 0)
 			playerPhoto.drawableSize = context.dpToPx(IMAGE_SIZE)
+		}
+	}
+
+	private fun MatchItemViewHolder.bindPlayerNames(match: MatchItem, isPlayer1: Boolean) { // player 1 is the left one
+		val playerNameTitle = if (isPlayer1) binding.player1Layout.playerName else binding.player2Layout.playerName
+		val playerNameSets = if (isPlayer1) binding.player1NameSurname else binding.player2NameSurname
+		val context = playerNameSets.context
+
+		if (!match.isDouble){
+			val playerName = if (isPlayer1) match.player1.name else match.player2.name
+			playerNameTitle.text = playerName.substringBefore(" ")
+			playerNameSets.text = playerName
+		} else {
+			val playerFirstName = if (isPlayer1) match.player1.name else match.player3?.name
+			val playerSecondName = if (isPlayer1) match.player2.name else match.player4?.name
+
 			playerNameTitle.text = context.getString(
 				R.string.insert_score_doubles_names,
 				playerFirstName?.substringBefore(" "),
@@ -122,6 +127,23 @@ class MatchesAdapter @Inject constructor(): PagingDataAdapter<MatchItem, MatchIt
 				playerFirstName?.substringBefore(" "),
 				playerSecondName?.substringBefore(" ")
 			)
+		}
+	}
+
+	private fun MatchItemViewHolder.bindPlayerRating(match: MatchItem, isPlayer1: Boolean) { // player 1 is the left one
+		val playerRating = if (isPlayer1) binding.player1Layout.playerRatingValue else binding.player2Layout.playerRatingValue
+		val secondPlayerRatingIcon = if (isPlayer1) binding.player1Layout.secondPlayerRatingImage else binding.player2Layout.secondPlayerRatingImage
+		val secondPlayerRating = if (isPlayer1) binding.player1Layout.secondPlayerRatingValue else binding.player2Layout.secondPlayerRatingValue
+
+		if (!match.isDouble){
+			val playerRatingValue = if (isPlayer1) match.player1.rating.toString() else match.player2.rating.toString()
+
+			playerRating.text = playerRatingValue
+			secondPlayerRatingIcon.isVisible = false
+		} else {
+			val playerRatingValue = if (isPlayer1) match.player1.rating.toString() else match.player3?.rating.toString()
+			val secondPlayerRatingValue = if (isPlayer1) match.player2.rating.toString() else match.player4?.rating.toString()
+
 			playerRating.text = playerRatingValue
 			secondPlayerRatingIcon.isVisible = true
 			secondPlayerRating.text = secondPlayerRatingValue

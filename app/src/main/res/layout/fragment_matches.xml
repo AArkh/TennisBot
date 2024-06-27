@@ -129,14 +129,23 @@
 		</com.google.android.material.appbar.CollapsingToolbarLayout>
 	</com.google.android.material.appbar.AppBarLayout>
 
-	<androidx.recyclerview.widget.RecyclerView
-		android:id="@+id/matches_container"
+	<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+		android:id="@+id/swipeRefreshLayout"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:layout_marginTop="16dp"
-		android:background="@color/tb_bg"
-		app:layout_behavior="@string/appbar_scrolling_view_behavior"
-		tools:listitem="@layout/recycler_match_item" />
+		app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+		<androidx.recyclerview.widget.RecyclerView
+			android:id="@+id/matches_container"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_marginTop="16dp"
+			android:background="@color/tb_bg"
+			tools:listitem="@layout/recycler_match_item" />
+	</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
 
 	<ProgressBar
 		android:id="@+id/loadingBar"

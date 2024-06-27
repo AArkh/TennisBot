@@ -80,17 +80,23 @@
 		app:layout_constraintTop_toTopOf="@id/city_spinner"
 		app:layout_constraintBottom_toBottomOf="@id/city_spinner"/>
 
+	<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+		android:id="@+id/swipeRefreshLayout"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_marginTop="11dp"
+		app:layout_constraintTop_toBottomOf="@id/all_events_spinner"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintBottom_toBottomOf="parent">
+
 	<androidx.recyclerview.widget.RecyclerView
 		android:id="@+id/container"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
-		android:layout_marginTop="11dp"
 		android:background="@color/tb_bg"
-		app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-		app:layout_constraintTop_toBottomOf="@id/all_events_spinner"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintBottom_toBottomOf="parent"/>
+		app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+	</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 	<ProgressBar
 		android:id="@+id/loadingBar"

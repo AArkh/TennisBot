@@ -117,6 +117,11 @@ class GameFragment : AuthorizedCoreFragment<FragmentGameBinding>() {
 			)
 		}
 
+		binding.swipeRefreshLayout.setOnRefreshListener {
+			adapter.refresh()
+			binding.swipeRefreshLayout.isRefreshing = false
+		}
+
 		adapter.addLoadStateListener { loadState ->
 			binding.errorLayout.isVisible = loadState.source.refresh is LoadState.Error
 			binding.loadingBar.isVisible = loadState.source.refresh is LoadState.Loading

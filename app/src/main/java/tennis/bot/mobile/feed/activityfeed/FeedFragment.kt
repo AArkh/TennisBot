@@ -58,6 +58,11 @@ class FeedFragment : AuthorizedCoreFragment<FragmentFeedBottomNavigationBinding>
 			}
 		}
 
+		binding.swipeRefreshLayout.setOnRefreshListener {
+			adapter.refresh()
+			binding.swipeRefreshLayout.isRefreshing = false
+		}
+
 		adapter.addLoadStateListener { loadState ->
 			binding.errorLayout.isVisible = loadState.source.refresh is LoadState.Error
 			binding.loadingBar.isVisible = loadState.source.refresh is LoadState.Loading

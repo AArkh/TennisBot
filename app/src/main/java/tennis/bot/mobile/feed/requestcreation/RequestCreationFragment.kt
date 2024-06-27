@@ -12,7 +12,6 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
 import tennis.bot.mobile.databinding.FragmentRequestBinding
-import tennis.bot.mobile.feed.activityfeed.FeedFragment
 import tennis.bot.mobile.feed.bottomnavigation.BottomNavigationFragment
 import tennis.bot.mobile.onboarding.location.LocationDialogViewModel
 import tennis.bot.mobile.utils.traverseToAnotherFragment

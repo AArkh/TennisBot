@@ -10,8 +10,8 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.navigation.NavigationBarView
 import dagger.hilt.android.AndroidEntryPoint
 import tennis.bot.mobile.R
-import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
+import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
 import tennis.bot.mobile.databinding.FragmentBottomNavigationBinding
 import tennis.bot.mobile.feed.activityfeed.FeedFragment
 import tennis.bot.mobile.feed.addscore.AddScoreFragment
@@ -23,7 +23,7 @@ import tennis.bot.mobile.utils.goToAnotherSectionFragment
 import tennis.bot.mobile.utils.view.AvatarImage
 
 @AndroidEntryPoint
-class BottomNavigationFragment : CoreFragment<FragmentBottomNavigationBinding>(), NavigationBarView.OnItemSelectedListener {
+class BottomNavigationFragment : AuthorizedCoreFragment<FragmentBottomNavigationBinding>(), NavigationBarView.OnItemSelectedListener {
 
 	override val bindingInflation: Inflation<FragmentBottomNavigationBinding> = FragmentBottomNavigationBinding::inflate
 	private val viewModel: BottomNavigationViewModel by viewModels()
@@ -47,6 +47,7 @@ class BottomNavigationFragment : CoreFragment<FragmentBottomNavigationBinding>()
 
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: BottomNavigationUiState ->
 			binding.title.text = uiState.title
+			binding.bottomNavBar.selectedItemId = uiState.currentItemId
 			binding.playerPhoto.setImage(AvatarImage(uiState.playerPicture))
 			binding.playerPhoto.drawableSize = requireContext().dpToPx(32)
 		}
@@ -55,13 +56,13 @@ class BottomNavigationFragment : CoreFragment<FragmentBottomNavigationBinding>()
 	override fun onNavigationItemSelected(item: MenuItem): Boolean {
 		return when (item.itemId) {
 			R.id.feed_item -> {
-				viewModel.replaceTitle(BottomNavigationViewModel.FRAGMENT_FEED)
 				replaceFragment(FeedFragment())
+				viewModel.onItemChosen(BottomNavigationViewModel.FRAGMENT_FEED)
 				true
 			}
 			R.id.game_item -> {
-				viewModel.replaceTitle(BottomNavigationViewModel.FRAGMENT_GAME)
 				replaceFragment(GameFragment())
+				viewModel.onItemChosen(BottomNavigationViewModel.FRAGMENT_GAME)
 				true
 			}
 //			R.id.chat_item -> {
@@ -79,7 +80,9 @@ class BottomNavigationFragment : CoreFragment<FragmentBottomNavigationBinding>()
 	}
 
 	private fun replaceFragment(fragment: Fragment) {
-		parentFragmentManager.beginTransaction().replace(R.id.container_view, fragment).commit()
+//		val currentFragment = parentFragmentManager.findFragmentById(R.id.fragment_container_view)
+//		if (currentFragment != fragment) {
+			parentFragmentManager.beginTransaction().replace(R.id.container_view, fragment).addToBackStack(fragment.tag).commit()
 	}
 
 	private fun showAddScorePopup(view: View, items: List<String>) {

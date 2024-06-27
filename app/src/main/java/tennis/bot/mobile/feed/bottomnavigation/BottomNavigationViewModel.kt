@@ -26,6 +26,7 @@ class BottomNavigationViewModel @Inject constructor(
 	private val _uiStateFlow = MutableStateFlow(
 		BottomNavigationUiState(
 			title = context.getString(R.string.feed_toolbar_title),
+			currentItemId = R.id.feed_item,
 			playerPicture = null
 		)
 	)
@@ -45,13 +46,13 @@ class BottomNavigationViewModel @Inject constructor(
 		}
 	}
 
-	fun replaceTitle(fragmentTag: String) {
+	fun onItemChosen(fragmentTag: String) {
 		when (fragmentTag) {
 			FRAGMENT_FEED -> {
-				_uiStateFlow.value = _uiStateFlow.value.copy(title = context.getString(R.string.feed_toolbar_title))
+				_uiStateFlow.value = _uiStateFlow.value.copy(title = context.getString(R.string.feed_toolbar_title), currentItemId = R.id.feed_item)
 			}
 			FRAGMENT_GAME -> {
-				_uiStateFlow.value = _uiStateFlow.value.copy(title = context.getString(R.string.game_toolbar_title))
+				_uiStateFlow.value = _uiStateFlow.value.copy(title = context.getString(R.string.game_toolbar_title), currentItemId = R.id.game_item)
 			}
 			else -> {}
 		}

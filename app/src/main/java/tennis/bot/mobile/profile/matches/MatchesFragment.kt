@@ -55,6 +55,11 @@ class MatchesFragment : CoreFragment<FragmentMatchesBinding>() {
 			}
 		}
 
+		binding.swipeRefreshLayout.setOnRefreshListener {
+			matchesAdapter.refresh()
+			binding.swipeRefreshLayout.isRefreshing = false
+		}
+
 		matchesAdapter.addLoadStateListener { loadState ->
 			binding.errorLayout.isVisible = loadState.source.refresh is LoadState.Error
 			binding.loadingBar.isVisible = loadState.source.refresh is LoadState.Loading
