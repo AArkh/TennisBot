@@ -7,6 +7,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.debounce
 import tennis.bot.mobile.R
 import tennis.bot.mobile.onboarding.survey.RegisterAndLoginApi
 import tennis.bot.mobile.onboarding.survey.TokenResponse
@@ -54,6 +55,7 @@ class AuthTokenRepository @Inject constructor(
 	val unAuthEventsFlow: SharedFlow<Unit> = _unAuthEventsFlow.asSharedFlow()
 
 	suspend fun triggerUnAuthFlow(isExpired: Boolean) {
+		// todo везде, где эта штука дергается тоже под debounce, если надо
 		if (isExpired) context.showToast(context.getString(R.string.session_expired))
 		_unAuthEventsFlow.emit(Unit)
 		removeToken()

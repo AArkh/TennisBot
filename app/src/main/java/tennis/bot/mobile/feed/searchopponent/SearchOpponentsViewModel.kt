@@ -46,7 +46,9 @@ open class SearchOpponentsViewModel @Inject constructor(
 	val uiStateFlow = _uiStateFlow.asStateFlow()
 
 	private val _userInput = MutableStateFlow<String?>(null)
-	val userInput: StateFlow<String?> = _userInput
+	val userInput: StateFlow<String?> = _userInput // todo add debounce 300L - 400L
+	// 1. без debounce мы показываем загрузку
+	// 2. с debounce мы стреляем запросы в бек
 
 	val opponentsPager = Pager(
 			config = PagingConfig(

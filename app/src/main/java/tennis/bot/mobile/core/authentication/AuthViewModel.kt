@@ -9,6 +9,7 @@ import androidx.viewbinding.ViewBinding
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,7 +24,7 @@ class AuthViewModel @Inject constructor(
 		fragment = authorizedFragment
 		authorizedFragment.lifecycleScope.launch (Dispatchers.Main) {
 			authorizedFragment.lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
-				repository.unAuthEventsFlow.collectLatest {
+				repository.unAuthEventsFlow.debounce(500L).collectLatest {
 					Log.d("AuthViewModel", "unAuthEventsFlow is triggered")
 					repository.triggerUnAuthFlow(true)
 				}
