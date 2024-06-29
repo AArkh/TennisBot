@@ -155,9 +155,13 @@ open class SearchOpponentsViewModel @Inject constructor(
 				val opponentItemsList = response?.items?.let { repository.convertToOpponentItemList(it) }
 				val nextPosition = position + 20
 
+				val filteredData = opponentItemsList?.filter { item ->
+					(uiStateFlow.value.opponentsList)?.contains(item) != true
+				}
+
 				Log.d("OpponentsDataSource", "Loading page starting from position: $nextPosition")
 				LoadResult.Page(
-					data = opponentItemsList ?: emptyList(),
+					data = filteredData ?: emptyList(),
 					prevKey = if (position == 0) null else position - params.loadSize,
 					nextKey = if (nextPosition >= (response?.totalCount ?: 0)) null else nextPosition
 				)

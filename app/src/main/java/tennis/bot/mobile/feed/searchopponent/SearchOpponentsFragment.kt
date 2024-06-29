@@ -20,7 +20,7 @@ import tennis.bot.mobile.core.DefaultLoadStateAdapter
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentSearchOpponentBinding
 import tennis.bot.mobile.feed.insertscore.InsertScoreFragment
-import tennis.bot.mobile.utils.LetterInputFilter
+import tennis.bot.mobile.utils.LetterInputWithSpacesFilter
 import tennis.bot.mobile.utils.traverseToAnotherFragment
 import javax.inject.Inject
 
@@ -44,7 +44,7 @@ open class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>
 			parentFragmentManager.popBackStack()
 		}
 
-		binding.searchBarEt.filters = arrayOf(LetterInputFilter())
+		binding.searchBarEt.filters = arrayOf(LetterInputWithSpacesFilter())
 		binding.searchBarEt.doAfterTextChanged { text ->
 			if(text?.isNotEmpty() == true) {
 				onContainerVisibility(isVisible = true)
