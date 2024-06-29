@@ -17,6 +17,9 @@ import tennis.bot.mobile.utils.buildImageRequest
 import javax.inject.Inject
 
 class ImageSliderAdapter @Inject constructor(): CoreAdapter<ImageItemViewHolder>() {
+
+
+
 	override fun onBindViewHolder(holder: ImageItemViewHolder, item: Any) {
 		val feedMediaItem = item as? FeedMediaItem ?: throw IllegalArgumentException("Item must be FeedMediaItem")
 

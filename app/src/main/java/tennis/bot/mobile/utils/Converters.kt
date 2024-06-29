@@ -52,27 +52,29 @@ fun convertDateAndTime(dateString: String, formatPattern: String? = null): Strin
 	return null
 }
 
+val smd: SimpleDateFormat by lazy { SimpleDateFormat("d MMMM yyyy HH:mm", Locale.getDefault()) }
+
 fun formatDateForMatchPostItem(timestampString: String): FormattedDate {
 	val formattedDateString = convertDateAndTime(timestampString, "d MMMM yyyy HH:mm")
 		?: throw IllegalArgumentException("Invalid timestamp format")
 
-	val dateFormat = SimpleDateFormat("d MMMM yyyy HH:mm", Locale.getDefault())
+	val dateFormat = smd
 	val date = dateFormat.parse(formattedDateString) ?: throw IllegalArgumentException("Invalid date format")
 
-	val calendar = Calendar.getInstance().apply { time = date }
+	val calendar = Calendar.getInstance().apply { time = date }// todo creates on each list item
 
-	val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+	val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())// todo creates on each list item
 
 	return FormattedDate(
 		time = timeFormat.format(date),
 		day = calendar.get(Calendar.DAY_OF_MONTH),
-		dayOfWeek = SimpleDateFormat("EEEE", Locale.getDefault()).format(date),
-		month = SimpleDateFormat("MMMM", Locale.getDefault()).format(date)
+		dayOfWeek = SimpleDateFormat("EEEE", Locale.getDefault()).format(date),// todo creates on each list item
+		month = SimpleDateFormat("MMMM", Locale.getDefault()).format(date)// todo creates on each list item
 	)
 }
 
 fun formatDateForFeed(dateString: String, context: Context): String {
-	val dateTimeFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ", Locale.getDefault())
+	val dateTimeFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ", Locale.getDefault())// todo creates on each list item
 	val timeStampMs = dateTimeFormatter.parse(dateString).time
 
 	val currentTime = System.currentTimeMillis()

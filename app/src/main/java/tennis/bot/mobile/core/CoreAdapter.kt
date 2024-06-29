@@ -20,7 +20,7 @@ abstract class CoreAdapter<ViewHolder : RecyclerView.ViewHolder> : RecyclerView.
         notifyDataSetChanged()
     }
 
-    fun submitList(newList: List<CoreUtilsItem>) {
+    fun submitList(newList: List<CoreUtilsItem>) { // todo может быть на главном потоке
         val diffResult = DiffUtil.calculateDiff(CoreDiffCallback(ArrayList(items), newList))
         items = newList
         diffResult.dispatchUpdatesTo(this)

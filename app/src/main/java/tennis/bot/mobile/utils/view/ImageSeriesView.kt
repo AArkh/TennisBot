@@ -113,11 +113,13 @@ class ImageSeriesView @JvmOverloads constructor(
             return
         }
         val drawables = drawables // to avoid index out of bounds exception when set images called twice
-        drawables[0] = TextShapeDrawable(avatarImage.shortName, getColor(context, R.color.tb_gray_border))
+        // todo allocation in bind, нужно создавать, только если ImageLoader обосрался
+//        drawables[0] = TextShapeDrawable(avatarImage.shortName, getColor(context, R.color.tb_gray_border))
         val imageLoader = ImageLoader(context)
         val request = ImageRequest.Builder(context)
             .data(buildImageRequest(context, avatarImage.imageUrl))
             .target { result ->
+                // если ImageLoader обосрался, то только тогда мы инстанцируем TextShapeDrawable, а не на каждый раз
                 drawables[0] = result
                 invalidate()
             }

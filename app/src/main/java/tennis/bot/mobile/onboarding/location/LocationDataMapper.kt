@@ -56,10 +56,10 @@ class LocationDataMapper @Inject constructor() {
         return null
     }
 
-    fun findCityString(responseData: List<Location>, selectedCity: Int): String? {
+    fun findCityString(responseData: Map<Int, Location>, selectedCity: Int): String? {
         for (country in responseData) {
             val cities: List<Location.LocationCity> = country.cities
-            val city = cities.find { it.id == selectedCity }
+            val city = cities[selectedCity]
             if (city != null) {
                 return city.name
             }

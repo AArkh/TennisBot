@@ -49,7 +49,7 @@ class GameAdapter@Inject constructor(): PagingDataAdapter<MatchRequestPostItem, 
 		val formattedMatchDate = matchRequestItem.matchDate?.let { formatDateForMatchPostItem(it) }
 		val context = holder.binding.postType.context
 
-		holder.binding.playerPhoto.showPlayerPhoto(matchRequestItem.playerPhoto, holder.binding.itemPicture)
+//		holder.binding.playerPhoto.showPlayerPhoto(matchRequestItem.playerPhoto, holder.binding.itemPicture)
 		holder.binding.nameSurname.text = matchRequestItem.playerName
 		holder.binding.locationSubTitle.text = matchRequestItem.locationSubTitle
 

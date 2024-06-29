@@ -134,8 +134,6 @@
 
 	</HorizontalScrollView>
 
-
-
 	<ImageView
 		android:id="@+id/options_dots"
 		android:layout_width="wrap_content"

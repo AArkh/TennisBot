@@ -2,6 +2,7 @@ package tennis.bot.mobile.feed.activityfeed
 
 import android.animation.Animator
 import android.animation.ObjectAnimator
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,21 +57,28 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 	var clickListener: ((command: String, id: Long) -> Unit)? = null
 
 	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+		val nanoStart = System.nanoTime()
 		getItem(position)?.let { item ->
 			when(holder) {
 				is NewPlayerPostItemViewHolder -> bindNewPlayerPost(item, holder)
 				is MatchRequestPostItemViewHolder -> bindMatchRequestPost(item, holder)
-				is ScorePostItemViewHolder -> bindScorePost(item, holder)
+				is ScorePostItemViewHolder -> {
+					bindScorePost(item, holder)
+				}
 			}
 		}
+		val nanoEnd = System.nanoTime() - nanoStart
+		Log.d("1234567", "onBindViewHolder: took $nanoEnd nanos") //todo add logic
 	}
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 		val inflater = LayoutInflater.from(parent.context)
 
+
 		return when(viewType) {
 			NEW_PLAYER -> {
 				val binding = FeedPostOneNewPlayerBinding.inflate(inflater, parent, false)
+
 				NewPlayerPostItemViewHolder(binding)
 			}
 			MATCH_REQUEST -> {
@@ -79,6 +87,11 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 			}
 			SCORE -> {
 				val binding = FeedPostThreeMatchScoreBinding.inflate(inflater, parent, false)
+				val adapter = ImageSliderAdapter()
+				binding.itemPicturesPager.adapter = adapter
+				TabLayoutMediator(binding.tabLayout, binding.itemPicturesPager) { tab, _ ->
+					tab.setCustomView(R.layout.tab_image_switch_indicator)
+				}.attach()
 				ScorePostItemViewHolder(binding)
 			}
 			else -> {
@@ -102,7 +115,7 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 	private fun bindNewPlayerPost(item: Any, holder: NewPlayerPostItemViewHolder) {
 		val newPlayerItem = item as? NewPlayerPostItem ?: throw IllegalArgumentException("Item must be NewPlayerPostItem")
 
-		holder.binding.playerPhoto.showPlayerPhoto(newPlayerItem.playerPhoto, holder.binding.itemPicture)
+//		holder.binding.playerPhoto.showPlayerPhoto(newPlayerItem.playerPhoto, holder.binding.itemPicture)
 		holder.binding.nameSurname.text = newPlayerItem.playerName
 		holder.binding.infoPanel.text = newPlayerItem.infoPanel
 
@@ -123,7 +136,7 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 		val matchRequestItem = item as? MatchRequestPostItem ?: throw IllegalArgumentException("Item must be MatchRequestPostItem")
 		val formattedMatchDate = matchRequestItem.matchDate?.let { formatDateForMatchPostItem(it) }
 
-		holder.binding.playerPhoto.showPlayerPhoto(matchRequestItem.playerPhoto, holder.binding.itemPicture)
+//		holder.binding.playerPhoto.showPlayerPhoto(matchRequestItem.playerPhoto, holder.binding.itemPicture)
 		holder.binding.nameSurname.text = matchRequestItem.playerName
 		holder.binding.locationSubTitle.text = matchRequestItem.locationSubTitle
 
@@ -144,20 +157,17 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 
 	private fun bindScorePost(item: Any, holder: ScorePostItemViewHolder) {
 		val scorePostItem = item as? ScorePostItem ?: throw IllegalArgumentException("Item must be ScorePostItem")
-		val mediaSliderAdapter = ImageSliderAdapter()
-		val matchResultsAdapter = MatchResultsAdapter()
+//		val mediaSliderAdapter = ImageSliderAdapter() // todo create on each bind
+//		val matchResultsAdapter = MatchResultsAdapter() // todo create on each bind
 
-		holder.binding.playerPhoto.showPlayerPhoto(scorePostItem.player1?.photo, null)
+//		holder.binding.playerPhoto.showPlayerPhoto(scorePostItem.player1?.photo, null)
 		holder.binding.itemPicture.isVisible = false
 		holder.binding.itemPicturesPager.isVisible = true
-		holder.binding.itemPicturesPager.adapter = mediaSliderAdapter
-		mediaSliderAdapter.submitList(scorePostItem.feedMediaItemsList)
-		holder.binding.itemPicturesPager.currentItem
+//		holder.binding.itemPicturesPager.adapter = mediaSliderAdapter
+		(holder.binding.itemPicturesPager.adapter as ImageSliderAdapter).submitList(scorePostItem.feedMediaItemsList)
+//		holder.binding.itemPicturesPager.currentItem
 
-		TabLayoutMediator(holder.binding.tabLayout, holder.binding.itemPicturesPager) { tab, _ ->
-			tab.setCustomView(R.layout.tab_image_switch_indicator)
-		}.attach()
-		holder.binding.tabLayout.addOnTabSelectedListener(this)
+		holder.binding.tabLayout.addOnTabSelectedListener(this) // todo create on each bind
 
 		if (scorePostItem.player3 == null) {
 			holder.binding.matchTypeTitle.text = holder.binding.matchTypeTitle.context.getString(R.string.match_result_single)
@@ -196,8 +206,8 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 			updateLikeUi(scorePostItem)
 		}
 
-		holder.binding.resultsContainer.adapter = matchResultsAdapter
-		matchResultsAdapter.submitList(scorePostItem.matchResultsList)
+//		holder.binding.resultsContainer.adapter = matchResultsAdapter
+		(holder.binding.resultsContainer.adapter as MatchResultsAdapter).submitList(scorePostItem.matchResultsList)
 		holder.binding.date.text = scorePostItem.addedAt?.let { formatDateForFeed(it, holder.binding.date.context) }
 	}
 
@@ -279,8 +289,8 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 }
 
 fun ImageSeriesView.showPlayerPhoto(profileImageUrl: String?, itemPicture: ImageView?) {
-	setImage(AvatarImage(profileImageUrl))
-	drawableSize = context.dpToPx(40)
+	setImage(AvatarImage(profileImageUrl)) //todo allocation in bind
+	drawableSize = context.dpToPx(40)//todo allocation in bind
 
 	if (itemPicture != null) {
 		if (profileImageUrl == null) {
@@ -290,8 +300,10 @@ fun ImageSeriesView.showPlayerPhoto(profileImageUrl: String?, itemPicture: Image
 
 		if (profileImageUrl.contains("default")) {
 			val resourceId = if (profileImageUrl.contains("http")) {
-				getDefaultDrawableResourceId(itemPicture.context,
-					profileImageUrl.removeSuffix(".png").removePrefix(DEFAULT_PICS_PREFIX))
+				getDefaultDrawableResourceId(
+					itemPicture.context,
+					profileImageUrl.removeSuffix(".png").removePrefix(DEFAULT_PICS_PREFIX)
+				)
 			} else {
 				getDefaultDrawableResourceId(context, profileImageUrl.removeSuffix(".png"))
 			}

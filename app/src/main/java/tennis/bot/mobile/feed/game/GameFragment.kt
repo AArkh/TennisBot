@@ -56,13 +56,26 @@ class GameFragment : AuthorizedCoreFragment<FragmentGameBinding>() {
 			onFilterOptionClicked(buttonClicked = binding.allFilter)
 		}
 
-		binding.incomingFilter.setOnClickListener {
-			lifecycleScope.launch(Dispatchers.IO) {
-				viewModel.onFetchingIncomingRequests().collectLatest {
-					adapter.submitData(it)
-				}
+		// todo так должно быть тут
+		lifecycleScope.launch(Dispatchers.IO) {
+			viewModel.uiStateFlow.collectLatest { state ->
+				binding.incomingFilter.setSelected = state.incomingFilterSelected
+				binding.outcomingFilter.setSelected = state.outcomingFilterSelected
+				binding.acceptedFilter.setSelected = state.acceptedFilterSelected
+				adapter.submitData(state.items)
 			}
-			onFilterOptionClicked(buttonClicked = binding.incomingFilter)
+		}
+
+		binding.incomingFilter.setOnClickListener {
+			viewModel.onFetchingIncomingRequestsClicked() // todo а во вьюмодели меняем ui state,
+			// а в подписке тут на этот самоый стейт мы уже делаем adapter.submitData(it)
+//
+//			lifecycleScope.launch(Dispatchers.IO) {
+//				viewModel.().collectLatest {
+//					adapter.submitData(it)
+//				}
+//			}
+//			onFilterOptionClicked(buttonClicked = binding.incomingFilter)
 		}
 
 		binding.outcomingFilter.setOnClickListener {

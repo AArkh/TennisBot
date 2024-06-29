@@ -25,8 +25,8 @@ class FeedFragment : AuthorizedCoreFragment<FragmentFeedBottomNavigationBinding>
 	lateinit var adapter: FeedAdapter
 
 	companion object {
-		const val ADD_SCORE_INDEX = 0
-		const val CREATE_GAME_ITEM = 1
+		const val ADD_SCORE_INDEX = 0 // todo
+		const val CREATE_GAME_ITEM = 1 // todo
 		const val LIKE = "LIKE"
 		const val UNLIKE = "UNLIKE"
 	}
@@ -54,18 +54,27 @@ class FeedFragment : AuthorizedCoreFragment<FragmentFeedBottomNavigationBinding>
 
 		lifecycleScope.launch(Dispatchers.IO) {
 			viewModel.getFeedPaginationFlow().collectLatest {
+				hasData = true
 				adapter.submitData(it)
 			}
 		}
 
 		binding.swipeRefreshLayout.setOnRefreshListener {
 			adapter.refresh()
-			binding.swipeRefreshLayout.isRefreshing = false
+//			binding.swipeRefreshLayout.isRefreshing = false
 		}
 
 		adapter.addLoadStateListener { loadState ->
 			binding.errorLayout.isVisible = loadState.source.refresh is LoadState.Error
-			binding.loadingBar.isVisible = loadState.source.refresh is LoadState.Loading
+			if (hasData) {
+				binding.swipeRefreshLayout.isRefreshing = true
+				binding.loadingBar.isVisible = false
+			} else {
+				binding.swipeRefreshLayout.isRefreshing = false
+				binding.loadingBar.isVisible = loadState.source.refresh is LoadState.Loading
+			}
 		}
 	}
+
+	private var hasData = false // todo что-то такое, наверное
 }

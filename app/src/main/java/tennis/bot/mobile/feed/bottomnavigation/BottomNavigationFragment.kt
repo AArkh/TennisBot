@@ -82,7 +82,11 @@ class BottomNavigationFragment : AuthorizedCoreFragment<FragmentBottomNavigation
 	private fun replaceFragment(fragment: Fragment) {
 //		val currentFragment = parentFragmentManager.findFragmentById(R.id.fragment_container_view)
 //		if (currentFragment != fragment) {
-			parentFragmentManager.beginTransaction().replace(R.id.container_view, fragment).addToBackStack(fragment.tag).commit()
+			parentFragmentManager.beginTransaction().replace(R.id.container_view, fragment)
+				// todo replace уже добавляет фрагмент
+				.addToBackStack(fragment.tag).commit()
+				// todo addToBackStack добавляет ВТОРОЙ такой же, в итоге мы дважды жмем назад, чтобы вернуться на предыдущий
+		// todo addToBackStack возможно не нужен, нужно проверить стек фрагментов, должно быть не более одного повторяющегося
 	}
 
 	private fun showAddScorePopup(view: View, items: List<String>) {

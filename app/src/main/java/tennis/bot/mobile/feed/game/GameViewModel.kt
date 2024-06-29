@@ -27,9 +27,7 @@ class GameViewModel @Inject constructor(
 	@ApplicationContext private val context: Context
 ): ViewModel() {
 
-	private val _uiStateFlow = MutableStateFlow(
-		GameUiState(emptyList())
-	)
+	private val _uiStateFlow = MutableStateFlow(GameUiState(emptyList()))
 	val uiStateFlow = _uiStateFlow.asStateFlow()
 
 	fun onSendingRequestResponse(id: Long, comment: String?) {
