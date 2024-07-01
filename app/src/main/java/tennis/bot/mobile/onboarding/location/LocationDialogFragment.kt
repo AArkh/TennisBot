@@ -1,6 +1,5 @@
 package tennis.bot.mobile.onboarding.location
 
-import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
 import androidx.core.widget.addTextChangedListener
@@ -27,7 +26,7 @@ class LocationDialogFragment : CountryCodesDialogFragment() {
             dialog?.dismiss()
         }
 
-        binding.tryAgainTv.setOnClickListener {
+        binding.errorLayout.tryAgainTv.setOnClickListener {
             viewModel.onLoadingSelectedList()
         }
 
@@ -39,19 +38,18 @@ class LocationDialogFragment : CountryCodesDialogFragment() {
             when (uiState) {
                 is LocationDialogUiState.Loading -> {
                     binding.loadingBar.visibility = View.VISIBLE
-                    binding.errorLayout.visibility = View.GONE
+                    binding.errorLayout.errorLayout.visibility = View.GONE
                     binding.title.text = uiState.title
                 }
                 is LocationDialogUiState.DataPassed -> {
                     binding.loadingBar.visibility = View.GONE
-                    binding.errorLayout.visibility = View.GONE
+                    binding.errorLayout.errorLayout.visibility = View.GONE
 
                     locationAdapter.submitList(uiState.dataList)
                     binding.title.text = uiState.title
                 }
                 is LocationDialogUiState.Error -> {
-                    binding.errorLayout.visibility = View.VISIBLE
-                    binding.tryAgainTv.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+                    binding.errorLayout.errorLayout.visibility = View.VISIBLE
                     binding.loadingBar.visibility = View.GONE
                     binding.title.text = uiState.title
                 }

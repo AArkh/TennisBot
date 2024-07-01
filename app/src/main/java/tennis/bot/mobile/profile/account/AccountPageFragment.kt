@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentAccountPageBinding
@@ -67,7 +66,7 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 			}
 		}
 
-		binding.tryAgainTv.setOnClickListener {
+		binding.errorLayout.tryAgainTv.setOnClickListener {
 			viewModel.onTryAgainPressed()
 		}
 
@@ -76,12 +75,12 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 				is AccountPageUiState.Loading -> {
 					viewModel.onFetchingProfileData()
 					binding.loadingBar.visibility = View.VISIBLE
-					binding.errorLayout.visibility = View.GONE
+					binding.errorLayout.errorLayout.visibility = View.GONE
 					binding.container.visibility = View.GONE
 				}
 				is AccountPageUiState.ProfileDataReceived -> {
 					binding.loadingBar.visibility = View.GONE
-					binding.errorLayout.visibility = View.GONE
+					binding.errorLayout.errorLayout.visibility = View.GONE
 					binding.container.visibility = View.VISIBLE
 
 					accountPageAdapter.submitList(uiState.receivedDataItems)
@@ -112,7 +111,7 @@ class AccountPageFragment : CoreFragment<FragmentAccountPageBinding>() {
 					}
 				}
 				is AccountPageUiState.Error -> {
-					binding.errorLayout.visibility = View.VISIBLE
+					binding.errorLayout.errorLayout.visibility = View.VISIBLE
 					binding.container.visibility = View.GONE
 					binding.loadingBar.visibility = View.GONE
 				}

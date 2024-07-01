@@ -11,8 +11,7 @@ import coil.load
 import kotlinx.parcelize.Parcelize
 import tennis.bot.mobile.R
 import tennis.bot.mobile.databinding.RecyclerOpponentItemBinding
-import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
-import tennis.bot.mobile.utils.DEFAULT_PICS_PREFIX
+import tennis.bot.mobile.utils.buildImageRequest
 import tennis.bot.mobile.utils.dpToPx
 import tennis.bot.mobile.utils.view.AvatarImage
 import javax.inject.Inject
@@ -68,18 +67,7 @@ private fun OpponentItemViewHolder.showPlayerPhoto(profileImageUrl: String?) {
 	binding.playerPhoto.setImage(AvatarImage(profileImageUrl))
 	binding.playerPhoto.drawableSize = binding.playerPhoto.context.dpToPx(40)
 
-	if (profileImageUrl == null) {
-		binding.itemPicture.load(R.drawable.null_placeholder)
-		return
-	}
-
-	if (profileImageUrl.contains("default")) {
-		val resourceId = getDefaultDrawableResourceId(binding.itemPicture.context,
-			profileImageUrl.removeSuffix(".png").removePrefix(DEFAULT_PICS_PREFIX))
-		if (resourceId != null) binding.itemPicture.load(resourceId)
-	} else {
-		binding.itemPicture.load(profileImageUrl)
-	}
+	binding.itemPicture.load(buildImageRequest(binding.itemPicture.context, profileImageUrl))
 }
 
 class OpponentItemViewHolder (

@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tennis.bot.mobile.core.authentication.AuthTokenRepository
@@ -71,7 +72,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         lifecycleScope.launch {
-            authTokenRepository.unAuthEventsFlow.collectLatest {
+            authTokenRepository.unAuthEventsFlow.debounce(500L).collectLatest {
                 Log.e("1234567", "activity caught an unauth event, trying to navigate back to login screen")
                 val transaction = supportFragmentManager.beginTransaction()
                 supportFragmentManager.fragments.forEach {

@@ -61,7 +61,7 @@ class MatchesFragment : CoreFragment<FragmentMatchesBinding>() {
 		}
 
 		matchesAdapter.addLoadStateListener { loadState ->
-			binding.errorLayout.isVisible = loadState.source.refresh is LoadState.Error
+			binding.errorLayout.errorLayout.isVisible = loadState.source.refresh is LoadState.Error
 			binding.loadingBar.isVisible = loadState.source.refresh is LoadState.Loading
 
 		}
@@ -69,18 +69,18 @@ class MatchesFragment : CoreFragment<FragmentMatchesBinding>() {
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: MatchesUiState ->
 			when(uiState){
 				is MatchesUiState.Loading -> {
-					binding.errorLayout.visibility = View.GONE
+					binding.errorLayout.errorLayout.visibility = View.GONE
 					binding.loadingBar.visibility = View.VISIBLE
 					binding.matchesContainer.visibility = View.VISIBLE
 				}
 				is MatchesUiState.MatchesDataReceived -> {
 					binding.loadingBar.visibility = View.GONE
-					binding.errorLayout.visibility = View.GONE
+					binding.errorLayout.errorLayout.visibility = View.GONE
 					binding.matchesContainer.visibility = View.VISIBLE
 				}
 				is MatchesUiState.Error -> {
 					binding.loadingBar.visibility = View.GONE
-					binding.errorLayout.visibility = View.VISIBLE
+					binding.errorLayout.errorLayout.visibility = View.VISIBLE
 					binding.matchesContainer.visibility = View.GONE
 				}
 			}

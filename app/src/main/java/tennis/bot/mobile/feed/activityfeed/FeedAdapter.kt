@@ -25,12 +25,10 @@ import tennis.bot.mobile.databinding.FeedPostTwoMatchRequestBinding
 import tennis.bot.mobile.databinding.RecyclerEmptyItemBinding
 import tennis.bot.mobile.feed.activityfeed.FeedFragment.Companion.LIKE
 import tennis.bot.mobile.feed.activityfeed.FeedFragment.Companion.UNLIKE
-import tennis.bot.mobile.profile.account.AccountPageAdapter
 import tennis.bot.mobile.profile.account.EmptyItemViewHolder
-import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
 import tennis.bot.mobile.profile.matches.TennisSetNetwork
-import tennis.bot.mobile.utils.DEFAULT_PICS_PREFIX
 import tennis.bot.mobile.utils.FormattedDate
+import tennis.bot.mobile.utils.buildImageRequest
 import tennis.bot.mobile.utils.dpToPx
 import tennis.bot.mobile.utils.formatDateForFeed
 import tennis.bot.mobile.utils.formatDateForMatchPostItem
@@ -282,28 +280,7 @@ fun ImageSeriesView.showPlayerPhoto(profileImageUrl: String?, itemPicture: Image
 	setImage(AvatarImage(profileImageUrl))
 	drawableSize = context.dpToPx(40)
 
-	if (itemPicture != null) {
-		if (profileImageUrl == null) {
-			itemPicture.load(R.drawable.null_placeholder)
-			return
-		}
-
-		if (profileImageUrl.contains("default")) {
-			val resourceId = if (profileImageUrl.contains("http")) {
-				getDefaultDrawableResourceId(itemPicture.context,
-					profileImageUrl.removeSuffix(".png").removePrefix(DEFAULT_PICS_PREFIX))
-			} else {
-				getDefaultDrawableResourceId(context, profileImageUrl.removeSuffix(".png"))
-			}
-			if (resourceId != null) itemPicture.load(resourceId)
-		} else {
-			if (profileImageUrl.contains("http")) {
-				itemPicture.load(profileImageUrl)
-			} else {
-				itemPicture.load(AccountPageAdapter.IMAGES_LINK + profileImageUrl)
-			}
-		}
-	}
+	itemPicture?.load(buildImageRequest(itemPicture.context, profileImageUrl))
 }
 
 

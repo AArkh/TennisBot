@@ -65,7 +65,7 @@ class PasswordViewModel @Inject constructor(
 		)
 	}
 
-	fun onError() {
+	private fun onError() {
 		context.showToast("${context.getString(R.string.error_text)}. Попробуйте еще раз")
 		val prevState =  _uiStateFlow.value
 		_uiStateFlow.value = PasswordUiState.Initial(

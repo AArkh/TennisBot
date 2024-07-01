@@ -25,7 +25,7 @@ class AuthViewModel @Inject constructor(
 			authorizedFragment.lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
 				repository.unAuthEventsFlow.collectLatest {
 					Log.d("AuthViewModel", "unAuthEventsFlow is triggered")
-					repository.triggerUnAuthFlow(true)
+					repository.triggerUnAuthFlow(false) // keep watching whether it's properly working here. turned off for now (debounce here didn't work)
 				}
 			}
 		}

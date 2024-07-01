@@ -1,4 +1,5 @@
 package tennis.bot.mobile.feed.game
+
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,8 +12,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import tennis.bot.mobile.feed.activityfeed.MatchRequestPostItem
@@ -27,10 +26,14 @@ class GameViewModel @Inject constructor(
 	@ApplicationContext private val context: Context
 ): ViewModel() {
 
-	private val _uiStateFlow = MutableStateFlow(
-		GameUiState(emptyList())
-	)
-	val uiStateFlow = _uiStateFlow.asStateFlow()
+	private var gamesPager = Pager(
+		config = PagingConfig(
+			pageSize = SearchOpponentsViewModel.PAGE_SIZE,
+			maxSize = SearchOpponentsViewModel.PAGE_SIZE + (SearchOpponentsViewModel.PAGE_SIZE * 2), // since paging library stores all received pages using memory so we add this thing, to prevent in to store too much. the value is one recommended in docs
+			enablePlaceholders = true
+		),
+		pagingSourceFactory = { GameDataSource(filter = ALL_REQUESTS) }
+	).flow
 
 	fun onSendingRequestResponse(id: Long, comment: String?) {
 		viewModelScope.launch(Dispatchers.IO) {
@@ -87,7 +90,7 @@ class GameViewModel @Inject constructor(
 	}
 
 	private fun getGamesPaginationFlow(filter: String?): Flow<PagingData<MatchRequestPostItem>> {
-		return Pager(
+		gamesPager = Pager(
 			config = PagingConfig(
 				pageSize = SearchOpponentsViewModel.PAGE_SIZE,
 				maxSize = SearchOpponentsViewModel.PAGE_SIZE + (SearchOpponentsViewModel.PAGE_SIZE * 2),
@@ -95,6 +98,8 @@ class GameViewModel @Inject constructor(
 			),
 			pagingSourceFactory = { GameDataSource(filter) }
 		).flow
+
+		return gamesPager
 	}
 
 	inner class GameDataSource(private val filter: String?) : PagingSource<Int, MatchRequestPostItem>() {

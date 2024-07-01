@@ -6,13 +6,11 @@ import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import tennis.bot.mobile.R
-import tennis.bot.mobile.core.CoreAdapter
 import tennis.bot.mobile.databinding.FeedPostTwoMatchRequestBinding
 import tennis.bot.mobile.feed.activityfeed.MatchRequestPostItem
 import tennis.bot.mobile.feed.activityfeed.MatchRequestPostItemViewHolder
 import tennis.bot.mobile.feed.activityfeed.bindInfoPanel
 import tennis.bot.mobile.feed.activityfeed.showPlayerPhoto
-import tennis.bot.mobile.feed.searchopponent.OpponentItem
 import tennis.bot.mobile.utils.formatDateForFeed
 import tennis.bot.mobile.utils.formatDateForMatchPostItem
 import javax.inject.Inject
