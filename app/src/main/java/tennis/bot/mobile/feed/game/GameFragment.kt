@@ -22,7 +22,10 @@ import tennis.bot.mobile.core.DefaultLoadStateAdapter
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
 import tennis.bot.mobile.databinding.FragmentGameBinding
+import tennis.bot.mobile.feed.insertscore.InsertScoreFragment
 import tennis.bot.mobile.utils.animateButtonTransition
+import tennis.bot.mobile.utils.showToast
+import tennis.bot.mobile.utils.traverseToAnotherFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -107,6 +110,12 @@ class GameFragment : AuthorizedCoreFragment<FragmentGameBinding>() {
 					bottomDialog.show(childFragmentManager, bottomDialog.tag)
 
 				}
+			}
+		}
+		adapter.insertScoreCallback = { listOfOpponents ->
+			viewModel.onInsertScoreButtonClicked(requireActivity(), listOfOpponents) {
+				parentFragmentManager.traverseToAnotherFragment(InsertScoreFragment())
+				requireContext().showToast("InsertScore Callback")
 			}
 		}
 

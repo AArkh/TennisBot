@@ -32,7 +32,7 @@ interface GameApi {
 	suspend fun getAcceptedRequests(
 		@Query("skip") skip:Int = DEFAULT_SKIP,
 		@Query("limit") limit:Int = DEFAULT_LIMIT
-	): Response<GameBasicResponse>
+	): Response<GameAcceptedResponse>
 
 	@POST("api/game-orders/{id}/response")
 	suspend fun postRequestResponse(
@@ -65,6 +65,26 @@ data class GameRequestResponse(
 data class GameBasicResponse(
 	val totalCount: Int,
 	val items: List<GamePostNetwork>
+)
+
+@Serializable
+data class GameAcceptedResponse(
+	val totalCount: Int,
+	val items: List<GameAcceptedPost>
+)
+
+@Serializable
+data class GameAcceptedPost(
+	val id: Long,
+	val player: GamePlayer,
+	val targetPlayer: GamePlayer,
+	val cityId: Int,
+	val districtId: Int?,
+	val date: String,
+	val isMale: Boolean?,
+	val paymentTypeId: Int,
+	val comment: String,
+	val responseComment: String?
 )
 
 @Serializable

@@ -40,7 +40,7 @@ class PasswordFragment : CoreFragment<FragmentPasswordBinding>() {
 			parentFragmentManager.popBackStack()
 		}
 
-		binding.confidentialityText.movementMethod = LinkMovementMethod.getInstance()
+		binding.confidentialityText.movementMethod = LinkMovementMethod.getInstance() // ссылка в strings
 
 		binding.buttonNext.setOnClickListener {
 			viewModel.onNextButtonClicked{

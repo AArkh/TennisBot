@@ -22,16 +22,17 @@ import tennis.bot.mobile.core.CoreUtilsItem
 import tennis.bot.mobile.databinding.FeedPostOneNewPlayerBinding
 import tennis.bot.mobile.databinding.FeedPostThreeMatchScoreBinding
 import tennis.bot.mobile.databinding.FeedPostTwoMatchRequestBinding
+import tennis.bot.mobile.databinding.RecyclerAcceptedGameItemBinding
 import tennis.bot.mobile.databinding.RecyclerEmptyItemBinding
 import tennis.bot.mobile.feed.activityfeed.FeedFragment.Companion.LIKE
 import tennis.bot.mobile.feed.activityfeed.FeedFragment.Companion.UNLIKE
+import tennis.bot.mobile.feed.searchopponent.OpponentItem
 import tennis.bot.mobile.profile.account.EmptyItemViewHolder
 import tennis.bot.mobile.profile.matches.TennisSetNetwork
 import tennis.bot.mobile.utils.FormattedDate
 import tennis.bot.mobile.utils.buildImageRequest
 import tennis.bot.mobile.utils.dpToPx
 import tennis.bot.mobile.utils.formatDateForFeed
-import tennis.bot.mobile.utils.formatDateForMatchPostItem
 import tennis.bot.mobile.utils.view.AvatarImage
 import tennis.bot.mobile.utils.view.ImageSeriesView
 import javax.inject.Inject
@@ -39,14 +40,14 @@ import javax.inject.Inject
 class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, RecyclerView.ViewHolder>(FEED_COMPARATOR), TabLayout.OnTabSelectedListener {
 
 	companion object {
-		private val FEED_COMPARATOR = object : DiffUtil.ItemCallback<FeedSealedClass>() {
+		val FEED_COMPARATOR = object : DiffUtil.ItemCallback<FeedSealedClass>() {
 			override fun areItemsTheSame(oldItem: FeedSealedClass, newItem: FeedSealedClass): Boolean =
 				oldItem.id == newItem.id
 
 			override fun areContentsTheSame(oldItem: FeedSealedClass, newItem: FeedSealedClass): Boolean =
 				oldItem == newItem
 		}
-		private const val OTHER = 0
+		const val OTHER = 0
 		const val NEW_PLAYER = 1
 		const val MATCH_REQUEST = 2
 		const val SCORE = 3
@@ -119,13 +120,12 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 
 	private fun bindMatchRequestPost(item: Any,holder: MatchRequestPostItemViewHolder) {
 		val matchRequestItem = item as? MatchRequestPostItem ?: throw IllegalArgumentException("Item must be MatchRequestPostItem")
-		val formattedMatchDate = matchRequestItem.matchDate?.let { formatDateForMatchPostItem(it) }
 
 		holder.binding.playerPhoto.showPlayerPhoto(matchRequestItem.playerPhoto, holder.binding.itemPicture)
 		holder.binding.nameSurname.text = matchRequestItem.playerName
 		holder.binding.locationSubTitle.text = matchRequestItem.locationSubTitle
 
-		holder.bindInfoPanel(formattedMatchDate, matchRequestItem)
+		holder.bindInfoPanel(matchRequestItem.matchDate, matchRequestItem)
 		holder.binding.requestComment.text = matchRequestItem.comment
 
 		holder.binding.likeButton.isLikeActive(matchRequestItem.liked, matchRequestItem.totalLikes)
@@ -315,6 +315,10 @@ class ScorePostItemViewHolder(
 	val binding: FeedPostThreeMatchScoreBinding
 ) : RecyclerView.ViewHolder(binding.root)
 
+class AcceptedGameItemViewHolder(
+	val binding: RecyclerAcceptedGameItemBinding
+) : RecyclerView.ViewHolder(binding.root)
+
 sealed class FeedSealedClass(
 	open val id: Long,
 	open var totalLikes: Int,
@@ -339,7 +343,7 @@ data class MatchRequestPostItem( // 2
 	override var totalLikes: Int,
 	override var liked: Boolean,
 	val addedAt: String?,
-	val matchDate: String?,
+	val matchDate: FormattedDate?,
 	val playerPhoto: String?,
 	val playerName: String,
 	val playerRating: Int,
@@ -370,3 +374,10 @@ data class ScorePostItem( // 3
 	val feedMediaItemsList: List<FeedMediaItem>,
 	val matchResultsList: List<CoreUtilsItem>
 ): FeedSealedClass(id, totalLikes, liked)
+
+data class AcceptedGameItem(
+	override val id: Long,
+	val matchDate: FormattedDate?,
+	val player: OpponentItem,
+	val targetPlayer: OpponentItem
+): FeedSealedClass(id, 0, false)

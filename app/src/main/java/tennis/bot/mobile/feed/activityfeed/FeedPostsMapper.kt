@@ -10,6 +10,7 @@ import tennis.bot.mobile.profile.account.AccountPageViewModel
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.profile.matches.TennisSetNetwork
 import tennis.bot.mobile.profile.matches.ratingChange
+import tennis.bot.mobile.utils.formatDateForMatchPostItem
 import tennis.bot.mobile.utils.view.AvatarImage
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -53,7 +54,7 @@ class FeedPostsMapper @Inject constructor(
 			totalLikes = postData.totalLikes,
 			liked = postData.liked,
 			addedAt = postData.addedAt,
-			matchDate = matchRequestPost.date,
+			matchDate = matchRequestPost.date?.let { formatDateForMatchPostItem(it) },
 			playerPhoto = matchRequestPost.playerPhoto,
 			playerName = matchRequestPost.playerName,
 			playerRating = matchRequestPost.playerRating,

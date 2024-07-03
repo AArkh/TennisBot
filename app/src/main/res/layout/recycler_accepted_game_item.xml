@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_marginTop="8dp"
+	android:background="@drawable/search_background"
+	android:backgroundTint="@color/tb_white"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<tennis.bot.mobile.utils.view.ImageSeriesView
+		android:id="@+id/players_left_photos"
+		android:layout_width="48dp"
+		android:layout_height="48dp"
+		android:layout_marginTop="16dp"
+		app:withBorder="true"
+		app:layout_constraintStart_toStartOf="@id/insert_score_button"
+		app:layout_constraintEnd_toEndOf="@id/insert_score_button"
+		app:layout_constraintTop_toTopOf="parent"/>
+
+	<TextView
+		android:id="@+id/players_left_names"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:text="@string/namesurname_name"
+		android:textColor="@color/tb_black"
+		android:textSize="14sp"
+		app:layout_constraintEnd_toEndOf="@id/players_left_photos"
+		app:layout_constraintStart_toStartOf="@id/players_left_photos"
+		app:layout_constraintTop_toBottomOf="@id/players_left_photos" />
+
+	<TextView
+		android:id="@+id/players_left_info"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:text="@string/player_info_panel"
+		android:textColor="@color/tb_gray_gray"
+		android:textSize="14sp"
+		app:layout_constraintEnd_toEndOf="@id/players_left_photos"
+		app:layout_constraintStart_toStartOf="@id/players_left_photos"
+		app:layout_constraintTop_toBottomOf="@id/players_left_names" />
+
+	<com.airbnb.lottie.LottieAnimationView
+		android:id="@+id/game_animation"
+		android:layout_width="92dp"
+		android:layout_height="126dp"
+		android:layout_marginBottom="-15dp"
+		android:padding="-5dp"
+		android:visibility="visible"
+		app:layout_constraintBottom_toBottomOf="@id/players_left_names"
+		app:layout_constraintStart_toEndOf="@id/players_left_photos"
+		app:layout_constraintEnd_toStartOf="@id/players_right_photos"
+		app:layout_constraintTop_toTopOf="parent"
+		app:lottie_autoPlay="true"
+		app:lottie_loop="false"
+		app:lottie_rawRes="@raw/game" />
+
+	<TextView
+		android:id="@+id/item_id"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="#1313"
+		android:layout_marginTop="50dp"
+		app:layout_constraintTop_toTopOf="@id/game_animation"
+		app:layout_constraintStart_toStartOf="@id/game_animation"
+		app:layout_constraintEnd_toEndOf="@id/game_animation"
+		app:layout_constraintBottom_toBottomOf="@id/game_animation"/>
+
+	<tennis.bot.mobile.utils.view.ImageSeriesView
+		android:id="@+id/players_right_photos"
+		android:layout_width="48dp"
+		android:layout_height="48dp"
+		android:layout_marginTop="16dp"
+		app:withBorder="true"
+		app:layout_constraintStart_toStartOf="@id/cancel_button"
+		app:layout_constraintEnd_toEndOf="@id/cancel_button"
+		app:layout_constraintTop_toTopOf="parent"/>
+
+	<TextView
+		android:id="@+id/players_right_names"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:text="@string/namesurname_name"
+		android:textColor="@color/tb_black"
+		android:textSize="14sp"
+		app:layout_constraintEnd_toEndOf="@id/players_right_photos"
+		app:layout_constraintStart_toStartOf="@id/players_right_photos"
+		app:layout_constraintTop_toBottomOf="@id/players_right_photos" />
+
+	<TextView
+		android:id="@+id/players_right_info"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:text="@string/player_info_panel"
+		android:textColor="@color/tb_gray_gray"
+		android:textSize="14sp"
+		app:layout_constraintEnd_toEndOf="@id/players_right_photos"
+		app:layout_constraintStart_toStartOf="@id/players_right_photos"
+		app:layout_constraintTop_toBottomOf="@id/players_right_names" />
+
+	<TextView
+		android:id="@+id/insert_score_button"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:text="@string/add_score_title"
+		android:textColor="@color/tb_primary_green"
+		android:textSize="14sp"
+		android:focusable="true"
+		android:clickable="true"
+		android:foreground="@drawable/ripple_gray_corners_8dp"
+		android:layout_marginTop="24dp"
+		android:layout_marginStart="16dp"
+		android:layout_marginBottom="16dp"
+		android:background="@drawable/outline_8dp_1dp"
+		android:backgroundTint="@color/tb_gray_active"
+		android:padding="12dp"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/players_left_info"
+		app:layout_constraintEnd_toStartOf="@id/cancel_button"
+		app:layout_constraintBottom_toBottomOf="parent"/>
+
+	<TextView
+		android:id="@+id/cancel_button"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:text="@string/cancel"
+		android:textColor="@color/tb_red_new"
+		android:textSize="14sp"
+		android:focusable="true"
+		android:clickable="true"
+		android:foreground="@drawable/ripple_gray_corners_8dp"
+		android:layout_marginStart="8dp"
+		android:layout_marginTop="24dp"
+		android:layout_marginEnd="16dp"
+		android:background="@drawable/outline_8dp_1dp"
+		android:backgroundTint="@color/tb_gray_active"
+		android:padding="12dp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toEndOf="@id/insert_score_button"
+		app:layout_constraintTop_toBottomOf="@id/players_left_info"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

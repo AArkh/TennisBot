@@ -36,7 +36,7 @@
 	<string name="password_title">Придумай пароль</string>
 	<string name="password_create_account">Создать аккаунт</string>
 	<string name="password_hint">Пароль должен содержать не менее 8 символов, включая как минимум одну букву и одну цифру</string>
-	<string name="password_agree_with_confidentiality">Нажимая кнопку вы соглашаетесь \n<a href="https://policies.google.com/privacy?hl=ru">с Политикой конфиденциальности</a></string>
+	<string name="password_agree_with_confidentiality">Нажимая кнопку вы соглашаетесь \n<a href="https://telegra.ph/Publichnaya-oferta-o-zaklyuchenii-dogovora-ob-okazanii-uslug-03-11">с Политикой конфиденциальности</a></string>
 	<string name="password_edittext_hint">Пароль</string>
 
 	<!-- survey -->
@@ -195,6 +195,7 @@
 	<string name="score_type_tournament">Турнирный</string>
 	<string name="score_type_friendly">Дружеский</string>
 	<string name="player_info_panel">%d/%d · %s | %s</string>
+	<string name="player_info_panel_no_location">%d/%d · %s</string>
 	<string name="player_new_info_panel">%d · %s | %s</string>
 	<string name="opponents_single_hint_text">Введите данные в строке \nпоиска. Выберите игрока и \nнажмите \"Далее\"</string>
 	<string name="opponents_single_hint_title">Найдите соперника по фамилии</string>
