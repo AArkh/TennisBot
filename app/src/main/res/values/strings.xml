@@ -36,8 +36,10 @@
 	<string name="password_title">Придумай пароль</string>
 	<string name="password_create_account">Создать аккаунт</string>
 	<string name="password_hint">Пароль должен содержать не менее 8 символов, включая как минимум одну букву и одну цифру</string>
+	<string name="password_match_hint">Пароли должны совпадать</string>
 	<string name="password_agree_with_confidentiality">Нажимая кнопку вы соглашаетесь \n<a href="https://telegra.ph/Publichnaya-oferta-o-zaklyuchenii-dogovora-ob-okazanii-uslug-03-11">с Политикой конфиденциальности</a></string>
 	<string name="password_edittext_hint">Пароль</string>
+	<string name="password_confirm_edittext_hint">Подтвердить пароль</string>
 
 	<!-- survey -->
 	<string name="survey_title_1">Твой уровень игры?</string>

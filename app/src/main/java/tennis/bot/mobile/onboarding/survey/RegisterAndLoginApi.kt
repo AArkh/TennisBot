@@ -9,6 +9,7 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.PUT
 
 interface RegisterAndLoginApi {
 
@@ -39,6 +40,9 @@ interface RegisterAndLoginApi {
 		@Field("scope") scope: String,
 		@Field("audience") audience: String
 	): Call<TokenResponse>
+
+	@PUT("api/core-account/password")
+	suspend fun updatePassword(@Body updatePassword: Register): Response<Unit>
 }
 
 const val CONTENT_TYPE_HEADER: String = "application/x-www-form-urlencoded"

@@ -72,12 +72,17 @@ class SmsCodeViewModel @Inject constructor(
         _uiStateFlow.value = newState
     }
 
-    fun onNextButtonClicked(navigationCallback: () -> Unit) {
+    fun onNextButtonClicked(isUpdatePassword: Boolean = false, navigationCallback: () -> Unit) {
         showLoading()
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
-                if (!repository.validateSmsCode(_uiStateFlow.value.input, phone))
-                    throw IllegalArgumentException("Failed to request sms code for phone $phone")
+                if (!isUpdatePassword) {
+                    if (!repository.validateSmsCode(_uiStateFlow.value.input, phone))
+                        throw IllegalArgumentException("Failed to request sms code for phone $phone")
+                } else {
+                    if (!repository.validateSmsCode(_uiStateFlow.value.input, phone, isUpdatePassword = true))
+                        throw IllegalArgumentException("Failed to request sms code for phone $phone")
+                }
             }.onFailure {
                 if (it is IllegalArgumentException) {
                     context.showToast(context.getString(R.string.onboarding_sms_input_failed_to_validate_sms))

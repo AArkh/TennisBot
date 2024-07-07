@@ -11,8 +11,8 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentPasswordBinding
-import tennis.bot.mobile.onboarding.login.LoginViewModel
 import tennis.bot.mobile.onboarding.survey.SurveyFragment
+import tennis.bot.mobile.utils.NoSpaceInputFilter
 import tennis.bot.mobile.utils.goToAnotherSectionFragment
 
 @AndroidEntryPoint
@@ -28,7 +28,7 @@ class PasswordFragment : CoreFragment<FragmentPasswordBinding>() {
 		binding.passwordEt.doOnTextChanged { password, _, _, _ ->
 			viewModel.onPasswordInput(password ?: "")
 		}
-		binding.passwordEt.filters = arrayOf(LoginViewModel.NoSpaceInputFilter())
+		binding.passwordEt.filters = arrayOf(NoSpaceInputFilter())
 		binding.passwordEt.doAfterTextChanged {
 			it?.replace(Regex(" "), "")
 		}

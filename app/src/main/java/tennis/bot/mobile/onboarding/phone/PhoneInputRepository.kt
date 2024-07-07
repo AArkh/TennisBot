@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.annotation.WorkerThread
 import dagger.hilt.android.qualifiers.ApplicationContext
 import tennis.bot.mobile.R
+import tennis.bot.mobile.onboarding.phone.SmsApi.Companion.UPDATE_USER_PASSWORD
 import tennis.bot.mobile.utils.showToast
 import java.lang.StringBuilder
 import javax.inject.Inject
@@ -17,9 +18,13 @@ class PhoneInputRepository @Inject constructor(
 
     @Throws(Exception::class)
     @WorkerThread
-    suspend fun requestSmsCode(phone: String): Boolean {
+    suspend fun requestSmsCode(phone: String, isUpdatePassword: Boolean = false): Boolean {
         val result = kotlin.runCatching {
-           smsApi.requestSmsCode(phone.toApiNumericFormat())
+            if(!isUpdatePassword){
+                smsApi.requestSmsCode(phone.toApiNumericFormat())
+            } else {
+                smsApi.requestSmsCode(phone.toApiNumericFormat(), operation = UPDATE_USER_PASSWORD)
+            }
 
         }.getOrElse { return false }
 
@@ -32,9 +37,13 @@ class PhoneInputRepository @Inject constructor(
 
     @Throws(Exception::class)
     @WorkerThread
-    suspend fun validateSmsCode(code: String, phone: String): Boolean {
+    suspend fun validateSmsCode(code: String, phone: String, isUpdatePassword: Boolean = false): Boolean {
         val response = kotlin.runCatching {
-            smsApi.validateSmsCode(code.toApiNumericFormat(), phone.toApiNumericFormat())
+            if(!isUpdatePassword){
+                smsApi.validateSmsCode(code.toApiNumericFormat(), phone.toApiNumericFormat())
+            } else {
+                smsApi.validateSmsCode(code.toApiNumericFormat(), phone.toApiNumericFormat(), operation = UPDATE_USER_PASSWORD)
+            }
         }.getOrElse { return false }
         return response.isSuccessful
     }

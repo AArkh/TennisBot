@@ -39,3 +39,19 @@ open class LetterInputWithSpacesFilter : InputFilter {
 		return null
 	}
 }
+
+class NoSpaceInputFilter : InputFilter {
+	override fun filter(
+		source: CharSequence?,
+		start: Int,
+		end: Int,
+		dest: Spanned?,
+		dstart: Int,
+		dend: Int
+	): CharSequence? {
+		if (source?.contains(" ") == true) {
+			return ""
+		}
+		return null
+	}
+}
