@@ -1,6 +1,7 @@
 package tennis.bot.mobile.onboarding.phone
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -10,7 +11,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
 import tennis.bot.mobile.utils.AppCoroutineScopes
-import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
 @HiltViewModel
@@ -57,16 +57,21 @@ open class PhoneInputViewModel @Inject constructor(
         )
     }
 
-    fun onNextClicked(successCallback: (phoneNumber: String) -> Unit) {
+    open fun onNextClicked(isUpdatePassword: Boolean = false, successCallback: (phoneNumber: String) -> Unit) {
         AppCoroutineScopes.appWorkerScope.launch {
             val value = uiStateFlow.value
             val phoneNumber = value.prefix + " " + value.userInput
             kotlin.runCatching {
-                if (!repository.requestSmsCode(phoneNumber))
-                    throw IllegalArgumentException("Failed to post Register")
+                if(!isUpdatePassword) {
+                    if (!repository.requestSmsCode(phoneNumber))
+                        throw IllegalArgumentException("Failed to post Register")
+                } else {
+                    if (!repository.requestSmsCode(phoneNumber, true))
+                        throw IllegalArgumentException("Failed to post Register")
+                }
             }.onFailure {
                 if (it !is CancellationException) {
-                    context.showToast("Failed to request sms code")
+                    Log.e("PhoneInputViewModel", "Failed to request sms code")
                 }
             }.onSuccess {
                 successCallback.invoke(phoneNumber)

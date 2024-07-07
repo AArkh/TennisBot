@@ -1,8 +1,6 @@
 package tennis.bot.mobile.onboarding.login
 
 import android.content.Context
-import android.text.InputFilter
-import android.text.Spanned
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +13,6 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.onboarding.survey.OnboardingRepository
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.utils.showToast
-import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -138,22 +135,6 @@ class LoginViewModel @Inject constructor(
 				}
 			}
 			onStopLoading()
-		}
-	}
-
-	class NoSpaceInputFilter : InputFilter {
-		override fun filter(
-			source: CharSequence?,
-			start: Int,
-			end: Int,
-			dest: Spanned?,
-			dstart: Int,
-			dend: Int
-		): CharSequence? {
-			if (source?.contains(" ") == true) {
-				return ""
-			}
-			return null
 		}
 	}
 }

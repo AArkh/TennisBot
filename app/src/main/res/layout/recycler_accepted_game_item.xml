@@ -37,6 +37,8 @@
 		android:text="@string/player_info_panel"
 		android:textColor="@color/tb_gray_gray"
 		android:textSize="14sp"
+		android:maxLines="1"
+		android:ellipsize="end"
 		app:layout_constraintEnd_toEndOf="@id/players_left_photos"
 		app:layout_constraintStart_toStartOf="@id/players_left_photos"
 		app:layout_constraintTop_toBottomOf="@id/players_left_names" />
@@ -97,6 +99,8 @@
 		android:text="@string/player_info_panel"
 		android:textColor="@color/tb_gray_gray"
 		android:textSize="14sp"
+		android:maxLines="1"
+		android:ellipsize="end"
 		app:layout_constraintEnd_toEndOf="@id/players_right_photos"
 		app:layout_constraintStart_toStartOf="@id/players_right_photos"
 		app:layout_constraintTop_toBottomOf="@id/players_right_names" />

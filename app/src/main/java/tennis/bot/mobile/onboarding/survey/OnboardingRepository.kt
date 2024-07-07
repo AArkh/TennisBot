@@ -199,6 +199,19 @@ class OnboardingRepository @Inject constructor(
         return response.code()
     }
 
+    @WorkerThread
+    suspend fun putUpdatePassword(password: String): Boolean {
+        val response = kotlin.runCatching {
+            registerAndLoginApi.updatePassword(Register(
+                phoneNumber = getPhoneNumber(),
+                password = password,
+                smsVerifyCode = getSmsVerifyCode()
+            ))
+        }.getOrElse { return false }
+
+        return response.isSuccessful
+    }
+
 	fun recordPhoneNumberAndSmsCode(phoneNumber: String, smsVerifyCode: String) {
 		sharedPreferences.edit().putString(PHONE_NUMBER_HEADER, phoneNumber.toApiNumericFormat()).apply()
 		sharedPreferences.edit().putString(SMS_VERIFY_CODE_HEADER, smsVerifyCode).apply()

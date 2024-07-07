@@ -20,7 +20,7 @@ import kotlin.math.min
 
 
 @AndroidEntryPoint
-class SmsCodeFragment : CoreFragment<FragmentSmsCodeBinding>() {
+open class SmsCodeFragment : CoreFragment<FragmentSmsCodeBinding>() {
 
     override var adjustToKeyboard: Boolean = true
     override val bindingInflation: Inflation<FragmentSmsCodeBinding> = FragmentSmsCodeBinding::inflate

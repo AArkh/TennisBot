@@ -16,7 +16,10 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentLoginBinding
 import tennis.bot.mobile.feed.bottomnavigation.BottomNavigationFragment
+import tennis.bot.mobile.onboarding.forgotpassword.EnterPhoneFragment
 import tennis.bot.mobile.onboarding.phone.CountryCodesDialogFragment
+import tennis.bot.mobile.utils.NoSpaceInputFilter
+import tennis.bot.mobile.utils.goToAnotherSectionFragment
 import tennis.bot.mobile.utils.hideKeyboard
 import tennis.bot.mobile.utils.traverseToAnotherFragment
 
@@ -35,7 +38,7 @@ class LoginFragment : CoreFragment<FragmentLoginBinding>() {
 		binding.passwordEt.doOnTextChanged { password, _, _, _ ->
 			viewModel.onPasswordInput(password ?: "")
 		}
-		binding.passwordEt.filters = arrayOf(LoginViewModel.NoSpaceInputFilter())
+		binding.passwordEt.filters = arrayOf(NoSpaceInputFilter())
 		binding.passwordEt.doAfterTextChanged {
 			it.toString().replace(" ", "")
 		}
@@ -54,6 +57,10 @@ class LoginFragment : CoreFragment<FragmentLoginBinding>() {
 			) {
 				parentFragmentManager.traverseToAnotherFragment(BottomNavigationFragment())
 			}
+		}
+
+		binding.buttonForgotPassword.setOnClickListener {
+			parentFragmentManager.goToAnotherSectionFragment(EnterPhoneFragment())
 		}
 
 		binding.backButton.setOnClickListener {
