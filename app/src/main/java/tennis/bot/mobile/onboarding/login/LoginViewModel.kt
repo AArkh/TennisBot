@@ -118,17 +118,22 @@ class LoginViewModel @Inject constructor(
 		)
 	}
 
-	fun onLoginPressed(username: CharSequence, password: CharSequence, navigationCallback: () -> Unit) {
+	fun onLoginPressed(username: String, password: String, navigationCallback: (isContinueRegistration: Boolean) -> Unit) {
 		showLoading()
 
 		viewModelScope.launch(Dispatchers.IO) {
-			when (accountInfo.postLogin(uiStateFlow.value.phonePrefix + username.toString(), password.toString())) {
+			when (accountInfo.postLogin(uiStateFlow.value.phonePrefix + username, password)) {
 				200 -> {
-					profileRepo.precacheProfile()
-					profileRepo.recordPhone(uiStateFlow.value.phonePrefix + username.toString())
-					navigationCallback.invoke()
+						if(profileRepo.precacheProfile().isSuccessful) {
+							profileRepo.recordPhone(uiStateFlow.value.phonePrefix + username)
+							navigationCallback.invoke(false)
+						} else {
+							accountInfo.recordPhoneNumberAndSmsCode(uiStateFlow.value.phonePrefix + username, null)
+							accountInfo.recordPassword(password)
+							context.showToast(context.getString(R.string.continue_registration_text))
+							navigationCallback.invoke(true)
+						}
 				}
-
 				400 -> onError(loginAndPasswordError)
 				else -> {
 					context.showToast(context.getString(R.string.error_text))

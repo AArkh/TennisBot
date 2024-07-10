@@ -1,15 +1,10 @@
 package tennis.bot.mobile.onboarding.photopick
 
-import android.content.res.ColorStateList
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.setPadding
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -20,9 +15,9 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentPhotoPickBinding
-import tennis.bot.mobile.onboarding.password.PasswordFragment
+import tennis.bot.mobile.onboarding.survey.SurveyFragment
 import tennis.bot.mobile.utils.dpToPx
-import tennis.bot.mobile.utils.traverseToAnotherFragment
+import tennis.bot.mobile.utils.goToAnotherSectionFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -66,7 +61,7 @@ class PhotoPickFragment : CoreFragment<FragmentPhotoPickBinding>() {
 
         binding.buttonNext.setOnClickListener {
             viewModel.onButtonNextClicked {
-                parentFragmentManager.traverseToAnotherFragment(PasswordFragment())
+                parentFragmentManager.goToAnotherSectionFragment(SurveyFragment())
             }
         }
 

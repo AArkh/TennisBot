@@ -57,7 +57,7 @@ open class PhoneInputViewModel @Inject constructor(
         )
     }
 
-    open fun onNextClicked(isUpdatePassword: Boolean = false, successCallback: (phoneNumber: String) -> Unit) {
+    open fun onNextClicked(isUpdatePassword: Boolean = false, callback: (phoneNumber: String, isSuccess: Boolean) -> Unit) {
         AppCoroutineScopes.appWorkerScope.launch {
             val value = uiStateFlow.value
             val phoneNumber = value.prefix + " " + value.userInput
@@ -73,8 +73,11 @@ open class PhoneInputViewModel @Inject constructor(
                 if (it !is CancellationException) {
                     Log.e("PhoneInputViewModel", "Failed to request sms code")
                 }
+                if (it is IllegalArgumentException) { // for now used to caught the registered number
+                    callback.invoke(phoneNumber, false)
+                }
             }.onSuccess {
-                successCallback.invoke(phoneNumber)
+                callback.invoke(phoneNumber, true)
             }
         }
     }

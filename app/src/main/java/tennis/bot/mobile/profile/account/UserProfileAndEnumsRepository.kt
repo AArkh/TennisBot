@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.annotation.WorkerThread
 import androidx.core.content.ContextCompat.getString
 import dagger.hilt.android.qualifiers.ApplicationContext
+import retrofit2.Response
 import tennis.bot.mobile.R
 import tennis.bot.mobile.onboarding.survey.OnboardingRepository
 import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.IS_ONE_BACKHAND_TITLE
@@ -65,12 +66,12 @@ class UserProfileAndEnumsRepository @Inject constructor(
 	}
 
 	@WorkerThread
-	fun precacheProfile(): ProfileData? {
+	fun precacheProfile(): Response<ProfileData> {
 		val response = userProfileApi.getProfile().execute()
 		if (response.code() == 200) {
 			cachedProfileData = response.body()!!
 		}
-		return response.body()
+		return response
 	}
 
 	@WorkerThread
@@ -78,7 +79,7 @@ class UserProfileAndEnumsRepository @Inject constructor(
 		if (::cachedProfileData.isInitialized) {
 			return cachedProfileData
 		} else {
-			precacheProfile()
+			precacheProfile().body()
 		}
 		return cachedProfileData
 	}

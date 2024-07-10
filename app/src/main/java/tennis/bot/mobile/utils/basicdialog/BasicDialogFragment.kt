@@ -57,7 +57,7 @@ open class BasicDialogFragment: CoreDialogFragment<DialogLoginBinding>() {
 		}
 	}
 
-	private fun openLink(url: String) {
+	fun openLink(url: String) {
 		val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
 		startActivity(intent)
 	}

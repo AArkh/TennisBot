@@ -3,6 +3,7 @@ package tennis.bot.mobile.onboarding.phone
 import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -14,6 +15,9 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentPhoneInputBinding
+import tennis.bot.mobile.onboarding.forgotpassword.VerifySmsFragment
+import tennis.bot.mobile.onboarding.phone.NumberAlreadyRegisteredDialog.Companion.FORGOT_PASSWORD_DIALOG_REQUEST_KEY
+import tennis.bot.mobile.utils.basicdialog.BasicDialogViewModel
 import tennis.bot.mobile.utils.hideKeyboard
 import tennis.bot.mobile.utils.traverseToAnotherFragment
 import javax.inject.Inject
@@ -57,6 +61,12 @@ open class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
             phoneInputViewModel.onCountryPicked(countryCode, countryIcon)
         }
 
+        setFragmentResultListener(FORGOT_PASSWORD_DIALOG_REQUEST_KEY) { _, _ ->
+            phoneInputViewModel.onNextClicked(true) { phoneNumber, _ ->
+                parentFragmentManager.traverseToAnotherFragment(VerifySmsFragment.newInstance(phoneNumber))
+            }
+        }
+
         subscribeToFlowOn(phoneInputViewModel.uiStateFlow) { uiState: PhoneInputUiState ->
             binding.textInputLayout.prefixText = uiState.prefix
             binding.countryIv.setImageResource(uiState.iconRes)
@@ -73,8 +83,18 @@ open class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
         }
 
         binding.buttonNext.setOnClickListener {
-            phoneInputViewModel.onNextClicked {
-                parentFragmentManager.traverseToAnotherFragment(SmsCodeFragment.newInstance(it))
+            phoneInputViewModel.onNextClicked { phoneNumber, isSuccess ->
+                if (isSuccess) {
+                    parentFragmentManager.traverseToAnotherFragment(SmsCodeFragment.newInstance(phoneNumber))
+                } else {
+                    val dialog = NumberAlreadyRegisteredDialog()
+                    dialog.arguments = bundleOf(
+                        BasicDialogViewModel.SELECT_DIALOG_TITLE to "Данный номер уже зарегистрирован",
+                        BasicDialogViewModel.SELECT_DIALOG_TEXT to "Вы можете перейти во вкладку \"Забыл пароль\", чтобы восстановить пароль от аккаунта. Если произошла ошибка и вы не были зарегистрированы по этому номеру, пожалуйста обратитесь в поддержку по кнопке ниже.",
+                        BasicDialogViewModel.SELECT_DIALOG_TOP_BUTTON_TEXT to getString(R.string.forgot_password),
+                        BasicDialogViewModel.SELECT_DIALOG_BOTTOM_BUTTON_TEXT to "Обратиться в поддержку")
+                    dialog.show(childFragmentManager, dialog.tag)
+                }
             }
         }
     }

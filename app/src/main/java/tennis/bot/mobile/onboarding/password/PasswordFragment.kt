@@ -11,7 +11,7 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentPasswordBinding
-import tennis.bot.mobile.onboarding.survey.SurveyFragment
+import tennis.bot.mobile.onboarding.sport.SportFragment
 import tennis.bot.mobile.utils.NoSpaceInputFilter
 import tennis.bot.mobile.utils.goToAnotherSectionFragment
 
@@ -44,7 +44,7 @@ class PasswordFragment : CoreFragment<FragmentPasswordBinding>() {
 
 		binding.buttonNext.setOnClickListener {
 			viewModel.onNextButtonClicked{
-				parentFragmentManager.goToAnotherSectionFragment(SurveyFragment())
+				parentFragmentManager.goToAnotherSectionFragment(SportFragment())
 			}
 		}
 

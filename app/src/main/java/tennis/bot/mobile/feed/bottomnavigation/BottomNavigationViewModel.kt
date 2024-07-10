@@ -1,7 +1,6 @@
 package tennis.bot.mobile.feed.bottomnavigation
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,6 +13,7 @@ import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.authentication.AuthTokenRepository
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
+import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,8 +40,12 @@ class BottomNavigationViewModel @Inject constructor(
 			kotlin.runCatching {
 				_uiStateFlow.value = _uiStateFlow.value.copy(playerPicture = userProfileRepository.getProfile().photoUrl)
 			}.onFailure {
-				Log.d("123456", "we have a problem")
-				tokenRepository.triggerUnAuthFlow(true)
+				if (it is UninitializedPropertyAccessException) { // cachedProfile can't load so the this exception is triggered
+					tokenRepository.triggerUnAuthFlow(false)
+					context.showToast(context.getString(R.string.insufficient_access_text))
+				} else {
+					tokenRepository.triggerUnAuthFlow(true)
+				}
 			}
 		}
 	}

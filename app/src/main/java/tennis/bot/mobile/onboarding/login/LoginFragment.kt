@@ -18,6 +18,7 @@ import tennis.bot.mobile.databinding.FragmentLoginBinding
 import tennis.bot.mobile.feed.bottomnavigation.BottomNavigationFragment
 import tennis.bot.mobile.onboarding.forgotpassword.EnterPhoneFragment
 import tennis.bot.mobile.onboarding.phone.CountryCodesDialogFragment
+import tennis.bot.mobile.onboarding.sport.SportFragment
 import tennis.bot.mobile.utils.NoSpaceInputFilter
 import tennis.bot.mobile.utils.goToAnotherSectionFragment
 import tennis.bot.mobile.utils.hideKeyboard
@@ -54,8 +55,12 @@ class LoginFragment : CoreFragment<FragmentLoginBinding>() {
 			viewModel.onLoginPressed(
 				username = binding.phoneEt.text.toString(),
 				password = binding.passwordEt.text.toString()
-			) {
-				parentFragmentManager.traverseToAnotherFragment(BottomNavigationFragment())
+			) { isContinueRegistration ->
+				if (!isContinueRegistration) {
+					parentFragmentManager.traverseToAnotherFragment(BottomNavigationFragment())
+				} else {
+					parentFragmentManager.goToAnotherSectionFragment(SportFragment())
+				}
 			}
 		}
 

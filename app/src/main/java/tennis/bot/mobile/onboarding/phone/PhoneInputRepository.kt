@@ -3,9 +3,7 @@ package tennis.bot.mobile.onboarding.phone
 import android.content.Context
 import androidx.annotation.WorkerThread
 import dagger.hilt.android.qualifiers.ApplicationContext
-import tennis.bot.mobile.R
 import tennis.bot.mobile.onboarding.phone.SmsApi.Companion.UPDATE_USER_PASSWORD
-import tennis.bot.mobile.utils.showToast
 import java.lang.StringBuilder
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -25,12 +23,7 @@ class PhoneInputRepository @Inject constructor(
             } else {
                 smsApi.requestSmsCode(phone.toApiNumericFormat(), operation = UPDATE_USER_PASSWORD)
             }
-
         }.getOrElse { return false }
-
-        if(result.code() == 400){
-            context.showToast(context.getString(R.string.phone_is_registered))
-        }
 
         return result.isSuccessful
     }

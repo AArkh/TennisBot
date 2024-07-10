@@ -11,8 +11,8 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentSmsCodeBinding
+import tennis.bot.mobile.onboarding.password.PasswordFragment
 import tennis.bot.mobile.onboarding.phone.SmsCodeViewModel.Companion.SMS_CODE_LENGTH
-import tennis.bot.mobile.onboarding.sport.SportFragment
 import tennis.bot.mobile.utils.showKeyboard
 import tennis.bot.mobile.utils.traverseToAnotherFragment
 import tennis.bot.mobile.utils.updateTextIfNeeded
@@ -44,7 +44,7 @@ open class SmsCodeFragment : CoreFragment<FragmentSmsCodeBinding>() {
         }
         binding.buttonNext.setOnClickListener {
             viewModel.onNextButtonClicked {
-                parentFragmentManager.traverseToAnotherFragment(SportFragment())
+                parentFragmentManager.traverseToAnotherFragment(PasswordFragment())
             }
         }
         binding.resendButton.setOnClickListener {

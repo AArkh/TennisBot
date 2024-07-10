@@ -12,13 +12,8 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentUpdatePasswordBinding
-import tennis.bot.mobile.feed.bottomnavigation.BottomNavigationFragment
-import tennis.bot.mobile.feed.requestcreation.RequestCreationFragment
-import tennis.bot.mobile.onboarding.location.LocationDialogFragment
-import tennis.bot.mobile.onboarding.location.LocationFragment
 import tennis.bot.mobile.onboarding.login.LoginFragment
 import tennis.bot.mobile.utils.NoSpaceInputFilter
-import tennis.bot.mobile.utils.basicdialog.BasicDialogFragment
 import tennis.bot.mobile.utils.basicdialog.BasicDialogViewModel
 import tennis.bot.mobile.utils.traverseToAnotherFragment
 
@@ -59,13 +54,12 @@ class UpdatePasswordFragment: CoreFragment<FragmentUpdatePasswordBinding>() {
 				val dialog = UpdatePasswordSuccessDialog()
 				dialog.arguments = bundleOf(
 					BasicDialogViewModel.SELECT_DIALOG_ANIMATION to R.raw.done,
-					BasicDialogViewModel.SELECT_DIALOG_TITLE to "Пароль успешно изменен",
-					BasicDialogViewModel.SELECT_DIALOG_TEXT to "Теперь вы можете успешно войти в приложение Теннис бот",
-					BasicDialogViewModel.SELECT_DIALOG_TOP_BUTTON_TEXT to "Хорошо",
+					BasicDialogViewModel.SELECT_DIALOG_TITLE to getString(R.string.password_changed_success),
+					BasicDialogViewModel.SELECT_DIALOG_TEXT to getString(R.string.password_change_success_text),
+					BasicDialogViewModel.SELECT_DIALOG_TOP_BUTTON_TEXT to getString(R.string.okay),
 					BasicDialogViewModel.SELECT_DIALOG_IS_ONE_BUTTON to true,
 					BasicDialogViewModel.SELECT_DIALOG_IS_CANCELABLE to false,
 					BasicDialogViewModel.SELECT_DIALOG_IS_CANCELABLE_ON_TOUCH_OUTSIDE to false)
-				dialog.isCancelable = false
 				dialog.show(childFragmentManager, dialog.tag)
 			}
 		}

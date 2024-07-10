@@ -327,5 +327,10 @@
 	<string name="hello_blank_fragment">Hello blank fragment</string>
 	<string name="my_request">Моя заявка</string>
 	<string name="my_response">Мой отклик</string>
+	<string name="password_changed_success">Пароль успешно изменен</string>
+	<string name="password_change_success_text">Теперь вы можете успешно войти в приложение Теннис бот</string>
+	<string name="okay">Хорошо</string>
+	<string name="insufficient_access_text">У вас недостаточно прав для доступа к этой вкладке</string>
+	<string name="continue_registration_text">Продолжите регистрацию для пользования всеми возможностями приложения Теннис бот</string>
 
 </resources>

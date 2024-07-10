@@ -6,7 +6,6 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import tennis.bot.mobile.onboarding.phone.PhoneInputFragment
 import tennis.bot.mobile.onboarding.phone.PhoneInputViewModel
-import tennis.bot.mobile.onboarding.phone.SmsCodeFragment
 import tennis.bot.mobile.utils.traverseToAnotherFragment
 
 @AndroidEntryPoint
@@ -18,8 +17,8 @@ class EnterPhoneFragment: PhoneInputFragment() {
 		super.onViewCreated(view, savedInstanceState)
 
 		binding.buttonNext.setOnClickListener {
-			phoneInputViewModel.onNextClicked(true) {
-				parentFragmentManager.traverseToAnotherFragment(VerifySmsFragment.newInstance(it))
+			phoneInputViewModel.onNextClicked(true) { phoneNumber, _ ->
+				parentFragmentManager.traverseToAnotherFragment(VerifySmsFragment.newInstance(phoneNumber))
 			}
 		}
 	}
