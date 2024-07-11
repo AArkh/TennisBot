@@ -48,11 +48,7 @@ class PhotoPickFragment : CoreFragment<FragmentPhotoPickBinding>() {
             viewModel.onPickedCircledImage(pickedCircledImage)
         }
         binding.pickPhotoImage.setOnClickListener {
-//            when (viewModel.uiStateFlow.value.userPickedImage) {
-//                 -> {}
-//                else -> {  }
-//            }
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
         binding.backButton.setOnClickListener {

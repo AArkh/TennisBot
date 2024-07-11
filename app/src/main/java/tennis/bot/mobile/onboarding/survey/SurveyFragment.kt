@@ -1,13 +1,9 @@
 package tennis.bot.mobile.onboarding.survey
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentSurveyBinding
@@ -28,13 +24,8 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 		binding.viewpager.adapter = surveyAdapter
 		binding.viewpager.isUserInputEnabled = false
 
-		val dialog = Dialog(requireContext())
-		dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-		dialog.setContentView(R.layout.dialog_survey_welcome)
-		dialog.window?.setBackgroundDrawableResource(R.drawable.survey_dialog_rounded)
-		val dialogButton = dialog.findViewById<Button>(R.id.dialog_buttonStart)
-		dialog.show()
-		dialogButton.setOnClickListener { dialog.dismiss() }
+		val dialog = SurveyWelcomeDialog()
+		dialog.show(childFragmentManager, dialog.tag)
 
 		binding.backButton.setOnClickListener {
 			if (viewModel.surveyUiState.value.selectedPage > 0) {

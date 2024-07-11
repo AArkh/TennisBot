@@ -13,8 +13,8 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.databinding.FragmentLoginProposalBinding
 import tennis.bot.mobile.onboarding.login.LoginFragment
 import tennis.bot.mobile.onboarding.phone.PhoneInputFragment
+import tennis.bot.mobile.onboarding.survey.SurveyFragment
 import tennis.bot.mobile.utils.goToAnotherSectionFragment
-import tennis.bot.mobile.utils.showInDevelopmentToast
 import javax.inject.Inject
 
 @SuppressLint("ClickableViewAccessibility")
@@ -46,13 +46,6 @@ class LoginProposalFragment : CoreFragment<FragmentLoginProposalBinding>() {
 
         binding.buttonStart.setOnClickListener {
             parentFragmentManager.goToAnotherSectionFragment(PhoneInputFragment())
-        }
-        binding.buttonWithoutRegistration.setOnClickListener {
-            requireContext().showInDevelopmentToast()
-//            parentFragmentManager.beginTransaction()
-//                .addToBackStack(this::class.java.name)
-//                .replace(R.id.fragment_container_view, PhotoPickFragment())
-//                .commit()
         }
         binding.buttonLogin.setOnClickListener {
             parentFragmentManager.goToAnotherSectionFragment(LoginFragment())

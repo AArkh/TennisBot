@@ -6,7 +6,7 @@ import android.graphics.drawable.Drawable
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.net.Uri
-import android.provider.MediaStore
+import android.provider.OpenableColumns
 import android.util.Log
 import android.widget.TextView
 import androidx.annotation.WorkerThread
@@ -17,12 +17,14 @@ import tennis.bot.mobile.onboarding.location.LocationRepository
 import tennis.bot.mobile.profile.account.AccountPageAdapter
 import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
 import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 const val DEFAULT_DATE_TIME = "0001-01-01T00:00:00Z"
 const val CONTENT_LINK = "http://bugz.su:9000/publiccontent/"
-const val DEFAULT_PICS_PREFIX = "https://s3.aeza.cloud/perfect-wine/DEV/avatars/"
+const val DEFAULT_PICS_PREFIX = "https://s3.timeweb.cloud/c9b28c11-tennisbot/DEV/avatars/"
 val dateFormats = listOf(
 	"yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ",
 	"yyyy-MM-dd'T'hh:mm:ss'Z'",
@@ -197,11 +199,42 @@ suspend fun convertLocationStringToInt(
 }
 
 fun uriToFile(context: Context, uri: Uri): File? {
-	val projection = arrayOf(MediaStore.Images.Media.DATA)
-	val cursor: Cursor? = context.contentResolver.query(uri, projection, null, null, null)
-	val columnIndex: Int? = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-	cursor?.moveToFirst()
-	val filePath: String? = columnIndex?.let { cursor.getString(it) }
-	cursor?.close()
-	return filePath?.let { File(it) }
+	val fileName = getFileName(context, uri) ?: return null
+	val tempFile = File(context.cacheDir, fileName)
+	try {
+		val inputStream = context.contentResolver.openInputStream(uri) ?: return null
+		val outputStream = FileOutputStream(tempFile)
+		inputStream.use { input ->
+			outputStream.use { output ->
+				input.copyTo(output)
+			}
+		}
+		return tempFile
+	} catch (e: IOException) {
+		e.printStackTrace()
+		return null
+	}
+}
+
+private fun getFileName(context: Context, uri: Uri): String? {
+	var result: String? = null
+	if (uri.scheme == "content") {
+		val cursor: Cursor? = context.contentResolver.query(uri, null, null, null, null)
+		cursor.use { cur ->
+			if (cur != null && cur.moveToFirst()) {
+				val index = cur.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+				if (index != -1) {
+					result = cur.getString(index)
+				}
+			}
+		}
+	}
+	if (result == null) {
+		result = uri.path
+		val cut = result?.lastIndexOf('/')
+		if (cut != -1) {
+			result = result?.substring(cut!! + 1)
+		}
+	}
+	return result
 }

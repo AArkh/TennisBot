@@ -56,27 +56,16 @@
 		android:layout_marginHorizontal="20dp"
 		android:layout_marginBottom="10dp"
 		android:text="@string/onboarding_start_button"
-		app:layout_constraintBottom_toTopOf="@id/button_without_registration"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent" />
-
-	<com.google.android.material.button.MaterialButton
-		android:id="@+id/button_without_registration"
-		style="@style/Widget.TennisBot.Button.Secondary"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginHorizontal="20dp"
-		android:layout_marginBottom="10dp"
-		android:text="@string/onboarding_proceed_without_registration_button"
 		app:layout_constraintBottom_toTopOf="@id/button_login"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent" />
 
 	<com.google.android.material.button.MaterialButton
 		android:id="@+id/button_login"
-		style="@style/Widget.TennisBot.Button.Secondary"
+		style="@style/Widget.TennisBot.Button.Active"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
+		android:background="@color/tb_blue_telegram"
 		android:layout_marginHorizontal="20dp"
 		android:layout_marginBottom="8dp"
 		android:text="@string/onboarding_login_button"
