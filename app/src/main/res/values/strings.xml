@@ -1,8 +1,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="ru">
 	// ignore not having an english translation
 	<string name="app_name">Tennis bot</string>
-	<string name="onboarding_text_title">Ракеточная Эко-Система</string>
-	<string name="onboarding_text">Тысячи игроков, в разных странах мира уже нашли себе равных партнеров, друзей и присоединились к самому большому сообществу «Теннис бот»</string>
+	<string name="onboarding_text_title_1">Ракеточная экоcистема</string>
+	<string name="onboarding_text_1">Тысячи игроков, в разных странах мира уже нашли себе равных партнеров, друзей и присоединились к самому большому сообществу «Теннис бот»</string>
+	<string name="onboarding_text_title_2">Новое поколение</string>
+	<string name="onboarding_text_2">Социальная сеть с возможностью получать ценные призы за активные действия</string>
+	<string name="onboarding_text_title_3">Безграничное общение</string>
+	<string name="onboarding_text_3">Вы всегда в центре событий и новостей. Полная синхронизация Приложения и Telegram</string>
 	<string name="onboarding_start_button">Начать</string>
 	<string name="onboarding_login_button">Войти</string>
 

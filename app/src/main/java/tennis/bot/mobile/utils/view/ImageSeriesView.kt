@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.os.Parcelable
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import androidx.annotation.Keep
 import androidx.core.content.ContextCompat.getColor
@@ -117,6 +118,20 @@ class ImageSeriesView @JvmOverloads constructor(
         val imageLoader = ImageLoader(context)
         val request = ImageRequest.Builder(context)
             .data(buildImageRequest(context, avatarImage.imageUrl))
+            .listener(
+                onStart = { request ->
+                    Log.d("Coil", "Started: ${request.data}")
+                },
+                onCancel = { request ->
+                    Log.d("Coil", "Cancelled: ${request.data}")
+                },
+                onError = { request, throwable ->
+                    Log.e("Coil", "Error: ${request.data}, Exception: $throwable")
+                },
+                onSuccess = { request, metadata ->
+                    Log.d("Coil", "Success: ${request.data}")
+                }
+            )
             .target { result ->
                 drawables[0] = result
                 invalidate()

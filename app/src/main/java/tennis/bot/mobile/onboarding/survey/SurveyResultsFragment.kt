@@ -9,10 +9,9 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentSurveyResultsBinding
-import tennis.bot.mobile.onboarding.login.LoginDialogFragment
-import tennis.bot.mobile.profile.account.AccountPageFragment
+import tennis.bot.mobile.feed.bottomnavigation.BottomNavigationFragment
+import tennis.bot.mobile.utils.destroyBackstack
 import tennis.bot.mobile.utils.goToAnotherSectionFragment
-import tennis.bot.mobile.utils.showToast
 import tennis.bot.mobile.utils.traverseToAnotherFragment
 import javax.inject.Inject
 
@@ -43,7 +42,8 @@ class SurveyResultsFragment : CoreFragment<FragmentSurveyResultsBinding>() {
 
 		binding.buttonContinue.setOnClickListener {
 			viewModel.onContinueButtonClicked {
-				parentFragmentManager.goToAnotherSectionFragment(AccountPageFragment())
+				parentFragmentManager.destroyBackstack()
+				parentFragmentManager.goToAnotherSectionFragment(BottomNavigationFragment())
 			}
 		}
 

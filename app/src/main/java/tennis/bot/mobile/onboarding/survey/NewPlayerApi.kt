@@ -54,7 +54,7 @@ data class NewPlayer(
     val surName: String,
     val phoneNumber: String?,
     val photo: String?,
-    val birthday: String,
+    val birthday: String?,
     val isMale: Boolean,
     val countryId: Int,
     val cityId: Int?, //nullable

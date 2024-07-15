@@ -65,7 +65,7 @@
 		style="@style/Widget.TennisBot.Button.Active"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:background="@color/tb_blue_telegram"
+		android:backgroundTint="@color/tb_blue_telegram"
 		android:layout_marginHorizontal="20dp"
 		android:layout_marginBottom="8dp"
 		android:text="@string/onboarding_login_button"

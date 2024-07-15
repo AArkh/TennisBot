@@ -27,7 +27,7 @@ class OnboardingRepository @Inject constructor(
 
     private val sharedPreferences = context.getSharedPreferences("AccountInfo", Context.MODE_PRIVATE)
     private val surveyData = mutableMapOf<String, Int>()
-    private var registerResponse: RegisterResponse = RegisterResponse("", "", false, "")
+    private var registerResponse: RegisterResponse = RegisterResponse("", "", false, "1970-01-01T00:00:00.000Z")
     val rawSurveyAnswers = mutableListOf<Int>()
     val surveyAnswers = mutableListOf<String>()
 

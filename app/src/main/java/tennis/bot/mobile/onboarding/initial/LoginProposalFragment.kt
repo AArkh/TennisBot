@@ -13,7 +13,6 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.databinding.FragmentLoginProposalBinding
 import tennis.bot.mobile.onboarding.login.LoginFragment
 import tennis.bot.mobile.onboarding.phone.PhoneInputFragment
-import tennis.bot.mobile.onboarding.survey.SurveyFragment
 import tennis.bot.mobile.utils.goToAnotherSectionFragment
 import javax.inject.Inject
 
@@ -53,16 +52,16 @@ class LoginProposalFragment : CoreFragment<FragmentLoginProposalBinding>() {
 
         textAdapter.setListAndNotify(listOf(
             TitledText(
-                requireContext().getString(R.string.onboarding_text_title),
-                requireContext().getString(R.string.onboarding_text)
+                requireContext().getString(R.string.onboarding_text_title_1),
+                requireContext().getString(R.string.onboarding_text_1)
             ),
             TitledText(
-                requireContext().getString(R.string.onboarding_text_title),
-                requireContext().getString(R.string.onboarding_text)
+                requireContext().getString(R.string.onboarding_text_title_2),
+                requireContext().getString(R.string.onboarding_text_2)
             ),
             TitledText(
-                requireContext().getString(R.string.onboarding_text_title),
-                requireContext().getString(R.string.onboarding_text)
+                requireContext().getString(R.string.onboarding_text_title_3),
+                requireContext().getString(R.string.onboarding_text_3)
             ),
         ))
 
