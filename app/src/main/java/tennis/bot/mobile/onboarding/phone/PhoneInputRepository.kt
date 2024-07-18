@@ -1,8 +1,6 @@
 package tennis.bot.mobile.onboarding.phone
 
-import android.content.Context
 import androidx.annotation.WorkerThread
-import dagger.hilt.android.qualifiers.ApplicationContext
 import tennis.bot.mobile.onboarding.phone.SmsApi.Companion.UPDATE_USER_PASSWORD
 import java.lang.StringBuilder
 import javax.inject.Inject
@@ -10,8 +8,7 @@ import javax.inject.Singleton
 
 @Singleton
 class PhoneInputRepository @Inject constructor(
-    private val smsApi: SmsApi,
-    @ApplicationContext private val context: Context
+    private val smsApi: SmsApi
 ) {
 
     @Throws(Exception::class)

@@ -29,9 +29,7 @@ class PhotoPickViewModel @Inject constructor(
         CircledImage(7, R.drawable.default7),
         CircledImage(8, R.drawable.default8),
         CircledImage(9, R.drawable.default9),
-        CircledImage(10, R.drawable.default10),
-        CircledImage(11, R.drawable.photo_picker_11),
-        CircledImage(12, R.drawable.photo_picker_12)
+        CircledImage(10, R.drawable.default10)
     )
 
     private val _uiStateFlow = MutableStateFlow<PhotoPickUiState>(PhotoPickUiState.Loading)
@@ -77,7 +75,7 @@ class PhotoPickViewModel @Inject constructor(
 
             is PhotoPickUiState.PickedUserImage -> {
                 viewModelScope.launch {
-                    onboardingRepository.postRegistrationProfilePicture((uiStateFlow.value as PhotoPickUiState.PickedUserImage).userPickedImage!!)
+                    onboardingRepository.postRegistrationProfilePicture((uiStateFlow.value as PhotoPickUiState.PickedUserImage).userPickedImage)
                 }
             }
 

@@ -27,6 +27,7 @@
 	<string name="photopick_title">Добавь фотографию</string>
 	<string name="button_skip">Пропустить</string>
 	<string name="photopick_title_second">Или выбери из базы</string>
+	<string name="phone_input_hint_text" translatable="false">Код подтверждения придет к вам в WhatsApp. Также, вы можете получить код в <a>Telegram</a>. \n Если вам не пришел код, свяжитесь с <a>поддержкой</a></string>
 
 	<!-- sms code -->
 	<string name="onboarding_sms_input_title">Введи код отправленный на\n %s</string>

@@ -2,6 +2,7 @@ package tennis.bot.mobile.onboarding.phone
 
 import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
+import android.text.method.LinkMovementMethod
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
@@ -20,15 +21,12 @@ import tennis.bot.mobile.onboarding.phone.NumberAlreadyRegisteredDialog.Companio
 import tennis.bot.mobile.utils.basicdialog.BasicDialogViewModel
 import tennis.bot.mobile.utils.hideKeyboard
 import tennis.bot.mobile.utils.traverseToAnotherFragment
-import javax.inject.Inject
 
 @AndroidEntryPoint
 open class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
 
     override var adjustToKeyboard: Boolean = true
     override val bindingInflation: Inflation<FragmentPhoneInputBinding> = FragmentPhoneInputBinding::inflate
-    @Inject
-    lateinit var countryAdapter: CountryCodesAdapter
     private val phoneInputViewModel: PhoneInputViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,6 +41,8 @@ open class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
         binding.backButton.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
+
+        binding.confidentialityText.movementMethod = LinkMovementMethod.getInstance() // ссылка в strings
 
         binding.openCountriesSheetLayout.setOnClickListener {
             requireContext().hideKeyboard()

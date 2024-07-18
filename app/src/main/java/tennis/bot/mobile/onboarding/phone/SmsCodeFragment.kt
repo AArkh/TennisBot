@@ -1,7 +1,14 @@
 package tennis.bot.mobile.onboarding.phone
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.InputFilter
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
@@ -13,6 +20,7 @@ import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentSmsCodeBinding
 import tennis.bot.mobile.onboarding.password.PasswordFragment
 import tennis.bot.mobile.onboarding.phone.SmsCodeViewModel.Companion.SMS_CODE_LENGTH
+import tennis.bot.mobile.onboarding.survey.toApiNumericFormat
 import tennis.bot.mobile.utils.showKeyboard
 import tennis.bot.mobile.utils.traverseToAnotherFragment
 import tennis.bot.mobile.utils.updateTextIfNeeded
@@ -50,8 +58,45 @@ open class SmsCodeFragment : CoreFragment<FragmentSmsCodeBinding>() {
         binding.resendButton.setOnClickListener {
             viewModel.onResendSmsButtonClicked()
         }
+        onSideNoteClicked()
 
         subscribeToFlowOn(viewModel.uiStateFlow) { uiState -> updateUiState(uiState) }
+    }
+
+    private fun onSideNoteClicked() {
+        val phone = viewModel.getPhone()
+        val spannableString = SpannableString(getString(R.string.phone_input_hint_text))
+
+        val telegramLink = object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                Log.d("onSideNoteClicked", "phone is $phone")
+                val url = "https://t.me/TennisPartnerBot?start=registration_phone${phone.toApiNumericFormat()}"
+                openLink(url)
+            }
+        }
+
+        val supportLink = object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                val url = "https://telegra.ph/Publichnaya-oferta-o-zaklyuchenii-dogovora-ob-okazanii-uslug-03-11"
+                openLink(url)
+            }
+        }
+
+        val telegramStart = spannableString.indexOf("Telegram")
+        val telegramEnd = telegramStart + "Telegram".length
+        spannableString.setSpan(telegramLink, telegramStart, telegramEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        val supportStart = spannableString.indexOf("поддержкой")
+        val supportEnd = supportStart + "поддержкой".length
+        spannableString.setSpan(supportLink, supportStart, supportEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        binding.sideNoteText.text = spannableString
+        binding.sideNoteText.movementMethod = LinkMovementMethod.getInstance()
+    }
+
+    private fun openLink(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(intent)
     }
 
     private fun updateUiState(uiState: SmsCodeUiState) {

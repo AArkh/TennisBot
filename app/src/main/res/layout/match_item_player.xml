@@ -53,6 +53,7 @@
 		android:layout_height="20dp"
 		android:background="@drawable/rating_power_background"
 		android:padding="3dp"
+		android:layout_marginTop="2dp"
 		android:src="@drawable/rating_power"
 		app:layout_constraintBottom_toBottomOf="@id/player_rating_value"
 		app:layout_constraintEnd_toStartOf="@id/player_rating_value"
@@ -90,10 +91,10 @@
 		android:textColor="@color/tb_primary_green"
 		android:textSize="11sp"
 		app:drawableStartCompat="@drawable/vector_up"
-		app:layout_constraintBottom_toBottomOf="@id/player_rating_value"
+		app:layout_constraintBottom_toBottomOf="@id/player_rating_image"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toEndOf="@id/player_rating_value"
-		app:layout_constraintTop_toTopOf="@id/player_rating_value" />
+		app:layout_constraintTop_toTopOf="@id/player_rating_image" />
 
 	<ImageView
 		android:id="@+id/second_player_rating_image"

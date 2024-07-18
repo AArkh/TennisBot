@@ -72,6 +72,10 @@ class SmsCodeViewModel @Inject constructor(
         _uiStateFlow.value = newState
     }
 
+    fun getPhone(): String {
+        return phone
+    }
+
     fun onNextButtonClicked(isUpdatePassword: Boolean = false, navigationCallback: () -> Unit) {
         showLoading()
         viewModelScope.launch(Dispatchers.IO) {

@@ -1,7 +1,6 @@
 package tennis.bot.mobile.onboarding.password
 
 import android.os.Bundle
-import android.text.method.LinkMovementMethod
 import android.view.View
 import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
@@ -39,8 +38,6 @@ class PasswordFragment : CoreFragment<FragmentPasswordBinding>() {
 		binding.backButton.setOnClickListener {
 			parentFragmentManager.popBackStack()
 		}
-
-		binding.confidentialityText.movementMethod = LinkMovementMethod.getInstance() // ссылка в strings
 
 		binding.buttonNext.setOnClickListener {
 			viewModel.onNextButtonClicked{
