@@ -1,6 +1,6 @@
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="ru">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation"  tools:locale="ru">
 	// ignore not having an english translation
-	<string name="app_name">Tennis bot</string>
+	<string name="app_name" >Tennis bot</string>
 	<string name="onboarding_text_title_1">Ракеточная экоcистема</string>
 	<string name="onboarding_text_1">Тысячи игроков, в разных странах мира уже нашли себе равных партнеров, друзей и присоединились к самому большому сообществу «Теннис бот»</string>
 	<string name="onboarding_text_title_2">Новое поколение</string>
@@ -27,7 +27,7 @@
 	<string name="photopick_title">Добавь фотографию</string>
 	<string name="button_skip">Пропустить</string>
 	<string name="photopick_title_second">Или выбери из базы</string>
-	<string name="phone_input_hint_text" translatable="false">Код подтверждения придет к вам в WhatsApp. Также, вы можете получить код в <a>Telegram</a>. \n Если вам не пришел код, свяжитесь с <a>поддержкой</a></string>
+	<string name="phone_input_hint_text">Код подтверждения придет к вам в WhatsApp. Также, вы можете получить код в <a>Telegram</a>. \n Если вам не пришел код, свяжитесь с <a>поддержкой</a></string>
 
 	<!-- sms code -->
 	<string name="onboarding_sms_input_title">Введи код отправленный на\n %s</string>
@@ -324,7 +324,7 @@
 	<string name="create">Создать</string>
 	<string name="comment_text_hint">Напишите коментарий</string>
 	<string name="you_have_request">У вас уже есть заявка</string>
-	<string name="you_have_request_dialog_text"><![CDATA[В первой версии приложения, вы можете создавать только одну заявку. Чтобы удалить или отредактировать текущую заявку, зайдите в раздел \"Игра\" -> \"Исходящее\", выберите \"...\" сверху карточки.]]></string>
+	<string name="you_have_request_dialog_text"><![CDATA[В первой версии приложения, вы можете создавать только одну заявку. Чтобы удалить или отредактировать текущую заявку, зайдите в раздел \"Игра\" -> \"Исходящее\", выберите \"…\" сверху карточки.]]></string>
 	<string name="understood">Понятно</string>
 	<string name="request_creation_success_title">Ваша заявка создана</string>
 	<string name="request_creation_success_text">Посмотрите актуальные заявки других игроков в ленте</string>
@@ -337,5 +337,9 @@
 	<string name="okay">Хорошо</string>
 	<string name="insufficient_access_text">У вас недостаточно прав для доступа к этой вкладке</string>
 	<string name="continue_registration_text">Продолжите регистрацию для пользования всеми возможностями приложения Теннис бот</string>
+	<string name="single_rating">Одиночная сила</string>
+	<string name="doubles_rating">Парная сила</string>
+	<string name="phone_number_hint">Номер телефона</string>
+	<string name="birthday_hint">День рождения</string>
 
 </resources>

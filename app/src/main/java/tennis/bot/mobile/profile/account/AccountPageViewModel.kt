@@ -96,9 +96,10 @@ class AccountPageViewModel @Inject constructor(
 					ButtonSwitch(true)
 				)
 				val gameDataList = onProvidingGameData(profileData)
+				val contactsList = onProvidingContacts(profileData)
 
 				_uiStateFlow.value =
-					AccountPageUiState.ProfileDataReceived(basicLayout, gameDataList, emptyList())
+					AccountPageUiState.ProfileDataReceived(basicLayout, gameDataList, contactsList)
 			}.onFailure {
 				onLogoutPressed(true)
 			}
@@ -128,6 +129,14 @@ class AccountPageViewModel @Inject constructor(
 		}
 
 		return modifiedGameData
+	}
+
+	private fun onProvidingContacts(profileData: ProfileData): List<SurveyResultItem> {
+		return listOf(
+			SurveyResultItem(context.getString(R.string.phone_number_hint), repository.getPhoneNumber() ?: context.getString(R.string.survey_option_null)),
+			SurveyResultItem(context.getString(R.string.telegram_hint), profileData.telegram ?: context.getString(R.string.survey_option_null)), // test to see if works
+			SurveyResultItem(context.getString(R.string.birthday_hint), convertDateAndTime(profileData.birthday ?: "") ?: context.getString(R.string.survey_option_null), noUnderline = true),
+		)
 	}
 
 	fun onLogoutPressed(isExpired: Boolean){

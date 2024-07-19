@@ -31,6 +31,7 @@ import tennis.bot.mobile.profile.editprofile.NameSurnameNetwork
 import tennis.bot.mobile.profile.editprofile.PhoneNumberNetwork
 import tennis.bot.mobile.profile.editprofile.TelegramNetwork
 import tennis.bot.mobile.utils.showToast
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -151,7 +152,7 @@ class UserProfileAndEnumsRepository @Inject constructor(
 
 		if (selectedEnumTypeAndId.second != null) {
 			val enum = enumType?.enums?.find { return@find it.id == selectedEnumTypeAndId.second }
-			if (enum != null) return enum.name
+			if (enum != null) return getLocalizedEnumName(enum)
 		} else {
 			return context.getString(R.string.survey_option_null)
 		}
@@ -168,13 +169,19 @@ class UserProfileAndEnumsRepository @Inject constructor(
 
 			if (id != null) {
 				val enum = enumType?.enums?.find { return@find it.id == id }
-				if (enum != null) decodedList.add(enum.name)
+				if (enum != null) decodedList.add(getLocalizedEnumName(enum))
 			} else {
 				decodedList.add(context.getString(R.string.survey_option_null))
 			}
 		}
 
 		return if (decodedList.isNotEmpty()) { decodedList.toList() } else { emptyList() }
+	}
+
+	private fun getLocalizedEnumName(enum: EnumData): String {
+		val locale = Locale.getDefault().language
+
+		return if (locale == "ru") enum.name else enum.nameEnglish
 	}
 
 	suspend fun getEnumGroup(enumType: String): List<EnumData>? {
