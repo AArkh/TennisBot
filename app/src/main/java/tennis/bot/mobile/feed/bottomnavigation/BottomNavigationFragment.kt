@@ -80,8 +80,6 @@ class BottomNavigationFragment : AuthorizedCoreFragment<FragmentBottomNavigation
 	}
 
 	private fun replaceFragment(fragment: Fragment) {
-//		val currentFragment = parentFragmentManager.findFragmentById(R.id.fragment_container_view)
-//		if (currentFragment != fragment) {
 			parentFragmentManager.beginTransaction().replace(R.id.container_view, fragment).commit()
 	}
 

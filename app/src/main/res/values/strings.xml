@@ -7,7 +7,7 @@
 	<string name="onboarding_text_2">Социальная сеть с возможностью получать ценные призы за активные действия</string>
 	<string name="onboarding_text_title_3">Безграничное общение</string>
 	<string name="onboarding_text_3">Вы всегда в центре событий и новостей. Полная синхронизация Приложения и Telegram</string>
-	<string name="onboarding_start_button">Начать</string>
+	<string name="onboarding_start_button">Пройти регистрацию</string>
 	<string name="onboarding_login_button">Войти</string>
 
 	<!-- phone input -->
@@ -28,6 +28,10 @@
 	<string name="button_skip">Пропустить</string>
 	<string name="photopick_title_second">Или выбери из базы</string>
 	<string name="phone_input_hint_text">Код подтверждения придет к вам в WhatsApp. Также, вы можете получить код в <a>Telegram</a>. \n Если вам не пришел код, свяжитесь с <a>поддержкой</a></string>
+	<string name="localized_support_word">поддержкой</string>
+	<string name="number_exist_dialog_title">Номер уже есть в системе</string>
+	<string name="number_exist_dialog_text">Этот номер уже зарегистрирован в Tennis Bot. Попробуйте войти или восстановить пароль</string>
+	<string name="restore_password">Восстановить пароль</string>
 
 	<!-- sms code -->
 	<string name="onboarding_sms_input_title">Введи код отправленный на\n %s</string>
@@ -133,12 +137,12 @@
 	<string name="phone_is_registered">Этот номер уже зарегистрирован</string>
 	<string name="login_title">Войти</string>
 	<string name="enter_password">Введи пароль</string>
-	<string name="forgot_password">Забыл пароль</string>
 	<string name="wrong_pass_or_login">Неправильный логин или пароль</string>
 	<string name="login_dialog_text">Сейчас вы можете воспользоваться всеми функциями Теннис Бота в телеграм</string>
 	<string name="login_dialog_title">Ваша заявка создана</string>
 	<string name="login_dialog_go_chat">Перейти в чат</string>
 	<string name="login_dialog_go_bot">Перейти в бот</string>
+	<string name="login_hint_text">Если у вас уже есть аккаунт в Tennis Bot, нажмите клавишу \"Восстановить пароль\". Код придет к вам в бот или в WhatsApp</string>
 	<string name="calibration_start">Начни играть для завершения калибровки</string>
 	<string name="calibration_rounds_remain_text">Сыграй еще %d матчей для завершения калибровки</string>
 	<string name="calibration_finished">Игрок проверен системой</string>

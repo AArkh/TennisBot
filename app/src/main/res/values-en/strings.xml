@@ -28,7 +28,7 @@
 	<string name="onboarding_text_2">A social network with the ability to receive valuable prizes for active actions</string>
 	<string name="onboarding_text_title_3">Limitless Communication</string>
 	<string name="onboarding_text_3">You are always at the center of events and news. Full synchronization of the App and Telegram bot</string>
-	<string name="onboarding_start_button">Start</string>
+	<string name="onboarding_start_button">Register</string>
 	<string name="onboarding_login_button">Login</string>
 
 	<!-- phone input -->
@@ -49,6 +49,10 @@
 	<string name="button_skip">Skip</string>
 	<string name="photopick_title_second">Or choose from the database</string>
 	<string name="phone_input_hint_text" translatable="false">You will receive your confirmation code in WhatsApp. Also, you can get the code in <a>Telegram</a>. \n If you did not receive the code, contact <a>support</a></string>
+	<string name="localized_support_word">support</string>
+	<string name="number_exist_dialog_title">Number is already taken in the system</string>
+	<string name="number_exist_dialog_text">This number is already registered in Tennis Bot. Try logging in or recovering your password.</string>
+	<string name="restore_password">Restore Password</string>
 
 	<!-- sms code -->
 	<string name="onboarding_sms_input_title">Enter the code sent to\n %s</string>
@@ -154,12 +158,12 @@
 	<string name="phone_is_registered">This number is already registered</string>
 	<string name="login_title">Login</string>
 	<string name="enter_password">Enter password</string>
-	<string name="forgot_password">Forgot password</string>
 	<string name="wrong_pass_or_login">Incorrect login or password</string>
 	<string name="login_dialog_text">Now you are a part of the Tennis Bot ecosystem</string>
 	<string name="login_dialog_title">Success</string>
 	<string name="login_dialog_go_chat">Go to the chat</string>
 	<string name="login_dialog_go_bot">Go to the bot</string>
+	<string name="login_hint_text">If you already have an account in Tennis Bot, press \"Restore Password\" button. Code will be sent to the Telegram bot or WhatsApp</string>
 	<string name="calibration_start">Start playing to complete calibration</string>
 	<string name="calibration_rounds_remain_text">Play %d more matches to complete calibration</string>
 	<string name="calibration_finished">Player verified by the system</string>

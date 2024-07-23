@@ -8,7 +8,6 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
-import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
@@ -69,16 +68,13 @@ open class SmsCodeFragment : CoreFragment<FragmentSmsCodeBinding>() {
 
         val telegramLink = object : ClickableSpan() {
             override fun onClick(widget: View) {
-                Log.d("onSideNoteClicked", "phone is $phone")
-                val url = "https://t.me/TennisPartnerBot?start=registration_phone${phone.toApiNumericFormat()}"
-                openLink(url)
+                openLink(TELEGRAM_SMS_URL + phone.toApiNumericFormat())
             }
         }
 
         val supportLink = object : ClickableSpan() {
             override fun onClick(widget: View) {
-                val url = "https://telegra.ph/Publichnaya-oferta-o-zaklyuchenii-dogovora-ob-okazanii-uslug-03-11"
-                openLink(url)
+                openLink(SUPPORT_URL)
             }
         }
 
@@ -86,8 +82,8 @@ open class SmsCodeFragment : CoreFragment<FragmentSmsCodeBinding>() {
         val telegramEnd = telegramStart + "Telegram".length
         spannableString.setSpan(telegramLink, telegramStart, telegramEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-        val supportStart = spannableString.indexOf("поддержкой")
-        val supportEnd = supportStart + "поддержкой".length
+        val supportStart = spannableString.indexOf(getString(R.string.localized_support_word)) // small fix to localized word problem
+        val supportEnd = supportStart + getString(R.string.localized_support_word).length
         spannableString.setSpan(supportLink, supportStart, supportEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         binding.sideNoteText.text = spannableString
@@ -164,6 +160,8 @@ open class SmsCodeFragment : CoreFragment<FragmentSmsCodeBinding>() {
 
     companion object {
         const val PHONE_NUMBER_ARGUMENT = "SmsCodeFragment"
+        const val TELEGRAM_SMS_URL = "https://t.me/TennisPartnerBot?start=registration_phone"
+        const val SUPPORT_URL = "https://t.me/ivzhbook"
 
         fun newInstance(phoneNumber: String): SmsCodeFragment {
             val fragment = SmsCodeFragment()

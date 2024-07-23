@@ -11,7 +11,7 @@ class NumberAlreadyRegisteredDialog: BasicDialogFragment() {
 		const val FORGOT_PASSWORD_DIALOG_REQUEST_KEY = "FORGOT_PASSWORD_DIALOG_REQUEST_KEY"
 		const val FORGOT_PASSWORD_DIALOG_SELECTED_OPTION_KEY = "FORGOT_PASSWORD_DIALOG_SELECTED_OPTION_KEY"
 		const val GO_TO_FORGOT_PASSWORD = "GO_TO_FORGOT_PASSWORD"
-		const val NEED_SUPPORT_CALLBACK = "NEED_SUPPORT_CALLBACK"
+		const val LOGIN_CALLBACK = "LOGIN_CALLBACK"
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -20,13 +20,14 @@ class NumberAlreadyRegisteredDialog: BasicDialogFragment() {
 		binding.buttonGreen.setOnClickListener {
 			requireActivity().supportFragmentManager.setFragmentResult(
 				FORGOT_PASSWORD_DIALOG_REQUEST_KEY,
-				bundleOf(FORGOT_PASSWORD_DIALOG_SELECTED_OPTION_KEY to GO_TO_FORGOT_PASSWORD)
+				bundleOf(FORGOT_PASSWORD_DIALOG_SELECTED_OPTION_KEY to LOGIN_CALLBACK)
 			)
 		}
 		binding.buttonGrey.setOnClickListener {
-			openLink(BOT_URL) // todo change to an actual support link
+			requireActivity().supportFragmentManager.setFragmentResult(
+				FORGOT_PASSWORD_DIALOG_REQUEST_KEY,
+				bundleOf(FORGOT_PASSWORD_DIALOG_SELECTED_OPTION_KEY to GO_TO_FORGOT_PASSWORD)
+			)
 		}
 	}
-
-
 }

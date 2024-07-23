@@ -17,7 +17,10 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentPhoneInputBinding
 import tennis.bot.mobile.onboarding.forgotpassword.VerifySmsFragment
+import tennis.bot.mobile.onboarding.login.LoginFragment
 import tennis.bot.mobile.onboarding.phone.NumberAlreadyRegisteredDialog.Companion.FORGOT_PASSWORD_DIALOG_REQUEST_KEY
+import tennis.bot.mobile.onboarding.phone.NumberAlreadyRegisteredDialog.Companion.GO_TO_FORGOT_PASSWORD
+import tennis.bot.mobile.onboarding.phone.NumberAlreadyRegisteredDialog.Companion.LOGIN_CALLBACK
 import tennis.bot.mobile.utils.basicdialog.BasicDialogViewModel
 import tennis.bot.mobile.utils.hideKeyboard
 import tennis.bot.mobile.utils.traverseToAnotherFragment
@@ -61,9 +64,16 @@ open class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
             phoneInputViewModel.onCountryPicked(countryCode, countryIcon)
         }
 
-        setFragmentResultListener(FORGOT_PASSWORD_DIALOG_REQUEST_KEY) { _, _ ->
-            phoneInputViewModel.onNextClicked(true) { phoneNumber, _ ->
-                parentFragmentManager.traverseToAnotherFragment(VerifySmsFragment.newInstance(phoneNumber))
+        setFragmentResultListener(FORGOT_PASSWORD_DIALOG_REQUEST_KEY) { requestKey, _ ->
+            when (requestKey) {
+                LOGIN_CALLBACK -> {
+                    parentFragmentManager.traverseToAnotherFragment(LoginFragment())
+                }
+                GO_TO_FORGOT_PASSWORD -> {
+                    phoneInputViewModel.onNextClicked(true) { phoneNumber, _ ->
+                        parentFragmentManager.traverseToAnotherFragment(VerifySmsFragment.newInstance(phoneNumber))
+                    }
+                }
             }
         }
 
@@ -89,10 +99,10 @@ open class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
                 } else {
                     val dialog = NumberAlreadyRegisteredDialog()
                     dialog.arguments = bundleOf(
-                        BasicDialogViewModel.SELECT_DIALOG_TITLE to "Данный номер уже зарегистрирован",
-                        BasicDialogViewModel.SELECT_DIALOG_TEXT to "Вы можете перейти во вкладку \"Забыл пароль\", чтобы восстановить пароль от аккаунта. Если произошла ошибка и вы не были зарегистрированы по этому номеру, пожалуйста обратитесь в поддержку по кнопке ниже.",
-                        BasicDialogViewModel.SELECT_DIALOG_TOP_BUTTON_TEXT to getString(R.string.forgot_password),
-                        BasicDialogViewModel.SELECT_DIALOG_BOTTOM_BUTTON_TEXT to "Обратиться в поддержку")
+                        BasicDialogViewModel.SELECT_DIALOG_TITLE to getString(R.string.number_exist_dialog_title),
+                        BasicDialogViewModel.SELECT_DIALOG_TEXT to getString(R.string.number_exist_dialog_text),
+                        BasicDialogViewModel.SELECT_DIALOG_TOP_BUTTON_TEXT to getString(R.string.login_title),
+                        BasicDialogViewModel.SELECT_DIALOG_BOTTOM_BUTTON_TEXT to getString(R.string.restore_password))
                     dialog.show(childFragmentManager, dialog.tag)
                 }
             }

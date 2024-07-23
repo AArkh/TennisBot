@@ -24,7 +24,6 @@ import java.util.concurrent.TimeUnit
 
 const val DEFAULT_DATE_TIME = "0001-01-01T00:00:00Z"
 const val CONTENT_LINK = "http://bugz.su:9000/publiccontent/"
-const val DEFAULT_PICS_PREFIX = "https://s3.timeweb.cloud/c9b28c11-tennisbot/DEV/avatars/"
 val dateFormats = listOf(
 	"yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ",
 	"yyyy-MM-dd'T'hh:mm:ss'Z'",
@@ -117,9 +116,10 @@ fun buildImageRequest(context: Context, imageUrl: String?): Any? { // loads a nu
 	if (imageUrl == null) {
 		result = R.drawable.null_placeholder
 	} else if (imageUrl.contains("default")) {
+		val defaultPicsPrefix = imageUrl.substringBefore("default")
 		val resourceId = if (imageUrl.contains("https")) {
 			getDefaultDrawableResourceId(context,
-				imageUrl.removeSuffix(".png").removePrefix(DEFAULT_PICS_PREFIX))
+				imageUrl.removeSuffix(".png").removePrefix(defaultPicsPrefix))
 		} else {
 			getDefaultDrawableResourceId(context, imageUrl.removeSuffix(".png"))
 		}
