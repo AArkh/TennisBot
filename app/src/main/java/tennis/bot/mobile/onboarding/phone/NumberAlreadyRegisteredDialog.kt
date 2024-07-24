@@ -1,6 +1,7 @@
 package tennis.bot.mobile.onboarding.phone
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
 import tennis.bot.mobile.utils.basicdialog.BasicDialogFragment
@@ -18,6 +19,7 @@ class NumberAlreadyRegisteredDialog: BasicDialogFragment() {
 		super.onViewCreated(view, savedInstanceState)
 
 		binding.buttonGreen.setOnClickListener {
+			Log.d("NumberAlreadyRegisteredDialog", "${requireActivity().supportFragmentManager.hashCode()}")
 			requireActivity().supportFragmentManager.setFragmentResult(
 				FORGOT_PASSWORD_DIALOG_REQUEST_KEY,
 				bundleOf(FORGOT_PASSWORD_DIALOG_SELECTED_OPTION_KEY to LOGIN_CALLBACK)

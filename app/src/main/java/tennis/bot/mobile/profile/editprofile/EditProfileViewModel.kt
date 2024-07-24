@@ -21,6 +21,7 @@ import tennis.bot.mobile.onboarding.survey.OnboardingRepository
 import tennis.bot.mobile.profile.account.AccountPageAdapter.Companion.NULL_STRING
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.utils.DEFAULT_DATE_TIME
+import tennis.bot.mobile.utils.buildImageRequest
 import tennis.bot.mobile.utils.convertDateAndTime
 import java.util.Locale
 import javax.inject.Inject
@@ -110,7 +111,7 @@ class EditProfileViewModel @Inject constructor(
 				}
 
 				_uiStateFlow.value = EditProfileUiState(
-					profilePicture = currentProfileData.photo,
+					profilePicture = currentProfileData.photoUrl,
 					categoriesList = categoriesDataList
 				)
 			}
@@ -210,7 +211,7 @@ class EditProfileViewModel @Inject constructor(
 
 	fun onPickedProfilePic(uri: Uri) {
 		viewModelScope.launch(Dispatchers.IO) {
-			onboardingRepository.postProfilePicture(uri.toString(), userProfileRepo.getProfile().photo == null)
+			onboardingRepository.postProfilePicture(uri.toString(), userProfileRepo.getProfile().photoUrl == null)
 			userProfileRepo.precacheProfile() // only way to update photo link
 			onStartup()
 		}

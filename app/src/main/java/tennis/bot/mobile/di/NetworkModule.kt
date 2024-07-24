@@ -45,6 +45,7 @@ class NetworkModule {
 
     companion object {
         private const val BASE_URL = "https://bugz.su:8443/core/"
+        private const val PROD_URL = "https://prod.bot.tennis/core/"
         const val WITH_AUTHENTICATION = "WITH_AUTHENTICATION"
         const val SMS_CODES = "BALANCES_ALLOWANCES"
         const val NEW_REGISTRATION = "NEW_REGISTRATION"

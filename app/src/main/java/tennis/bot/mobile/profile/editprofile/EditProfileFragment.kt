@@ -40,6 +40,7 @@ import tennis.bot.mobile.profile.editprofile.EditProfileViewModel.Companion.TELE
 import tennis.bot.mobile.profile.editprofile.location.EditLocationFragment
 import tennis.bot.mobile.profile.editprofile.namesurname.EditNameSurnameFragment
 import tennis.bot.mobile.profile.editprofile.telegram.EditTelegramFragment
+import tennis.bot.mobile.utils.buildImageRequest
 import tennis.bot.mobile.utils.showToast
 import tennis.bot.mobile.utils.traverseToAnotherFragment
 import java.io.ByteArrayOutputStream
@@ -183,21 +184,9 @@ class EditProfileFragment : CoreFragment<FragmentEditProfileBinding>() {
 	}
 
 	private fun onLoadingProfileImage(profileImageUrl: String?) {
-		if (profileImageUrl == null) return
-
-		if (profileImageUrl.contains("default")) {
-			val resourceId = getDefaultDrawableResourceId(
-				requireContext(),
-				profileImageUrl.removeSuffix(".png")
-			) // add logic for changing cached picture
-			binding.accountPhoto.visibility = View.VISIBLE
-			if (resourceId != null) binding.accountPhoto.load(resourceId)
-			binding.placeholderPhoto.visibility = View.GONE
-		} else {
-			binding.accountPhoto.visibility = View.VISIBLE
-			binding.accountPhoto.load(AccountPageAdapter.IMAGES_LINK + profileImageUrl) { crossfade(true) }
-			binding.placeholderPhoto.visibility = View.GONE
-		}
+		binding.accountPhoto.visibility = View.VISIBLE
+		binding.accountPhoto.load(buildImageRequest(requireContext(), profileImageUrl)) { crossfade(true) }
+		binding.placeholderPhoto.visibility = View.GONE
 	}
 
 	private fun showDatePickerDialog() {

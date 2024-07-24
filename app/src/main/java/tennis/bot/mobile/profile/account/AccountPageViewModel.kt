@@ -59,7 +59,7 @@ class AccountPageViewModel @Inject constructor(
 						profileData.name,
 						formatLocationDataForPost(profileData.cityId, profileData.districtId, locationRepository, locationDataMapper),
 						profileData.rating.toString(),
-						profileData.universalDoublesRating.toString()
+						profileData.doublesRating?.toInt().toString()
 					),
 					Calibration(
 						if (gamesRemain < 10) context.getString(R.string.calibration_title) else context.getString(R.string.calibration_finished_title),

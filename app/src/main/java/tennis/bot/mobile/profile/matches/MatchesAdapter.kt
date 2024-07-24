@@ -34,13 +34,12 @@ class MatchesAdapter @Inject constructor(): PagingDataAdapter<MatchItem, MatchIt
 	override fun onBindViewHolder(holder: MatchItemViewHolder, position: Int) {
 		getItem(position)?.let {match ->
 
+			holder.bindPlayerNames(match)
 			holder.bindPlayerPhotos(match, isPlayer1 = true)
-			holder.bindPlayerNames(match, isPlayer1 = true)
 			holder.bindPlayerRating(match, isPlayer1 = true)
 			holder.onBindingRating(match, true)
 
 			holder.bindPlayerPhotos(match, isPlayer1 = false)
-			holder.bindPlayerNames(match, isPlayer1 = false)
 			holder.bindPlayerRating(match, isPlayer1 = false)
 			holder.onBindingRating(match, false)
 
@@ -104,30 +103,45 @@ class MatchesAdapter @Inject constructor(): PagingDataAdapter<MatchItem, MatchIt
 		}
 	}
 
-	private fun MatchItemViewHolder.bindPlayerNames(match: MatchItem, isPlayer1: Boolean) { // player 1 is the left one
-		val playerNameTitle = if (isPlayer1) binding.player1Layout.playerName else binding.player2Layout.playerName
-		val playerNameSets = if (isPlayer1) binding.player1NameSurname else binding.player2NameSurname
-		val context = playerNameSets.context
+	private fun MatchItemViewHolder.bindPlayerNames(match: MatchItem) {  // player 1 is the left one
+		val context = binding.root.context
+		val playerLeftNames = context.getString(
+			R.string.post_three_doubles_title,
+			match.player1.name.substringBefore(" "),
+			match.player2.name.substringBefore(" ")
+		)
+		val playerRightNames = context.getString(
+			R.string.post_three_doubles_title,
+			match.player3?.name?.substringBefore(" "),
+			match.player4?.name?.substringBefore(" "))
 
-		if (!match.isDouble){
-			val playerName = if (isPlayer1) match.player1.name else match.player2.name
-			playerNameTitle.text = playerName.substringBefore(" ")
-			playerNameSets.text = playerName
+		val (winner, loser) = if (match.isWin) match.player1.name to match.player2.name else match.player2.name to match.player1.name
+
+		val (winnerNames, loserNames) = if (match.isWin) {
+			context.getString(
+				R.string.post_three_doubles_title,
+				match.player1.name.substringBefore(" "),
+				match.player2.name.substringBefore(" ")
+			) to context.getString(
+				R.string.post_three_doubles_title,
+				match.player3?.name?.substringBefore(" "),
+				match.player4?.name?.substringBefore(" "))
 		} else {
-			val playerFirstName = if (isPlayer1) match.player1.name else match.player3?.name
-			val playerSecondName = if (isPlayer1) match.player2.name else match.player4?.name
-
-			playerNameTitle.text = context.getString(
-				R.string.insert_score_doubles_names,
-				playerFirstName?.substringBefore(" "),
-				playerSecondName?.substringBefore(" ")
-			)
-			playerNameSets.text = context.getString(
-				R.string.insert_score_doubles_names,
-				playerFirstName?.substringBefore(" "),
-				playerSecondName?.substringBefore(" ")
+			context.getString(
+				R.string.post_three_doubles_title,
+				match.player3?.name?.substringBefore(" "),
+				match.player4?.name?.substringBefore(" ")
+			) to context.getString(
+				R.string.post_three_doubles_title,
+				match.player1.name.substringBefore(" "),
+				match.player2.name.substringBefore(" ")
 			)
 		}
+
+		binding.player1Layout.playerName.text = if (!match.isDouble) playerLeftNames.substringBefore(" ") else playerLeftNames
+		binding.player2Layout.playerName.text = if (!match.isDouble) playerLeftNames.substringAfter("/") else playerRightNames
+		binding.player1NameSurname.text = if (!match.isDouble) winner else winnerNames
+		binding.player2NameSurname.text = if (!match.isDouble) loser else loserNames
 	}
 
 	private fun MatchItemViewHolder.bindPlayerRating(match: MatchItem, isPlayer1: Boolean) { // player 1 is the left one

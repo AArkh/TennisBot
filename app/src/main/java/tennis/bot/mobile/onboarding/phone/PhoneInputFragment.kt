@@ -64,8 +64,8 @@ open class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
             phoneInputViewModel.onCountryPicked(countryCode, countryIcon)
         }
 
-        setFragmentResultListener(FORGOT_PASSWORD_DIALOG_REQUEST_KEY) { requestKey, _ ->
-            when (requestKey) {
+        setFragmentResultListener(FORGOT_PASSWORD_DIALOG_REQUEST_KEY) { _, result ->
+            when (result.getString(NumberAlreadyRegisteredDialog.FORGOT_PASSWORD_DIALOG_SELECTED_OPTION_KEY)) {
                 LOGIN_CALLBACK -> {
                     parentFragmentManager.traverseToAnotherFragment(LoginFragment())
                 }
