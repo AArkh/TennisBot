@@ -1,5 +1,7 @@
 package tennis.bot.mobile.core
 
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -57,6 +59,23 @@ abstract class CoreFragment<BINDING : ViewBinding> : Fragment() {
         }
         ViewCompat.requestApplyInsets(binding.root)
         return binding.root
+    }
+
+    fun Fragment.getAppVersionName(): String {
+        val packageManager: PackageManager? = requireContext().packageManager
+        val packageName: String? = requireContext().packageName
+        var versionName = ""
+
+        try {
+            if (packageManager != null && packageName != null) {
+                val packageInfo: PackageInfo = packageManager.getPackageInfo(packageName, 0)
+                versionName = packageInfo.versionName
+            }
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+
+        return versionName
     }
 
     fun <FlowType> subscribeToFlowOn(

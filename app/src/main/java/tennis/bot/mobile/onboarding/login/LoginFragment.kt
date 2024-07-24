@@ -20,9 +20,9 @@ import tennis.bot.mobile.onboarding.forgotpassword.EnterPhoneFragment
 import tennis.bot.mobile.onboarding.phone.CountryCodesDialogFragment
 import tennis.bot.mobile.onboarding.sport.SportFragment
 import tennis.bot.mobile.utils.NoSpaceInputFilter
+import tennis.bot.mobile.utils.destroyBackstack
 import tennis.bot.mobile.utils.goToAnotherSectionFragment
 import tennis.bot.mobile.utils.hideKeyboard
-import tennis.bot.mobile.utils.traverseToAnotherFragment
 
 @AndroidEntryPoint
 class LoginFragment : CoreFragment<FragmentLoginBinding>() {
@@ -57,7 +57,10 @@ class LoginFragment : CoreFragment<FragmentLoginBinding>() {
 				password = binding.passwordEt.text.toString()
 			) { isContinueRegistration ->
 				if (!isContinueRegistration) {
-					parentFragmentManager.traverseToAnotherFragment(BottomNavigationFragment())
+					parentFragmentManager.destroyBackstack()
+					requireActivity().supportFragmentManager.beginTransaction()
+						.replace(R.id.fragment_container_view, BottomNavigationFragment())
+						.commit()
 				} else {
 					parentFragmentManager.goToAnotherSectionFragment(SportFragment())
 				}

@@ -42,9 +42,8 @@ class SurveyResultsFragment : CoreFragment<FragmentSurveyResultsBinding>() {
 		binding.buttonContinue.setOnClickListener {
 			viewModel.onContinueButtonClicked {
 				parentFragmentManager.destroyBackstack()
-				requireActivity().supportFragmentManager.fragments.clear()
 				requireActivity().supportFragmentManager.beginTransaction()
-					.add(R.id.fragment_container_view, BottomNavigationFragment())
+					.replace(R.id.fragment_container_view, BottomNavigationFragment())
 					.commit()
 			}
 		}

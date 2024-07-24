@@ -50,6 +50,17 @@ class BottomNavigationViewModel @Inject constructor(
 		}
 	}
 
+	fun onCheckingAppVersion(appVersionName: String, updateDialogCallback: (isBroken: Boolean) -> Unit) {
+		viewModelScope.launch (Dispatchers.IO) {
+			kotlin.runCatching { // removed onFailure because other components signal the same thing
+				val response = userProfileRepository.getAppVersion(appVersionName)
+				if (response?.updated == true) {
+					response.broken.let { updateDialogCallback.invoke(it) }
+				}
+			}
+		}
+	}
+
 	fun onItemChosen(fragmentTag: String) {
 		when (fragmentTag) {
 			FRAGMENT_FEED -> {

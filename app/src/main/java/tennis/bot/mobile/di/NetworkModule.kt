@@ -15,6 +15,7 @@ import tennis.bot.mobile.core.authentication.AuthInterceptor
 import tennis.bot.mobile.core.CrashTestInterceptor
 import tennis.bot.mobile.feed.activityfeed.FeedApi
 import tennis.bot.mobile.feed.activityfeed.LikesApi
+import tennis.bot.mobile.feed.bottomnavigation.VersionControlApi
 import tennis.bot.mobile.feed.game.GameApi
 import tennis.bot.mobile.feed.insertscore.InsertScoreApi
 import tennis.bot.mobile.feed.insertscore.MediaApi
@@ -361,5 +362,11 @@ class NetworkModule {
     fun provideGameApiClient(
         @Named(ACTIVITY_FEED) retrofit: Retrofit
     ): GameApi = retrofit.create(GameApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideVersionControlApiClient(
+        @Named(ACTIVITY_FEED) retrofit: Retrofit
+    ): VersionControlApi = retrofit.create(VersionControlApi::class.java)
 }
 

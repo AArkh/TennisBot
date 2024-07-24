@@ -6,6 +6,8 @@ import androidx.core.content.ContextCompat.getString
 import dagger.hilt.android.qualifiers.ApplicationContext
 import retrofit2.Response
 import tennis.bot.mobile.R
+import tennis.bot.mobile.feed.bottomnavigation.VersionControlApi
+import tennis.bot.mobile.feed.bottomnavigation.VersionControlResponse
 import tennis.bot.mobile.onboarding.survey.OnboardingRepository
 import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.IS_ONE_BACKHAND_TITLE
 import tennis.bot.mobile.profile.account.AccountPageViewModel.Companion.IS_RIGHTHAND_TITLE
@@ -42,6 +44,7 @@ class UserProfileAndEnumsRepository @Inject constructor(
 	private val enumsApi: EnumsApi,
 	private val gameDataApi: EditGameDataApi,
 	private val editProfileApi: EditProfileApi,
+	private val versionControlApi: VersionControlApi,
 	@ApplicationContext private val context: Context
 ) {
 	private lateinit var cachedProfileData: ProfileData
@@ -200,6 +203,16 @@ class UserProfileAndEnumsRepository @Inject constructor(
 			RACQUET_STRINGS_TITLE -> { defaultGameData[6].resultTitle }
 			else -> { AccountPageAdapter.NULL_STRING }
 		}
+	}
+
+	@WorkerThread
+	suspend fun getAppVersion(version: String): VersionControlResponse? {
+		val response = versionControlApi.getAppVersion(version = version)
+
+		if (response.code() == 200) return response.body()
+		if (response.code() == 404) context.showToast("Something went wrong")
+
+		return null
 	}
 
 	@WorkerThread

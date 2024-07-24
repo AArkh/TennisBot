@@ -18,6 +18,7 @@ import tennis.bot.mobile.feed.addscore.AddScoreFragment
 import tennis.bot.mobile.feed.game.GameFragment
 import tennis.bot.mobile.feed.requestcreation.RequestCreationFragment
 import tennis.bot.mobile.profile.account.AccountPageFragment
+import tennis.bot.mobile.utils.basicdialog.BasicDialogViewModel
 import tennis.bot.mobile.utils.dpToPx
 import tennis.bot.mobile.utils.goToAnotherSectionFragment
 import tennis.bot.mobile.utils.view.AvatarImage
@@ -33,6 +34,23 @@ class BottomNavigationFragment : AuthorizedCoreFragment<FragmentBottomNavigation
 
 		if (savedInstanceState == null) {
 			replaceFragment(FeedFragment())
+		}
+		viewModel.onCheckingAppVersion(getAppVersionName()) { isBroken ->
+			val dialog = VersionControlDialog()
+			val args = Bundle()
+			args.putString(BasicDialogViewModel.SELECT_DIALOG_TITLE, "Вышло новое обновление!")
+			args.putString(BasicDialogViewModel.SELECT_DIALOG_TEXT, "Ваша версия устарела. Чтобы использовать Tennis Bot дальше - обновите приложение")
+			args.putString(BasicDialogViewModel.SELECT_DIALOG_TOP_BUTTON_TEXT, "Обновить")
+			args.putString(BasicDialogViewModel.SELECT_DIALOG_BOTTOM_BUTTON_TEXT, "Позже")
+			if (isBroken) {
+				args.putInt(BasicDialogViewModel.SELECT_DIALOG_ANIMATION, R.raw.close)
+				args.putBoolean(BasicDialogViewModel.SELECT_DIALOG_IS_ONE_BUTTON, true)
+				args.putBoolean(BasicDialogViewModel.SELECT_DIALOG_IS_CANCELABLE, false)
+				args.putBoolean(BasicDialogViewModel.SELECT_DIALOG_IS_CANCELABLE_ON_TOUCH_OUTSIDE, false)
+			}
+
+			dialog.arguments = args
+			dialog.show(childFragmentManager, dialog.tag)
 		}
 
 		binding.bottomNavBar.setOnItemSelectedListener(this)
