@@ -114,7 +114,7 @@ data class GamePlayer(
 	val photo: String?,
 	val photoUrl: String?,
 	val isMale: Boolean,
-	val experience: Int,
+	val experience: Int?,
 	val rating: Int,
 	val doublesRating: Int
 )

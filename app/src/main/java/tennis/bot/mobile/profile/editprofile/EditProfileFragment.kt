@@ -14,7 +14,6 @@ import android.widget.DatePicker
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -27,8 +26,6 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentEditProfileBinding
-import tennis.bot.mobile.profile.account.AccountPageAdapter
-import tennis.bot.mobile.profile.account.getDefaultDrawableResourceId
 import tennis.bot.mobile.profile.editprofile.EditProfileViewModel.Companion.LOCATION_STRINGS_REQUEST_KEY
 import tennis.bot.mobile.profile.editprofile.EditProfileViewModel.Companion.NAME_SURNAME_REQUEST_KEY
 import tennis.bot.mobile.profile.editprofile.EditProfileViewModel.Companion.PHONE_NUMBER_REQUEST_KEY
