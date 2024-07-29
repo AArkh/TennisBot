@@ -71,7 +71,7 @@ class RequestCreationFragment : AuthorizedCoreFragment<FragmentRequestBinding>()
 		}
 
 		binding.buttonCreate.setOnClickListener {
-			viewModel.onCreateButtonPressed {
+			viewModel.onCreateButtonPressed(binding.root.findViewById(R.id.comment_text)) {
 				val dialog = RequestCreationSuccessDialog()
 				dialog.show(childFragmentManager, dialog.tag)
 			}

@@ -23,7 +23,7 @@
 	</plurals>
 	<string name="app_name">Tennis bot</string>
 	<string name="onboarding_text_title_1">Racquet Ecosystem</string>
-	<string name="onboarding_text_1">Thousands of players in different countries around the world have already found equal partners, friends, and joined the largest Tennis Bot community</string>
+	<string name="onboarding_text_1">Thousands of players in different countries around the world have already found equal partners and friends</string>
 	<string name="onboarding_text_title_2">New Generation</string>
 	<string name="onboarding_text_2">A social network with the ability to receive valuable prizes for active actions</string>
 	<string name="onboarding_text_title_3">Limitless Communication</string>
@@ -326,7 +326,7 @@
 	<string name="my_request">My request</string>
 	<string name="my_response">My response</string>
 	<string name="password_changed_success">Password changed successfully</string>
-	<string name="password_change_success_text">You can now successfully log in to the Tennis Bot app</string>
+	<string name="password_change_success_text">You can now log in to the Tennis Bot app</string>
 	<string name="okay">Okay</string>
 	<string name="insufficient_access_text">You do not have enough rights to access this tab</string>
 	<string name="continue_registration_text">Continue registration to use all the features of the Tennis Bot app</string>

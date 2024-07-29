@@ -2,7 +2,7 @@
 	// ignore not having an english translation
 	<string name="app_name" >Tennis bot</string>
 	<string name="onboarding_text_title_1">Ракеточная экоcистема</string>
-	<string name="onboarding_text_1">Тысячи игроков, в разных странах мира уже нашли себе равных партнеров, друзей и присоединились к самому большому сообществу «Теннис бот»</string>
+	<string name="onboarding_text_1">Тысячи игроков, в разных странах мира уже нашли себе равных партнеров, друзей</string>
 	<string name="onboarding_text_title_2">Новое поколение</string>
 	<string name="onboarding_text_2">Социальная сеть с возможностью получать ценные призы за активные действия</string>
 	<string name="onboarding_text_title_3">Безграничное общение</string>
@@ -337,7 +337,7 @@
 	<string name="my_request">Моя заявка</string>
 	<string name="my_response">Мой отклик</string>
 	<string name="password_changed_success">Пароль успешно изменен</string>
-	<string name="password_change_success_text">Теперь вы можете успешно войти в приложение Теннис бот</string>
+	<string name="password_change_success_text">Теперь вы можете авторизоваться в приложение Теннис бот</string>
 	<string name="okay">Хорошо</string>
 	<string name="insufficient_access_text">У вас недостаточно прав для доступа к этой вкладке</string>
 	<string name="continue_registration_text">Продолжите регистрацию для пользования всеми возможностями приложения Теннис бот</string>

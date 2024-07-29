@@ -41,6 +41,11 @@ class RequestCreationViewModel @Inject constructor(
 	@ApplicationContext private val context: Context
 ): ViewModel() {
 
+	private var currentRating: Int = 0
+	private var currentGamePay: String = context.getString(R.string.payment_split)
+	private var currentGamePayId: Int = 1
+	private var currentGameTypeId: Int = 1
+	private var recommendedValues = "${currentRating - 150} - ${currentRating + 150}"
 	private val _uiStateFlow = MutableStateFlow(
 		RequestCreationUiState(
 			layoutItemsList = emptyList(),
@@ -50,10 +55,7 @@ class RequestCreationViewModel @Inject constructor(
 		)
 	)
 	val uiStateFlow = _uiStateFlow.asStateFlow()
-	private var currentRating: Int = 0
-	private var currentGamePay: String = context.getString(R.string.payment_split)
-	private var currentGamePayId: Int = 1
-	private var currentGameTypeId: Int = 1
+
 
 	private suspend fun checkForActiveRequests(): Boolean {
 		return repository.getPermissionToCreate() == true
@@ -66,7 +68,6 @@ class RequestCreationViewModel @Inject constructor(
 			}
 
 			currentRating = userProfileAndEnumsRepository.getProfile().rating
-			val recommendedValues = "${currentRating - 150} - ${currentRating + 150}"
 			val dateTime = getCurrentDateAndTime()
 
 			val layoutList = listOf(
@@ -200,7 +201,6 @@ class RequestCreationViewModel @Inject constructor(
 	}
 
 	fun updateComment(commentItem: EditText) {
-		val recommendedValues = "${currentRating - 150} - ${currentRating + 150}"
 		commentItem.text = SpannableStringBuilder.valueOf(
 			context.getString(R.string.request_creation_comment,
 				recommendedValues,
@@ -234,7 +234,7 @@ class RequestCreationViewModel @Inject constructor(
 		return isoDateFormat.format(dateTime)
 	}
 
-	fun onCreateButtonPressed(navigationCallback: () -> Unit) {
+	fun onCreateButtonPressed(comment: EditText, navigationCallback: () -> Unit) {
 		viewModelScope.launch(Dispatchers.IO) {
 			showLoading()
 			val layoutList = uiStateFlow.value.layoutItemsList
@@ -242,7 +242,6 @@ class RequestCreationViewModel @Inject constructor(
 			val profileCityId = userProfileAndEnumsRepository.getProfile().cityId
 			val district = locationDataMapper.findDistrictIntFromString(locations, profileCityId, (layoutList[0] as SurveyResultItem).resultOption)
 			val date = formatDateAndTimeForRequest((layoutList[3] as SurveyResultItem).resultOption, (layoutList[4] as SurveyResultItem).resultOption)
-			val recommendedValues = "${currentRating - 150} - ${currentRating + 150}"
 			kotlin.runCatching {
 				repository.postAddRequest(RequestNetwork(
 					cityId = profileCityId,
@@ -250,10 +249,7 @@ class RequestCreationViewModel @Inject constructor(
 					date = date,
 					gameType = currentGameTypeId,
 					paymentTypeId = currentGamePayId,
-					comment = context.getString(R.string.request_creation_comment,
-						recommendedValues,
-						currentGamePay,
-						"Хард") // кандидат на удаление (покрытие не выставляем),
+					comment = comment.text.toString()
 				))
 			}.onFailure {
 				onStopLoading()
