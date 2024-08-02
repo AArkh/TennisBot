@@ -19,6 +19,7 @@ interface LocationApi {
 data class Location(
     @PrimaryKey @ColumnInfo(name = "id") val id: Int,
     @SerialName("name") @ColumnInfo(name = "name") val countryName: String,
+    @SerialName("nameEn") @ColumnInfo(name = "nameEn") val countryNameEn: String?,
     @ColumnInfo(name = "flag") val flag: String,
     @ColumnInfo(name = "cities") val cities: List<LocationCity>,
 ) : CoreUtilsItem() {
@@ -26,6 +27,7 @@ data class Location(
     data class LocationCity(
         val id: Int,
         val name: String,
+        val nameEn: String?,
         val districts: List<LocationDistrict>
     ) {
         @Serializable

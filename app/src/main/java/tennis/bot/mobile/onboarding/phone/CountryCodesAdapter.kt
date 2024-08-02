@@ -2,8 +2,8 @@ package tennis.bot.mobile.onboarding.phone
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import kotlinx.serialization.Serializable
 import tennis.bot.mobile.core.CoreAdapter
 import tennis.bot.mobile.core.CoreUtilsItem
@@ -15,7 +15,7 @@ open class CountryCodesAdapter @Inject constructor() : CoreAdapter<CountryCodeIt
 
     override fun onBindViewHolder(holder: CountryCodeItemViewHolder, item: Any) {
         val countryItem = item as? CountryItem ?: throw IllegalArgumentException("Item must be CountryItem")
-        holder.binding.countryIconIv.setImageResource(countryItem.icon)
+        holder.binding.countryIconIv.load(countryItem.icon)
         holder.binding.countryNameTv.text = countryItem.name
         holder.binding.countryCodeTv.text = countryItem.code
         holder.itemView.setOnClickListener {
@@ -36,7 +36,7 @@ class CountryCodeItemViewHolder(
 
 @Serializable
 data class CountryItem(
-    @DrawableRes val icon: Int,
+    val icon: String,
     val name: String,
     val code: String
 ) : CoreUtilsItem()

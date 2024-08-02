@@ -67,7 +67,7 @@
 	<string name="password_create_account">Create account</string>
 	<string name="password_hint">Password must be at least 8 characters long, including at least one letter and one number</string>
 	<string name="password_match_hint">Passwords must match</string>
-	<string name="password_agree_with_confidentiality">By clicking the button, you agree to the \n<a href="https://telegra.ph/Publichnaya-oferta-o-zaklyuchenii-dogovora-ob-okazanii-uslug-03-11">Privacy Policy</a></string>
+	<string name="password_agree_with_confidentiality">By clicking the button you agreeing to the \n<a href="https://telegra.ph/Publichnaya-oferta-o-zaklyuchenii-dogovora-ob-okazanii-uslug-03-11">Privacy Policy</a></string>
 	<string name="password_edittext_hint">Password</string>
 	<string name="password_confirm_edittext_hint">Confirm password</string>
 
@@ -334,5 +334,7 @@
 	<string name="doubles_rating">Doubles rating</string>
 	<string name="phone_number_hint">Phone number</string>
 	<string name="birthday_hint">Birthday</string>
+	<string name="edit_profile_side_note_title">Connect</string>
+	<string name="edit_profile_side_note_text">Add your Telegram nickname. We’ve connected communication technology between the bot and the app. Now you can find friends, opponents, and even love through the Tennis Bot system in one click.</string>
 
 </resources>

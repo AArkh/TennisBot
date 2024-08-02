@@ -8,13 +8,13 @@ import javax.inject.Singleton
 class LocationDataMapper @Inject constructor() {
 
     fun getCountryList(responseData: List<Location>): List<CountryItem> {
-        return responseData.map { return@map CountryItem(0, it.countryName, "") }
+        return responseData.map { return@map CountryItem("", it.countryName, "") }
     }
 
     fun getCityList(responseData: List<Location>, selectedCountry: String): List<CountryItem> {
         val country = responseData.find { return@find it.countryName == selectedCountry }
         if (country?.cities?.isNotEmpty() == true) {
-            return country.cities.map { return@map CountryItem(0, it.name, "") }
+            return country.cities.map { return@map CountryItem("", it.name, "") }
         } else {
             return emptyList()
         }
@@ -28,7 +28,7 @@ class LocationDataMapper @Inject constructor() {
         val country = responseData.find { return@find it.countryName == selectedCountry }
         val city = country?.cities?.find { return@find it.name == selectedCity }
         if (country?.cities?.isNotEmpty() == true && city?.districts?.isNotEmpty() == true) {
-            return city.districts.map { return@map CountryItem(0, it.title, "") }
+            return city.districts.map { return@map CountryItem("", it.title, "") }
         } else {
             return emptyList()
         }

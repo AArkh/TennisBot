@@ -16,7 +16,7 @@ android {
         minSdk = 24
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0.0"
+        versionName = "1.0.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -110,6 +110,9 @@ dependencies {
 //    val hiltWorkerVersion = "1.0.0"
 //    implementation("androidx.hilt:hilt-work:$hiltWorkerVersion")
 //    kapt("androidx.hilt:hilt-compiler:$hiltWorkerVersion")
+
+    //PhoneUtils
+    implementation ("com.googlecode.libphonenumber:libphonenumber:8.12.40")
 }
 
 kapt {

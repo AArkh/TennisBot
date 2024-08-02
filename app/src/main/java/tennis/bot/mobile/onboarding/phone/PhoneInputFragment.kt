@@ -44,7 +44,6 @@ open class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
         binding.backButton.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
-
         binding.confidentialityText.movementMethod = LinkMovementMethod.getInstance() // ссылка в strings
 
         binding.openCountriesSheetLayout.setOnClickListener {

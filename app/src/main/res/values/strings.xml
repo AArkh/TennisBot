@@ -1,8 +1,8 @@
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation"  tools:locale="ru">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="ru">
 	// ignore not having an english translation
-	<string name="app_name" >Tennis bot</string>
+	<string name="app_name">Tennis bot</string>
 	<string name="onboarding_text_title_1">Ракеточная экоcистема</string>
-	<string name="onboarding_text_1">Тысячи игроков, в разных странах мира уже нашли себе равных партнеров, друзей</string>
+	<string name="onboarding_text_1">Тысячи игроков в разных странах мира уже нашли себе равных партнеров, друзей</string>
 	<string name="onboarding_text_title_2">Новое поколение</string>
 	<string name="onboarding_text_2">Социальная сеть с возможностью получать ценные призы за активные действия</string>
 	<string name="onboarding_text_title_3">Безграничное общение</string>
@@ -46,7 +46,7 @@
 	<string name="password_create_account">Создать аккаунт</string>
 	<string name="password_hint">Пароль должен содержать не менее 8 символов, включая как минимум одну букву и одну цифру</string>
 	<string name="password_match_hint">Пароли должны совпадать</string>
-	<string name="password_agree_with_confidentiality">Нажимая кнопку вы соглашаетесь \n<a href="https://telegra.ph/Publichnaya-oferta-o-zaklyuchenii-dogovora-ob-okazanii-uslug-03-11">с Политикой конфиденциальности</a></string>
+	<string name="password_agree_with_confidentiality">Нажимая кнопку, вы соглашаетесь \n<a href="https://telegra.ph/Publichnaya-oferta-o-zaklyuchenii-dogovora-ob-okazanii-uslug-03-11">с Политикой конфиденциальности</a></string>
 	<string name="password_edittext_hint">Пароль</string>
 	<string name="password_confirm_edittext_hint">Подтвердить пароль</string>
 
@@ -345,5 +345,9 @@
 	<string name="doubles_rating">Парная сила</string>
 	<string name="phone_number_hint">Номер телефона</string>
 	<string name="birthday_hint">День рождения</string>
+	<string name="edit_profile_side_note_title">Общайся</string>
+	<string name="edit_profile_side_note_text">Добавьте свой телеграм ник. Мы связали технологию общения с приложением. Теперь найти друзей, партнеров для игры и даже любовь можно в системе Tennis Bot в один клик</string>
+	<string name="requests_title">Заявки</string>
+	<string name="players_title">Игроки</string>
 
 </resources>

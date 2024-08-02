@@ -223,15 +223,16 @@ class RequestCreationViewModel @Inject constructor(
 		)
 	}
 
-	private fun formatDateAndTimeForRequest(date: String, time: String): String {
+	private fun formatDateAndTimeForRequest(date: String, time: String): String? {
 		val dateTimeString = "$date $time"
 		val dateTimeFormat = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
+		val currentDate = Calendar.getInstance().time
 		val dateTime = dateTimeFormat.parse(dateTimeString)
 
 		val isoDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
 		isoDateFormat.timeZone = TimeZone.getTimeZone("UTC")
 
-		return isoDateFormat.format(dateTime)
+		return if (dateTime.before(currentDate)) null else isoDateFormat.format(dateTime)
 	}
 
 	fun onCreateButtonPressed(comment: EditText, navigationCallback: () -> Unit) {
@@ -243,17 +244,27 @@ class RequestCreationViewModel @Inject constructor(
 			val district = locationDataMapper.findDistrictIntFromString(locations, profileCityId, (layoutList[0] as SurveyResultItem).resultOption)
 			val date = formatDateAndTimeForRequest((layoutList[3] as SurveyResultItem).resultOption, (layoutList[4] as SurveyResultItem).resultOption)
 			kotlin.runCatching {
-				repository.postAddRequest(RequestNetwork(
-					cityId = profileCityId,
-					districtId = district,
-					date = date,
-					gameType = currentGameTypeId,
-					paymentTypeId = currentGamePayId,
-					comment = comment.text.toString()
-				))
+				if (!date.isNullOrEmpty()) {
+					repository.postAddRequest(
+						RequestNetwork(
+							cityId = profileCityId,
+							districtId = district,
+							date = date,
+							gameType = currentGameTypeId,
+							paymentTypeId = currentGamePayId,
+							comment = comment.text.toString()
+						)
+					)
+				} else {
+					throw IllegalArgumentException()
+				}
 			}.onFailure {
 				onStopLoading()
-				context.showToast(context.getString(R.string.error_no_network_message))
+				if (it is IllegalArgumentException) {
+					context.showToast("Выбрано некорректное время")
+				} else {
+					context.showToast(context.getString(R.string.error_no_network_message))
+				}
 			}.onSuccess {
 				onStopLoading()
 				navigationCallback.invoke()
