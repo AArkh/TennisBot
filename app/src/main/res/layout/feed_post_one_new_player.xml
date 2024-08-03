@@ -71,6 +71,19 @@
 		app:layout_constraintTop_toBottomOf="@id/player_photo" />
 
 	<ImageView
+		android:id="@+id/double_rating_icon"
+		android:layout_width="24dp"
+		android:layout_height="24dp"
+		android:layout_marginTop="14dp"
+		android:layout_marginStart="-9dp"
+		android:background="@drawable/rating_users_background"
+		android:backgroundTint="@color/tb_new_orange"
+		android:padding="4dp"
+		android:src="@drawable/rating_power"
+		app:layout_constraintTop_toBottomOf="@id/item_picture"
+		app:layout_constraintStart_toEndOf="@id/single_rating_icon"/>
+
+	<ImageView
 		android:id="@+id/single_rating_icon"
 		android:layout_width="24dp"
 		android:layout_height="24dp"
@@ -82,7 +95,8 @@
 		android:padding="4dp"
 		android:src="@drawable/rating_power"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/item_picture" />
+		app:layout_constraintTop_toBottomOf="@id/item_picture"
+		app:layout_constraintBottom_toTopOf="@id/like_button"/>
 
 	<TextView
 		android:id="@+id/info_panel"
@@ -91,9 +105,9 @@
 		android:layout_marginStart="8dp"
 		android:text="@string/player_new_info_panel"
 		android:textColor="@color/tb_black"
-		app:layout_constraintBottom_toBottomOf="@id/single_rating_icon"
-		app:layout_constraintStart_toEndOf="@id/single_rating_icon"
-		app:layout_constraintTop_toTopOf="@id/single_rating_icon" />
+		app:layout_constraintBottom_toBottomOf="@id/double_rating_icon"
+		app:layout_constraintStart_toEndOf="@id/double_rating_icon"
+		app:layout_constraintTop_toTopOf="@id/double_rating_icon" />
 
 	<TextView
 		android:id="@+id/like_button"

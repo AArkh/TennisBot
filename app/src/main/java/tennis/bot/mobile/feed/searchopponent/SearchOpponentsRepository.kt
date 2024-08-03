@@ -44,7 +44,8 @@ class SearchOpponentsRepository @Inject constructor(
 					opponentResponseItem.rating,
 					opponentResponseItem.doublesRating,
 					experience,
-					"${opponentResponseItem.games ?: 0} матчей")
+					"${opponentResponseItem.games ?: 0} матчей"),
+				isInvited = opponentResponseItem.isInvited
 			)
 		}
 	}
