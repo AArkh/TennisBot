@@ -23,7 +23,6 @@ import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
 import tennis.bot.mobile.databinding.FragmentGameBinding
 import tennis.bot.mobile.feed.insertscore.InsertScoreFragment
-import tennis.bot.mobile.utils.animateButtonTransition
 import tennis.bot.mobile.utils.showToast
 import tennis.bot.mobile.utils.traverseToAnotherFragment
 import javax.inject.Inject
@@ -86,14 +85,6 @@ class GameFragment : AuthorizedCoreFragment<FragmentGameBinding>() {
 			onFilterOptionClicked(buttonClicked = binding.acceptedFilter)
 		}
 
-		binding.tabRequests.setOnClickListener {
-			onTabClick(binding.tabRequests, binding.underline)
-		}
-
-		binding.tabPlayers.setOnClickListener {
-			onTabClick(binding.tabPlayers, binding.underline)
-		}
-
 		adapter.clickListener = { command, id ->
 			when(command) {
 				GameAdapter.REQUEST_OPTIONS_RESPONSE -> {
@@ -136,16 +127,6 @@ class GameFragment : AuthorizedCoreFragment<FragmentGameBinding>() {
 			binding.loadingBar.isVisible = loadState.source.refresh is LoadState.Loading
 		}
 
-	}
-
-	private fun onTabClick(view: View, underline: View) {
-		val selectedTab = view as TextView
-		val otherTab = if (selectedTab === binding.tabRequests) binding.tabPlayers else binding.tabRequests
-
-		selectedTab.setTextColor(requireContext().getColor(R.color.tb_black))
-		otherTab.setTextColor(requireContext().getColor(R.color.tb_gray_gray))
-
-		animateButtonTransition(underline, selectedTab)
 	}
 
 	private fun onFilterOptionClicked(buttonClicked: TextView) {

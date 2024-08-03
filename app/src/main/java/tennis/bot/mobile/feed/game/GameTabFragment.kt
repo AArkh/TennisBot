@@ -8,6 +8,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import tennis.bot.mobile.R
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
 import tennis.bot.mobile.databinding.FragmentGameTabBinding
@@ -25,9 +26,8 @@ class GameTabFragment : AuthorizedCoreFragment<FragmentGameTabBinding>() {
 		binding.viewPager.adapter = pagerAdapter
 		TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
 			tab.text = when (position) {
-				0 -> "GAME"
-				1 -> "PLAYERS"
-				else -> null
+				0 -> getString(R.string.requests_title)
+				else -> getString(R.string.players_title)
 			}
 		}.attach()
 	}
@@ -43,8 +43,7 @@ class GameTabPager(fragmentManager: FragmentManager, lifecycle: Lifecycle
 	override fun createFragment(position: Int): Fragment {
 		return when (position) {
 			0 -> GameFragment()
-			1 -> PlayersFragment()
-			else -> throw IllegalArgumentException("Invalid position")
+			else -> PlayersFragment()
 		}
 	}
 }

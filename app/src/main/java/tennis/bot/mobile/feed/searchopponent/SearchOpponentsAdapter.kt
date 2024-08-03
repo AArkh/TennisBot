@@ -21,7 +21,7 @@ class SearchOpponentsAdapter @Inject constructor(): PagingDataAdapter<OpponentIt
 	private var selectedItem = -1
 
 	companion object {
-		private val OPPONENTS_COMPARATOR = object : DiffUtil.ItemCallback<OpponentItem>() {
+		val OPPONENTS_COMPARATOR = object : DiffUtil.ItemCallback<OpponentItem>() {
 			override fun areItemsTheSame(oldItem: OpponentItem, newItem: OpponentItem): Boolean =
 				oldItem.id == newItem.id
 
@@ -80,5 +80,5 @@ data class OpponentItem(
 	val profilePicture: String?,
 	val nameSurname: String,
 	val infoPanel: String, // rating/doublesRating experience | games + string
-	val isPicked: Boolean = false
+	val isInvited: Boolean? = false
 ): Parcelable

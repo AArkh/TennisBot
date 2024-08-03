@@ -10,24 +10,16 @@
 		android:id="@+id/tabLayout"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
+		app:tabTextAppearance="@style/Theme.TennisBot.TabTextAppearance"
+		app:tabSelectedTextColor="@color/tb_black"
+		app:tabTextColor="@color/tb_gray_gray"
 		android:background="@color/tb_white"
+		android:layout_marginHorizontal="16dp"
 		app:tabIndicatorHeight="2dp"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent">
-
-		<com.google.android.material.tabs.TabItem
-			android:id="@+id/game"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/game_title" />
-
-		<com.google.android.material.tabs.TabItem
-			android:id="@+id/players"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/players_title" />
-	</com.google.android.material.tabs.TabLayout>
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintBottom_toTopOf="@id/viewPager"/>
 
 	<androidx.viewpager2.widget.ViewPager2
 		android:id="@+id/viewPager"

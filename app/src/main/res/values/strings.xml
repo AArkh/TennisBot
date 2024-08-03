@@ -194,7 +194,7 @@
 	<string name="game_toolbar_title">Игра</string>
 	<string name="events_spinner_title">Все события</string>
 	<string name="sports_spinner_title">Вид спорта</string>
-	<string name="city_spinner_title">Город</string>
+	<string name="city_spinner_title">Все города</string>
 	<string name="game_title">Игра</string>
 	<string name="chat_title">Общение</string>
 	<string name="tournaments_title">Турниры</string>

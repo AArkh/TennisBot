@@ -15,7 +15,7 @@ import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
 import tennis.bot.mobile.databinding.FragmentBottomNavigationBinding
 import tennis.bot.mobile.feed.activityfeed.FeedFragment
 import tennis.bot.mobile.feed.addscore.AddScoreFragment
-import tennis.bot.mobile.feed.game.GameFragment
+import tennis.bot.mobile.feed.game.GameTabFragment
 import tennis.bot.mobile.feed.requestcreation.RequestCreationFragment
 import tennis.bot.mobile.profile.account.AccountPageFragment
 import tennis.bot.mobile.utils.basicdialog.BasicDialogViewModel
@@ -79,7 +79,7 @@ class BottomNavigationFragment : AuthorizedCoreFragment<FragmentBottomNavigation
 				true
 			}
 			R.id.game_item -> {
-				replaceFragment(GameFragment())
+				replaceFragment(GameTabFragment())
 				viewModel.onItemChosen(BottomNavigationViewModel.FRAGMENT_GAME)
 				true
 			}

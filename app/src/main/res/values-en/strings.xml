@@ -215,7 +215,9 @@
 	<string name="game_toolbar_title">Game</string>
 	<string name="events_spinner_title">All events</string>
 	<string name="sports_spinner_title">Sport type</string>
-	<string name="city_spinner_title">City</string>
+	<string name="requests_title">Requests</string>
+	<string name="players_title">Players</string>
+	<string name="city_spinner_title">All cities</string>
 	<string name="game_title">Game</string>
 	<string name="chat_title">Chat</string>
 	<string name="tournaments_title">Tournaments</string>
