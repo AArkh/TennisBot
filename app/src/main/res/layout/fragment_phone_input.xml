@@ -52,9 +52,9 @@
 		app:expandedHintEnabled="false"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/title"
-		app:prefixText="+7">
+		app:layout_constraintTop_toBottomOf="@+id/title">
 
+<!--		25 is max recommended characters for a number including formatting-->
 		<com.google.android.material.textfield.TextInputEditText
 			android:id="@+id/phone_et"
 			android:layout_width="match_parent"
@@ -62,46 +62,33 @@
 			android:digits="1234567890 +()-"
 			android:inputType="phone"
 			android:cursorVisible="true"
-			android:maxLength="14"
-			android:paddingStart="60dp"
+			android:maxLength="25"
+			android:paddingStart="50dp"
 			android:textCursorDrawable="@null"
+			android:text="+7"
 			android:textSize="15sp" />
 
 	</com.google.android.material.textfield.TextInputLayout>
 
-	<LinearLayout
-		android:id="@+id/open_countries_sheet_layout"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginBottom="2sp"
-		android:gravity="center"
-		android:paddingHorizontal="12dp"
-		android:paddingTop="15dp"
-		android:paddingBottom="18dp"
+	<ImageView
+		android:id="@+id/country_iv"
+		android:layout_width="20dp"
+		android:layout_height="20dp"
+		android:src="@drawable/russia"
+		android:layout_marginHorizontal="12dp"
+		android:layout_marginTop="15dp"
+		android:layout_marginBottom="22dp"
 		app:layout_constraintBottom_toBottomOf="@+id/textInputLayout"
 		app:layout_constraintLeft_toLeftOf="@+id/textInputLayout"
-		app:layout_constraintTop_toTopOf="@+id/textInputLayout">
-
-		<ImageView
-			android:id="@+id/country_iv"
-			android:layout_width="20dp"
-			android:layout_height="20dp"
-			android:layout_weight="50"
-			android:src="@drawable/russia" />
-
-		<ImageView
-			android:id="@+id/chevron_iv"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_weight="50"
-			android:src="@drawable/chevron_down_small" />
-	</LinearLayout>
+		app:layout_constraintTop_toTopOf="@+id/textInputLayout"/>
 
 	<FrameLayout
 		android:id="@+id/clear_button"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:padding="10dp"
+		android:paddingHorizontal="12dp"
+		android:paddingTop="15dp"
+		android:paddingBottom="22dp"
 		app:layout_constraintBottom_toBottomOf="@+id/textInputLayout"
 		app:layout_constraintRight_toRightOf="@+id/textInputLayout"
 		app:layout_constraintTop_toTopOf="@+id/textInputLayout">

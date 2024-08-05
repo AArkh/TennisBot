@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
 import tennis.bot.mobile.utils.AppCoroutineScopes
+import tennis.bot.mobile.utils.getCountryCodeForPhoneNumber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,8 +22,7 @@ open class PhoneInputViewModel @Inject constructor(
 
     private val _uiStateFlow = MutableStateFlow(
         PhoneInputUiState(
-            iconRes = R.drawable.russia,
-            prefix = "+7",
+            countryCode = "",
             userInput = "",
             errorMessage = null,
             proceedButtonEnabled = false,
@@ -33,34 +33,53 @@ open class PhoneInputViewModel @Inject constructor(
 
     private val errorText = context.getString(R.string.onboarding_text_incorrect_phone_number)
 
+//    fun onTextInput(text: CharSequence) {
+//        val prevState: PhoneInputUiState = _uiStateFlow.value
+//        val isClearButtonVisible = text.isNotEmpty()
+//        val errorMessage = if ( text.isNotEmpty() && text.length < 14) {
+//            errorText
+//        } else {
+//            null
+//        }
+//        _uiStateFlow.value = prevState.copy(
+//            userInput = text.toString(),
+//            clearButtonVisible = isClearButtonVisible,
+//            errorMessage = errorMessage,
+//            proceedButtonEnabled = text.length == 14 //todo переработать для разных стран
+//        )
+//    }
+
     fun onTextInput(text: CharSequence) {
         val prevState: PhoneInputUiState = _uiStateFlow.value
         val isClearButtonVisible = text.isNotEmpty()
-        val errorMessage = if ( text.isNotEmpty() && text.length < 14) {
+        val countryCode = getCountryCodeForPhoneNumber(text.toString()) ?: ""
+        val errorMessage = if ( text.isNotEmpty() && text.length < 15) {
             errorText
         } else {
             null
         }
         _uiStateFlow.value = prevState.copy(
+            countryCode = countryCode.lowercase(), // temp val for country code
             userInput = text.toString(),
             clearButtonVisible = isClearButtonVisible,
             errorMessage = errorMessage,
-            proceedButtonEnabled = text.length == 14 //todo переработать для разных стран
+            proceedButtonEnabled = text.length >= 15
         )
     }
 
-    fun onCountryPicked(countryCode: String, countryIcon: Int) {
-        val prevState: PhoneInputUiState = _uiStateFlow.value
-        _uiStateFlow.value = prevState.copy(
-            prefix = countryCode,
-            iconRes = countryIcon,
-        )
-    }
+//    private fun getFlagEmoji(countryCode: String): String { // kept it in case we decide to use the more offline flag format
+//        return countryCode
+//            .uppercase(Locale.ROOT)
+//            .map { char ->
+//                Character.toChars(char.code - 'A'.code + 0x1F1E6)
+//            }
+//            .joinToString("") { it.concatToString() }
+//    }
 
     open fun onNextClicked(isUpdatePassword: Boolean = false, callback: (phoneNumber: String, isSuccess: Boolean) -> Unit) {
         AppCoroutineScopes.appWorkerScope.launch {
             val value = uiStateFlow.value
-            val phoneNumber = value.prefix + " " + value.userInput
+            val phoneNumber = value.userInput.toString()
             kotlin.runCatching {
                 if(!isUpdatePassword) {
                     if (!repository.requestSmsCode(phoneNumber))

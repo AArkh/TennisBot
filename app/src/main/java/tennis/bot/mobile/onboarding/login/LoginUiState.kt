@@ -1,8 +1,7 @@
 package tennis.bot.mobile.onboarding.login
 
 data class LoginUiState(
-	val countryIconRes: Int,
-	val phonePrefix: String,
+	val countryCode: String,
 	val userPhoneInput: String,
 	val userPasswordInput: String,
 	val phoneErrorMessage: String?,

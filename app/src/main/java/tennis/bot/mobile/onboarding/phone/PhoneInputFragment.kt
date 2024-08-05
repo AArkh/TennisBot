@@ -8,10 +8,9 @@ import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import coil.decode.SvgDecoder
+import coil.load
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
@@ -22,7 +21,6 @@ import tennis.bot.mobile.onboarding.phone.NumberAlreadyRegisteredDialog.Companio
 import tennis.bot.mobile.onboarding.phone.NumberAlreadyRegisteredDialog.Companion.GO_TO_FORGOT_PASSWORD
 import tennis.bot.mobile.onboarding.phone.NumberAlreadyRegisteredDialog.Companion.LOGIN_CALLBACK
 import tennis.bot.mobile.utils.basicdialog.BasicDialogViewModel
-import tennis.bot.mobile.utils.hideKeyboard
 import tennis.bot.mobile.utils.traverseToAnotherFragment
 
 @AndroidEntryPoint
@@ -46,23 +44,6 @@ open class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
         }
         binding.confidentialityText.movementMethod = LinkMovementMethod.getInstance() // ссылка в strings
 
-        binding.openCountriesSheetLayout.setOnClickListener {
-            requireContext().hideKeyboard()
-            lifecycleScope.launch {
-                delay(180L) // wait for keyboard to hide
-                val bottomSheet = CountryCodesDialogFragment()
-                bottomSheet.show(childFragmentManager, bottomSheet.tag)
-            }
-        }
-
-        setFragmentResultListener(
-            CountryCodesDialogFragment.COUNTRY_REQUEST_CODE_KEY
-        ) { _, result ->
-            val countryCode = result.getString(CountryCodesDialogFragment.SELECTED_COUNTRY_CODE_KEY, "+7")
-            val countryIcon = result.getInt(CountryCodesDialogFragment.SELECTED_COUNTRY_ICON_KEY)
-            phoneInputViewModel.onCountryPicked(countryCode, countryIcon)
-        }
-
         setFragmentResultListener(FORGOT_PASSWORD_DIALOG_REQUEST_KEY) { _, result ->
             when (result.getString(NumberAlreadyRegisteredDialog.FORGOT_PASSWORD_DIALOG_SELECTED_OPTION_KEY)) {
                 LOGIN_CALLBACK -> {
@@ -77,8 +58,15 @@ open class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
         }
 
         subscribeToFlowOn(phoneInputViewModel.uiStateFlow) { uiState: PhoneInputUiState ->
-            binding.textInputLayout.prefixText = uiState.prefix
-            binding.countryIv.setImageResource(uiState.iconRes)
+            if (uiState.countryCode.isNotEmpty()) {
+                binding.countryIv.load("https://hatscripts.github.io/circle-flags/flags/${uiState.countryCode}.svg") {
+                    decoderFactory { result, options, _ ->
+                        SvgDecoder(result.source, options)
+                    }
+                }
+            }
+            binding.textInputLayout.error = uiState.errorMessage
+            binding.clearButton.visibility = if (uiState.clearButtonVisible) View.VISIBLE else View.INVISIBLE
 
             binding.buttonNext.isEnabled = uiState.proceedButtonEnabled
             val buttonBackground = if (uiState.proceedButtonEnabled) {
@@ -87,8 +75,6 @@ open class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
                 R.drawable.btn_bkg_disabled
             }
             binding.buttonNext.setBackgroundResource(buttonBackground)
-            binding.textInputLayout.error = uiState.errorMessage
-            binding.clearButton.visibility = if (uiState.clearButtonVisible) View.VISIBLE else View.INVISIBLE
         }
 
         binding.buttonNext.setOnClickListener {

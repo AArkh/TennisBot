@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
 import tennis.bot.mobile.onboarding.survey.OnboardingRepository
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
+import tennis.bot.mobile.utils.getCountryCodeForPhoneNumber
 import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
@@ -24,8 +25,7 @@ class LoginViewModel @Inject constructor(
 
 	private val _uiStateFlow = MutableStateFlow(
 		LoginUiState(
-			countryIconRes = R.drawable.russia,
-			phonePrefix = "+7",
+			countryCode = "",
 			userPhoneInput = "",
 			userPasswordInput = "",
 			phoneErrorMessage = null,
@@ -44,30 +44,24 @@ class LoginViewModel @Inject constructor(
 	private val passwordConditionsRegex = Regex("^(?=.*[A-Za-z])(?=.*\\d).+\$")
 
 	companion object {
-		const val PHONE_NUMBER_MAX_LENGTH = 14
+		const val PHONE_NUMBER_MAX_LENGTH = 15
 		const val PASSWORD_MIN_LENGTH = 8
 	}
 
 	fun onPhoneInput(phoneNumber: CharSequence) {
 		val prevState: LoginUiState = _uiStateFlow.value
 		val isClearPhoneButtonVisible = phoneNumber.isNotEmpty()
-		val phoneErrorMessage = if (phoneNumber.isNotEmpty() && phoneNumber.length < 14) {
+		val countryCode = getCountryCodeForPhoneNumber(phoneNumber.toString()) ?: ""
+		val phoneErrorMessage = if ( phoneNumber.isNotEmpty() && phoneNumber.length < PHONE_NUMBER_MAX_LENGTH) {
 			phoneErrorText
 		} else {
 			null
 		}
 		_uiStateFlow.value = prevState.copy(
+			countryCode = countryCode,
 			userPhoneInput = phoneNumber.toString(),
 			phoneErrorMessage = phoneErrorMessage,
 			clearPhoneButtonVisible = isClearPhoneButtonVisible,
-		)
-	}
-
-	fun onCountryPicked(countryCode: String, countryIcon: Int) {
-		val prevState: LoginUiState = _uiStateFlow.value
-		_uiStateFlow.value = prevState.copy(
-			countryIconRes = countryIcon,
-			phonePrefix = countryCode,
 		)
 	}
 
@@ -87,9 +81,9 @@ class LoginViewModel @Inject constructor(
 		)
 	}
 
-	fun isLoginButtonEnabled(){
+	fun isLoginButtonEnabled() {
 		val currentState = _uiStateFlow.value
-		val isPhoneNumberOk = currentState.userPhoneInput.length == PHONE_NUMBER_MAX_LENGTH
+		val isPhoneNumberOk = currentState.userPhoneInput.length >= PHONE_NUMBER_MAX_LENGTH
 		val isPasswordOk = passwordConditionsRegex.matches(currentState.userPasswordInput) && currentState.userPasswordInput.length >= PASSWORD_MIN_LENGTH
 
 		_uiStateFlow.value = currentState.copy(
@@ -122,13 +116,13 @@ class LoginViewModel @Inject constructor(
 		showLoading()
 
 		viewModelScope.launch(Dispatchers.IO) {
-			when (accountInfo.postLogin(uiStateFlow.value.phonePrefix + username, password)) {
+			when (accountInfo.postLogin(username, password)) {
 				200 -> {
 						if(profileRepo.precacheProfile().isSuccessful) {
-							profileRepo.recordPhone(uiStateFlow.value.phonePrefix + username)
+							profileRepo.recordPhone(username)
 							navigationCallback.invoke(false)
 						} else {
-							accountInfo.recordPhoneNumberAndSmsCode(uiStateFlow.value.phonePrefix + username, null)
+							accountInfo.recordPhoneNumberAndSmsCode(username, null)
 							accountInfo.recordPassword(password)
 							context.showToast(context.getString(R.string.continue_registration_text))
 							navigationCallback.invoke(true)

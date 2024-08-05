@@ -12,6 +12,8 @@ import android.widget.TextView
 import androidx.annotation.WorkerThread
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import com.google.i18n.phonenumbers.NumberParseException
+import com.google.i18n.phonenumbers.PhoneNumberUtil
 import tennis.bot.mobile.R
 import tennis.bot.mobile.onboarding.location.LocationRepository
 import tennis.bot.mobile.profile.account.AccountPageAdapter
@@ -237,4 +239,16 @@ private fun getFileName(context: Context, uri: Uri): String? {
 		}
 	}
 	return result
+}
+
+fun getCountryCodeForPhoneNumber(phoneNumber: String): String? {
+	val phoneNumberUtil = PhoneNumberUtil.getInstance()
+	return try {
+		val numberProto = phoneNumberUtil.parse(phoneNumber, null)
+		val regionCode = phoneNumberUtil.getRegionCodeForNumber(numberProto)
+		regionCode
+	} catch (e: NumberParseException) {
+		e.printStackTrace()
+		null
+	}
 }
