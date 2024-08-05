@@ -3,6 +3,7 @@ package tennis.bot.mobile.onboarding.password
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -86,6 +87,7 @@ class PasswordViewModel @Inject constructor(
 					throw IllegalArgumentException("Failed to post Register")
 			}.onFailure {
 				onError()
+				FirebaseCrashlytics.getInstance().recordException(it)
 			}.onSuccess {
 				navigationCallback.invoke()
 			}

@@ -7,6 +7,7 @@ import androidx.annotation.WorkerThread
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -105,6 +106,7 @@ class SmsCodeViewModel @Inject constructor(
                         validateButtonBlocked = _uiStateFlow.value.input.length != SMS_CODE_LENGTH,
                     )
                 }
+                FirebaseCrashlytics.getInstance().recordException(it)
             }.onSuccess {
                 navigationCallback.invoke()
                 accountInfo.recordPhoneNumberAndSmsCode(phone, _uiStateFlow.value.input)

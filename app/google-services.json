@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "471244417957",
+    "project_id": "tennisbot-19f22",
+    "storage_bucket": "tennisbot-19f22.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:471244417957:android:2be2cace9fdb931505964c",
+        "android_client_info": {
+          "package_name": "tennis.bot.mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzY1-N2zQ4WSFVfZszrFw9Odl8bRgoHXY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

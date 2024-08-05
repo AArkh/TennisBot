@@ -3,6 +3,7 @@ package tennis.bot.mobile.onboarding.phone
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CancellationException
@@ -33,27 +34,11 @@ open class PhoneInputViewModel @Inject constructor(
 
     private val errorText = context.getString(R.string.onboarding_text_incorrect_phone_number)
 
-//    fun onTextInput(text: CharSequence) {
-//        val prevState: PhoneInputUiState = _uiStateFlow.value
-//        val isClearButtonVisible = text.isNotEmpty()
-//        val errorMessage = if ( text.isNotEmpty() && text.length < 14) {
-//            errorText
-//        } else {
-//            null
-//        }
-//        _uiStateFlow.value = prevState.copy(
-//            userInput = text.toString(),
-//            clearButtonVisible = isClearButtonVisible,
-//            errorMessage = errorMessage,
-//            proceedButtonEnabled = text.length == 14 //todo переработать для разных стран
-//        )
-//    }
-
     fun onTextInput(text: CharSequence) {
         val prevState: PhoneInputUiState = _uiStateFlow.value
         val isClearButtonVisible = text.isNotEmpty()
         val countryCode = getCountryCodeForPhoneNumber(text.toString()) ?: ""
-        val errorMessage = if ( text.isNotEmpty() && text.length < 15) {
+        val errorMessage = if ( text.isNotEmpty() && text.length < 14) {
             errorText
         } else {
             null
@@ -63,7 +48,7 @@ open class PhoneInputViewModel @Inject constructor(
             userInput = text.toString(),
             clearButtonVisible = isClearButtonVisible,
             errorMessage = errorMessage,
-            proceedButtonEnabled = text.length >= 15
+            proceedButtonEnabled = text.length >= 14
         )
     }
 
@@ -84,9 +69,11 @@ open class PhoneInputViewModel @Inject constructor(
                 if(!isUpdatePassword) {
                     if (!repository.requestSmsCode(phoneNumber))
                         throw IllegalArgumentException("Failed to post Register")
+                    FirebaseCrashlytics.getInstance().log("Failed to post Register regular")
                 } else {
                     if (!repository.requestSmsCode(phoneNumber, true))
                         throw IllegalArgumentException("Failed to post Register")
+                    FirebaseCrashlytics.getInstance().log("Failed to post Register updatePassword")
                 }
             }.onFailure {
                 if (it !is CancellationException) {
@@ -94,7 +81,9 @@ open class PhoneInputViewModel @Inject constructor(
                 }
                 if (it is IllegalArgumentException) { // for now used to caught the registered number
                     callback.invoke(phoneNumber, false)
+                    FirebaseCrashlytics.getInstance().log("(Supposedly) Caught the registered number")
                 }
+                FirebaseCrashlytics.getInstance().recordException(it)
             }.onSuccess {
                 callback.invoke(phoneNumber, true)
             }

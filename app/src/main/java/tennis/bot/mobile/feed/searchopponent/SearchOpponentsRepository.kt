@@ -2,6 +2,7 @@ package tennis.bot.mobile.feed.searchopponent
 
 import android.content.Context
 import androidx.annotation.WorkerThread
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.qualifiers.ApplicationContext
 import tennis.bot.mobile.R
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
@@ -24,8 +25,11 @@ class SearchOpponentsRepository @Inject constructor(
 	suspend fun getOpponents(userInput: String, position: Int): OpponentsBasicResponse? {
 
 		val response = api.getOpponents(userInput, position)
-		if (response.code() == 200) return response.body()
-		if (response.code() == 404) context.showToast("Something went wrong")
+		if (response.isSuccessful) return response.body()
+		else {
+			FirebaseCrashlytics.getInstance().log("getOpponents code ${response.code()} and message: ${response.message()}")
+			context.showToast("Something went wrong")
+		}
 
 		return OpponentsBasicResponse(0, emptyList())
 	}

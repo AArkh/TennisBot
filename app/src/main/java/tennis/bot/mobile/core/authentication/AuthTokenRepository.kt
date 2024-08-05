@@ -3,6 +3,7 @@ package tennis.bot.mobile.core.authentication
 import android.content.Context
 import android.util.Log
 import androidx.annotation.WorkerThread
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -106,6 +107,8 @@ class AuthTokenRepository @Inject constructor(
 					refreshToken = response.body()!!.refreshToken
 				)
 			)
+		} else {
+			FirebaseCrashlytics.getInstance().log("updateToken code ${response.code()} and message: ${response.message()}")
 		}
 	}
 

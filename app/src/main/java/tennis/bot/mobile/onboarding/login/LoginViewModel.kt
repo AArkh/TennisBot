@@ -3,6 +3,7 @@ package tennis.bot.mobile.onboarding.login
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -44,7 +45,7 @@ class LoginViewModel @Inject constructor(
 	private val passwordConditionsRegex = Regex("^(?=.*[A-Za-z])(?=.*\\d).+\$")
 
 	companion object {
-		const val PHONE_NUMBER_MAX_LENGTH = 15
+		const val PHONE_NUMBER_MAX_LENGTH = 14
 		const val PASSWORD_MIN_LENGTH = 8
 	}
 
@@ -130,6 +131,7 @@ class LoginViewModel @Inject constructor(
 				}
 				400 -> onError(loginAndPasswordError)
 				else -> {
+					FirebaseCrashlytics.getInstance().log("onLoginPressed: Not 200 or 400 was triggered")
 					context.showToast(context.getString(R.string.error_text))
 				}
 			}

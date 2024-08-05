@@ -3,6 +3,7 @@ package tennis.bot.mobile.profile.account
 import android.content.Context
 import androidx.annotation.WorkerThread
 import androidx.core.content.ContextCompat.getString
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.qualifiers.ApplicationContext
 import retrofit2.Response
 import tennis.bot.mobile.R
@@ -74,6 +75,8 @@ class UserProfileAndEnumsRepository @Inject constructor(
 		val response = userProfileApi.getProfile().execute()
 		if (response.code() == 200) {
 			cachedProfileData = response.body()!!
+		} else {
+			FirebaseCrashlytics.getInstance().log("precacheProfile returned code ${response.code()} and message: ${response.message()}")
 		}
 		return response
 	}
@@ -123,19 +126,24 @@ class UserProfileAndEnumsRepository @Inject constructor(
 
 	@WorkerThread
 	suspend fun precacheEnums(): List<EnumType> {
-		val response = enumsApi.getAllEnums().execute().body()
-		enumsDao.insert(response!!)
-		enumsDao.insert(listOf(
-			EnumType(IS_RIGHTHAND_TITLE, listOf(
-				EnumData(0, "Левая", "left"),
-				EnumData(1, "Правая", "right")
-			)),
-			EnumType(IS_ONE_BACKHAND_TITLE, listOf(
-				EnumData(0, "Двуручный", "two-handed"),
-				EnumData(1, "Одноручный", "one-handed")
-			)),
-		))
-		return response
+		val response = enumsApi.getAllEnums().execute()
+		response.body()?.let {
+			enumsDao.insert(it)
+			enumsDao.insert(listOf(
+				EnumType(IS_RIGHTHAND_TITLE, listOf(
+					EnumData(0, "Левая", "left"),
+					EnumData(1, "Правая", "right")
+				)),
+				EnumType(IS_ONE_BACKHAND_TITLE, listOf(
+					EnumData(0, "Двуручный", "two-handed"),
+					EnumData(1, "Одноручный", "one-handed")
+				)),
+			))
+		}
+		if (!response.isSuccessful) {
+			FirebaseCrashlytics.getInstance().log("precacheEnums code ${response.code()} and message: ${response.message()}")
+		}
+		return response.body()!!
 	}
 
 	@WorkerThread
@@ -209,8 +217,11 @@ class UserProfileAndEnumsRepository @Inject constructor(
 	suspend fun getAppVersion(version: String): VersionControlResponse? {
 		val response = versionControlApi.getAppVersion(version = version)
 
-		if (response.code() == 200) return response.body()
-		if (response.code() == 404) context.showToast("Something went wrong")
+		if (response.isSuccessful) return response.body()
+		else {
+			context.showToast("Something went wrong")
+			FirebaseCrashlytics.getInstance().log("getAppVersion code ${response.code()} and message: ${response.message()}")
+		}
 
 		return null
 	}
@@ -223,80 +234,116 @@ class UserProfileAndEnumsRepository @Inject constructor(
 					gameDataApi.putGameStyle(GameStyleNetwork(value)).execute()
 				}.onSuccess {
 					updateCachedProfile(GAME_STYLE_TITLE, value)
-				}.onFailure { context.showToast("Failed to update the value. Please, try again later") }
+				}.onFailure {
+					context.showToast("Failed to update the value. Please, try again later")
+					FirebaseCrashlytics.getInstance().recordException(it)
+				}
 			}
 			defaultGameData[1].resultTitle -> {
 				kotlin.runCatching {
 					gameDataApi.putIsRightHand(IsRightHandNetwork(value == 1)).execute()
 				}.onSuccess {
 					updateCachedProfile(IS_RIGHTHAND_TITLE, value)
-				}.onFailure { context.showToast("Failed to update the value. Please, try again later") }
+				}.onFailure {
+					context.showToast("Failed to update the value. Please, try again later")
+					FirebaseCrashlytics.getInstance().recordException(it)
+				}
 			}
 			defaultGameData[2].resultTitle -> {
 				kotlin.runCatching {
 				gameDataApi.putIsOneBackhand(IsOneBackhandNetwork(value == 1)).execute()
 				}.onSuccess {
 					updateCachedProfile(IS_ONE_BACKHAND_TITLE, value)
-				}.onFailure { context.showToast("Failed to update the value. Please, try again later") }
+				}.onFailure {
+					context.showToast("Failed to update the value. Please, try again later")
+					FirebaseCrashlytics.getInstance().recordException(it)
+				}
 			}
 			defaultGameData[3].resultTitle -> {
 				kotlin.runCatching {
 				gameDataApi.putSurface(SurfaceNetwork(value)).execute()
 				}.onSuccess {
 					updateCachedProfile(SURFACE_TITLE, value)
-				}.onFailure { context.showToast("Failed to update the value. Please, try again later") }
+				}.onFailure {
+					context.showToast("Failed to update the value. Please, try again later")
+					FirebaseCrashlytics.getInstance().recordException(it)
+				}
 			}
 			defaultGameData[4].resultTitle -> {
 				kotlin.runCatching {
 				gameDataApi.putShoes(ShoesNetwork(value)).execute()
 				}.onSuccess {
 					updateCachedProfile(SHOES_TITLE, value)
-				}.onFailure { context.showToast("Failed to update the value. Please, try again later") }
+				}.onFailure {
+					context.showToast("Failed to update the value. Please, try again later")
+					FirebaseCrashlytics.getInstance().recordException(it)
+				}
 			}
 			defaultGameData[5].resultTitle -> {
 				kotlin.runCatching {
 				gameDataApi.putRacquet(RacquetNetwork(value)).execute()
 				}.onSuccess {
 					updateCachedProfile(RACQUET_TITLE, value)
-				}.onFailure { context.showToast("Failed to update the value. Please, try again later") }
+				}.onFailure {
+					context.showToast("Failed to update the value. Please, try again later")
+					FirebaseCrashlytics.getInstance().recordException(it)
+				}
 			}
 			defaultGameData[6].resultTitle -> {
 				kotlin.runCatching {
 				gameDataApi.putRacquetStrings(RacquetStringsNetwork(value)).execute()
 				}.onSuccess {
 					updateCachedProfile(RACQUET_STRINGS_TITLE, value)
-				}.onFailure { context.showToast("Failed to update the value. Please, try again later") }
+				}.onFailure {
+					context.showToast("Failed to update the value. Please, try again later")
+					FirebaseCrashlytics.getInstance().recordException(it)
+				}
 			}
 		}
 	}
 
 	@WorkerThread
 	fun putNameSurname(name: String, surname: String): Boolean{
-		val response = kotlin.runCatching { editProfileApi.putNameSurname( NameSurnameNetwork(name, surname) ).execute() }.getOrElse { return false }
+		val response = kotlin.runCatching { editProfileApi.putNameSurname( NameSurnameNetwork(name, surname) ).execute() }.getOrElse {
+			FirebaseCrashlytics.getInstance().recordException(it)
+			return false
+		}
 		return response.isSuccessful
 	}
 
 	@WorkerThread
 	fun putBirthday(networkDateTime: String): Boolean {
-		val response = kotlin.runCatching { editProfileApi.putBirthday(BirthdayNetwork(networkDateTime)).execute()  }.getOrElse { return false }
+		val response = kotlin.runCatching { editProfileApi.putBirthday(BirthdayNetwork(networkDateTime)).execute()  }.getOrElse {
+			FirebaseCrashlytics.getInstance().recordException(it)
+			return false
+		}
 		return response.isSuccessful
 	}
 
 	@WorkerThread
 	fun putLocation(cityId: Int, districtId: Int?): Boolean {
-		val response = kotlin.runCatching { editProfileApi.putLocation(LocationNetwork(cityId, districtId)).execute()  }.getOrElse { return false }
+		val response = kotlin.runCatching { editProfileApi.putLocation(LocationNetwork(cityId, districtId)).execute()  }.getOrElse {
+			FirebaseCrashlytics.getInstance().recordException(it)
+			return false
+		}
 		return response.isSuccessful
 	}
 
 	@WorkerThread
 	fun putPhoneNumber(phoneNumber: String): Boolean {
-		val response =  kotlin.runCatching { editProfileApi.putPhoneNumber(PhoneNumberNetwork(phoneNumber.toApiNumericFormat())).execute() }.getOrElse { return false }
+		val response =  kotlin.runCatching { editProfileApi.putPhoneNumber(PhoneNumberNetwork(phoneNumber.toApiNumericFormat())).execute() }.getOrElse {
+			FirebaseCrashlytics.getInstance().recordException(it)
+			return false
+		}
 		return response.isSuccessful
 	}
 
 	@WorkerThread
 	fun putTelegramNetwork(telegram: String): Boolean {
-		val response =  kotlin.runCatching { editProfileApi.putTelegram(TelegramNetwork(telegram)).execute() }.getOrElse { return false }
+		val response =  kotlin.runCatching { editProfileApi.putTelegram(TelegramNetwork(telegram)).execute() }.getOrElse {
+			FirebaseCrashlytics.getInstance().recordException(it)
+			return false
+		}
 		return response.isSuccessful
 	}
 

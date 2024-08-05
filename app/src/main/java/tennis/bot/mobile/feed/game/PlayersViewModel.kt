@@ -7,6 +7,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import retrofit2.HttpException
@@ -18,8 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 open class PlayersViewModel @Inject constructor(
-	private val repository: SearchOpponentsRepository,
-	@ApplicationContext private val context: Context
+	private val repository: SearchOpponentsRepository
 ): ViewModel() {
 
 	val playersPager = Pager(
@@ -51,11 +51,14 @@ open class PlayersViewModel @Inject constructor(
 					nextKey = if (nextPosition >= (response?.totalCount ?: 0)) null else nextPosition
 				)
 
-			} catch (exception: IOException) {
+			}  catch (exception: IOException) {
+				FirebaseCrashlytics.getInstance().recordException(exception)
 				return LoadResult.Error(exception)
 			} catch (exception: HttpException) {
+				FirebaseCrashlytics.getInstance().recordException(exception)
 				return LoadResult.Error(exception)
 			} catch (exception: NullPointerException) {
+				FirebaseCrashlytics.getInstance().recordException(exception)
 				return LoadResult.Error(exception)
 			}
 		}

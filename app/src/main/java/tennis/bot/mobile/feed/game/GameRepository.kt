@@ -2,6 +2,7 @@ package tennis.bot.mobile.feed.game
 
 import android.content.Context
 import androidx.annotation.WorkerThread
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.qualifiers.ApplicationContext
 import tennis.bot.mobile.R
 import tennis.bot.mobile.feed.activityfeed.AcceptedGameItem
@@ -30,8 +31,11 @@ class GameRepository @Inject constructor(
 	suspend fun getAllRequests(position: Int): GameBasicResponse? {
 		val response = gameApi.getAllRequests(skip = position)
 
-		if (response.code() == 200) return response.body()
-		if (response.code() == 404) context.showToast("Something went wrong")
+		if (response.isSuccessful) return response.body()
+		else {
+			FirebaseCrashlytics.getInstance().log("getActivities code ${response.code()} and message: ${response.message()}")
+			context.showToast("Something went wrong")
+		}
 
 		return null
 	}
@@ -40,8 +44,11 @@ class GameRepository @Inject constructor(
 	suspend fun getIncomingRequests(position: Int): GameBasicResponse? {
 		val response = gameApi.getIncomingRequests(skip = position)
 
-		if (response.code() == 200) return response.body()
-		if (response.code() == 404) context.showToast("Something went wrong")
+		if (response.isSuccessful) return response.body()
+		else {
+			FirebaseCrashlytics.getInstance().log("getActivities code ${response.code()} and message: ${response.message()}")
+			context.showToast("Something went wrong")
+		}
 
 		return null
 	}
@@ -50,8 +57,11 @@ class GameRepository @Inject constructor(
 	suspend fun getOutcomingRequests(position: Int): GameBasicResponse? {
 		val response = gameApi.getOutcomingRequests(skip = position)
 
-		if (response.code() == 200) return response.body()
-		if (response.code() == 404) context.showToast("Something went wrong")
+		if (response.isSuccessful) return response.body()
+		else {
+			FirebaseCrashlytics.getInstance().log("getActivities code ${response.code()} and message: ${response.message()}")
+			context.showToast("Something went wrong")
+		}
 
 		return null
 	}
@@ -60,8 +70,11 @@ class GameRepository @Inject constructor(
 	suspend fun getAcceptedRequests(position: Int): GameAcceptedResponse? {
 		val response = gameApi.getAcceptedRequests(skip = position)
 
-		if (response.code() == 200) return response.body()
-		if (response.code() == 404) context.showToast("Something went wrong")
+		if (response.isSuccessful) return response.body()
+		else {
+			FirebaseCrashlytics.getInstance().log("getActivities code ${response.code()} and message: ${response.message()}")
+			context.showToast("Something went wrong")
+		}
 
 		return null
 	}
@@ -70,7 +83,10 @@ class GameRepository @Inject constructor(
 	suspend fun postRequestResponse(id: Long, comment: String?): Boolean {
 		val response = kotlin.runCatching {
 			gameApi.postRequestResponse(id, comment)
-		}.getOrElse { return false }
+		}.getOrElse {
+			FirebaseCrashlytics.getInstance().recordException(it)
+			return false
+		}
 
 		return response.isSuccessful
 	}
@@ -79,7 +95,10 @@ class GameRepository @Inject constructor(
 	suspend fun deleteGameRequest(id: Long): Boolean {
 		val response = kotlin.runCatching {
 			gameApi.deleteGameRequest(id)
-		}.getOrElse { return false }
+		}.getOrElse {
+			FirebaseCrashlytics.getInstance().recordException(it)
+			return false
+		}
 
 		return response.isSuccessful
 	}
@@ -88,7 +107,10 @@ class GameRepository @Inject constructor(
 	suspend fun deleteMyGameResponse(id: Long): Boolean {
 		val response = kotlin.runCatching {
 			gameApi.deleteMyGameResponse(id)
-		}.getOrElse { return false }
+		}.getOrElse {
+			FirebaseCrashlytics.getInstance().recordException(it)
+			return false
+		}
 
 		return response.isSuccessful
 	}

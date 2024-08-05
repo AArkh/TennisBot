@@ -3,6 +3,7 @@ package tennis.bot.mobile.feed.bottomnavigation
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -46,6 +47,7 @@ class BottomNavigationViewModel @Inject constructor(
 				} else {
 					tokenRepository.triggerUnAuthFlow(true)
 				}
+				FirebaseCrashlytics.getInstance().recordException(it)
 			}
 		}
 	}

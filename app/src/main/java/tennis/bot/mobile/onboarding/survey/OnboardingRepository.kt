@@ -5,6 +5,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.core.net.toUri
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -91,7 +92,9 @@ class OnboardingRepository @Inject constructor(
                     refreshToken = response.body()!!.refreshToken
                 )
             )
-            Log.d("1234567", "token has been recorded")
+            FirebaseCrashlytics.getInstance().log("postLogin(onboarding) token has been recorded")
+        } else {
+            FirebaseCrashlytics.getInstance().log("postLogin returned code ${response.code()} and message: ${response.message()}")
         }
     }
 
@@ -108,7 +111,7 @@ class OnboardingRepository @Inject constructor(
         )
 
         if (response.code() == 200) {
-            Log.d("1234567", "token has been recorded")
+            FirebaseCrashlytics.getInstance().log("postLogin(login) token has been recorded")
             tokenRepo.recordToken(
                 TokenResponse(
                     accessToken = response.body()!!.accessToken,
@@ -152,7 +155,10 @@ class OnboardingRepository @Inject constructor(
 			)
 		}.onSuccess {
             postLogin()
-        }.getOrElse { return false }
+        }.getOrElse {
+            FirebaseCrashlytics.getInstance().recordException(it)
+            return false
+        }
 		return response.isSuccessful
 	}
 
@@ -171,7 +177,9 @@ class OnboardingRepository @Inject constructor(
             response.body()?.let { recordUserPicture(it) }
             Log.d("123456", "profilePic has been received and recorded")
         } else if (response.code() == 400) {
-            Log.d("123456", "profilePic has crashed and burned")
+            FirebaseCrashlytics.getInstance().log("postRegistrationProfilePicture returned code 400")
+        } else {
+            FirebaseCrashlytics.getInstance().log("postRegistrationProfilePicture returned code ${response.code()} and message: ${response.message()}")
         }
 
         return response.code()
@@ -193,7 +201,9 @@ class OnboardingRepository @Inject constructor(
         if (response.code() == 204) {
             Log.d("123456", "profilePic was posted")
         } else if (response.code() == 400) {
-            Log.d("123456", "profilePic has crashed and burned")
+            FirebaseCrashlytics.getInstance().log("postProfilePicture returned code 400")
+        } else {
+            FirebaseCrashlytics.getInstance().log("postProfilePicture returned code ${response.code()} and message: ${response.message()}")
         }
 
         return response.code()
@@ -207,7 +217,10 @@ class OnboardingRepository @Inject constructor(
                 password = password,
                 smsVerifyCode = getSmsVerifyCode()
             ))
-        }.getOrElse { return false }
+        }.getOrElse {
+            FirebaseCrashlytics.getInstance().log("postProfilePicture returned error $it and message: ${it.message}")
+            return false
+        }
 
         return response.isSuccessful
     }

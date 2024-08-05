@@ -7,11 +7,11 @@ import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.net.Uri
 import android.provider.OpenableColumns
-import android.util.Log
 import android.widget.TextView
 import androidx.annotation.WorkerThread
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import tennis.bot.mobile.R
@@ -153,20 +153,20 @@ suspend fun convertLocationIntToString(
 	runCatching {
 		countryString = locationRepository.getLocations().find { it.id == countryInt }!!.countryName
 	}.onFailure {
-		Log.d("1234567", "recordLocationValues: country error")
+		FirebaseCrashlytics.getInstance().recordException(it)
 	}
 	runCatching {
 		cityString = locationRepository.getLocations().find { it.id == countryInt }
 			?.cities!!.find { it.id == cityInt }!!.name
 	}.onFailure {
-		Log.d("1234567", "recordLocationValues: city error")
+		FirebaseCrashlytics.getInstance().recordException(it)
 	}
 	runCatching {
 		districtString = locationRepository.getLocations().find { it.id == countryInt }
 			?.cities!!.find { it.id == cityInt }
 			?.districts!!.find { it.id == districtInt }!!.title
 	}.onFailure {
-		Log.d("1234567", "recordLocationValues: district error")
+		FirebaseCrashlytics.getInstance().recordException(it)
 	}
 
 	return Triple(countryString, cityString, districtString)
@@ -181,20 +181,20 @@ suspend fun convertLocationStringToInt(
 	runCatching {
 		countryInt = locationRepository.getLocations().find { it.countryName == countryString }!!.id
 	}.onFailure {
-		Log.d("1234567", "recordLocationValues: country error")
+		FirebaseCrashlytics.getInstance().recordException(it)
 	}
 	runCatching {
 		cityInt = locationRepository.getLocations().find { it.countryName == countryString }
 			?.cities!!.find { it.name == cityString }!!.id
 	}.onFailure {
-		Log.d("1234567", "recordLocationValues: city error")
+		FirebaseCrashlytics.getInstance().recordException(it)
 	}
 	runCatching {
 		districtInt = locationRepository.getLocations().find { it.countryName == countryString }
 			?.cities!!.find { it.name == cityString }
 			?.districts!!.find { it.title == districtString }!!.id
 	}.onFailure {
-		Log.d("1234567", "recordLocationValues: district error")
+		FirebaseCrashlytics.getInstance().recordException(it)
 	}
 
 	return Triple(countryInt, cityInt, districtInt)
@@ -213,6 +213,7 @@ fun uriToFile(context: Context, uri: Uri): File? {
 		}
 		return tempFile
 	} catch (e: IOException) {
+		FirebaseCrashlytics.getInstance().recordException(e)
 		e.printStackTrace()
 		return null
 	}
@@ -248,6 +249,7 @@ fun getCountryCodeForPhoneNumber(phoneNumber: String): String? {
 		val regionCode = phoneNumberUtil.getRegionCodeForNumber(numberProto)
 		regionCode
 	} catch (e: NumberParseException) {
+		FirebaseCrashlytics.getInstance().recordException(e)
 		e.printStackTrace()
 		null
 	}

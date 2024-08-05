@@ -4,6 +4,7 @@ import android.icu.text.SimpleDateFormat
 import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import retrofit2.HttpException
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import java.io.IOException
@@ -74,10 +75,13 @@ class MatchesRepository @Inject constructor(
 					nextKey = if (nextPosition >= (response.body()?.totalCount ?: 0)) null else nextPosition
 				)
 			} catch (exception: IOException) {
+				FirebaseCrashlytics.getInstance().recordException(exception)
 				return LoadResult.Error(exception)
 			} catch (exception: HttpException) {
+				FirebaseCrashlytics.getInstance().recordException(exception)
 				return LoadResult.Error(exception)
 			} catch (exception: NullPointerException) {
+				FirebaseCrashlytics.getInstance().recordException(exception)
 				return LoadResult.Error(exception)
 			}
 		}

@@ -2,8 +2,8 @@ package tennis.bot.mobile.feed.insertscore
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.annotation.WorkerThread
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -23,7 +23,10 @@ class InsertScoreRepository @Inject constructor(
 	suspend fun postSingleScore(postBody: InsertScoreItem): Boolean {
 		val response = kotlin.runCatching {
 			insertScoreApi.postSingleScore(postBody)
-		}.getOrElse { return false }
+		}.getOrElse {
+			FirebaseCrashlytics.getInstance().recordException(it)
+			return false
+		}
 
 		return response.isSuccessful
 	}
@@ -32,7 +35,10 @@ class InsertScoreRepository @Inject constructor(
 	suspend fun postDoublesScore(postBody: InsertScoreItem): Boolean {
 		val response = kotlin.runCatching {
 			insertScoreApi.postDoublesScore(postBody)
-		}.getOrElse { return false }
+		}.getOrElse {
+			FirebaseCrashlytics.getInstance().recordException(it)
+			return false
+		}
 
 		return response.isSuccessful
 	}
@@ -50,10 +56,8 @@ class InsertScoreRepository @Inject constructor(
 			name = ""
 		)
 
-		if (response.code() == 204) {
-			Log.d("123456", "photo was posted")
-		} else if (response.code() == 400) {
-			Log.d("123456", "photo has crashed and burned")
+		if (!response.isSuccessful) {
+			FirebaseCrashlytics.getInstance().log("getActivities code ${response.code()} and message: ${response.message()}")
 		}
 
 		return response.body()
@@ -72,10 +76,8 @@ class InsertScoreRepository @Inject constructor(
 			name = ""
 		)
 
-		if (response.code() == 204) {
-			Log.d("123456", "video was posted")
-		} else if (response.code() == 400) {
-			Log.d("123456", "video has crashed and burned")
+		if (!response.isSuccessful) {
+			FirebaseCrashlytics.getInstance().log("getActivities code ${response.code()} and message: ${response.message()}")
 		}
 
 		return response.body()

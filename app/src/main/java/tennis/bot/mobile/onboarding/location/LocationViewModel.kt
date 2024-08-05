@@ -3,6 +3,7 @@ package tennis.bot.mobile.onboarding.location
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,6 +36,7 @@ open class LocationViewModel @Inject constructor(
 					)
 				}.onFailure {
 					_uiStateFlow.value = LocationUiState.Error
+					FirebaseCrashlytics.getInstance().recordException(it)
 				}
 			}
 		}
@@ -87,20 +89,20 @@ open class LocationViewModel @Inject constructor(
 				kotlin.runCatching {
 					countryInt = repository.getLocations().find { it.countryName == selectedCountry }!!.id
 				}.onFailure {
-					Log.d("1234567", "recordLocationValues: country error")
+					FirebaseCrashlytics.getInstance().log("recordLocationValues: country error")
 				}
 				kotlin.runCatching {
 					cityInt = repository.getLocations().find { it.countryName == selectedCountry }
 						?.cities!!.find { it.name == selectedCity }!!.id
 				}.onFailure {
-					Log.d("1234567", "recordLocationValues: city error")
+					FirebaseCrashlytics.getInstance().log("recordLocationValues: city error")
 				}
 				kotlin.runCatching {
 					districtInt = repository.getLocations().find { it.countryName == selectedCountry }
 						?.cities!!.find { it.name == selectedCity }
 						?.districts!!.find { it.title == selectedDistrict }!!.id
 				}.onFailure {
-					Log.d("1234567", "recordLocationValues: district error")
+					FirebaseCrashlytics.getInstance().log("recordLocationValues: district error")
 				}
 				accountInfo.recordLocationData(countryInt, cityInt, districtInt)
 			}

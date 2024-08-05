@@ -2,7 +2,6 @@ package tennis.bot.mobile.profile.account
 
 import android.content.Context
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +9,7 @@ import androidx.core.content.ContextCompat.getColor
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreAdapter
 import tennis.bot.mobile.core.CoreUtilsItem
@@ -222,7 +222,7 @@ fun getDefaultDrawableResourceId(context: Context, drawableName: String): Int? {
 	return if (resourceId != 0) {
 		resourceId
 	} else {
-		Log.d("123456", "couldn't find the drawable")
+		FirebaseCrashlytics.getInstance().log("getDefaultDrawableResourceId: couldn't find the drawable named $drawableName")
 		null
 	}
 }

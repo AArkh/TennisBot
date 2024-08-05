@@ -10,6 +10,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -43,6 +44,7 @@ class GameViewModel @Inject constructor(
 			kotlin.runCatching {
 				repository.postRequestResponse(id, comment)
 			}.onFailure {
+				FirebaseCrashlytics.getInstance().recordException(it)
 				context.showToast("Не удалось отправить ответ на заявку")
 			}.onSuccess {
 				context.showToast("Отклик на заявку успешно отправлен")
@@ -55,6 +57,7 @@ class GameViewModel @Inject constructor(
 			kotlin.runCatching {
 				repository.deleteGameRequest(id)
 			}.onFailure {
+				FirebaseCrashlytics.getInstance().recordException(it)
 				context.showToast("Не удалось удалить заявку")
 			}.onSuccess {
 				context.showToast("Заявка успешно удалена")
@@ -68,6 +71,7 @@ class GameViewModel @Inject constructor(
 			kotlin.runCatching {
 				repository.deleteMyGameResponse(id)
 			}.onFailure {
+				FirebaseCrashlytics.getInstance().recordException(it)
 				context.showToast("Не удалось удалить отклик")
 			}.onSuccess {
 				context.showToast("Отклик успешно удален")
@@ -151,10 +155,13 @@ class GameViewModel @Inject constructor(
 				)
 
 			} catch (exception: IOException) {
+				FirebaseCrashlytics.getInstance().recordException(exception)
 				return LoadResult.Error(exception)
 			} catch (exception: HttpException) {
+				FirebaseCrashlytics.getInstance().recordException(exception)
 				return LoadResult.Error(exception)
 			} catch (exception: NullPointerException) {
+				FirebaseCrashlytics.getInstance().recordException(exception)
 				return LoadResult.Error(exception)
 			}
 		}
@@ -177,11 +184,14 @@ class GameViewModel @Inject constructor(
 					nextKey = if (nextPosition >= (response?.totalCount ?: 0)) null else nextPosition
 				)
 
-			} catch (exception: IOException) {
+			}  catch (exception: IOException) {
+				FirebaseCrashlytics.getInstance().recordException(exception)
 				return LoadResult.Error(exception)
 			} catch (exception: HttpException) {
+				FirebaseCrashlytics.getInstance().recordException(exception)
 				return LoadResult.Error(exception)
 			} catch (exception: NullPointerException) {
+				FirebaseCrashlytics.getInstance().recordException(exception)
 				return LoadResult.Error(exception)
 			}
 		}
