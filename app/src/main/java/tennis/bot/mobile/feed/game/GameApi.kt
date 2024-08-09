@@ -37,7 +37,7 @@ interface GameApi {
 	@POST("api/game-orders/{id}/response")
 	suspend fun postRequestResponse(
 		@Path("id") id: Long,
-		@Query("comment") comment: String?
+		@Query("comment") comment: String?,
 	): Response<GameRequestResponse>
 
 	@DELETE("api/game-orders/{id}")
@@ -90,7 +90,7 @@ data class GameAcceptedPost(
 @Serializable
 data class GamePostNetwork(
 	val id: Long,
-	val targetPlayerId: Int?,
+	val targetPlayerId: Long?,
 	val player: GamePlayer,
 	val isOwned: Boolean,
 	val isResponsed: Boolean,

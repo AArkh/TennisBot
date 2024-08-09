@@ -82,7 +82,7 @@ class GameRepository @Inject constructor(
 	@WorkerThread
 	suspend fun postRequestResponse(id: Long, comment: String?): Boolean {
 		val response = kotlin.runCatching {
-			gameApi.postRequestResponse(id, comment)
+				gameApi.postRequestResponse(id, comment)
 		}.getOrElse {
 			FirebaseCrashlytics.getInstance().recordException(it)
 			return false
@@ -133,7 +133,8 @@ class GameRepository @Inject constructor(
 				experience = userProfileRepository.getEnumById(Pair(AccountPageViewModel.EXPERIENCE_TITLE, game.player.experience)),
 				comment = game.comment,
 				isOwned = game.isOwned,
-				isResponsed = game.isResponsed
+				isResponsed = game.isResponsed,
+				targetPlayerId = game.targetPlayerId
 			)
 		}
 	}

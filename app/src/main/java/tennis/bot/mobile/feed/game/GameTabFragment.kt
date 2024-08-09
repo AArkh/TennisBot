@@ -22,7 +22,7 @@ class GameTabFragment : AuthorizedCoreFragment<FragmentGameTabBinding>() {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 
-		pagerAdapter = GameTabPager(childFragmentManager, lifecycle)
+		pagerAdapter = GameTabPager(parentFragmentManager, lifecycle)
 		binding.viewPager.adapter = pagerAdapter
 		TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
 			tab.text = when (position) {

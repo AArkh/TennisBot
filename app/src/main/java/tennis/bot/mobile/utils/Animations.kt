@@ -30,5 +30,4 @@ fun animateButtonTransition(backgroundView: View, targetButton: View) {
 	animatorSet.playTogether(widthChangeAnimator, translationAnimator)
 	animatorSet.duration = BUTTON_ANIMATION_DURATION
 	animatorSet.start()
-
 }

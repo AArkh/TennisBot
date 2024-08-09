@@ -351,7 +351,8 @@ data class MatchRequestPostItem( // 2
 	val experience: String,
 	val comment: String,
 	val isOwned: Boolean? = null,
-	val isResponsed: Boolean? = null
+	val isResponsed: Boolean? = null,
+	val targetPlayerId: Long? = null
 ): FeedSealedClass(id, totalLikes, liked)
 
 data class ScorePostItem( // 3

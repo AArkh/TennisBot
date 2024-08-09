@@ -19,7 +19,7 @@ interface RequestCreationApi {
 
 @Serializable
 data class RequestNetwork(
-	val targetPlayerId: Long? = null, // не факт, что вообще стоит оставлять
+	val targetPlayerId: Long? = null,
 	val cityId: Int,
 	val districtId: Int?,
 	val date: String,

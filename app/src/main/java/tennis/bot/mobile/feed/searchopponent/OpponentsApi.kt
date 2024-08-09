@@ -11,6 +11,7 @@ interface OpponentsApi {
 		@Query("name") playerName: String,
 		@Query("ticks") skip: Int = DEFAULT_SKIP,
 		@Query("limit") limit: Int = DEFAULT_LIMIT,
+		@Query("checkInvites") checkInvites: Boolean = false,
 	): Response<OpponentsBasicResponse>
 
 	companion object{

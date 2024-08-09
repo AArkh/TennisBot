@@ -336,6 +336,7 @@
 	<string name="hello_blank_fragment">Hello blank fragment</string>
 	<string name="my_request">Моя заявка</string>
 	<string name="my_response">Мой отклик</string>
+	<string name="my_invite">Мой вызов</string>
 	<string name="password_changed_success">Пароль успешно изменен</string>
 	<string name="password_change_success_text">Теперь вы можете авторизоваться в приложение Теннис бот</string>
 	<string name="okay">Хорошо</string>

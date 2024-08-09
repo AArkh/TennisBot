@@ -14,6 +14,7 @@ import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
 import tennis.bot.mobile.databinding.FragmentRequestBinding
 import tennis.bot.mobile.feed.bottomnavigation.BottomNavigationFragment
 import tennis.bot.mobile.onboarding.location.LocationDialogViewModel
+import tennis.bot.mobile.utils.basicdialog.BasicDialogViewModel
 import tennis.bot.mobile.utils.traverseToAnotherFragment
 import javax.inject.Inject
 
@@ -52,6 +53,10 @@ class RequestCreationFragment : AuthorizedCoreFragment<FragmentRequestBinding>()
 		binding.container.layoutManager = LinearLayoutManager(requireContext())
 		viewModel.onStartup {
 			val dialog = RequestCreationDeniedDialog()
+			dialog.arguments = bundleOf(
+				BasicDialogViewModel.SELECT_DIALOG_IS_ONE_BUTTON to true,
+				BasicDialogViewModel.SELECT_DIALOG_IS_CANCELABLE to false,
+				BasicDialogViewModel.SELECT_DIALOG_IS_CANCELABLE_ON_TOUCH_OUTSIDE to false)
 			dialog.show(childFragmentManager, dialog.tag)
 		}
 		adapter.clickListener = { position ->

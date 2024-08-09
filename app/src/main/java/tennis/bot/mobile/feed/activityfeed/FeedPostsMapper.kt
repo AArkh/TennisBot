@@ -119,7 +119,7 @@ class FeedPostsMapper @Inject constructor(
 		return theList.toList()
 	}
 
-	private suspend fun formatLocationDataForPost(cityId: Int, districtId: Int?): String? {
+	suspend fun formatLocationDataForPost(cityId: Int, districtId: Int?): String? {
 		val locations = locationRepository.getLocations()
 		val city = locationDataMapper.findCityString(locations, cityId)
 		val district = if (districtId != null) {
@@ -230,15 +230,21 @@ class FeedPostsMapper @Inject constructor(
 	}
 }
 
-suspend fun formatLocationDataForPost(cityId: Int, districtId: Int?, locationRepository: LocationRepository, locationDataMapper: LocationDataMapper): String? {
+suspend fun formatLocationDataForPost(cityId: Int?, districtId: Int?, locationRepository: LocationRepository, locationDataMapper: LocationDataMapper): String? {
 	val locations = locationRepository.getLocations()
-	val city = locationDataMapper.findCityString(locations, cityId)
-	val district = if (districtId != null) {
+	val city = if (cityId != null) {
+		locationDataMapper.findCityString(locations, cityId)
+	} else {
+		null
+	}
+	val district = if (cityId != null && districtId != null) {
 		locationDataMapper.findDistrictStringFromCity(locations, cityId, districtId)
 	} else {
 		null
 	}
-	val location = if (district == null) {
+	val location = if (city == null && district == null) {
+		null
+	} else if (district == null) {
 		city
 	} else {
 		"$city(${district})"

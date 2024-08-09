@@ -169,6 +169,7 @@ class GameFragment : AuthorizedCoreFragment<FragmentGameBinding>() {
 	companion object {
 		const val GAME_ORDER_RESPONSE_KEY = "GAME_ORDER_RESPONSE_KEY"
 		const val GAME_ORDER_ID = "GAME_ORDER_ID"
+		const val TARGET_PLAYER_ID = "TARGET_PLAYER_ID"
 		const val GAME_ORDER_COMMENT = "GAME_ORDER_COMMENT"
 	}
 }

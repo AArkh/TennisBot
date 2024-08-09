@@ -77,6 +77,7 @@ class OpponentItemViewHolder (
 @Parcelize
 data class OpponentItem(
 	val id: Long,
+	val locationSubtitle: String? = null,
 	val profilePicture: String?,
 	val nameSurname: String,
 	val infoPanel: String, // rating/doublesRating experience | games + string

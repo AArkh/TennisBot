@@ -5,6 +5,7 @@ import android.database.Cursor
 import android.graphics.drawable.Drawable
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
+import android.icu.util.TimeZone
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.widget.TextView
@@ -93,6 +94,14 @@ fun formatDateForFeed(dateString: String, context: Context): String {
 		minutes > 0 -> context.resources.getQuantityString(R.plurals.minutes_ago, minutes.toInt(), minutes.toInt())
 		else -> context.getString(R.string.just_now)
 	}
+}
+
+fun getCurrentFormattedDateAndTimeForNetwork(): String {
+	val currentDate = Calendar.getInstance().time
+	val isoDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+	isoDateFormat.timeZone = TimeZone.getTimeZone("UTC")
+
+	return isoDateFormat.format(currentDate)
 }
 
 fun TextView.formRatingChange(difference: String) {

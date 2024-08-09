@@ -84,7 +84,8 @@ class GameAdapter@Inject constructor(): PagingDataAdapter<FeedSealedClass, Recyc
 
 		if (matchRequestItem.isOwned == true) {
 			holder.binding.postType.setTextColor(context.getColor(R.color.tb_red_new))
-			holder.binding.postType.text = context.getString(R.string.my_request)
+			holder.binding.postType.text =
+				if (matchRequestItem.targetPlayerId == null) context.getString(R.string.my_request) else context.getString(R.string.my_invite)
 			holder.binding.optionsDots.isVisible = true
 			holder.binding.optionsDots.setOnClickListener {
 				clickListener?.invoke(REQUEST_OPTIONS_REQUEST, matchRequestItem.id)
@@ -106,6 +107,7 @@ class GameAdapter@Inject constructor(): PagingDataAdapter<FeedSealedClass, Recyc
 		holder.binding.requestComment.text = matchRequestItem.comment
 		holder.binding.date.text = matchRequestItem.addedAt?.let { formatDateForFeed(it, holder.binding.date.context) }
 		holder.binding.likeButton.isVisible = false
+		holder.binding.messageButton.isVisible = false
 
 		holder.binding.root.setOnClickListener {
 			clickListener?.invoke(REQUEST_RESPONSE, matchRequestItem.id)

@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import tennis.bot.mobile.R
-import tennis.bot.mobile.onboarding.login.LoginDialogFragment
+import tennis.bot.mobile.utils.basicdialog.BasicDialogFragment
 
-open class RequestCreationDeniedDialog: LoginDialogFragment() {
+open class RequestCreationDeniedDialog: BasicDialogFragment() {
 
 	companion object {
 		const val GO_TO_FEED = "GO_TO_FEED"
@@ -14,11 +14,6 @@ open class RequestCreationDeniedDialog: LoginDialogFragment() {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-
-		dialog?.setCancelable(false)
-		dialog?.setCanceledOnTouchOutside(false)
-
-		binding.dartsAnimation.setAnimation(R.raw.warning_2d)
 
 		binding.dialogTitle.text = getString(R.string.you_have_request)
 		binding.dialogText.text = getString(R.string.you_have_request_dialog_text)
@@ -29,7 +24,7 @@ open class RequestCreationDeniedDialog: LoginDialogFragment() {
 				RequestCreationFragment.REQUEST_DENIED_DIALOG_KEY,
 				bundleOf(RequestCreationFragment.REQUEST_DENIED_DIALOG_PICKED_OPTION to GO_TO_FEED)
 			)
+			dialog?.dismiss()
 		}
-		binding.buttonGrey.visibility = View.GONE
 	}
 }

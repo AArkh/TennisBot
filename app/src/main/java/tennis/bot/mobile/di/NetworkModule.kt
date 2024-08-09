@@ -131,7 +131,7 @@ class NetworkModule {
     ): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(BASE_URL) //todo вынести debug && prod url в gradle build config
+            .baseUrl(BASE_URL)
             .addConverterFactory(converterFactory)
             .build()
     }
@@ -145,7 +145,7 @@ class NetworkModule {
     ): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(BASE_URL) //todo вынести debug && prod url в gradle build config
+            .baseUrl(BASE_URL)
             .addConverterFactory(converterFactory)
             .build()
     }
@@ -159,7 +159,7 @@ class NetworkModule {
     ): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(BASE_URL) //todo вынести debug && prod url в gradle build config
+            .baseUrl(BASE_URL)
             .addConverterFactory(converterFactory)
             .build()
     }
@@ -173,7 +173,7 @@ class NetworkModule {
     ): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(BASE_URL) //todo вынести debug && prod url в gradle build config
+            .baseUrl(BASE_URL)
             .addConverterFactory(converterFactory)
             .build()
     }
@@ -187,7 +187,7 @@ class NetworkModule {
     ): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(BASE_URL) //todo вынести debug && prod url в gradle build config
+            .baseUrl(BASE_URL)
             .addConverterFactory(converterFactory)
             .build()
     }
@@ -201,7 +201,7 @@ class NetworkModule {
     ): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(BASE_URL) //todo вынести debug && prod url в gradle build config
+            .baseUrl(BASE_URL)
             .addConverterFactory(converterFactory)
             .build()
     }
@@ -215,7 +215,7 @@ class NetworkModule {
     ): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(BASE_URL) //todo вынести debug && prod url в gradle build config
+            .baseUrl(BASE_URL)
             .addConverterFactory(converterFactory)
             .build()
     }
@@ -229,7 +229,7 @@ class NetworkModule {
     ): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(BASE_URL) //todo вынести debug && prod url в gradle build config
+            .baseUrl(BASE_URL)
             .addConverterFactory(converterFactory)
             .build()
     }
@@ -243,7 +243,7 @@ class NetworkModule {
     ): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(BASE_URL) //todo вынести debug && prod url в gradle build config
+            .baseUrl(BASE_URL)
             .addConverterFactory(converterFactory)
             .build()
     }
@@ -257,7 +257,7 @@ class NetworkModule {
     ): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(BASE_URL) //todo вынести debug && prod url в gradle build config
+            .baseUrl(BASE_URL)
             .addConverterFactory(converterFactory)
             .build()
     }
