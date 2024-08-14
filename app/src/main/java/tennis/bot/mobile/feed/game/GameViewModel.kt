@@ -20,6 +20,7 @@ import retrofit2.HttpException
 import tennis.bot.mobile.feed.activityfeed.FeedSealedClass
 import tennis.bot.mobile.feed.searchopponent.OpponentItem
 import tennis.bot.mobile.feed.searchopponent.SearchOpponentsViewModel
+import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.utils.showToast
 import java.io.IOException
 import javax.inject.Inject
@@ -42,7 +43,9 @@ class GameViewModel @Inject constructor(
 	fun onSendingRequestResponse(id: Long, comment: String?) {
 		viewModelScope.launch(Dispatchers.IO) {
 			kotlin.runCatching {
-				repository.postRequestResponse(id, comment)
+				if (!repository.postRequestResponse(id, comment)) {
+					throw IllegalArgumentException("Failed to postRequestResponse")
+				}
 			}.onFailure {
 				FirebaseCrashlytics.getInstance().recordException(it)
 				context.showToast("Не удалось отправить ответ на заявку")

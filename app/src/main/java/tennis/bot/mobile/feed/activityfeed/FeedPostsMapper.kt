@@ -50,11 +50,13 @@ class FeedPostsMapper @Inject constructor(
 
 		return MatchRequestPostItem(
 			id = postData.id,
+			gameOrderId = matchRequestPost.gameOrderId,
 			postType = matchRequestPost.type,
 			totalLikes = postData.totalLikes,
 			liked = postData.liked,
 			addedAt = postData.addedAt,
 			matchDate = matchRequestPost.date?.let { formatDateForMatchPostItem(it) },
+			playerId = matchRequestPost.playerId,
 			playerPhoto = matchRequestPost.playerPhoto,
 			playerName = matchRequestPost.playerName,
 			playerRating = matchRequestPost.playerRating,

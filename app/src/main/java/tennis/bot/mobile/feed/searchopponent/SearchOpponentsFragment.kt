@@ -1,7 +1,6 @@
 package tennis.bot.mobile.feed.searchopponent
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -59,7 +58,6 @@ open class SearchOpponentsFragment : CoreFragment<FragmentSearchOpponentBinding>
 		binding.opponentsContainer.layoutManager = LinearLayoutManager(requireContext())
 
 		adapter.clickListener = { opponent ->
-			Log.d("123546", "Recieved $opponent")
 			viewModel.onOpponentPicked(opponent)
 
 			if (viewModel.uiStateFlow.value.numberOfOpponents > 1) {

@@ -7,7 +7,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,7 +18,6 @@ import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
 import tennis.bot.mobile.databinding.FragmentFeedBottomNavigationBinding
 import tennis.bot.mobile.feed.requestcreation.RequestCreationDeniedDialog
-import tennis.bot.mobile.feed.requestcreation.RequestCreationFragment
 import tennis.bot.mobile.utils.basicdialog.BasicDialogViewModel
 import javax.inject.Inject
 
@@ -47,14 +45,14 @@ class PlayersFragment: AuthorizedCoreFragment<FragmentFeedBottomNavigationBindin
 			}
 		}
 
-		adapter.clickListener = { command, targetPlayerId ->
+		adapter.clickListener = { command, opponentItem ->
 			when(command) {
 				GameAdapter.REQUEST_RESPONSE -> {
-					viewModel.viewModelScope.launch {
-						if (viewModel.checkPermission() == true) {
+					viewModel.checkPermissionToInvite(opponentItem) { isPermitted ->
+						if (isPermitted) {
 							val bottomDialog = GameOrderResponseDialogFragment()
 							bottomDialog.arguments = bundleOf(
-								GameFragment.TARGET_PLAYER_ID to targetPlayerId
+								GameFragment.GAME_ORDER_ID to opponentItem.id
 							)
 							bottomDialog.show(childFragmentManager, bottomDialog.tag)
 						} else {
@@ -67,16 +65,18 @@ class PlayersFragment: AuthorizedCoreFragment<FragmentFeedBottomNavigationBindin
 				}
 			}
 		}
+
 		setFragmentResultListener(GameFragment.GAME_ORDER_RESPONSE_KEY) { _, result ->
 			viewModel.onSendingPlayerRequestResponse(
-				targetPlayerId = result.getLong(GameFragment.TARGET_PLAYER_ID),
+				targetPlayerId = result.getLong(GameFragment.GAME_ORDER_ID),
 				comment = result.getString(GameFragment.GAME_ORDER_COMMENT)
-			)
+			) {
+				binding.container.post {
+					adapter.updateInviteUi(it)
+				}
+			}
 		}
 
-		setFragmentResultListener(RequestCreationFragment.REQUEST_DENIED_DIALOG_KEY) { _, _ ->
-
-		}
 
 		binding.swipeRefreshLayout.setOnRefreshListener {
 			adapter.refresh()
@@ -88,4 +88,5 @@ class PlayersFragment: AuthorizedCoreFragment<FragmentFeedBottomNavigationBindin
 			binding.loadingBar.isVisible = loadState.source.refresh is LoadState.Loading
 		}
 	}
+
 }

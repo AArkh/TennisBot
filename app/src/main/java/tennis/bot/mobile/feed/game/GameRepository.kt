@@ -33,7 +33,7 @@ class GameRepository @Inject constructor(
 
 		if (response.isSuccessful) return response.body()
 		else {
-			FirebaseCrashlytics.getInstance().log("getActivities code ${response.code()} and message: ${response.message()}")
+			FirebaseCrashlytics.getInstance().log("getAllRequests code ${response.code()} and message: ${response.message()}")
 			context.showToast("Something went wrong")
 		}
 
@@ -46,7 +46,7 @@ class GameRepository @Inject constructor(
 
 		if (response.isSuccessful) return response.body()
 		else {
-			FirebaseCrashlytics.getInstance().log("getActivities code ${response.code()} and message: ${response.message()}")
+			FirebaseCrashlytics.getInstance().log("getIncomingRequests code ${response.code()} and message: ${response.message()}")
 			context.showToast("Something went wrong")
 		}
 
@@ -59,7 +59,7 @@ class GameRepository @Inject constructor(
 
 		if (response.isSuccessful) return response.body()
 		else {
-			FirebaseCrashlytics.getInstance().log("getActivities code ${response.code()} and message: ${response.message()}")
+			FirebaseCrashlytics.getInstance().log("getOutcomingRequests code ${response.code()} and message: ${response.message()}")
 			context.showToast("Something went wrong")
 		}
 
@@ -72,7 +72,7 @@ class GameRepository @Inject constructor(
 
 		if (response.isSuccessful) return response.body()
 		else {
-			FirebaseCrashlytics.getInstance().log("getActivities code ${response.code()} and message: ${response.message()}")
+			FirebaseCrashlytics.getInstance().log("getAcceptedRequests code ${response.code()} and message: ${response.message()}")
 			context.showToast("Something went wrong")
 		}
 
@@ -121,11 +121,13 @@ class GameRepository @Inject constructor(
 		else return gameList!!.map { game ->
 			MatchRequestPostItem(
 				id = game.id,
+				gameOrderId = game.id,
 				postType = 2,
 				totalLikes = 0,
 				liked = false,
 				addedAt = game.createdAt,
 				matchDate = formatDateForMatchPostItem(game.date),
+				playerId = game.player.id,
 				playerPhoto = game.player.photoUrl,
 				playerName = game.player.name,
 				playerRating = game.player.rating,

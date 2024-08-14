@@ -2,7 +2,9 @@ package tennis.bot.mobile.feed.activityfeed
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
@@ -11,10 +13,15 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import tennis.bot.mobile.R
 import tennis.bot.mobile.core.DefaultLoadStateAdapter
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
 import tennis.bot.mobile.databinding.FragmentFeedBottomNavigationBinding
+import tennis.bot.mobile.feed.game.GameAdapter
+import tennis.bot.mobile.feed.game.GameFragment
+import tennis.bot.mobile.feed.game.GameOrderResponseDialogFragment
+import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -41,15 +48,35 @@ class FeedFragment : AuthorizedCoreFragment<FragmentFeedBottomNavigationBinding>
 		binding.container.itemAnimator = null
 		binding.container.layoutManager = LinearLayoutManager(context)
 
-		adapter.clickListener = { command, postId ->
-			when(command) {
+		adapter.clickListener = { command, postId, playerId ->
+			when (command) {
 				LIKE -> {
 					viewModel.onLikeButtonPressed(true, postId)
 				}
+
 				UNLIKE -> {
 					viewModel.onLikeButtonPressed(false, postId)
 				}
+				GameAdapter.REQUEST_RESPONSE -> {
+					if (!viewModel.checkIfRequestIsYours(playerId ?: 0)) {
+						val bottomDialog = GameOrderResponseDialogFragment()
+						bottomDialog.arguments = bundleOf(
+							GameFragment.GAME_ORDER_ID to postId
+						)
+						bottomDialog.show(childFragmentManager, bottomDialog.tag)
+					} else {
+						requireContext().showToast(getString(R.string.response_to_own_request))
+					}
+				}
 			}
+		}
+
+		setFragmentResultListener(GameFragment.GAME_ORDER_RESPONSE_KEY) { _, result ->
+			viewModel.onSendingRequestResponse(
+				id = result.getLong(GameFragment.GAME_ORDER_ID),
+				comment = result.getString(GameFragment.GAME_ORDER_COMMENT),
+				requireContext()
+			)
 		}
 
 		lifecycleScope.launch(Dispatchers.IO) {

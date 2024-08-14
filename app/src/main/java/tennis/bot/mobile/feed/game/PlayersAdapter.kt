@@ -13,7 +13,7 @@ import tennis.bot.mobile.feed.searchopponent.SearchOpponentsAdapter
 import javax.inject.Inject
 
 class PlayersAdapter@Inject constructor(): PagingDataAdapter<OpponentItem, NewPlayerPostItemViewHolder>(SearchOpponentsAdapter.OPPONENTS_COMPARATOR) {
-	var clickListener: ((command: String, id: Long) -> Unit)? = null
+	var clickListener: ((command: String, item: OpponentItem) -> Unit)? = null
 
 
 	override fun onBindViewHolder(holder: NewPlayerPostItemViewHolder, position: Int) {
@@ -33,16 +33,26 @@ class PlayersAdapter@Inject constructor(): PagingDataAdapter<OpponentItem, NewPl
 				holder.binding.postType.text = "Пригласить"
 				holder.binding.postType.setTextColor(holder.binding.postType.context.getColor(R.color.tb_black))
 				holder.binding.postType.backgroundTintList = holder.binding.postType.context.getColorStateList(R.color.tb_gray_border_new)
+
+				holder.binding.root.setOnClickListener {
+					clickListener?.invoke(GameAdapter.REQUEST_RESPONSE, opponentItem)
+				}
 			}
 
 			holder.binding.likeButton.isVisible = false
 			holder.binding.likeAnim.isVisible = false
 			holder.binding.messageButton.isVisible = false
 			holder.binding.date.isVisible = false
+		}
+	}
 
-			holder.binding.root.setOnClickListener {
-				clickListener?.invoke(GameAdapter.REQUEST_RESPONSE, opponentItem.id)
-			}
+	fun updateInviteUi(item: OpponentItem) {
+		item.isInvited = !item.isInvited!!
+
+		val currentList = snapshot().items
+		val index = currentList.indexOfFirst { it.id == item.id }
+		if (index != -1) {
+			notifyItemChanged(index)
 		}
 	}
 

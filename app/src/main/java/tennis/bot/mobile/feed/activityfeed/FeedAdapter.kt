@@ -26,6 +26,7 @@ import tennis.bot.mobile.databinding.RecyclerAcceptedGameItemBinding
 import tennis.bot.mobile.databinding.RecyclerEmptyItemBinding
 import tennis.bot.mobile.feed.activityfeed.FeedFragment.Companion.LIKE
 import tennis.bot.mobile.feed.activityfeed.FeedFragment.Companion.UNLIKE
+import tennis.bot.mobile.feed.game.GameAdapter
 import tennis.bot.mobile.feed.searchopponent.OpponentItem
 import tennis.bot.mobile.profile.account.EmptyItemViewHolder
 import tennis.bot.mobile.profile.matches.TennisSetNetwork
@@ -52,7 +53,7 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 		const val MATCH_REQUEST = 2
 		const val SCORE = 3
 	}
-	var clickListener: ((command: String, id: Long) -> Unit)? = null
+	var clickListener: ((command: String, id: Long, playerId: Long?) -> Unit)? = null
 
 	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 		getItem(position)?.let { item ->
@@ -138,6 +139,10 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 			updateLikeUi(matchRequestItem)
 		}
 		holder.binding.date.text = matchRequestItem.addedAt?.let { formatDateForFeed(it, holder.binding.date.context) }
+
+		holder.binding.root.setOnClickListener {
+			clickListener?.invoke(GameAdapter.REQUEST_RESPONSE, matchRequestItem.gameOrderId, matchRequestItem.playerId)
+		}
 	}
 
 	private fun bindScorePost(item: Any, holder: ScorePostItemViewHolder) {
@@ -222,12 +227,12 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 				override fun onAnimationRepeat(animation: Animator) {}
 
 			})
-			clickListener?.invoke(LIKE, postId)
+			clickListener?.invoke(LIKE, postId, null)
 		} else {
 			setCompoundDrawablesWithIntrinsicBounds(R.drawable.fire, 0, 0, 0)
 			setTextColor(getColor(context, R.color.tb_gray_gray))
 			text = if (totalLikes == 1) "" else (totalLikes - 1).toString()
-			clickListener?.invoke(UNLIKE, postId)
+			clickListener?.invoke(UNLIKE, postId, null)
 		}
 	}
 
@@ -338,12 +343,14 @@ data class NewPlayerPostItem( // 1
 ): FeedSealedClass(id, totalLikes, liked)
 
 data class MatchRequestPostItem( // 2
-	override val id: Long, // i don't want to store two id's so for now let's pick the post one
+	override val id: Long,  // i don't want to store two id's so for now let's pick the post one
+	val gameOrderId: Long,
 	val postType: Int,
 	override var totalLikes: Int,
 	override var liked: Boolean,
 	val addedAt: String?,
 	val matchDate: FormattedDate?,
+	val playerId: Long,
 	val playerPhoto: String?,
 	val playerName: String,
 	val playerRating: Int,

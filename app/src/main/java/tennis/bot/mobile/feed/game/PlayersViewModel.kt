@@ -1,5 +1,6 @@
 package tennis.bot.mobile.feed.game
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,6 +10,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -37,6 +39,7 @@ open class PlayersViewModel @Inject constructor(
 		),
 		pagingSourceFactory = { OpponentsDataSource() }
 	).flow
+	private var opponentItem: OpponentItem? = null
 
 	inner class OpponentsDataSource : PagingSource<Int, OpponentItem>() {
 		override fun getRefreshKey(state: PagingState<Int, OpponentItem>): Int {
@@ -51,9 +54,13 @@ open class PlayersViewModel @Inject constructor(
 				val opponentItemsList = response?.items?.let { repository.convertToOpponentItemList(it, true) }
 				val nextPosition = position + 20
 
+				val filteredData = opponentItemsList?.filter { item -> // filtering your own profile
+					userProfileAndEnumsRepository.getProfile().id != item.id
+				}
+
 				Log.d("OpponentsDataSource", "Loading page starting from position: $nextPosition")
 				LoadResult.Page(
-					data = opponentItemsList ?: emptyList(),
+					data = filteredData ?: emptyList(),
 					prevKey = if (position == 0) null else position - params.loadSize,
 					nextKey = if (nextPosition >= (response?.totalCount ?: 0)) null else nextPosition
 				)
@@ -71,11 +78,18 @@ open class PlayersViewModel @Inject constructor(
 		}
 	}
 
-	suspend fun checkPermission(): Boolean? {
-			return requestRepository.getPermissionToCreate()
+	fun checkPermissionToInvite(opponentItem: OpponentItem, navigationCallback: (isPermitted: Boolean) -> Unit) {
+		viewModelScope.launch {
+			if (requestRepository.getPermissionToCreate() == true) {
+				navigationCallback.invoke(true)
+				this@PlayersViewModel.opponentItem = opponentItem
+			} else {
+				navigationCallback.invoke(false)
+			}
+		}
 	}
 
-	fun onSendingPlayerRequestResponse(targetPlayerId: Long?, comment: String?) {
+	fun onSendingPlayerRequestResponse(targetPlayerId: Long?, comment: String?, successCallback: (opponentItem: OpponentItem) -> Unit) {
 		viewModelScope.launch(Dispatchers.IO) {
 			val profile = userProfileAndEnumsRepository.getProfile()
 			kotlin.runCatching {
@@ -93,8 +107,7 @@ open class PlayersViewModel @Inject constructor(
 			}.onFailure {
 				FirebaseCrashlytics.getInstance().recordException(it)
 			}.onSuccess {
-
-				Log.d("onSendingPlayerRequestResponse", "Отклик на заявку успешно отправлен")
+				successCallback.invoke(opponentItem!!)
 			}
 		}
 	}

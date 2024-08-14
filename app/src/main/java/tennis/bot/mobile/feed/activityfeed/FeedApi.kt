@@ -80,7 +80,7 @@ sealed class PostParent {
 		val opponentsCount: Int,
 		val opponentsPower: Int,
 		val date: String?,
-		val gameOrderId: Int
+		val gameOrderId: Long
 	) : PostParent()
 
 	@Serializable

@@ -339,5 +339,6 @@
 	<string name="edit_profile_side_note_title">Connect</string>
 	<string name="edit_profile_side_note_text">Add your Telegram nickname. We’ve connected communication technology between the bot and the app. Now you can find friends, opponents, and even love through the Tennis Bot system in one click.</string>
 	<string name="my_invite">My invite</string>
+	<string name="response_to_own_request">You can\'t respond to your own request</string>
 
 </resources>

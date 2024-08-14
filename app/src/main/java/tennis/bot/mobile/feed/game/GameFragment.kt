@@ -85,7 +85,7 @@ class GameFragment : AuthorizedCoreFragment<FragmentGameBinding>() {
 			onFilterOptionClicked(buttonClicked = binding.acceptedFilter)
 		}
 
-		adapter.clickListener = { command, id ->
+		adapter.clickListener = { command, id, isOwned ->
 			when(command) {
 				GameAdapter.REQUEST_OPTIONS_RESPONSE -> {
 					showDeletePopup(binding.root.findViewById(R.id.options_dots), GameAdapter.REQUEST_OPTIONS_RESPONSE, id)
@@ -94,19 +94,21 @@ class GameFragment : AuthorizedCoreFragment<FragmentGameBinding>() {
 					showDeletePopup(binding.root.findViewById(R.id.options_dots), GameAdapter.REQUEST_OPTIONS_REQUEST, id)
 				}
 				GameAdapter.REQUEST_RESPONSE -> {
-					val bottomDialog = GameOrderResponseDialogFragment()
-					bottomDialog.arguments = bundleOf(
-						GAME_ORDER_ID to id,
-					)
-					bottomDialog.show(childFragmentManager, bottomDialog.tag)
-
+					if (!isOwned!!) {
+						val bottomDialog = GameOrderResponseDialogFragment()
+						bottomDialog.arguments = bundleOf(
+							GAME_ORDER_ID to id,
+						)
+						bottomDialog.show(childFragmentManager, bottomDialog.tag)
+					} else {
+						requireContext().showToast(getString(R.string.response_to_own_request))
+					}
 				}
 			}
 		}
 		adapter.insertScoreCallback = { listOfOpponents ->
 			viewModel.onInsertScoreButtonClicked(requireActivity(), listOfOpponents) {
 				parentFragmentManager.traverseToAnotherFragment(InsertScoreFragment())
-				requireContext().showToast("InsertScore Callback")
 			}
 		}
 
@@ -141,6 +143,14 @@ class GameFragment : AuthorizedCoreFragment<FragmentGameBinding>() {
 
 		buttonClicked.backgroundTintList = ContextCompat.getColorStateList(buttonClicked.context, R.color.tb_bg_card)
 		buttonClicked.setTextColor(ContextCompat.getColor(buttonClicked.context, R.color.tb_black))
+		scrollToView(buttonClicked)
+	}
+
+	private fun scrollToView(view: View) {
+		binding.filters.post {
+			val scrollToX = view.left
+			binding.filters.smoothScrollTo(scrollToX, 0)
+		}
 	}
 
 	private fun showDeletePopup(view: View, command: String, id: Long) {
@@ -169,7 +179,6 @@ class GameFragment : AuthorizedCoreFragment<FragmentGameBinding>() {
 	companion object {
 		const val GAME_ORDER_RESPONSE_KEY = "GAME_ORDER_RESPONSE_KEY"
 		const val GAME_ORDER_ID = "GAME_ORDER_ID"
-		const val TARGET_PLAYER_ID = "TARGET_PLAYER_ID"
 		const val GAME_ORDER_COMMENT = "GAME_ORDER_COMMENT"
 	}
 }

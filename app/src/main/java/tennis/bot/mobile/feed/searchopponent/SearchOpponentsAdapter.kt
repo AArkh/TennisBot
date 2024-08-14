@@ -81,5 +81,5 @@ data class OpponentItem(
 	val profilePicture: String?,
 	val nameSurname: String,
 	val infoPanel: String, // rating/doublesRating experience | games + string
-	val isInvited: Boolean? = false
+	var isInvited: Boolean? = false
 ): Parcelable

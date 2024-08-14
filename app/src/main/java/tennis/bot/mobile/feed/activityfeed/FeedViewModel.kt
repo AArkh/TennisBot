@@ -1,5 +1,6 @@
 package tennis.bot.mobile.feed.activityfeed
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,17 +11,23 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import tennis.bot.mobile.feed.game.GameRepository
 import tennis.bot.mobile.feed.searchopponent.SearchOpponentsViewModel
+import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
+import tennis.bot.mobile.utils.showToast
 import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
 class FeedViewModel @Inject constructor(
 	private val repository: FeedRepository,
-	private val feedPostsMapper: FeedPostsMapper
+	private val feedPostsMapper: FeedPostsMapper,
+	private val gameRepository: GameRepository,
+	private val userProfileAndEnumsRepository: UserProfileAndEnumsRepository,
 ): ViewModel()  {
 
 	fun onLikeButtonPressed(isLike: Boolean, postId: Long) {
@@ -57,6 +64,10 @@ class FeedViewModel @Inject constructor(
 		return listOfItems.toList()
 	}
 
+	fun checkIfRequestIsYours(id: Long): Boolean {
+		return userProfileAndEnumsRepository.getProfile().id == id
+	}
+
 	fun getFeedPaginationFlow(): Flow<PagingData<FeedSealedClass>> {
 		return Pager(
 			config = PagingConfig(
@@ -66,6 +77,21 @@ class FeedViewModel @Inject constructor(
 			),
 			pagingSourceFactory = { FeedDataSource() }
 		).flow
+	}
+
+	fun onSendingRequestResponse(id: Long, comment: String?, context: Context) {
+		viewModelScope.launch(Dispatchers.IO) {
+			kotlin.runCatching {
+				if (!gameRepository.postRequestResponse(id, comment)) {
+					throw IllegalArgumentException("Failed to postRequestResponse")
+				}
+			}.onFailure {
+				FirebaseCrashlytics.getInstance().recordException(it)
+				context.showToast("Не удалось отправить ответ на заявку")
+			}.onSuccess {
+				context.showToast("Отклик на заявку успешно отправлен")
+			}
+		}
 	}
 
 	inner class FeedDataSource : PagingSource<Int, FeedSealedClass>() {

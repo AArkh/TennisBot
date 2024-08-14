@@ -350,5 +350,6 @@
 	<string name="edit_profile_side_note_text">Добавьте свой телеграм ник. Мы связали технологию общения с приложением. Теперь найти друзей, партнеров для игры и даже любовь можно в системе Tennis Bot в один клик</string>
 	<string name="requests_title">Заявки</string>
 	<string name="players_title">Игроки</string>
+	<string name="response_to_own_request">Нельзя откликнуться на собственную заявку</string>
 
 </resources>
