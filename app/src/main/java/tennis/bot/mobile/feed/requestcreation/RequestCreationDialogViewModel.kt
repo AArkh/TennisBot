@@ -18,6 +18,7 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.profile.editgamedata.EditGameDataDialogUiState
 import tennis.bot.mobile.profile.editgamedata.TextOnlyItem
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,6 +46,9 @@ class RequestCreationDialogViewModel @Inject constructor(
 			GAME_PAY -> {
 				loadOptionsListByTitle(GAME_PAY_TITLE)
 			}
+			SURFACE -> {
+				loadOptionsListByTitle(SURFACE_TITLE)
+			}
 		}
 	}
 
@@ -52,10 +56,11 @@ class RequestCreationDialogViewModel @Inject constructor(
 		viewModelScope.launch {
 			withContext(Dispatchers.IO) {
 				val enumList = repository.getEnumGroup(type)
+				val locale = Locale.getDefault().language
 				val enumOptionsList = enumList?.map { enumData ->
 					TextOnlyItem(
 						id = enumData.id,
-						title = enumData.name
+						title = if (locale == "ru") enumData.name else enumData.nameEnglish
 					)
 				}
 				if (enumOptionsList != null) {
@@ -63,6 +68,7 @@ class RequestCreationDialogViewModel @Inject constructor(
 						title = when(type) {
 							GAME_TYPE_TITLE -> { context.getString(R.string.gametype_title) }
 							GAME_PAY_TITLE -> { context.getString(R.string.payment_title) }
+							SURFACE_TITLE -> { context.getString(R.string.surface) }
 							else -> ""
 						},
 						optionsList = enumOptionsList
@@ -79,6 +85,7 @@ class RequestCreationDialogViewModel @Inject constructor(
 					when (currentAction) {
 						GAME_TYPE -> GAME_TYPE_TITLE
 						GAME_PAY -> GAME_PAY_TITLE
+						SURFACE -> SURFACE_TITLE
 						else -> ""
 					}, optionInt))
 			activity.supportFragmentManager.setFragmentResult(
@@ -95,7 +102,9 @@ class RequestCreationDialogViewModel @Inject constructor(
 	companion object {
 		private const val GAME_TYPE = 1
 		private const val GAME_PAY = 2
+		private const val SURFACE = 3
 		const val GAME_TYPE_TITLE = "gameType"
 		const val GAME_PAY_TITLE = "gamePay"
+		const val SURFACE_TITLE = "surface"
 	}
 }

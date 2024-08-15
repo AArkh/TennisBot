@@ -42,10 +42,11 @@ class RequestCreationViewModel @Inject constructor(
 ): ViewModel() {
 
 	private var currentRating: Int = 0
-	private var currentGamePay: String = context.getString(R.string.payment_split)
-	private var currentGamePayId: Int = 1
+	private var currentGamePay: Pair<String, Int> = Pair(context.getString(R.string.payment_split), 1)
+	private var currentSurface: Pair<String, Int> = Pair(context.getString(R.string.default_surface), 1)
 	private var currentGameTypeId: Int = 1
-	private var recommendedValues = "${currentRating - 150} - ${currentRating + 150}"
+	private val recommendedValues
+		get() = "${currentRating - 150} - ${currentRating + 150}"
 	private val _uiStateFlow = MutableStateFlow(
 		RequestCreationUiState(
 			layoutItemsList = emptyList(),
@@ -73,7 +74,8 @@ class RequestCreationViewModel @Inject constructor(
 			val layoutList = listOf(
 				SurveyResultItem(context.getString(R.string.district_title), context.getString(R.string.survey_option_null)),
 				SurveyResultItem(context.getString(R.string.gametype_title), context.getString(R.string.score_type_single)),
-				SurveyResultItem(context.getString(R.string.payment_title), currentGamePay),
+				SurveyResultItem(context.getString(R.string.payment_title), currentGamePay.first),
+				SurveyResultItem(context.getString(R.string.surface), context.getString(R.string.default_surface)),
 				SurveyResultItem(context.getString(R.string.date_title), dateTime.first), // today's date
 				SurveyResultItem(context.getString(R.string.time_title), dateTime.second), // current time
 				GaugeAndCommentItem(
@@ -84,7 +86,7 @@ class RequestCreationViewModel @Inject constructor(
 					context.getString(R.string.request_creation_comment,
 						recommendedValues,
 						context.getString(R.string.payment_split),
-						"Хард") // кандидат на удаление (покрытие не выставляем)
+						context.getString(R.string.default_surface))
 				)
 			)
 
@@ -119,11 +121,10 @@ class RequestCreationViewModel @Inject constructor(
 	}
 
 	fun onValueChanged(title: String, value: String, valueId: Int) {
-		if (title == context.getString(R.string.payment_title)) { //todo узнать у Андрея насколько это норм вариант так сделать (через переменнные). После последних изменений выглядит немного janky
-			currentGamePay = value
-			currentGamePayId = valueId
-		} else if (title == context.getString(R.string.gametype_title)) {
-			currentGameTypeId = valueId
+		when (title) { //todo узнать у Андрея насколько это норм вариант так сделать (через переменнные). После последних изменений выглядит немного janky
+			context.getString(R.string.payment_title) -> { currentGamePay = Pair(value, valueId) }
+			context.getString(R.string.gametype_title) -> { currentGameTypeId = valueId }
+			context.getString(R.string.surface) -> { currentSurface = Pair(value, valueId) }
 		}
 
 		val list = uiStateFlow.value.layoutItemsList
@@ -204,8 +205,8 @@ class RequestCreationViewModel @Inject constructor(
 		commentItem.text = SpannableStringBuilder.valueOf(
 			context.getString(R.string.request_creation_comment,
 				recommendedValues,
-				currentGamePay,
-				"Хард")
+				currentGamePay.first,
+				currentSurface.first)
 		)
 	}
 
@@ -251,7 +252,7 @@ class RequestCreationViewModel @Inject constructor(
 							districtId = district,
 							date = date,
 							gameType = currentGameTypeId,
-							paymentTypeId = currentGamePayId,
+							paymentTypeId = currentGamePay.second,
 							comment = comment.text.toString()
 						)
 					)

@@ -351,5 +351,7 @@
 	<string name="requests_title">Заявки</string>
 	<string name="players_title">Игроки</string>
 	<string name="response_to_own_request">Нельзя откликнуться на собственную заявку</string>
+	<string name="surface">Покрытие</string>
+	<string name="default_surface">Любое</string>
 
 </resources>

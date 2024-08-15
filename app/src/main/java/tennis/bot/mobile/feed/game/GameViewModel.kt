@@ -20,7 +20,6 @@ import retrofit2.HttpException
 import tennis.bot.mobile.feed.activityfeed.FeedSealedClass
 import tennis.bot.mobile.feed.searchopponent.OpponentItem
 import tennis.bot.mobile.feed.searchopponent.SearchOpponentsViewModel
-import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.utils.showToast
 import java.io.IOException
 import javax.inject.Inject

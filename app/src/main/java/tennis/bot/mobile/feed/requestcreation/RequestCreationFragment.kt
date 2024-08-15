@@ -38,8 +38,10 @@ class RequestCreationFragment : AuthorizedCoreFragment<FragmentRequestBinding>()
 		private const val DISTRICT = 0
 		private const val GAME_TYPE = 1
 		private const val GAME_PAY = 2
-		private const val DATE = 3
-		private const val TIME = 4
+		private const val SURFACE = 3
+		private const val DATE = 4
+		private const val TIME = 5
+		private const val TOTAL_NUMBER_OF_ITEMS = 7
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,6 +53,8 @@ class RequestCreationFragment : AuthorizedCoreFragment<FragmentRequestBinding>()
 
 		binding.container.adapter = adapter
 		binding.container.layoutManager = LinearLayoutManager(requireContext())
+		binding.container.setItemViewCacheSize(TOTAL_NUMBER_OF_ITEMS)
+
 		viewModel.onStartup {
 			val dialog = RequestCreationDeniedDialog()
 			dialog.arguments = bundleOf(
@@ -64,15 +68,13 @@ class RequestCreationFragment : AuthorizedCoreFragment<FragmentRequestBinding>()
 				DISTRICT -> { viewModel.onDistrictPressed(childFragmentManager) }
 				GAME_TYPE -> { startDialogWithKey(position) }
 				GAME_PAY -> { startDialogWithKey(position) }
+				SURFACE -> { startDialogWithKey(position) }
 				DATE -> { viewModel.showDatePickerDialog(requireContext()).show() }
 				TIME -> { viewModel.showTimePickerDialog().show(parentFragmentManager, "Timepicker") }
 			}
 		}
 		adapter.currentRating = { rating ->
 			viewModel.updateRating(binding.root.findViewById(R.id.comment_text), rating)
-		}
-		adapter.onGamePayChanged = {
-			viewModel.updateComment(binding.root.findViewById(R.id.comment_text))
 		}
 
 		binding.buttonCreate.setOnClickListener {
@@ -103,8 +105,10 @@ class RequestCreationFragment : AuthorizedCoreFragment<FragmentRequestBinding>()
 			if (title != null && option != null) {
 				viewModel.onValueChanged(title, option, optionId)
 
-				if (title == getString(R.string.payment_title)) { // выглядит не очень, но работает
-					adapter.onGamePayChanged!!.invoke()
+				if (title == getString(R.string.payment_title) || title == getString(R.string.surface)) { // выглядит не очень, но работает
+					binding.container.post {
+						viewModel.updateComment(binding.root.findViewById(R.id.comment_text))
+					}
 				}
 			}
 		}

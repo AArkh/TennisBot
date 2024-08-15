@@ -4,7 +4,6 @@ import android.content.Context
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -23,14 +22,12 @@ import javax.inject.Inject
 class RequestAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>() {
 
 	companion object {
-		private const val GAMEPAY_POSITION = 2
 		private const val OTHER = 0
 		const val REGULAR_ITEM = 1
 		const val RATING_SLIDER = 2
 	}
 	var clickListener: ((position: Int) -> Unit)? = null
 	var currentRating: ((rating: Int) -> Unit)? = null
-	var onGamePayChanged: (() -> Unit)? = null
 
 	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: Any) {
 		when(holder) {
