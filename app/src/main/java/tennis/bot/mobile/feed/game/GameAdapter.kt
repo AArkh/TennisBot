@@ -131,7 +131,7 @@ class GameAdapter@Inject constructor(): PagingDataAdapter<FeedSealedClass, Recyc
 		holder.binding.playersRightInfo.text = acceptedGameItem.targetPlayer.infoPanel
 
 		holder.binding.insertScoreButton.setOnClickListener {
-			insertScoreCallback?.invoke(arrayOf(acceptedGameItem.player)) // prone to error since we don't know who's the main player and how's the opponent. todo discuss
+			insertScoreCallback?.invoke(arrayOf(acceptedGameItem.player, acceptedGameItem.targetPlayer)) // prone to error since we don't know who's the main player and how's the opponent. todo discuss
 		}
 	}
 }

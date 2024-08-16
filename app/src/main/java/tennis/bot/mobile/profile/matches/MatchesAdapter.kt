@@ -43,7 +43,7 @@ class MatchesAdapter @Inject constructor(): PagingDataAdapter<MatchItem, MatchIt
 			holder.bindPlayerRating(match, isPlayer1 = false)
 			holder.onBindingRating(match, false)
 
-			if(match.isWin) {
+			if(match.isWinLeft) {
 				holder.binding.player1Layout.trophy.visibility = View.VISIBLE
 				holder.binding.player2Layout.trophy.visibility = View.GONE
 			} else {
@@ -51,7 +51,7 @@ class MatchesAdapter @Inject constructor(): PagingDataAdapter<MatchItem, MatchIt
 				holder.binding.player1Layout.trophy.visibility = View.GONE
 			}
 
-			val gameSetsAdapter = GameSetsAdapter()
+			val gameSetsAdapter = GameSetsAdapter(match.isWinLeft)
 			holder.binding.gameSetsContainer.adapter = gameSetsAdapter
 			holder.binding.gameSetsContainer.layoutManager = LinearLayoutManager(
 				holder.binding.gameSetsContainer.context, LinearLayoutManager.HORIZONTAL, true)
@@ -115,9 +115,9 @@ class MatchesAdapter @Inject constructor(): PagingDataAdapter<MatchItem, MatchIt
 			match.player3?.name?.substringBefore(" "),
 			match.player4?.name?.substringBefore(" "))
 
-		val (winner, loser) = if (match.isWin) match.player1.name to match.player2.name else match.player2.name to match.player1.name
+		val (winner, loser) = if (match.isWinLeft) match.player1.name to match.player2.name else match.player2.name to match.player1.name
 
-		val (winnerNames, loserNames) = if (match.isWin) {
+		val (winnerNames, loserNames) = if (match.isWinLeft) {
 			context.getString(
 				R.string.post_three_doubles_title,
 				match.player1.name.substringBefore(" "),
@@ -180,7 +180,7 @@ class MatchItemViewHolder(
 
 data class MatchItem(
 	val id: Int,
-	val isWin: Boolean,
+	val isWinLeft: Boolean,
 	val isDouble: Boolean,
 	val player1: Player,
 	val player2: Player,

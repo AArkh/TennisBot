@@ -24,13 +24,19 @@ class MatchesRepository @Inject constructor(
 		"yyyy-MM-dd'T'hh:mm:ss'Z'"
 	)
 
-	private fun List<MatchResponseItem>.convertToMatchItemList(): List<MatchItem> {
+	private fun List<MatchResponseItem>.convertToMatchItemList(currentUserId: Long): List<MatchItem> {
 		return map { matchResponseItem ->
 			val dateTime = convertDateAndTime(matchResponseItem.playedAt)
 
+			val currentPlayerIndex = matchResponseItem.players.indexOfFirst { it.id == currentUserId }
+			val isWinLeft = matchResponseItem.win && when {
+				matchResponseItem.isDouble -> currentPlayerIndex <= 1
+				else -> currentPlayerIndex == 0
+			}
+
 			MatchItem(
 				id = matchResponseItem.id,
-				isWin = matchResponseItem.win,
+				isWinLeft = isWinLeft,
 				isDouble = matchResponseItem.isDouble,
 				player1 = matchResponseItem.players.getOrNull(0)!!,
 				player2 = matchResponseItem.players.getOrNull(1)!!,
@@ -65,7 +71,7 @@ class MatchesRepository @Inject constructor(
 			val position = params.key ?: 0
 			return try {
 				val response = api.getScores(userProfileAndEnumsRepository.getProfile().id, position)
-				val matchItemsList = response.body()?.items?.convertToMatchItemList()
+				val matchItemsList = response.body()?.items?.convertToMatchItemList(userProfileAndEnumsRepository.getProfile().id)
 				val nextPosition = position + 20
 
 				Log.d("MatchesDataSource", "Loading page starting from position: $nextPosition")

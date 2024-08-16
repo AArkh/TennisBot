@@ -27,6 +27,10 @@ class GameRepository @Inject constructor(
 	@ApplicationContext private val context: Context
 ) {
 
+	fun getPlayerId(): Long {
+		return userProfileRepository.getProfile().id
+	}
+
 	@WorkerThread
 	suspend fun getAllRequests(position: Int): GameBasicResponse? {
 		val response = gameApi.getAllRequests(skip = position)

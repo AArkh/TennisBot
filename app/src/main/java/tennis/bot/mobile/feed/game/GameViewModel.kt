@@ -39,6 +39,10 @@ class GameViewModel @Inject constructor(
 		pagingSourceFactory = { GameDataSource(filter = ALL_REQUESTS) }
 	).flow
 
+	fun filterPlayerOpponent(arrayOfOpponents: Array<OpponentItem>): Array<OpponentItem> {
+		return arrayOfOpponents.filter { it.id != repository.getPlayerId() }.toTypedArray()
+	}
+
 	fun onSendingRequestResponse(id: Long, comment: String?) {
 		viewModelScope.launch(Dispatchers.IO) {
 			kotlin.runCatching {

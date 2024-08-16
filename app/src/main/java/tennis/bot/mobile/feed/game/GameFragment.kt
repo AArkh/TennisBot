@@ -107,7 +107,7 @@ class GameFragment : AuthorizedCoreFragment<FragmentGameBinding>() {
 			}
 		}
 		adapter.insertScoreCallback = { listOfOpponents ->
-			viewModel.onInsertScoreButtonClicked(requireActivity(), listOfOpponents) {
+			viewModel.onInsertScoreButtonClicked(requireActivity(), viewModel.filterPlayerOpponent(listOfOpponents)) {
 				parentFragmentManager.traverseToAnotherFragment(InsertScoreFragment())
 			}
 		}
