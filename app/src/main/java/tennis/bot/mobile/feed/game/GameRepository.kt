@@ -96,6 +96,30 @@ class GameRepository @Inject constructor(
 	}
 
 	@WorkerThread
+	suspend fun postInviteAccept(id: Long, playerId: Long): Boolean {
+		val response = kotlin.runCatching {
+			gameApi.postInviteAccept(id, playerId)
+		}.getOrElse {
+			FirebaseCrashlytics.getInstance().recordException(it)
+			return false
+		}
+
+		return response.isSuccessful
+	}
+
+	@WorkerThread
+	suspend fun postInviteDecline(id: Long, playerId: Long): Boolean {
+		val response = kotlin.runCatching {
+			gameApi.postInviteDecline(id, playerId)
+		}.getOrElse {
+			FirebaseCrashlytics.getInstance().recordException(it)
+			return false
+		}
+
+		return response.isSuccessful
+	}
+
+	@WorkerThread
 	suspend fun deleteGameRequest(id: Long): Boolean {
 		val response = kotlin.runCatching {
 			gameApi.deleteGameRequest(id)

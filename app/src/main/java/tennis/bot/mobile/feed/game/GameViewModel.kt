@@ -58,10 +58,42 @@ class GameViewModel @Inject constructor(
 		}
 	}
 
+	fun onAcceptingInvite(id: Long, targetPlayerId: Long) {
+		viewModelScope.launch(Dispatchers.IO) {
+			kotlin.runCatching {
+				if (!repository.postInviteAccept(id, targetPlayerId)) {
+					throw IllegalArgumentException("Failed to onAcceptingInvite")
+				}
+			}.onFailure {
+				FirebaseCrashlytics.getInstance().recordException(it)
+				context.showToast("Не удалось отправить ответ на приглашение")
+			}.onSuccess {
+				context.showToast("Отклик на заявку успешно отправлен")
+			}
+		}
+	}
+
+	fun onDecliningInvite(id: Long, targetPlayerId: Long) {
+		viewModelScope.launch(Dispatchers.IO) {
+			kotlin.runCatching {
+				if (!repository.postInviteDecline(id, targetPlayerId)) {
+					throw IllegalArgumentException("Failed to onDecliningInvite")
+				}
+			}.onFailure {
+				FirebaseCrashlytics.getInstance().recordException(it)
+				context.showToast("Не удалось отправить ответ на приглашение")
+			}.onSuccess {
+				context.showToast("Отклик на заявку успешно отправлен")
+			}
+		}
+	}
+
 	fun onDeletingGameRequest(adapter: GameAdapter, id: Long) {
 		viewModelScope.launch(Dispatchers.IO) {
 			kotlin.runCatching {
-				repository.deleteGameRequest(id)
+				if (!repository.deleteGameRequest(id)) {
+					throw IllegalArgumentException("Failed to deleteGameRequest")
+				}
 			}.onFailure {
 				FirebaseCrashlytics.getInstance().recordException(it)
 				context.showToast("Не удалось удалить заявку")
@@ -75,7 +107,9 @@ class GameViewModel @Inject constructor(
 	fun onDeletingMyGameResponse(adapter: GameAdapter, id: Long) {
 		viewModelScope.launch(Dispatchers.IO) {
 			kotlin.runCatching {
-				repository.deleteMyGameResponse(id)
+				if (!repository.deleteMyGameResponse(id)) {
+					throw IllegalArgumentException("Failed to deleteMyGameResponse")
+				}
 			}.onFailure {
 				FirebaseCrashlytics.getInstance().recordException(it)
 				context.showToast("Не удалось удалить отклик")

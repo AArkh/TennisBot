@@ -74,13 +74,15 @@ class InsertScoreDialogViewModel @Inject constructor(
 				}
 			} else InsertScoreViewModel.DEFAULT_SCORE
 
-		when (valuePositionBasic) {
-			RIGHT_TIE_POSITION -> {
-				pickedScore = "$pickedScore (${rightTieBreakScoreVariants[valuePositionRightTie]})"
-			}
+		if (uiStateFlow.value.isSuperTieBreak == false) {
+			when (valuePositionBasic) {
+				RIGHT_TIE_POSITION -> {
+					pickedScore = "$pickedScore (${rightTieBreakScoreVariants[valuePositionRightTie]})"
+				}
 
-			LEFT_TIE_POSITION -> {
-				pickedScore = "$pickedScore (${leftTieBreakScoreVariants[valuePositionLeftTie]})"
+				LEFT_TIE_POSITION -> {
+					pickedScore = "$pickedScore (${leftTieBreakScoreVariants[valuePositionLeftTie]})"
+				}
 			}
 		}
 

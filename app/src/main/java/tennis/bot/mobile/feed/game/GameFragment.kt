@@ -85,7 +85,7 @@ class GameFragment : AuthorizedCoreFragment<FragmentGameBinding>() {
 			onFilterOptionClicked(buttonClicked = binding.acceptedFilter)
 		}
 
-		adapter.clickListener = { command, id, isOwned ->
+		adapter.clickListener = { command, id, targetPlayerId, isOwned ->
 			when(command) {
 				GameAdapter.REQUEST_OPTIONS_RESPONSE -> {
 					showDeletePopup(binding.root.findViewById(R.id.options_dots), GameAdapter.REQUEST_OPTIONS_RESPONSE, id)
@@ -95,11 +95,20 @@ class GameFragment : AuthorizedCoreFragment<FragmentGameBinding>() {
 				}
 				GameAdapter.REQUEST_RESPONSE -> {
 					if (!isOwned!!) {
-						val bottomDialog = GameOrderResponseDialogFragment()
-						bottomDialog.arguments = bundleOf(
-							GAME_ORDER_ID to id,
-						)
-						bottomDialog.show(childFragmentManager, bottomDialog.tag)
+						if (targetPlayerId == null) {
+							val bottomDialog = GameOrderResponseDialogFragment()
+							bottomDialog.arguments = bundleOf(
+								GAME_ORDER_ID to id,
+							)
+							bottomDialog.show(childFragmentManager, bottomDialog.tag)
+						} else {
+							val bottomDialog = GameInviteDecisionDialogFragment()
+							bottomDialog.arguments = bundleOf(
+								GAME_ORDER_ID to id,
+								TARGET_PLAYER_ID to targetPlayerId
+							)
+							bottomDialog.show(childFragmentManager, bottomDialog.tag)
+						}
 					} else {
 						requireContext().showToast(getString(R.string.response_to_own_request))
 					}
@@ -117,6 +126,20 @@ class GameFragment : AuthorizedCoreFragment<FragmentGameBinding>() {
 				id = result.getLong(GAME_ORDER_ID),
 				comment = result.getString(GAME_ORDER_COMMENT)
 			)
+		}
+
+		setFragmentResultListener(GAME_INVITE_RESPONSE_KEY) { _, result ->
+			if (result.getBoolean(GAME_INVITE_IS_ACCEPTED)) {
+				viewModel.onAcceptingInvite(
+					id = result.getLong(GAME_ORDER_ID),
+					targetPlayerId = result.getLong(TARGET_PLAYER_ID)
+				)
+			} else {
+				viewModel.onDecliningInvite(
+					id = result.getLong(GAME_ORDER_ID),
+					targetPlayerId = result.getLong(TARGET_PLAYER_ID)
+				)
+			}
 		}
 
 		binding.swipeRefreshLayout.setOnRefreshListener {
@@ -180,5 +203,8 @@ class GameFragment : AuthorizedCoreFragment<FragmentGameBinding>() {
 		const val GAME_ORDER_RESPONSE_KEY = "GAME_ORDER_RESPONSE_KEY"
 		const val GAME_ORDER_ID = "GAME_ORDER_ID"
 		const val GAME_ORDER_COMMENT = "GAME_ORDER_COMMENT"
+		const val TARGET_PLAYER_ID = "TARGET_PLAYER_ID"
+		const val GAME_INVITE_RESPONSE_KEY = "GAME_INVITE_RESPONSE_KEY"
+		const val GAME_INVITE_IS_ACCEPTED = "GAME_INVITE_IS_ACCEPTED"
 	}
 }
