@@ -242,8 +242,8 @@ class RequestCreationViewModel @Inject constructor(
 			val layoutList = uiStateFlow.value.layoutItemsList
 			val locations = locationRepository.getLocations()
 			val profileCityId = userProfileAndEnumsRepository.getProfile().cityId
-			val district = locationDataMapper.findDistrictIntFromString(locations, profileCityId, (layoutList[0] as SurveyResultItem).resultOption)
-			val date = formatDateAndTimeForRequest((layoutList[3] as SurveyResultItem).resultOption, (layoutList[4] as SurveyResultItem).resultOption)
+			val district = locationDataMapper.findDistrictIntFromString(locations, profileCityId, (layoutList[DISTRICT_POSITION] as SurveyResultItem).resultOption)
+			val date = formatDateAndTimeForRequest((layoutList[DATE_POSITION] as SurveyResultItem).resultOption, (layoutList[TIME_POSITION] as SurveyResultItem).resultOption)
 			kotlin.runCatching {
 				if (!date.isNullOrEmpty()) {
 					repository.postAddRequest(
@@ -271,5 +271,11 @@ class RequestCreationViewModel @Inject constructor(
 				navigationCallback.invoke()
 			}
 		}
+	}
+
+	companion object {
+		private const val DISTRICT_POSITION = 0
+		private const val DATE_POSITION = 4
+		private const val TIME_POSITION = 5
 	}
 }

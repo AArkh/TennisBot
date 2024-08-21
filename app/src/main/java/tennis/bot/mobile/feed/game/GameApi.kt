@@ -40,6 +40,18 @@ interface GameApi {
 		@Query("comment") comment: String?,
 	): Response<GameRequestResponse>
 
+	@POST("api/game-orders/{id}/accept/{playerId}")
+	suspend fun postInviteAccept(
+		@Path("id") id: Long,
+		@Path("id") playerId: Long,
+	): Response<GameRequestResponse>
+
+	@DELETE("api/game-orders/{id}/response/{playerId}")
+	suspend fun postInviteDecline(
+		@Path("id") id: Long,
+		@Path("id") playerId: Long,
+	): Response<GameRequestResponse>
+
 	@DELETE("api/game-orders/{id}")
 	suspend fun deleteGameRequest(
 		@Path("id") id: Long

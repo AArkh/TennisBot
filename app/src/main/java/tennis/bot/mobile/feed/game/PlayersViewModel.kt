@@ -1,5 +1,6 @@
 package tennis.bot.mobile.feed.game
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,9 +10,11 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import tennis.bot.mobile.R
 import tennis.bot.mobile.feed.requestcreation.RequestCreationRepository
 import tennis.bot.mobile.feed.requestcreation.RequestNetwork
 import tennis.bot.mobile.feed.searchopponent.OpponentItem
@@ -19,6 +22,7 @@ import tennis.bot.mobile.feed.searchopponent.SearchOpponentsRepository
 import tennis.bot.mobile.feed.searchopponent.SearchOpponentsViewModel
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.utils.getCurrentFormattedDateAndTimeForNetwork
+import tennis.bot.mobile.utils.showToast
 import java.io.IOException
 import javax.inject.Inject
 
@@ -27,6 +31,7 @@ open class PlayersViewModel @Inject constructor(
 	private val repository: SearchOpponentsRepository,
 	private val requestRepository: RequestCreationRepository,
 	private val userProfileAndEnumsRepository: UserProfileAndEnumsRepository,
+	@ApplicationContext private val context: Context
 ): ViewModel() {
 
 	val playersPager = Pager(
@@ -91,7 +96,7 @@ open class PlayersViewModel @Inject constructor(
 		viewModelScope.launch(Dispatchers.IO) {
 			val profile = userProfileAndEnumsRepository.getProfile()
 			kotlin.runCatching {
-				requestRepository.postAddRequest(
+				if (!requestRepository.postAddRequest(
 					RequestNetwork(
 						targetPlayerId = targetPlayerId,
 						cityId = profile.cityId,
@@ -101,9 +106,10 @@ open class PlayersViewModel @Inject constructor(
 						paymentTypeId = 1, // default - 50/50
 						comment = comment ?: ""
 					)
-				)
+				)) throw IllegalArgumentException("Failed to postAddRequest")
 			}.onFailure {
 				FirebaseCrashlytics.getInstance().recordException(it)
+				context.showToast(context.getString(R.string.error_text))
 			}.onSuccess {
 				successCallback.invoke(opponentItem!!)
 			}

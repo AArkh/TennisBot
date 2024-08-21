@@ -27,7 +27,7 @@ import javax.inject.Inject
 
 class GameAdapter@Inject constructor(): PagingDataAdapter<FeedSealedClass, RecyclerView.ViewHolder>(FEED_COMPARATOR) {
 
-	var clickListener: ((command: String, id: Long, isOwned: Boolean?) -> Unit)? = null
+	var clickListener: ((command: String, id: Long, targetPlayerId: Long?, isOwned: Boolean?) -> Unit)? = null
 	var insertScoreCallback: ((opponentsList: Array<OpponentItem>) -> Unit)? = null
 	companion object {
 		const val REQUEST_RESPONSE = "REQUEST_RESPONSE"
@@ -88,14 +88,14 @@ class GameAdapter@Inject constructor(): PagingDataAdapter<FeedSealedClass, Recyc
 				if (matchRequestItem.targetPlayerId == null) context.getString(R.string.my_request) else context.getString(R.string.my_invite)
 			holder.binding.optionsDots.isVisible = true
 			holder.binding.optionsDots.setOnClickListener {
-				clickListener?.invoke(REQUEST_OPTIONS_REQUEST, matchRequestItem.id, null)
+				clickListener?.invoke(REQUEST_OPTIONS_REQUEST, matchRequestItem.id, null, null)
 			}
 		} else if (matchRequestItem.isResponsed == true) {
 			holder.binding.postType.setTextColor(context.getColor(R.color.tb_primary_green))
 			holder.binding.postType.text = context.getString(R.string.my_response)
 			holder.binding.optionsDots.isVisible = true
 			holder.binding.optionsDots.setOnClickListener {
-				clickListener?.invoke(REQUEST_OPTIONS_RESPONSE, matchRequestItem.id, null)
+				clickListener?.invoke(REQUEST_OPTIONS_RESPONSE, matchRequestItem.id, null, null)
 			}
 		} else {
 			holder.binding.postType.setTextColor(context.getColor(R.color.tb_gray_dark))
@@ -110,7 +110,7 @@ class GameAdapter@Inject constructor(): PagingDataAdapter<FeedSealedClass, Recyc
 		holder.binding.messageButton.isVisible = false
 
 		holder.binding.root.setOnClickListener {
-			clickListener?.invoke(REQUEST_RESPONSE, matchRequestItem.id, matchRequestItem.isOwned)
+			clickListener?.invoke(REQUEST_RESPONSE, matchRequestItem.id,  matchRequestItem.targetPlayerId, matchRequestItem.isOwned)
 		}
 	}
 
