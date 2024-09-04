@@ -32,14 +32,13 @@ class GameTabFragment : AuthorizedCoreFragment<FragmentGameTabBinding>() {
 		}.attach()
 		binding.viewPager.offscreenPageLimit = 2
 	}
-
 }
 
-class GameTabPager(fragmentManager: FragmentManager, lifecycle: Lifecycle
+class GameTabPager(
+	fragmentManager: FragmentManager,
+	lifecycle: Lifecycle
 ) : FragmentStateAdapter(fragmentManager, lifecycle) {
-	override fun getItemCount(): Int {
-		return 2
-	}
+	override fun getItemCount(): Int = 2
 
 	override fun createFragment(position: Int): Fragment {
 		return when (position) {

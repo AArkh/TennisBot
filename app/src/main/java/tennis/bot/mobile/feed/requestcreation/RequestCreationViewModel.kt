@@ -42,7 +42,7 @@ class RequestCreationViewModel @Inject constructor(
 ): ViewModel() {
 
 	private var currentRating: Int = 0
-	private var currentGamePay: Pair<String, Int> = Pair(context.getString(R.string.payment_split), 1)
+	private var currentGamePay: Pair<String, Int> = Pair(context.getString(R.string.payment_split), 2)
 	private var currentSurface: Pair<String, Int> = Pair(context.getString(R.string.default_surface), 1)
 	private var currentGameTypeId: Int = 1
 	private val recommendedValues
@@ -242,8 +242,8 @@ class RequestCreationViewModel @Inject constructor(
 			val layoutList = uiStateFlow.value.layoutItemsList
 			val locations = locationRepository.getLocations()
 			val profileCityId = userProfileAndEnumsRepository.getProfile().cityId
-			val district = locationDataMapper.findDistrictIntFromString(locations, profileCityId, (layoutList[DISTRICT_POSITION] as SurveyResultItem).resultOption)
-			val date = formatDateAndTimeForRequest((layoutList[DATE_POSITION] as SurveyResultItem).resultOption, (layoutList[TIME_POSITION] as SurveyResultItem).resultOption)
+			val district = locationDataMapper.findDistrictIntFromString(locations, profileCityId, (layoutList[0] as SurveyResultItem).resultOption)
+			val date = formatDateAndTimeForRequest((layoutList[3] as SurveyResultItem).resultOption, (layoutList[4] as SurveyResultItem).resultOption)
 			kotlin.runCatching {
 				if (!date.isNullOrEmpty()) {
 					repository.postAddRequest(
@@ -271,11 +271,5 @@ class RequestCreationViewModel @Inject constructor(
 				navigationCallback.invoke()
 			}
 		}
-	}
-
-	companion object {
-		private const val DISTRICT_POSITION = 0
-		private const val DATE_POSITION = 4
-		private const val TIME_POSITION = 5
 	}
 }

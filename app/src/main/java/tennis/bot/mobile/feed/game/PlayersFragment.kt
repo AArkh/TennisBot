@@ -16,15 +16,15 @@ import kotlinx.coroutines.launch
 import tennis.bot.mobile.core.DefaultLoadStateAdapter
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
-import tennis.bot.mobile.databinding.FragmentFeedBottomNavigationBinding
+import tennis.bot.mobile.databinding.FragmentPlayersBinding
 import tennis.bot.mobile.feed.requestcreation.RequestCreationDeniedDialog
 import tennis.bot.mobile.utils.basicdialog.BasicDialogViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class PlayersFragment: AuthorizedCoreFragment<FragmentFeedBottomNavigationBinding>() {
+class PlayersFragment: AuthorizedCoreFragment<FragmentPlayersBinding>() {
 
-	override val bindingInflation: Inflation<FragmentFeedBottomNavigationBinding> = FragmentFeedBottomNavigationBinding::inflate
+	override val bindingInflation: Inflation<FragmentPlayersBinding> = FragmentPlayersBinding::inflate
 	private val viewModel: PlayersViewModel by viewModels()
 	@Inject
 	lateinit var adapter: PlayersAdapter
@@ -75,12 +75,6 @@ class PlayersFragment: AuthorizedCoreFragment<FragmentFeedBottomNavigationBindin
 					adapter.updateInviteUi(it)
 				}
 			}
-		}
-
-
-		binding.swipeRefreshLayout.setOnRefreshListener {
-			adapter.refresh()
-			binding.swipeRefreshLayout.isRefreshing = false
 		}
 
 		adapter.addLoadStateListener { loadState ->

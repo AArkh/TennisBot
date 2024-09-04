@@ -33,7 +33,7 @@ class SearchOpponentsRepository @Inject constructor(
 		if (response.isSuccessful) return response.body()
 		else {
 			FirebaseCrashlytics.getInstance().log("getOpponents code ${response.code()} and message: ${response.message()}")
-			context.showToast(context.getString(R.string.error_text))
+			context.showToast("Something went wrong")
 		}
 
 		return OpponentsBasicResponse(0, emptyList())
