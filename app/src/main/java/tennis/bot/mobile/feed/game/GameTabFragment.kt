@@ -30,7 +30,6 @@ class GameTabFragment : AuthorizedCoreFragment<FragmentGameTabBinding>() {
 				else -> getString(R.string.players_title)
 			}
 		}.attach()
-		binding.viewPager.offscreenPageLimit = 2
 	}
 }
 
