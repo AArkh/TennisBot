@@ -231,7 +231,7 @@ class RequestCreationViewModel @Inject constructor(
 		val dateTime = dateTimeFormat.parse(dateTimeString)
 
 		val isoDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-		isoDateFormat.timeZone = TimeZone.getTimeZone("UTC")
+//		isoDateFormat.timeZone = TimeZone.getTimeZone("UTC")
 
 		return if (dateTime.before(currentDate)) null else isoDateFormat.format(dateTime)
 	}
@@ -243,7 +243,7 @@ class RequestCreationViewModel @Inject constructor(
 			val locations = locationRepository.getLocations()
 			val profileCityId = userProfileAndEnumsRepository.getProfile().cityId
 			val district = locationDataMapper.findDistrictIntFromString(locations, profileCityId, (layoutList[0] as SurveyResultItem).resultOption)
-			val date = formatDateAndTimeForRequest((layoutList[3] as SurveyResultItem).resultOption, (layoutList[4] as SurveyResultItem).resultOption)
+			val date = formatDateAndTimeForRequest((layoutList[4] as SurveyResultItem).resultOption, (layoutList[5] as SurveyResultItem).resultOption)
 			kotlin.runCatching {
 				if (!date.isNullOrEmpty()) {
 					repository.postAddRequest(

@@ -21,6 +21,10 @@
 		<item quantity="one">%d month ago</item>
 		<item quantity="other">%d months ago</item>
 	</plurals>
+	<plurals name="matches">
+		<item quantity="one">%d match</item>
+		<item quantity="other">%d matches</item>
+	</plurals>
 	<string name="app_name">Tennis bot</string>
 	<string name="onboarding_text_title_1">Racquet Ecosystem</string>
 	<string name="onboarding_text_1">Thousands of players in different countries around the world have already found equal partners and friends</string>

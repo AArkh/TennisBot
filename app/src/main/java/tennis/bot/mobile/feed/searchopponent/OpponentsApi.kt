@@ -9,7 +9,7 @@ interface OpponentsApi {
 	@GET("api/tennis-players/")
 	suspend fun getOpponents(
 		@Query("name") playerName: String,
-		@Query("ticks") skip: Int = DEFAULT_SKIP,
+		@Query("skip") skip: Int = DEFAULT_SKIP,
 		@Query("limit") limit: Int = DEFAULT_LIMIT,
 		@Query("checkInvites") checkInvites: Boolean = false,
 	): Response<OpponentsBasicResponse>

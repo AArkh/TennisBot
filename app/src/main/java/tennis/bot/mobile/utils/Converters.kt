@@ -99,7 +99,7 @@ fun formatDateForFeed(dateString: String, context: Context): String {
 fun getCurrentFormattedDateAndTimeForNetwork(): String {
 	val currentDate = Calendar.getInstance().time
 	val isoDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-	isoDateFormat.timeZone = TimeZone.getTimeZone("UTC")
+//	isoDateFormat.timeZone = TimeZone.getTimeZone("UTC")
 
 	return isoDateFormat.format(currentDate)
 }

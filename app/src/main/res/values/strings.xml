@@ -293,6 +293,12 @@
 		<item quantity="many">%d месяцев назад</item>
 		<item quantity="other">%d месяцев назад</item>
 	</plurals>
+	<plurals name="matches">
+		<item quantity="one">%d матч</item>
+		<item quantity="few">%d матчей</item>
+		<item quantity="many">%d матчей</item>
+		<item quantity="other">%d матчей</item>
+	</plurals>
 
 	<string name="month_text">Май</string>
 	<string name="post_two_location_subtitle">%s, игра на %s</string>

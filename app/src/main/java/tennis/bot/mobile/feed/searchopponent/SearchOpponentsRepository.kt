@@ -1,6 +1,7 @@
 package tennis.bot.mobile.feed.searchopponent
 
 import android.content.Context
+import android.util.Log
 import androidx.annotation.WorkerThread
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -28,7 +29,6 @@ class SearchOpponentsRepository @Inject constructor(
 
 	@WorkerThread
 	suspend fun getOpponents(userInput: String, position: Int, checkInvites: Boolean = false): OpponentsBasicResponse? {
-
 		val response = api.getOpponents(userInput, position, checkInvites = checkInvites)
 		if (response.isSuccessful) return response.body()
 		else {
@@ -53,7 +53,7 @@ class SearchOpponentsRepository @Inject constructor(
 						opponentResponseItem.rating,
 						opponentResponseItem.doublesRating,
 						experience,
-						"${opponentResponseItem.games ?: 0} матчей"),
+						context.resources.getQuantityString(R.plurals.matches, opponentResponseItem.games ?: 0, opponentResponseItem.games ?: 0)),
 					isInvited = opponentResponseItem.isInvited
 				)
 			} else {
@@ -67,7 +67,7 @@ class SearchOpponentsRepository @Inject constructor(
 						opponentResponseItem.rating,
 						opponentResponseItem.doublesRating,
 						experience,
-						"${opponentResponseItem.games ?: 0} матчей"),
+						context.resources.getQuantityString(R.plurals.matches, opponentResponseItem.games ?: 0, opponentResponseItem.games ?: 0)),
 					isInvited = opponentResponseItem.isInvited
 				)
 			}
