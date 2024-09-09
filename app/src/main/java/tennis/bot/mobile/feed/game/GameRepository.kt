@@ -138,6 +138,7 @@ class GameRepository @Inject constructor(
 				locationSubTitle = formatLocationDataForPost(game.cityId, game.districtId, locationRepository, locationDataMapper),
 				experience = userProfileRepository.getEnumById(Pair(AccountPageViewModel.EXPERIENCE_TITLE, game.player.experience)),
 				comment = game.comment,
+				responseComment = game.responseComment,
 				isOwned = game.isOwned,
 				isResponsed = game.isResponsed,
 				targetPlayerId = game.targetPlayerId

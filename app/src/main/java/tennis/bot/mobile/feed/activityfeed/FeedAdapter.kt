@@ -357,6 +357,7 @@ data class MatchRequestPostItem( // 2
 	val locationSubTitle: String?,
 	val experience: String,
 	val comment: String,
+	val responseComment: String? = null,
 	val isOwned: Boolean? = null,
 	val isResponsed: Boolean? = null,
 	val targetPlayerId: Long? = null

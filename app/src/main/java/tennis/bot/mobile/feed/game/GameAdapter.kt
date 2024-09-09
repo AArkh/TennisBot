@@ -110,7 +110,10 @@ class GameAdapter@Inject constructor(): PagingDataAdapter<FeedSealedClass, Recyc
 		holder.binding.messageButton.isVisible = false
 
 		holder.binding.root.setOnClickListener {
-			clickListener?.invoke(REQUEST_RESPONSE, matchRequestItem.id, matchRequestItem.isOwned)
+			if (matchRequestItem.responseComment == null)
+				clickListener?.invoke(REQUEST_RESPONSE, matchRequestItem.id, matchRequestItem.isOwned)
+			else
+				clickListener?.invoke(REQUEST_RESPONSE, matchRequestItem.id, false)
 		}
 	}
 
