@@ -36,7 +36,7 @@
 				android:foreground="@drawable/ripple_gray_corners_100dp"
 				android:paddingHorizontal="12dp"
 				android:paddingVertical="6dp"
-				android:text="Все"
+				android:text="@string/all_matches"
 				android:textColor="@color/tb_black" />
 
 			<TextView
@@ -46,7 +46,7 @@
 				android:layout_marginStart="4dp"
 				android:background="@drawable/background_corners_100dp"
 				android:backgroundTint="@color/invisible"
-				android:text="Входящие"
+				android:text="@string/incoming"
 				android:textColor="@color/tb_gray_gray"
 				android:paddingHorizontal="12dp"
 				android:paddingVertical="6dp"
@@ -62,7 +62,7 @@
 				android:layout_marginStart="4dp"
 				android:background="@drawable/background_corners_100dp"
 				android:backgroundTint="@color/invisible"
-				android:text="Исходящие"
+				android:text="@string/outcoming"
 				android:textColor="@color/tb_gray_gray"
 				android:paddingHorizontal="12dp"
 				android:paddingVertical="6dp"
@@ -80,7 +80,7 @@
 				android:layout_marginStart="4dp"
 				android:background="@drawable/background_corners_100dp"
 				android:backgroundTint="@color/invisible"
-				android:text="Подтвержденные"
+				android:text="@string/accepted"
 				android:textColor="@color/tb_gray_gray"
 				android:paddingHorizontal="12dp"
 				android:paddingVertical="6dp"

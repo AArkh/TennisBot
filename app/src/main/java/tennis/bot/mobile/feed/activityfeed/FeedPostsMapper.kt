@@ -10,6 +10,7 @@ import tennis.bot.mobile.profile.account.AccountPageViewModel
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.profile.matches.TennisSetNetwork
 import tennis.bot.mobile.profile.matches.ratingChange
+import tennis.bot.mobile.utils.formatDateForFeed
 import tennis.bot.mobile.utils.formatDateForMatchPostItem
 import tennis.bot.mobile.utils.view.AvatarImage
 import javax.inject.Inject
@@ -37,7 +38,7 @@ class FeedPostsMapper @Inject constructor(
 				postType = postData.postType,
 				totalLikes = postData.totalLikes,
 				liked = postData.liked,
-				addedAt = postData.addedAt,
+				addedAt = postData.addedAt?.let { formatDateForFeed(it, context) },
 				infoPanel = infoPanel,
 				playerName = newPlayerPost.name,
 				isMale = newPlayerPost.isMale,
@@ -54,7 +55,7 @@ class FeedPostsMapper @Inject constructor(
 			postType = matchRequestPost.type,
 			totalLikes = postData.totalLikes,
 			liked = postData.liked,
-			addedAt = postData.addedAt,
+			addedAt = postData.addedAt?.let { formatDateForFeed(it, context) },
 			matchDate = matchRequestPost.date?.let { formatDateForMatchPostItem(it) },
 			playerId = matchRequestPost.playerId,
 			playerPhoto = matchRequestPost.playerPhoto,
@@ -74,7 +75,7 @@ class FeedPostsMapper @Inject constructor(
 			postType = scorePost.type,
 			totalLikes = postData.totalLikes,
 			liked = postData.liked,
-			addedAt = postData.addedAt,
+			addedAt = postData.addedAt?.let { formatDateForFeed(it, context) },
 			creatorId = scorePost.creatorId,
 			photo = scorePost.photo,
 			video = scorePost.video,

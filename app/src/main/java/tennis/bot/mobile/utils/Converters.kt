@@ -5,7 +5,6 @@ import android.database.Cursor
 import android.graphics.drawable.Drawable
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
-import android.icu.util.TimeZone
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.widget.TextView
@@ -35,7 +34,7 @@ val dateFormats = listOf(
 
 data class FormattedDate(
 	val time: String,
-	val day: Int,
+	val day: String,
 	val dayOfWeek: String,
 	val month: String
 )
@@ -69,9 +68,9 @@ fun formatDateForMatchPostItem(timestampString: String): FormattedDate {
 
 	return FormattedDate(
 		time = timeFormat.format(date),
-		day = calendar.get(Calendar.DAY_OF_MONTH),
-		dayOfWeek = SimpleDateFormat("EEEE", Locale.getDefault()).format(date),
-		month = SimpleDateFormat("MMMM", Locale.getDefault()).format(date)
+		day = calendar.get(Calendar.DAY_OF_MONTH).toString(),
+		dayOfWeek = SimpleDateFormat("EEEE", Locale.getDefault()).format(date).toString().replaceFirstChar { it.uppercase() },
+		month = SimpleDateFormat("MMMM", Locale.getDefault()).format(date).replaceFirstChar { it.uppercase() }
 	)
 }
 

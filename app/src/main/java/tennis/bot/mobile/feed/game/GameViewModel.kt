@@ -17,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import tennis.bot.mobile.R
 import tennis.bot.mobile.feed.activityfeed.FeedSealedClass
 import tennis.bot.mobile.feed.searchopponent.OpponentItem
 import tennis.bot.mobile.feed.searchopponent.SearchOpponentsViewModel
@@ -51,14 +52,14 @@ class GameViewModel @Inject constructor(
 				}
 			}.onFailure {
 				FirebaseCrashlytics.getInstance().recordException(it)
-				context.showToast("Не удалось отправить ответ на заявку")
+				context.showToast(context.getString(R.string.request_response_failure))
 			}.onSuccess {
-				context.showToast("Отклик на заявку успешно отправлен")
+				context.showToast(context.getString(R.string.request_response_success))
 			}
 		}
 	}
 
-	fun onAcceptingInvite(id: Long, targetPlayerId: Long) {
+	fun onAcceptingInvite(id: Long, targetPlayerId: Long, successCallBack: () -> Unit) {
 		viewModelScope.launch(Dispatchers.IO) {
 			kotlin.runCatching {
 				if (!repository.postInviteAccept(id, targetPlayerId)) {
@@ -66,14 +67,15 @@ class GameViewModel @Inject constructor(
 				}
 			}.onFailure {
 				FirebaseCrashlytics.getInstance().recordException(it)
-				context.showToast("Не удалось отправить ответ на приглашение")
+				context.showToast(context.getString(R.string.response_invite_failure))
 			}.onSuccess {
-				context.showToast("Отклик на заявку успешно отправлен")
+				context.showToast(context.getString(R.string.response_invite_accept))
+				successCallBack.invoke()
 			}
 		}
 	}
 
-	fun onDecliningInvite(id: Long, targetPlayerId: Long) {
+	fun onDecliningInvite(id: Long, targetPlayerId: Long, successCallBack: () -> Unit) {
 		viewModelScope.launch(Dispatchers.IO) {
 			kotlin.runCatching {
 				if (!repository.postInviteDecline(id, targetPlayerId)) {
@@ -81,9 +83,10 @@ class GameViewModel @Inject constructor(
 				}
 			}.onFailure {
 				FirebaseCrashlytics.getInstance().recordException(it)
-				context.showToast("Не удалось отправить ответ на приглашение")
+				context.showToast(context.getString(R.string.response_invite_failure))
 			}.onSuccess {
-				context.showToast("Отклик на заявку успешно отправлен")
+				context.showToast(context.getString(R.string.response_invite_decline))
+				successCallBack.invoke()
 			}
 		}
 	}
@@ -96,9 +99,9 @@ class GameViewModel @Inject constructor(
 				}
 			}.onFailure {
 				FirebaseCrashlytics.getInstance().recordException(it)
-				context.showToast("Не удалось удалить заявку")
+				context.showToast(context.getString(R.string.request_delete_failure))
 			}.onSuccess {
-				context.showToast("Заявка успешно удалена")
+				context.showToast(context.getString(R.string.request_delete_success))
 				adapter.refresh()
 			}
 		}
@@ -112,9 +115,9 @@ class GameViewModel @Inject constructor(
 				}
 			}.onFailure {
 				FirebaseCrashlytics.getInstance().recordException(it)
-				context.showToast("Не удалось удалить отклик")
+				context.showToast(context.getString(R.string.response_delete_failure))
 			}.onSuccess {
-				context.showToast("Отклик успешно удален")
+				context.showToast(context.getString(R.string.response_delete_success))
 				adapter.refresh()
 			}
 		}

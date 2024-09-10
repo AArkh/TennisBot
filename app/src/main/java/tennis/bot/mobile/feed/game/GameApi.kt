@@ -43,13 +43,13 @@ interface GameApi {
 	@POST("api/game-orders/{id}/accept/{playerId}")
 	suspend fun postInviteAccept(
 		@Path("id") id: Long,
-		@Path("id") playerId: Long,
+		@Path("playerId") playerId: Long,
 	): Response<GameRequestResponse>
 
 	@DELETE("api/game-orders/{id}/response/{playerId}")
 	suspend fun postInviteDecline(
 		@Path("id") id: Long,
-		@Path("id") playerId: Long,
+		@Path("playerId") playerId: Long,
 	): Response<GameRequestResponse>
 
 	@DELETE("api/game-orders/{id}")

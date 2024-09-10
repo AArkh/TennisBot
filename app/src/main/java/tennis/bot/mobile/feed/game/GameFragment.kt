@@ -88,10 +88,10 @@ class GameFragment : AuthorizedCoreFragment<FragmentGameBinding>() {
 		adapter.clickListener = { command, id, targetPlayerId, isOwned ->
 			when(command) {
 				GameAdapter.REQUEST_OPTIONS_RESPONSE -> {
-					showDeletePopup(binding.root.findViewById(R.id.options_dots), GameAdapter.REQUEST_OPTIONS_RESPONSE, id)
+					showDeletePopup(binding.root.findViewById(R.id.options_dots), GameAdapter.REQUEST_OPTIONS_RESPONSE, id!!)
 				}
 				GameAdapter.REQUEST_OPTIONS_REQUEST -> {
-					showDeletePopup(binding.root.findViewById(R.id.options_dots), GameAdapter.REQUEST_OPTIONS_REQUEST, id)
+					showDeletePopup(binding.root.findViewById(R.id.options_dots), GameAdapter.REQUEST_OPTIONS_REQUEST, id!!)
 				}
 				GameAdapter.REQUEST_RESPONSE -> {
 					if (!isOwned!!) {
@@ -101,17 +101,22 @@ class GameFragment : AuthorizedCoreFragment<FragmentGameBinding>() {
 								GAME_ORDER_ID to id,
 							)
 							bottomDialog.show(childFragmentManager, bottomDialog.tag)
-						} else {
-							val bottomDialog = GameInviteDecisionDialogFragment()
-							bottomDialog.arguments = bundleOf(
-								GAME_ORDER_ID to id,
-								TARGET_PLAYER_ID to targetPlayerId
-							)
-							bottomDialog.show(childFragmentManager, bottomDialog.tag)
 						}
 					} else {
 						requireContext().showToast(getString(R.string.response_to_own_request))
 					}
+				}
+				GameAdapter.REQUEST_RESPONSE_ACCEPT -> {
+					viewModel.onAcceptingInvite(
+						id = id!!,
+						targetPlayerId = targetPlayerId!!
+					) { adapter.refresh() }
+				}
+				GameAdapter.REQUEST_RESPONSE_DECLINE -> {
+					viewModel.onDecliningInvite(
+						id = id!!,
+						targetPlayerId = targetPlayerId!!
+					) { adapter.refresh() }
 				}
 			}
 		}
@@ -126,20 +131,6 @@ class GameFragment : AuthorizedCoreFragment<FragmentGameBinding>() {
 				id = result.getLong(GAME_ORDER_ID),
 				comment = result.getString(GAME_ORDER_COMMENT)
 			)
-		}
-
-		setFragmentResultListener(GAME_INVITE_RESPONSE_KEY) { _, result ->
-			if (result.getBoolean(GAME_INVITE_IS_ACCEPTED)) {
-				viewModel.onAcceptingInvite(
-					id = result.getLong(GAME_ORDER_ID),
-					targetPlayerId = result.getLong(TARGET_PLAYER_ID)
-				)
-			} else {
-				viewModel.onDecliningInvite(
-					id = result.getLong(GAME_ORDER_ID),
-					targetPlayerId = result.getLong(TARGET_PLAYER_ID)
-				)
-			}
 		}
 
 		binding.swipeRefreshLayout.setOnRefreshListener {
@@ -181,14 +172,14 @@ class GameFragment : AuthorizedCoreFragment<FragmentGameBinding>() {
 
 		when(command) {
 			GameAdapter.REQUEST_OPTIONS_RESPONSE -> {
-				menu.menu.add("Удалить отклик")
+				menu.menu.add(getString(R.string.delete_response))
 				menu.setOnMenuItemClickListener {
 					viewModel.onDeletingMyGameResponse(adapter, id)
 					true
 				}
 			}
 			GameAdapter.REQUEST_OPTIONS_REQUEST -> {
-				menu.menu.add("Удалить заявку")
+				menu.menu.add(getString(R.string.delete_request))
 				menu.setOnMenuItemClickListener {
 					viewModel.onDeletingGameRequest(adapter, id)
 					true
@@ -203,8 +194,5 @@ class GameFragment : AuthorizedCoreFragment<FragmentGameBinding>() {
 		const val GAME_ORDER_RESPONSE_KEY = "GAME_ORDER_RESPONSE_KEY"
 		const val GAME_ORDER_ID = "GAME_ORDER_ID"
 		const val GAME_ORDER_COMMENT = "GAME_ORDER_COMMENT"
-		const val TARGET_PLAYER_ID = "TARGET_PLAYER_ID"
-		const val GAME_INVITE_RESPONSE_KEY = "GAME_INVITE_RESPONSE_KEY"
-		const val GAME_INVITE_IS_ACCEPTED = "GAME_INVITE_IS_ACCEPTED"
 	}
 }

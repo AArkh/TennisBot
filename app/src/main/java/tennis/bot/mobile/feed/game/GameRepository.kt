@@ -13,6 +13,7 @@ import tennis.bot.mobile.onboarding.location.LocationDataMapper
 import tennis.bot.mobile.onboarding.location.LocationRepository
 import tennis.bot.mobile.profile.account.AccountPageViewModel
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
+import tennis.bot.mobile.utils.formatDateForFeed
 import tennis.bot.mobile.utils.formatDateForMatchPostItem
 import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
@@ -153,7 +154,7 @@ class GameRepository @Inject constructor(
 				postType = 2,
 				totalLikes = 0,
 				liked = false,
-				addedAt = game.createdAt,
+				addedAt = formatDateForFeed(game.createdAt, context),
 				matchDate = formatDateForMatchPostItem(game.date),
 				playerId = game.player.id,
 				playerPhoto = game.player.photoUrl,

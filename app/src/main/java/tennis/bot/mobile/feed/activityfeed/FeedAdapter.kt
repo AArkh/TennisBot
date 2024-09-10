@@ -33,7 +33,6 @@ import tennis.bot.mobile.profile.matches.TennisSetNetwork
 import tennis.bot.mobile.utils.FormattedDate
 import tennis.bot.mobile.utils.buildImageRequest
 import tennis.bot.mobile.utils.dpToPx
-import tennis.bot.mobile.utils.formatDateForFeed
 import tennis.bot.mobile.utils.view.AvatarImage
 import tennis.bot.mobile.utils.view.ImageSeriesView
 import javax.inject.Inject
@@ -60,7 +59,7 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 			when(holder) {
 				is NewPlayerPostItemViewHolder -> bindNewPlayerPost(item, holder)
 				is MatchRequestPostItemViewHolder -> bindMatchRequestPost(item, holder)
-				is ScorePostItemViewHolder -> bindScorePost(item, holder)
+				is ScorePostItemViewHolder -> bindScorePost(item, holder, ImageSliderAdapter(), MatchResultsAdapter())
 			}
 		}
 	}
@@ -116,7 +115,7 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 			updateLikeUi(newPlayerItem)
 		}
 
-		holder.binding.date.text = newPlayerItem.addedAt?.let { formatDateForFeed(it, holder.binding.date.context) }
+		holder.binding.date.text = newPlayerItem.addedAt
 	}
 
 	private fun bindMatchRequestPost(item: Any,holder: MatchRequestPostItemViewHolder) {
@@ -138,17 +137,15 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 				matchRequestItem.totalLikes)
 			updateLikeUi(matchRequestItem)
 		}
-		holder.binding.date.text = matchRequestItem.addedAt?.let { formatDateForFeed(it, holder.binding.date.context) }
+		holder.binding.date.text = matchRequestItem.addedAt
 
 		holder.binding.root.setOnClickListener {
 			clickListener?.invoke(GameAdapter.REQUEST_RESPONSE, matchRequestItem.gameOrderId, matchRequestItem.playerId)
 		}
 	}
 
-	private fun bindScorePost(item: Any, holder: ScorePostItemViewHolder) {
+	private fun bindScorePost(item: Any, holder: ScorePostItemViewHolder, mediaSliderAdapter: ImageSliderAdapter, matchResultsAdapter: MatchResultsAdapter) {
 		val scorePostItem = item as? ScorePostItem ?: throw IllegalArgumentException("Item must be ScorePostItem")
-		val mediaSliderAdapter = ImageSliderAdapter()
-		val matchResultsAdapter = MatchResultsAdapter()
 
 		holder.binding.playerPhoto.showPlayerPhoto(scorePostItem.player1?.photo, null)
 		holder.binding.itemPicture.isVisible = false
@@ -201,7 +198,7 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 
 		holder.binding.resultsContainer.adapter = matchResultsAdapter
 		matchResultsAdapter.submitList(scorePostItem.matchResultsList)
-		holder.binding.date.text = scorePostItem.addedAt?.let { formatDateForFeed(it, holder.binding.date.context) }
+		holder.binding.date.text = scorePostItem.addedAt
 	}
 
 	private fun TextView.onLikePressed(isLiked: Boolean, likeAnimation: LottieAnimationView, postId: Long, totalLikes: Int) {
@@ -293,12 +290,12 @@ fun MatchRequestPostItemViewHolder.bindInfoPanel(
 	formattedMatchDate: FormattedDate?,
 	matchRequestItem: MatchRequestPostItem
 ) {
-	binding.infoPanel.month.text = formattedMatchDate?.month?.replaceFirstChar { it.uppercase() }
-	binding.infoPanel.day.text = formattedMatchDate?.day.toString()
+	binding.infoPanel.month.text = formattedMatchDate?.month
+	binding.infoPanel.day.text = formattedMatchDate?.day
 	binding.infoPanel.timeAndDay.text = binding.infoPanel.timeAndDay.context.getString(
 		R.string.day_and_time,
 		formattedMatchDate?.time,
-		formattedMatchDate?.dayOfWeek.toString().replaceFirstChar { it.uppercase() }
+		formattedMatchDate?.dayOfWeek
 	)
 	binding.infoPanel.ratingAndSkill.text = binding.infoPanel.ratingAndSkill.context.getString(
 		R.string.rating_and_skill,

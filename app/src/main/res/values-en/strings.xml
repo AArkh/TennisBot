@@ -346,5 +346,23 @@
 	<string name="response_to_own_request">You can\'t respond to your own request</string>
 	<string name="surface">Surface</string>
 	<string name="default_surface">All</string>
+	<string name="request_response">Request response</string>
+	<string name="accept">Accept</string>
+	<string name="decline">Decline</string>
+	<string name="incoming">Incoming</string>
+	<string name="outcoming">Outcoming</string>
+	<string name="accepted">Accepted</string>
+	<string name="invite">Invite</string>
+	<string name="request_response_failure">Failed to submit response to the request</string>
+	<string name="request_response_success">Response to the request successfully submitted</string>
+	<string name="response_invite_failure">Failed to submit response to the invitation</string>
+	<string name="response_invite_accept">Response successfully accepted</string>
+	<string name="response_invite_decline">Response successfully declined</string>
+	<string name="request_delete_failure">Failed to delete request</string>
+	<string name="response_delete_failure">Failed to delete response</string>
+	<string name="request_delete_success">Request successfully deleted</string>
+	<string name="response_delete_success">Response successfully deleted</string>
+	<string name="delete_response">Delete response</string>
+	<string name="delete_request">Delete request</string>
 
 </resources>

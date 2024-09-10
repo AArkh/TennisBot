@@ -359,5 +359,23 @@
 	<string name="response_to_own_request">Нельзя откликнуться на собственную заявку</string>
 	<string name="surface">Покрытие</string>
 	<string name="default_surface">Любое</string>
+	<string name="request_response">Отклик на заявку</string>
+	<string name="accept">Принять</string>
+	<string name="decline">Отказать</string>
+	<string name="incoming">Входящие</string>
+	<string name="outcoming">Исходящие</string>
+	<string name="accepted">Подтвержденные</string>
+	<string name="invite">Вызов</string>
+	<string name="request_response_failure">Не удалось отправить ответ на заявку</string>
+	<string name="request_response_success">Отклик на заявку успешно отправлен</string>
+	<string name="response_invite_failure">Не удалось отправить ответ на приглашение</string>
+	<string name="response_invite_accept">Положительный ответ успешно отправлен</string>
+	<string name="response_invite_decline">Отказ успешно отправлен</string>
+	<string name="request_delete_failure">Не удалось удалить заявку</string>
+	<string name="response_delete_failure">Не удалось удалить отклик</string>
+	<string name="request_delete_success">Заявка успешно удалена</string>
+	<string name="response_delete_success">Отклик успешно удален</string>
+	<string name="delete_response">Удалить отклик</string>
+	<string name="delete_request">Удалить заявку</string>
 
 </resources>
