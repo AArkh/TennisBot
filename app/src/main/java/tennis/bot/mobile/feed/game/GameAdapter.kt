@@ -15,11 +15,16 @@ import tennis.bot.mobile.feed.activityfeed.FeedAdapter
 import tennis.bot.mobile.feed.activityfeed.FeedAdapter.Companion.FEED_COMPARATOR
 import tennis.bot.mobile.feed.activityfeed.FeedSealedClass
 import tennis.bot.mobile.feed.activityfeed.MatchRequestPostItem
+import tennis.bot.mobile.feed.activityfeed.formatLocationDataForPost
 import tennis.bot.mobile.feed.activityfeed.showPlayerPhoto
 import tennis.bot.mobile.feed.searchopponent.OpponentItem
+import tennis.bot.mobile.profile.account.AccountPageViewModel
 import tennis.bot.mobile.profile.account.EmptyItemViewHolder
+import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.utils.FormattedDate
 import tennis.bot.mobile.utils.dpToPx
+import tennis.bot.mobile.utils.formatDateForFeed
+import tennis.bot.mobile.utils.formatDateForMatchPostItem
 import tennis.bot.mobile.utils.showToast
 import tennis.bot.mobile.utils.view.AvatarImage
 import javax.inject.Inject
@@ -76,7 +81,7 @@ class GameAdapter@Inject constructor(): PagingDataAdapter<FeedSealedClass, Recyc
 	}
 
 	private fun bindGameRequestItem(item: Any, holder: GameRequestResponseItemViewHolder) {
-		val matchRequestItem = item as? MatchRequestPostItem ?: throw IllegalArgumentException("Item must be MatchRequestPostItem")
+		val matchRequestItem = item as? MatchRequestPostItem ?: error("Item must be MatchRequestPostItem")
 		val context = holder.binding.postType.context
 
 		with(holder.binding) {
@@ -85,25 +90,33 @@ class GameAdapter@Inject constructor(): PagingDataAdapter<FeedSealedClass, Recyc
 			locationSubTitle.text = matchRequestItem.locationSubTitle
 
 			postType.text = when {
-				matchRequestItem.responseComment != null -> context.getString(R.string.request_response)
-				matchRequestItem.isOwned == true && matchRequestItem.targetPlayerId != null -> context.getString(R.string.my_invite)
-				matchRequestItem.isOwned == true -> context.getString(R.string.my_request)
-				matchRequestItem.targetPlayerId != null -> context.getString(R.string.invite)
+				matchRequestItem.targetPlayerId != null -> context.getString(if (matchRequestItem.isOwned == true) R.string.my_invite else R.string.invite)
 				matchRequestItem.isResponsed == true -> context.getString(R.string.my_response)
+				matchRequestItem.gameOrderId == matchRequestItem.playerId -> context.getString(R.string.my_request)
+				matchRequestItem.isOwned == true -> context.getString(R.string.request_response)
 				else -> context.getString(R.string.post_type_2).substringBefore(" ")
 			}
 
-			postType.setTextColor(
-				context.getColor(
-					when {
-						matchRequestItem.responseComment != null || matchRequestItem.targetPlayerId != null || matchRequestItem.isResponsed == true -> R.color.tb_primary_green
-						matchRequestItem.isOwned == true -> R.color.tb_red_new
-						else -> R.color.tb_gray_dark
-					}
-				)
-			)
+			postType.setTextColor(context.getColor(
+				when (postType.text) {
+					context.getString(R.string.request_response),
+					context.getString(R.string.invite),
+					context.getString(R.string.my_response) -> R.color.tb_primary_green
+					else -> if (matchRequestItem.isOwned == true) R.color.tb_red_new else R.color.tb_gray_dark
+				}
+			))
 
-			optionsDots.isVisible = matchRequestItem.isOwned == true || matchRequestItem.isResponsed == true
+			acceptButton.isVisible = postType.text in listOf(context.getString(R.string.request_response), context.getString(R.string.invite))
+			acceptButton.setOnClickListener {
+				clickListener?.invoke(REQUEST_RESPONSE_ACCEPT, matchRequestItem.id, matchRequestItem.playerId, false)
+			}
+
+			declineButton.isVisible = acceptButton.isVisible
+			declineButton.setOnClickListener {
+				clickListener?.invoke(REQUEST_RESPONSE_DECLINE, matchRequestItem.id, matchRequestItem.playerId, false)
+			}
+
+			optionsDots.isVisible = !acceptButton.isVisible
 			optionsDots.setOnClickListener {
 				clickListener?.invoke(
 					if (matchRequestItem.isOwned == true) REQUEST_OPTIONS_REQUEST else REQUEST_OPTIONS_RESPONSE,
@@ -111,32 +124,16 @@ class GameAdapter@Inject constructor(): PagingDataAdapter<FeedSealedClass, Recyc
 				)
 			}
 
-			acceptButton.isVisible = matchRequestItem.responseComment != null || (matchRequestItem.targetPlayerId != null && matchRequestItem.isOwned == false)
-			acceptButton.setOnClickListener {
-				context.showToast("acceptButton pressed")
-				clickListener?.invoke(
-					REQUEST_RESPONSE_ACCEPT, matchRequestItem.id,
-					matchRequestItem.playerId,
-					false)
-			}
-			declineButton.isVisible = acceptButton.isVisible
-			declineButton.setOnClickListener {
-				context.showToast("declineButton pressed")
-				clickListener?.invoke(
-					REQUEST_RESPONSE_DECLINE, matchRequestItem.id,
-					matchRequestItem.playerId,
-					false)
-			}
-
 			bindInfoPanel(matchRequestItem.matchDate, matchRequestItem)
-			requestComment.text = matchRequestItem.responseComment ?: matchRequestItem.comment
-			date.isVisible = !acceptButton.isVisible
+			requestComment.text = matchRequestItem.comment.takeUnless { postType.text == context.getString(R.string.request_response) }
+				?: matchRequestItem.responseComment
+			requestComment.isVisible = requestComment.text.isNotEmpty()
+				date.isVisible = !acceptButton.isVisible
 			date.text = matchRequestItem.addedAt
 
 			if (!acceptButton.isVisible) {
 				root.setOnClickListener {
-					context.showToast("root.setOnClickListener pressed")
-					clickListener?.invoke(REQUEST_RESPONSE, matchRequestItem.id, matchRequestItem.targetPlayerId, matchRequestItem.isOwned)
+					clickListener?.invoke(REQUEST_RESPONSE, matchRequestItem.id, matchRequestItem.targetPlayerId, matchRequestItem.isOwned.takeUnless { matchRequestItem.isOwned == false } ?: matchRequestItem.isResponsed)
 				}
 			}
 		}

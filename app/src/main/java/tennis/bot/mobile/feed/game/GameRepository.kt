@@ -150,23 +150,23 @@ class GameRepository @Inject constructor(
 		else return gameList!!.map { game ->
 			MatchRequestPostItem(
 				id = game.id,
-				gameOrderId = game.id,
-				postType = 2,
+				gameOrderId = userProfileRepository.getProfile().id, //let's imagine this is our id
+				postType = 2, //
 				totalLikes = 0,
 				liked = false,
-				addedAt = formatDateForFeed(game.createdAt, context),
-				matchDate = formatDateForMatchPostItem(game.date),
-				playerId = game.player.id,
-				playerPhoto = game.player.photoUrl,
-				playerName = game.player.name,
+				addedAt = formatDateForFeed(game.createdAt, context), //
+				matchDate = formatDateForMatchPostItem(game.date), //
+				playerId = game.player.id, //
+				playerPhoto = game.player.photoUrl, //
+				playerName = game.player.name, //
 				playerRating = game.player.rating,
 				locationSubTitle = formatLocationDataForPost(game.cityId, game.districtId, locationRepository, locationDataMapper),
 				experience = userProfileRepository.getEnumById(Pair(AccountPageViewModel.EXPERIENCE_TITLE, game.player.experience)),
-				comment = game.comment,
-				responseComment = game.responseComment,
+				comment = game.comment, //
+				responseComment = game.responseComment, //
 				isOwned = game.isOwned,
 				isResponsed = game.isResponsed,
-				targetPlayerId = game.targetPlayerId
+				targetPlayerId = game.targetPlayerId //
 			)
 		}
 	}
