@@ -41,7 +41,11 @@ class GameViewModel @Inject constructor(
 	).flow
 
 	fun filterPlayerOpponent(arrayOfOpponents: Array<OpponentItem>): Array<OpponentItem> {
-		return arrayOfOpponents.filter { it.id != repository.getPlayerId() }.toTypedArray()
+		val id = repository.getPlayerId()
+		val newArray = arrayOfOpponents.filter {
+			it.id != id
+		}.toTypedArray()
+		return newArray
 	}
 
 	fun onSendingRequestResponse(id: Long, comment: String?) {

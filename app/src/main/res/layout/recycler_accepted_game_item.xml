@@ -19,7 +19,7 @@
 
 	<TextView
 		android:id="@+id/players_left_names"
-		android:layout_width="wrap_content"
+		android:layout_width="100dp"
 		android:layout_height="wrap_content"
 		android:gravity="center"
 		android:text="@string/namesurname_name"
@@ -81,7 +81,7 @@
 
 	<TextView
 		android:id="@+id/players_right_names"
-		android:layout_width="wrap_content"
+		android:layout_width="100dp"
 		android:layout_height="wrap_content"
 		android:gravity="center"
 		android:text="@string/namesurname_name"

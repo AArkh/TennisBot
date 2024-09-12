@@ -363,7 +363,7 @@
 	<string name="accept">Принять</string>
 	<string name="decline">Отказать</string>
 	<string name="incoming">Входящие</string>
-	<string name="outcoming">Исходящие</string>
+	<string name="outcoming">Исх</string>
 	<string name="accepted">Подтвержденные</string>
 	<string name="invite">Вызов</string>
 	<string name="request_response_failure">Не удалось отправить ответ на заявку</string>

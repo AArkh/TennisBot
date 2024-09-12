@@ -15,17 +15,11 @@ import tennis.bot.mobile.feed.activityfeed.FeedAdapter
 import tennis.bot.mobile.feed.activityfeed.FeedAdapter.Companion.FEED_COMPARATOR
 import tennis.bot.mobile.feed.activityfeed.FeedSealedClass
 import tennis.bot.mobile.feed.activityfeed.MatchRequestPostItem
-import tennis.bot.mobile.feed.activityfeed.formatLocationDataForPost
 import tennis.bot.mobile.feed.activityfeed.showPlayerPhoto
 import tennis.bot.mobile.feed.searchopponent.OpponentItem
-import tennis.bot.mobile.profile.account.AccountPageViewModel
 import tennis.bot.mobile.profile.account.EmptyItemViewHolder
-import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.utils.FormattedDate
 import tennis.bot.mobile.utils.dpToPx
-import tennis.bot.mobile.utils.formatDateForFeed
-import tennis.bot.mobile.utils.formatDateForMatchPostItem
-import tennis.bot.mobile.utils.showToast
 import tennis.bot.mobile.utils.view.AvatarImage
 import javax.inject.Inject
 
@@ -156,7 +150,9 @@ class GameAdapter@Inject constructor(): PagingDataAdapter<FeedSealedClass, Recyc
 		holder.binding.playersRightInfo.text = acceptedGameItem.targetPlayer.infoPanel
 
 		holder.binding.insertScoreButton.setOnClickListener {
-			insertScoreCallback?.invoke(arrayOf(acceptedGameItem.player, acceptedGameItem.targetPlayer)) // prone to error since we don't know who's the main player and how's the opponent. todo discuss
+			insertScoreCallback?.invoke(arrayOf(
+				acceptedGameItem.player,
+				acceptedGameItem.targetPlayer))
 		}
 	}
 }

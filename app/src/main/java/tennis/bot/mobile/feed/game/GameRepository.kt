@@ -150,7 +150,7 @@ class GameRepository @Inject constructor(
 		else return gameList!!.map { game ->
 			MatchRequestPostItem(
 				id = game.id,
-				gameOrderId = userProfileRepository.getProfile().id, //let's imagine this is our id
+				gameOrderId = getPlayerId(), //let's imagine this is our id
 				postType = 2, //
 				totalLikes = 0,
 				liked = false,
@@ -188,7 +188,7 @@ class GameRepository @Inject constructor(
 						userProfileRepository.getEnumById(Pair(AccountPageViewModel.EXPERIENCE_TITLE, game.player.experience))
 					)),
 				targetPlayer = OpponentItem(
-					id = game.player.id,
+					id = game.targetPlayer.id,
 					profilePicture = game.targetPlayer.photoUrl,
 					nameSurname = game.targetPlayer.name,
 					infoPanel = context.getString(R.string.player_info_panel_no_location,

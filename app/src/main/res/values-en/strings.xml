@@ -350,7 +350,7 @@
 	<string name="accept">Accept</string>
 	<string name="decline">Decline</string>
 	<string name="incoming">Incoming</string>
-	<string name="outcoming">Outcoming</string>
+	<string name="outcoming">Out</string>
 	<string name="accepted">Accepted</string>
 	<string name="invite">Invite</string>
 	<string name="request_response_failure">Failed to submit response to the request</string>
