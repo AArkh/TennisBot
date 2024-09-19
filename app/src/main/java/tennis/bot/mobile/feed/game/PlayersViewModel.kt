@@ -43,6 +43,11 @@ open class PlayersViewModel @Inject constructor(
 		pagingSourceFactory = { OpponentsDataSource() }
 	).flow
 	private var opponentItem: OpponentItem? = null
+	private var searchInput: String = ""
+
+	fun updateSearchInput(input: String) {
+		searchInput = input
+	}
 
 	inner class OpponentsDataSource : PagingSource<Int, OpponentItem>() {
 		override fun getRefreshKey(state: PagingState<Int, OpponentItem>): Int {
@@ -53,7 +58,7 @@ open class PlayersViewModel @Inject constructor(
 			val position = params.key ?: 0
 
 			return try {
-				val response = repository.getOpponents("", position, checkInvites = true)
+				val response = repository.getOpponents(searchInput, position, checkInvites = true)
 				val opponentItemsList = response?.items?.let { repository.convertToOpponentItemList(it, true) }
 				val nextPosition = position + 20
 

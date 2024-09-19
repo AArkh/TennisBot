@@ -377,5 +377,6 @@
 	<string name="response_delete_success">Отклик успешно удален</string>
 	<string name="delete_response">Удалить отклик</string>
 	<string name="delete_request">Удалить заявку</string>
+	<string name="still_in_development">Функция находится в разработке</string>
 
 </resources>

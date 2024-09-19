@@ -10,7 +10,6 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentAddScoreBinding
 import tennis.bot.mobile.feed.searchopponent.SearchOpponentsFragment
-import tennis.bot.mobile.onboarding.survey.SurveyResultsAdapter
 import tennis.bot.mobile.utils.showToast
 import tennis.bot.mobile.utils.traverseToAnotherFragment
 import javax.inject.Inject
@@ -47,8 +46,8 @@ class AddScoreFragment : CoreFragment<FragmentAddScoreBinding>() {
 			binding.sideNoteContainer.visibility = View.GONE
 			viewModel.onOptionPicked(requireActivity(), SCORE_DOUBLE)
 		}
-		binding.option3.setOnClickListener { context?.showToast("Still in development") }
-		binding.option4.setOnClickListener { context?.showToast("Still in development") }
+		binding.option3.setOnClickListener { context?.showToast(getString(R.string.still_in_development)) }
+		binding.option4.setOnClickListener { context?.showToast(getString(R.string.still_in_development)) }
 
 		binding.buttonNext.setOnClickListener {
 			viewModel.onNextButtonClicked {

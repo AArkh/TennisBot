@@ -5,7 +5,9 @@ import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.google.android.material.navigation.NavigationBarView
 import dagger.hilt.android.AndroidEntryPoint
@@ -15,6 +17,8 @@ import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
 import tennis.bot.mobile.databinding.FragmentBottomNavigationBinding
 import tennis.bot.mobile.feed.activityfeed.FeedFragment
 import tennis.bot.mobile.feed.addscore.AddScoreFragment
+import tennis.bot.mobile.feed.bottomnavigation.BottomNavigationViewModel.Companion.FRAGMENT_TYPE_NUMBER
+import tennis.bot.mobile.feed.bottomnavigation.BottomNavigationViewModel.Companion.FRAGMENT_TYPE_REQUEST_KEY
 import tennis.bot.mobile.feed.game.GameTabFragment
 import tennis.bot.mobile.feed.requestcreation.RequestCreationFragment
 import tennis.bot.mobile.profile.account.AccountPageFragment
@@ -51,6 +55,35 @@ class BottomNavigationFragment : AuthorizedCoreFragment<FragmentBottomNavigation
 
 			dialog.arguments = args
 			dialog.show(childFragmentManager, dialog.tag)
+		}
+
+//		binding.searchButton.setOnClickListener { // todo add logic to lock this behaviour only to Players for now
+//			binding.searchLayout.root.isVisible = true
+//			binding.searchLayout.cancelSearch.setOnClickListener {
+//				binding.searchLayout.root.isVisible = false
+//			}
+//		}
+//
+//		binding.searchLayout.searchBarEt.doAfterTextChanged {
+//			requireActivity().supportFragmentManager.setFragmentResult(
+//				PLAYERS_SEARCH_BAR_REQUEST_KEY,
+//				bundleOf(
+//					PLAYERS_SEARCH_BAR_QUERY to binding.searchLayout.searchBarEt.text.toString(),
+//				)
+//			)
+//		}
+
+		binding.searchButton.setOnClickListener {
+			viewModel.onSearchBarActivation(
+				binding.searchLayout.root,
+				binding.searchLayout.cancelSearch,
+				binding.searchLayout.searchBarEt,
+				requireActivity())
+		}
+
+		setFragmentResultListener(FRAGMENT_TYPE_REQUEST_KEY) { _, result ->
+			viewModel.onSearchBarType(result.getInt(FRAGMENT_TYPE_NUMBER))
+			binding.searchLayout.root.isVisible = false
 		}
 
 		binding.bottomNavBar.setOnItemSelectedListener(this)

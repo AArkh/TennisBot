@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.core.DefaultLoadStateAdapter
 import tennis.bot.mobile.core.Inflation
@@ -40,7 +41,7 @@ class PlayersFragment: AuthorizedCoreFragment<FragmentPlayersBinding>() {
 		binding.container.layoutManager = LinearLayoutManager(context)
 
 		lifecycleScope.launch(Dispatchers.IO) {
-			viewModel.playersPager.collectLatest {
+			viewModel.playersPager.debounce(300).collectLatest {
 				adapter.submitData(it)
 			}
 		}
@@ -77,10 +78,21 @@ class PlayersFragment: AuthorizedCoreFragment<FragmentPlayersBinding>() {
 			}
 		}
 
+		setFragmentResultListener(PLAYERS_SEARCH_BAR_REQUEST_KEY) { _, result ->
+			result.getString(PLAYERS_SEARCH_BAR_QUERY)
+				?.let { viewModel.updateSearchInput(it) }
+				.also { adapter.refresh() }
+		}
+
 		adapter.addLoadStateListener { loadState ->
 			binding.errorLayout.errorLayout.isVisible = loadState.source.refresh is LoadState.Error
 			binding.loadingBar.isVisible = loadState.source.refresh is LoadState.Loading
 		}
+	}
+
+	companion object {
+		const val PLAYERS_SEARCH_BAR_REQUEST_KEY = "PLAYERS_SEARCH_BAR_REQUEST_KEY"
+		const val PLAYERS_SEARCH_BAR_QUERY= "PLAYERS_SEARCH_BAR_QUERY"
 	}
 
 }

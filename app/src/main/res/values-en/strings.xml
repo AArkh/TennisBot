@@ -364,5 +364,6 @@
 	<string name="response_delete_success">Response successfully deleted</string>
 	<string name="delete_response">Delete response</string>
 	<string name="delete_request">Delete request</string>
+	<string name="still_in_development">Still in development</string>
 
 </resources>

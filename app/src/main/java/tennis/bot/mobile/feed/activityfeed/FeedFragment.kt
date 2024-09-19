@@ -18,6 +18,9 @@ import tennis.bot.mobile.core.DefaultLoadStateAdapter
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
 import tennis.bot.mobile.databinding.FragmentFeedBottomNavigationBinding
+import tennis.bot.mobile.feed.bottomnavigation.BottomNavigationViewModel.Companion.FEED_NUMBER
+import tennis.bot.mobile.feed.bottomnavigation.BottomNavigationViewModel.Companion.FRAGMENT_TYPE_NUMBER
+import tennis.bot.mobile.feed.bottomnavigation.BottomNavigationViewModel.Companion.FRAGMENT_TYPE_REQUEST_KEY
 import tennis.bot.mobile.feed.game.GameAdapter
 import tennis.bot.mobile.feed.game.GameFragment
 import tennis.bot.mobile.feed.game.GameOrderResponseDialogFragment
@@ -36,6 +39,17 @@ class FeedFragment : AuthorizedCoreFragment<FragmentFeedBottomNavigationBinding>
 		const val CREATE_GAME_ITEM = 1
 		const val LIKE = "LIKE"
 		const val UNLIKE = "UNLIKE"
+	}
+
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+
+		requireActivity().supportFragmentManager.setFragmentResult(
+			FRAGMENT_TYPE_REQUEST_KEY,
+			bundleOf(
+				FRAGMENT_TYPE_NUMBER to FEED_NUMBER,
+			)
+		)
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
