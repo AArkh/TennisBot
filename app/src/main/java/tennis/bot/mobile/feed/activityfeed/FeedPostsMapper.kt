@@ -214,22 +214,21 @@ class FeedPostsMapper @Inject constructor(
 	private fun List<TennisSetNetwork>.formSetsList(isWinner: Boolean): List<TennisSetNetwork> {
 		val newList: MutableList<TennisSetNetwork> = mutableListOf()
 
-		if (isWinner) {
-			return this
+		return if (isWinner) {
+			this
 		} else {
 			for (set in this) {
 				newList.add(
 					TennisSetNetwork(
-					score1 = set.score2,
-					score2 = set.score1,
-					scoreTie1 = set.scoreTie2,
-					scoreTie2 = set.scoreTie1
+						score1 = set.score2,
+						score2 = set.score1,
+						scoreTie1 = set.scoreTie2,
+						scoreTie2 = set.scoreTie1
+					)
 				)
-				)
-				return newList
 			}
+			newList
 		}
-		return emptyList()
 	}
 }
 

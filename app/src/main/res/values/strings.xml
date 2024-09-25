@@ -378,5 +378,7 @@
 	<string name="delete_response">Удалить отклик</string>
 	<string name="delete_request">Удалить заявку</string>
 	<string name="still_in_development">Функция находится в разработке</string>
+	<string name="invite_player">Пригласить</string>
+	<string name="invited_player">Приглашен</string>
 
 </resources>

@@ -26,11 +26,11 @@ class PlayersAdapter@Inject constructor(): PagingDataAdapter<OpponentItem, NewPl
 			holder.binding.postType.setBackgroundResource(R.drawable.background_corners_10dp)
 
 			if(opponentItem.isInvited == true) {
-				holder.binding.postType.text = "Приглашен"
+				holder.binding.postType.text = holder.binding.postType.context.getString(R.string.invited_player)
 				holder.binding.postType.setTextColor(holder.binding.postType.context.getColor(R.color.tb_white))
 				holder.binding.postType.backgroundTintList = holder.binding.postType.context.getColorStateList(R.color.tb_primary_green)
 			} else {
-				holder.binding.postType.text = "Пригласить"
+				holder.binding.postType.text = holder.binding.postType.context.getString(R.string.invite_player)
 				holder.binding.postType.setTextColor(holder.binding.postType.context.getColor(R.color.tb_black))
 				holder.binding.postType.backgroundTintList = holder.binding.postType.context.getColorStateList(R.color.tb_gray_border_new)
 

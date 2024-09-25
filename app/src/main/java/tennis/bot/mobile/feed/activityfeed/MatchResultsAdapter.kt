@@ -30,7 +30,7 @@ class MatchResultsAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHo
 
 	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: Any) {
 		when(holder) {
-			is MatchScoreItemViewHolder -> bindMatchScore(item, holder)
+			is MatchScoreItemViewHolder -> bindMatchScore(item, holder, FeedGameSetsAdapter())
 			is RatingItemViewHolder -> bindRating(item, holder)
 			is HeadToHeadItemViewHolder -> bindHeadToHead(item, holder)
 			is BonusItemViewHolder -> bindBonus(item, holder)
@@ -64,13 +64,12 @@ class MatchResultsAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHo
 		}
 	}
 
-	private fun bindMatchScore(item: Any, holder: MatchScoreItemViewHolder) {
+	private fun bindMatchScore(item: Any, holder: MatchScoreItemViewHolder, gameSetsAdapter: FeedGameSetsAdapter) {
 		val matchScoreItem = item as? MatchScoreItem ?: throw IllegalArgumentException("Item must be MatchScoreItem")
 
 		holder.binding.player1NameSurname.text = matchScoreItem.winnerName
 		holder.binding.player2NameSurname.text = matchScoreItem.loserName
 
-		val gameSetsAdapter = FeedGameSetsAdapter()
 		holder.binding.gameSetsContainer.adapter = gameSetsAdapter
 		holder.binding.gameSetsContainer.layoutManager = LinearLayoutManager(
 			holder.binding.gameSetsContainer.context, LinearLayoutManager.HORIZONTAL, true)

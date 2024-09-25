@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.airbnb.lottie.LottieAnimationView
@@ -197,6 +198,8 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 		}
 
 		holder.binding.resultsContainer.adapter = matchResultsAdapter
+		holder.binding.resultsContainer.layoutManager = LinearLayoutManager(
+			holder.binding.resultsContainer.context, LinearLayoutManager.HORIZONTAL, true)
 		matchResultsAdapter.submitList(scorePostItem.matchResultsList)
 		holder.binding.date.text = scorePostItem.addedAt
 	}

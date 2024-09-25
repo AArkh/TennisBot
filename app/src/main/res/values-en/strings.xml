@@ -365,5 +365,7 @@
 	<string name="delete_response">Delete response</string>
 	<string name="delete_request">Delete request</string>
 	<string name="still_in_development">Still in development</string>
+	<string name="invite_player">Invite</string>
+	<string name="invited_player">Invited</string>
 
 </resources>
