@@ -20,6 +20,7 @@ import tennis.bot.mobile.feed.addscore.AddScoreFragment
 import tennis.bot.mobile.feed.bottomnavigation.BottomNavigationViewModel.Companion.FRAGMENT_TYPE_NUMBER
 import tennis.bot.mobile.feed.bottomnavigation.BottomNavigationViewModel.Companion.FRAGMENT_TYPE_REQUEST_KEY
 import tennis.bot.mobile.feed.game.GameTabFragment
+import tennis.bot.mobile.feed.notifications.NotificationsFragment
 import tennis.bot.mobile.feed.requestcreation.RequestCreationFragment
 import tennis.bot.mobile.profile.account.AccountPageFragment
 import tennis.bot.mobile.utils.basicdialog.BasicDialogViewModel
@@ -57,28 +58,15 @@ class BottomNavigationFragment : AuthorizedCoreFragment<FragmentBottomNavigation
 			dialog.show(childFragmentManager, dialog.tag)
 		}
 
-//		binding.searchButton.setOnClickListener { // todo add logic to lock this behaviour only to Players for now
-//			binding.searchLayout.root.isVisible = true
-//			binding.searchLayout.cancelSearch.setOnClickListener {
-//				binding.searchLayout.root.isVisible = false
-//			}
-//		}
-//
-//		binding.searchLayout.searchBarEt.doAfterTextChanged {
-//			requireActivity().supportFragmentManager.setFragmentResult(
-//				PLAYERS_SEARCH_BAR_REQUEST_KEY,
-//				bundleOf(
-//					PLAYERS_SEARCH_BAR_QUERY to binding.searchLayout.searchBarEt.text.toString(),
-//				)
-//			)
-//		}
-
 		binding.searchButton.setOnClickListener {
 			viewModel.onSearchBarActivation(
 				binding.searchLayout.root,
 				binding.searchLayout.cancelSearch,
 				binding.searchLayout.searchBarEt,
 				requireActivity())
+		}
+		binding.notificationsBell.setOnClickListener {
+			parentFragmentManager.goToAnotherSectionFragment(NotificationsFragment())
 		}
 
 		setFragmentResultListener(FRAGMENT_TYPE_REQUEST_KEY) { _, result ->

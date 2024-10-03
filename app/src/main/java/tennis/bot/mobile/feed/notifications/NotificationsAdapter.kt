@@ -1,0 +1,195 @@
+package tennis.bot.mobile.feed.notifications
+
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.recyclerview.widget.RecyclerView
+import tennis.bot.mobile.R
+import tennis.bot.mobile.core.CoreAdapter
+import tennis.bot.mobile.databinding.RecyclerEmptyItemBinding
+import tennis.bot.mobile.databinding.RecyclerNotificationActionableBinding
+import tennis.bot.mobile.databinding.RecyclerNotificationInfoBinding
+import tennis.bot.mobile.databinding.RecyclerNotificationPointsBinding
+import tennis.bot.mobile.databinding.RecyclerNotificationScoreBinding
+import tennis.bot.mobile.profile.account.EmptyItemViewHolder
+import tennis.bot.mobile.utils.view.AvatarImage
+import javax.inject.Inject
+
+class NotificationsAdapter@Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>() {
+
+	companion object {
+		const val OTHER = 0
+		const val ACTIONABLE_NOTIFICATIONS = 1
+		const val INFO_NOTIFICATIONS = 2
+		const val POINTS_NOTIFICATIONS = 3
+		const val SCORE_NOTIFICATIONS = 4
+	}
+
+
+	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: Any) {
+		when(holder) {
+			is NotificationsActionableViewHolder -> { bindActionableNotifications(item, holder) }
+			is NotificationsInfoViewHolder -> { bindInfoNotifications(item, holder) }
+			is NotificationsPointsViewHolder -> { bindPointsNotifications(item, holder) }
+			is NotificationsScoreViewHolder -> { bindScoreNotifications(item, holder) }
+		}
+	}
+
+	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+		val inflater = LayoutInflater.from(parent.context)
+
+		return when(viewType) {
+			ACTIONABLE_NOTIFICATIONS -> {
+				val binding = RecyclerNotificationActionableBinding.inflate(inflater, parent, false)
+				NotificationsActionableViewHolder(binding)
+			}
+			INFO_NOTIFICATIONS -> {
+				val binding = RecyclerNotificationInfoBinding.inflate(inflater, parent, false)
+				NotificationsInfoViewHolder(binding)
+			}
+			POINTS_NOTIFICATIONS -> {
+				val binding = RecyclerNotificationPointsBinding.inflate(inflater, parent, false)
+				NotificationsPointsViewHolder(binding)
+			}
+			SCORE_NOTIFICATIONS -> {
+				val binding = RecyclerNotificationScoreBinding.inflate(inflater, parent, false)
+				NotificationsScoreViewHolder(binding)
+			}
+			else -> {
+				val binding = RecyclerEmptyItemBinding.inflate(inflater, parent, false)
+				EmptyItemViewHolder(binding)
+			}
+		}
+	}
+
+	override fun getItemViewType(position: Int): Int {
+		return when ((items[position] as NotificationData).content) {
+			is NotificationContentParent.GameOrderInvite,
+			is NotificationContentParent.GameOrderResponse -> ACTIONABLE_NOTIFICATIONS
+
+			is NotificationContentParent.GameOrderAccept,
+			is NotificationContentParent.GameOrderCreate -> INFO_NOTIFICATIONS
+
+			is NotificationContentParent.Bonus -> POINTS_NOTIFICATIONS
+
+			is NotificationContentParent.SinglesScore,
+			is NotificationContentParent.DoublesScore -> SCORE_NOTIFICATIONS
+
+			else -> OTHER
+		}
+	}
+
+	private fun bindActionableNotifications(item: Any, holder: NotificationsActionableViewHolder) {
+		val data = item as? NotificationData ?: throw IllegalArgumentException("Item must be NotificationData")
+		val actionableItem = when (data.content) {
+			is NotificationContentParent.GameOrderInvite -> data.content
+			is NotificationContentParent.GameOrderResponse -> data.content
+			else -> throw IllegalArgumentException("Content must be a valid type (1, 2)")
+		}
+
+		with(holder.binding) {
+			if (actionableItem is NotificationContentParent.GameOrderResponse) {
+					if (actionableItem.selfNotify) {
+						title.text = root.context.getString(R.string.you_responsed_to_invite)
+						subTitle.isVisible = false
+					} else {
+						title.text = root.context.getString(R.string.response_to_your_invite)
+						subTitle.text = root.context.getString(
+							R.string.from_player,
+							actionableItem.playerName)
+					}
+				playerPhoto.setImage(AvatarImage(actionableItem.playerPhoto))
+				} else if (actionableItem is NotificationContentParent.GameOrderInvite) {
+					if (actionableItem.selfNotify) {
+						title.text = root.context.getString(R.string.you_sent_invite)
+						subTitle.text = root.context.getString(
+							R.string.sent_to_player,
+							actionableItem.playerName)
+					} else {
+						title.text = root.context.getString(R.string.you_invited)
+						subTitle.text = root.context.getString(
+							R.string.from_player,
+							actionableItem.playerName)
+				}
+				playerPhoto.setImage(AvatarImage(actionableItem.playerPhoto))
+			}
+		}
+	}
+
+	private fun bindInfoNotifications(item: Any, holder: NotificationsInfoViewHolder) {
+		val data = item as? NotificationData ?: throw IllegalArgumentException("Item must be NotificationData")
+		val infoItem = when (data.content) {
+			is NotificationContentParent.GameOrderAccept -> data.content
+			is NotificationContentParent.GameOrderCreate -> data.content
+			else -> throw IllegalArgumentException("Content must be a valid type (5, 6)")
+		}
+
+		with(holder.binding) {
+			if (infoItem is NotificationContentParent.GameOrderAccept) {
+				info.text = root.context.getString(R.string.your_invite_accepted,
+					infoItem.playerName,
+					infoItem.telegram,
+					infoItem.phone)
+				playerPhoto.setImage(AvatarImage(infoItem.playerPhoto))
+			} else if (infoItem is NotificationContentParent.GameOrderCreate) {
+				info.text = root.context.getString(R.string.you_created_request)
+				playerPhoto.setImage(AvatarImage(infoItem.playerPhoto))
+			}
+
+			date.text = data.createdAt // todo add conversion
+		}
+	}
+
+	private fun bindPointsNotifications(item: Any, holder: NotificationsPointsViewHolder) {
+		val data = item as? NotificationData ?: throw IllegalArgumentException("Item must be NotificationData")
+		val pointsItem = data.content as? NotificationContentParent.Bonus ?: throw IllegalArgumentException("Content must be Bonus")
+
+		with(holder.binding) {
+			info.text = root.context.getString(R.string.points_acquired,
+				pointsItem.addBonus)
+			date.text = data.createdAt // todo add conversion
+		}
+	}
+
+	private fun bindScoreNotifications(item: Any, holder: NotificationsScoreViewHolder) {
+		val data = item as? NotificationData ?: throw IllegalArgumentException("Item must be NotificationData")
+		val scoreItem = when (data.content) {
+			is NotificationContentParent.SinglesScore -> data.content
+			is NotificationContentParent.DoublesScore -> data.content
+			else -> throw IllegalArgumentException("Content must be a valid type (3, 8)")
+		}
+
+		with(holder.binding) {
+			if (scoreItem is NotificationContentParent.SinglesScore) {
+				info.text = root.context.getString(R.string.score_inserted,
+					scoreItem.player1.name,
+					scoreItem.player2.name,
+					scoreItem.sets.joinToString(", ") { "${it.score1} - ${it.score2}" }) // todo move this out of adapter
+			} else if (scoreItem is NotificationContentParent.DoublesScore) {
+				info.text = root.context.getString(R.string.score_inserted,
+					("${scoreItem.player1.name}, ${scoreItem.player2.name}"),
+					("${scoreItem.player3.name}, ${scoreItem.player4.name}"),
+					scoreItem.sets.joinToString(", ") { "${it.score1} - ${it.score2}" }) // todo move this out of adapter
+			}
+
+			date.text = data.createdAt // todo add conversion outside of adapter
+		}
+	}
+
+}
+
+class NotificationsActionableViewHolder( // 1, 2
+	val binding: RecyclerNotificationActionableBinding
+) : RecyclerView.ViewHolder(binding.root)
+
+class NotificationsInfoViewHolder( // 5, 6
+	val binding: RecyclerNotificationInfoBinding
+) : RecyclerView.ViewHolder(binding.root)
+
+class NotificationsPointsViewHolder( // 4
+	val binding: RecyclerNotificationPointsBinding
+) : RecyclerView.ViewHolder(binding.root)
+
+class NotificationsScoreViewHolder( // 3, 8
+	val binding: RecyclerNotificationScoreBinding
+) : RecyclerView.ViewHolder(binding.root)

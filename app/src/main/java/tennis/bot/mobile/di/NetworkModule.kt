@@ -19,6 +19,7 @@ import tennis.bot.mobile.feed.bottomnavigation.VersionControlApi
 import tennis.bot.mobile.feed.game.GameApi
 import tennis.bot.mobile.feed.insertscore.InsertScoreApi
 import tennis.bot.mobile.feed.insertscore.MediaApi
+import tennis.bot.mobile.feed.notifications.NotificationsApi
 import tennis.bot.mobile.feed.requestcreation.RequestCreationApi
 import tennis.bot.mobile.feed.searchopponent.OpponentsApi
 import tennis.bot.mobile.profile.account.EnumsApi
@@ -369,5 +370,11 @@ class NetworkModule {
     fun provideVersionControlApiClient(
         @Named(ACTIVITY_FEED) retrofit: Retrofit
     ): VersionControlApi = retrofit.create(VersionControlApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideNotificationsApiClient(
+        @Named(ACTIVITY_FEED) retrofit: Retrofit
+    ): NotificationsApi = retrofit.create(NotificationsApi::class.java)
 }
 

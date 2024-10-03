@@ -212,7 +212,7 @@
 	<string name="change_telegram">Change Telegram</string>
 	<string name="telegram_hint">Telegram</string>
 	<string name="settings_title">Settings</string>
-	<string name="notification_title">Notification</string>
+	<string name="notification_title">Notifications</string>
 	<string name="contact_email">Contact via email</string>
 	<string name="contact_telegram">Contact via Telegram</string>
 	<string name="feed_toolbar_title">Activity</string>
@@ -367,5 +367,15 @@
 	<string name="still_in_development">Still in development</string>
 	<string name="invite_player">Invite</string>
 	<string name="invited_player">Invited</string>
+	<string name="you_sent_invite">You sent an invite</string>
+	<string name="sent_to_player">To player - %s</string>
+	<string name="your_invite_accepted">%s accepted your invite\n Telegram: %s\n Phone number: %s</string>
+	<string name="score_inserted">%s - %s  score was submitted (%s)</string>
+	<string name="points_acquired">%d points acquired</string>
+	<string name="from_player">From %s</string>
+	<string name="you_created_request">You created the request</string>
+	<string name="you_invited">You\'re invited to play</string>
+	<string name="response_to_your_invite">Response to your invite</string>
+	<string name="you_responsed_to_invite">You responsed to the invite</string>
 
 </resources>
