@@ -9,9 +9,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
-import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
 import tennis.bot.mobile.databinding.FragmentRequestBinding
-import tennis.bot.mobile.profile.matches.TennisSetNetwork
 import javax.inject.Inject
 
 @AndroidEntryPoint

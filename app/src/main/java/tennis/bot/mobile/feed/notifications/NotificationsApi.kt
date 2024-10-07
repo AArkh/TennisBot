@@ -6,7 +6,6 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 import tennis.bot.mobile.core.CoreUtilsItem
-import tennis.bot.mobile.feed.activityfeed.ActivityBasicResponse
 import tennis.bot.mobile.profile.matches.TennisSetNetwork
 
 interface NotificationsApi {
