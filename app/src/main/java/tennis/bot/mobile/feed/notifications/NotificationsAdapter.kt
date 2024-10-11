@@ -3,21 +3,24 @@ package tennis.bot.mobile.feed.notifications
 import android.content.Context
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
+import android.text.util.Linkify
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import tennis.bot.mobile.R
-import tennis.bot.mobile.core.CoreAdapter
 import tennis.bot.mobile.databinding.RecyclerEmptyItemBinding
 import tennis.bot.mobile.databinding.RecyclerNotificationActionableBinding
 import tennis.bot.mobile.databinding.RecyclerNotificationInfoBinding
 import tennis.bot.mobile.databinding.RecyclerNotificationPointsBinding
 import tennis.bot.mobile.databinding.RecyclerNotificationScoreBinding
-import tennis.bot.mobile.feed.activityfeed.FeedSealedClass
 import tennis.bot.mobile.profile.account.EmptyItemViewHolder
 import tennis.bot.mobile.utils.view.AvatarImage
 import javax.inject.Inject
@@ -38,6 +41,8 @@ class NotificationsAdapter@Inject constructor(): PagingDataAdapter<NotificationD
 		const val POINTS_NOTIFICATIONS = 3
 		const val SCORE_NOTIFICATIONS = 4
 	}
+	var clickListenerTransfer: ((id: Int) -> Unit)? = null
+	var clickListenerTelegram: ((telegram: String) -> Unit)? = null
 
 
 	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -115,6 +120,9 @@ class NotificationsAdapter@Inject constructor(): PagingDataAdapter<NotificationD
 							actionableItem.playerName)
 					}
 				playerPhoto.setImage(AvatarImage(actionableItem.playerPhoto))
+				root.setOnClickListener {
+					clickListenerTransfer?.invoke(actionableItem.gameOrderId)
+				}
 				} else if (actionableItem is NotificationContentParent.GameOrderInvite) {
 					if (actionableItem.selfNotify) {
 						title.text = root.context.getString(R.string.you_sent_invite)
@@ -128,7 +136,12 @@ class NotificationsAdapter@Inject constructor(): PagingDataAdapter<NotificationD
 							actionableItem.playerName)
 				}
 				playerPhoto.setImage(AvatarImage(actionableItem.playerPhoto))
+				root.setOnClickListener {
+					clickListenerTransfer?.invoke(actionableItem.gameOrderId)
+				}
 			}
+
+
 		}
 	}
 
@@ -144,10 +157,14 @@ class NotificationsAdapter@Inject constructor(): PagingDataAdapter<NotificationD
 			if (infoItem is NotificationContentParent.GameOrderAccept) {
 				info.text = formatTextToTwoColors(root.context, root.context.getString(R.string.your_invite_accepted,
 					infoItem.playerName,
-					infoItem.telegram,
+					"@${infoItem.telegram}",
 					infoItem.phone), infoItem.playerName.lastIndex + 1)
 				info.setTextIsSelectable(true)
 				playerPhoto.setImage(AvatarImage(infoItem.playerPhoto))
+				Linkify.addLinks(info, Linkify.PHONE_NUMBERS) // supposed to make phone number detectable
+
+				info.movementMethod = LinkMovementMethod.getInstance() // ?
+
 			} else if (infoItem is NotificationContentParent.GameOrderCreate) {
 				info.text = formatTextToTwoColors(root.context, root.context.getString(R.string.you_created_request),
 					root.context.getString(R.string.you_created_request).indexOf(" "))
@@ -195,7 +212,7 @@ class NotificationsAdapter@Inject constructor(): PagingDataAdapter<NotificationD
 		}
 	}
 
-	private fun formatTextToTwoColors(context: Context, formattedText: String, endIndex: Int): SpannableString {
+	private fun formatTextToTwoColors(context: Context, formattedText: String, endIndex: Int, hasTelegram: Boolean = false, telegram: String = ""): SpannableString {
 		val spannableString = SpannableString(formattedText)
 		val startIndex = 0 // testing
 		if (endIndex != -1) {
@@ -206,6 +223,17 @@ class NotificationsAdapter@Inject constructor(): PagingDataAdapter<NotificationD
 				endIndex,
 				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
 			)
+		}
+		if (hasTelegram) {
+			val telegramLink = object : ClickableSpan() { //
+				override fun onClick(widget: View) {
+					clickListenerTelegram?.invoke(telegram)
+				}
+			}
+
+			val telegramStart = spannableString.indexOf("@") + 1
+			val telegramEnd = telegramStart + telegram.length
+			spannableString.setSpan(telegramLink, telegramStart, telegramEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 		}
 
 		return spannableString

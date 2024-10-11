@@ -1,5 +1,4 @@
 package tennis.bot.mobile.feed.bottomnavigation
-
 import android.content.Context
 import android.view.View
 import android.widget.TextView
@@ -21,6 +20,7 @@ import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.authentication.AuthTokenRepository
 import tennis.bot.mobile.feed.game.PlayersFragment
+import tennis.bot.mobile.feed.notifications.NotificationsRepository
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
@@ -29,6 +29,7 @@ import javax.inject.Inject
 class BottomNavigationViewModel @Inject constructor(
 	private val userProfileRepository: UserProfileAndEnumsRepository,
 	private val tokenRepository: AuthTokenRepository,
+	private val notificationsRepository: NotificationsRepository,
 	@ApplicationContext private val context: Context
 ): ViewModel()  {
 
@@ -36,6 +37,9 @@ class BottomNavigationViewModel @Inject constructor(
 		BottomNavigationUiState(
 			title = context.getString(R.string.feed_toolbar_title),
 			currentItemId = R.id.feed_item,
+			allNotifications = 0,
+			feedNotifications = 0,
+			gameNotifications = 0,
 			playerPicture = null
 		)
 	)
@@ -56,6 +60,24 @@ class BottomNavigationViewModel @Inject constructor(
 				} else {
 					tokenRepository.triggerUnAuthFlow(true)
 				}
+				FirebaseCrashlytics.getInstance().recordException(it)
+			}
+		}
+	}
+
+	fun onCheckingNotifications() {
+		viewModelScope.launch(Dispatchers.IO) {
+			kotlin.runCatching {
+				val result = notificationsRepository.getNotificationIndicators()
+				if (result == null) {
+					throw IllegalArgumentException("Failed to onCheckingNotifications")
+				} else {
+					_uiStateFlow.value = _uiStateFlow.value.copy(
+						allNotifications = result.notifications,
+						gameNotifications = result.gameOrdersAll + result.gameOrdersAccepted + result.gameOrdersInput + result.gameOrdersOutput
+					)
+				}
+			}.onFailure {
 				FirebaseCrashlytics.getInstance().recordException(it)
 			}
 		}
@@ -130,5 +152,7 @@ class BottomNavigationViewModel @Inject constructor(
 		const val FEED_NUMBER = 1
 		const val REQUESTS_NUMBER = 2
 		const val PLAYERS_NUMBER = 3
+		const val refreshInterval: Long = 60000 // 1 minute interval
 	}
 }
+

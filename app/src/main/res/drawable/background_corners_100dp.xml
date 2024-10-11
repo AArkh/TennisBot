@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-	<solid android:color="@color/tb_gray_border" />
-	<corners android:radius="100dp" />
-</shape>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+	android:color="?android:colorControlHighlight">
+
+	<!-- Background shape -->
+	<item android:id="@android:id/background">
+		<shape android:shape="rectangle">
+			<solid android:color="@color/tb_gray_border" />
+			<corners android:radius="100dp" />
+		</shape>
+	</item>
+
+	<!-- Ripple mask (optional) -->
+	<item android:id="@android:id/mask">
+		<shape android:shape="rectangle">
+			<solid android:color="?android:colorControlHighlight" />
+			<corners android:radius="100dp" />
+		</shape>
+	</item>
+
+</ripple>

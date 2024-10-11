@@ -17,8 +17,8 @@ android {
         applicationId = "tennis.bot.mobile"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0.16"
+        versionCode = 3
+        versionName = "1.0.18"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

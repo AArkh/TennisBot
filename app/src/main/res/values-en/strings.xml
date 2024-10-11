@@ -2,6 +2,10 @@
 <resources
 	xmlns:tools="http://schemas.android.com/tools"
 	tools:locale="en">
+	<plurals name="minutes_ago">
+		<item quantity="one">%d minute ago</item>
+		<item quantity="other">%d minutes ago</item>
+	</plurals>
 	<plurals name="hours_ago">
 		<item quantity="one">%d hour ago</item>
 		<item quantity="other">%d hours ago</item>

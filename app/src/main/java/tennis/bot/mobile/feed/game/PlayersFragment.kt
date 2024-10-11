@@ -20,6 +20,7 @@ import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
 import tennis.bot.mobile.databinding.FragmentPlayersBinding
 import tennis.bot.mobile.feed.requestcreation.RequestCreationDeniedDialog
 import tennis.bot.mobile.utils.basicdialog.BasicDialogViewModel
+import tennis.bot.mobile.utils.showInDevelopmentToast
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -44,6 +45,10 @@ class PlayersFragment: AuthorizedCoreFragment<FragmentPlayersBinding>() {
 			viewModel.playersPager.debounce(300).collectLatest {
 				adapter.submitData(it)
 			}
+		}
+
+		binding.optionsDots.setOnClickListener {
+			requireContext().showInDevelopmentToast()
 		}
 
 		adapter.clickListener = { command, opponentItem ->

@@ -2,7 +2,6 @@ package tennis.bot.mobile.feed.activityfeed
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreAdapter
@@ -71,8 +70,6 @@ class MatchResultsAdapter @Inject constructor(): CoreAdapter<RecyclerView.ViewHo
 		holder.binding.player2NameSurname.text = matchScoreItem.loserName
 
 		holder.binding.gameSetsContainer.adapter = gameSetsAdapter
-		holder.binding.gameSetsContainer.layoutManager = LinearLayoutManager(
-			holder.binding.gameSetsContainer.context, LinearLayoutManager.HORIZONTAL, true)
 		gameSetsAdapter.submitList(matchScoreItem.sets)
 	}
 

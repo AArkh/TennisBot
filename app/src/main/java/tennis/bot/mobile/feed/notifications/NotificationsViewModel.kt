@@ -3,6 +3,7 @@ package tennis.bot.mobile.feed.notifications
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -11,11 +12,11 @@ import androidx.paging.PagingState
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import retrofit2.HttpException
-import tennis.bot.mobile.feed.activityfeed.FeedSealedClass
 import tennis.bot.mobile.feed.searchopponent.SearchOpponentsViewModel
-import tennis.bot.mobile.profile.matches.TennisSetNetwork
 import tennis.bot.mobile.utils.formatDateForFeed
 import java.io.IOException
 import javax.inject.Inject
@@ -25,6 +26,13 @@ class NotificationsViewModel @Inject constructor(
 	private val repository: NotificationsRepository,
 	@ApplicationContext private val context: Context
 ): ViewModel()  {
+	companion object {
+		const val BELL_NOTIFICATONS_TYPE = 1
+		const val GAME_ALL_NOTIFICATONS_TYPE = 2
+		const val INPUT_NOTIFICATONS_TYPE = 3
+		const val OUTPUT_NOTIFICATONS_TYPE = 4
+		const val ACCEPTED_NOTIFICATONS_TYPE = 5
+	}
 
 	fun getNotificationsPaginationFlow(): Flow<PagingData<NotificationData>> {
 		return Pager(
@@ -35,6 +43,16 @@ class NotificationsViewModel @Inject constructor(
 			),
 			pagingSourceFactory = { NotificationsDataSource() }
 		).flow
+	}
+
+	fun readAllBellNotifications(lastIndicator: Int) {
+		viewModelScope.launch(Dispatchers.IO) {
+			kotlin.runCatching {
+				repository.postReadAllNotifications(BELL_NOTIFICATONS_TYPE, lastIndicator)
+			}.onFailure {
+				FirebaseCrashlytics.getInstance().log("Failed to readAllBellNotifications")
+			}
+		}
 	}
 
 
@@ -48,6 +66,7 @@ class NotificationsViewModel @Inject constructor(
 				val response = repository.getAllNotifications(position)
 				val itemsList = response?.items?.map { it.copy(createdAt = formatDateForFeed(it.createdAt, context)) }
 				val nextPosition = position + 20
+				if (position == 0 && itemsList != null) readAllBellNotifications(itemsList[0].id)
 
 				Log.d("NotificationsDataSource", "Loading page starting from position: $nextPosition")
 				LoadResult.Page(

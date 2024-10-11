@@ -24,6 +24,7 @@ import tennis.bot.mobile.feed.bottomnavigation.BottomNavigationViewModel.Compani
 import tennis.bot.mobile.feed.game.GameAdapter
 import tennis.bot.mobile.feed.game.GameFragment
 import tennis.bot.mobile.feed.game.GameOrderResponseDialogFragment
+import tennis.bot.mobile.utils.showInDevelopmentToast
 import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
@@ -61,6 +62,10 @@ class FeedFragment : AuthorizedCoreFragment<FragmentFeedBottomNavigationBinding>
 		)
 		binding.container.itemAnimator = null
 		binding.container.layoutManager = LinearLayoutManager(context)
+
+		binding.optionsDots.setOnClickListener {
+			requireContext().showInDevelopmentToast()
+		}
 
 		adapter.clickListener = { command, postId, playerId ->
 			when (command) {

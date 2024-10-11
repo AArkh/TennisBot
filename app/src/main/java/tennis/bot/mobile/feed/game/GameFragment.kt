@@ -1,5 +1,6 @@
 package tennis.bot.mobile.feed.game
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
@@ -14,15 +15,21 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.DefaultLoadStateAdapter
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
 import tennis.bot.mobile.databinding.FragmentGameBinding
+import tennis.bot.mobile.feed.bottomnavigation.BottomNavigationViewModel
 import tennis.bot.mobile.feed.insertscore.InsertScoreFragment
+import tennis.bot.mobile.utils.showInDevelopmentToast
 import tennis.bot.mobile.utils.showToast
 import tennis.bot.mobile.utils.traverseToAnotherFragment
 import javax.inject.Inject
@@ -34,6 +41,7 @@ class GameFragment : AuthorizedCoreFragment<FragmentGameBinding>() {
 	private val viewModel: GameViewModel by viewModels()
 	@Inject
 	lateinit var adapter: GameAdapter
+	private var fetchJob: Job? = null
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
@@ -47,6 +55,17 @@ class GameFragment : AuthorizedCoreFragment<FragmentGameBinding>() {
 			viewModel.onFetchingAllRequests().collectLatest {
 				adapter.submitData(it)
 			}
+		}
+
+		fetchJob = CoroutineScope(Dispatchers.Main).launch { // todo ask Andrey if that's a good practice
+			while (isActive) {
+				viewModel.onCheckingGameIndicators()
+				delay(BottomNavigationViewModel.refreshInterval)
+			}
+		}
+
+		binding.optionsDots.setOnClickListener {
+			requireContext().showInDevelopmentToast()
 		}
 
 		binding.allFilter.setOnClickListener {
@@ -143,6 +162,22 @@ class GameFragment : AuthorizedCoreFragment<FragmentGameBinding>() {
 			binding.loadingBar.isVisible = loadState.source.refresh is LoadState.Loading
 		}
 
+		subscribeToFlowOn(viewModel.uiStateFlow) { uiState ->
+			binding.allFilter.foregroundTintList = isIndicatorActive(uiState.isAllIndicatorActive)
+			binding.incomingFilter.foregroundTintList = isIndicatorActive(uiState.isInputIndicatorActive)
+			binding.outcomingFilter.foregroundTintList = isIndicatorActive(uiState.isOutIndicatorActive)
+			binding.acceptedFilter.foregroundTintList = isIndicatorActive(uiState.isAcceptedIndicatorActive)
+		}
+	}
+
+	override fun onDestroy() {
+		super.onDestroy()
+
+		fetchJob?.cancel()
+	}
+
+	private fun isIndicatorActive(isActive: Boolean): ColorStateList {
+		return if (isActive) requireContext().getColorStateList(R.color.tb_primary_green) else requireContext().getColorStateList(R.color.invisible)
 	}
 
 	private fun onFilterOptionClicked(buttonClicked: TextView) {
@@ -156,6 +191,7 @@ class GameFragment : AuthorizedCoreFragment<FragmentGameBinding>() {
 		binding.acceptedFilter.setTextColor(ContextCompat.getColor(requireContext(), R.color.tb_gray_gray))
 
 		buttonClicked.backgroundTintList = ContextCompat.getColorStateList(buttonClicked.context, R.color.tb_bg_card)
+		buttonClicked.foregroundTintList = isIndicatorActive(false)
 		buttonClicked.setTextColor(ContextCompat.getColor(buttonClicked.context, R.color.tb_black))
 		scrollToView(buttonClicked)
 	}

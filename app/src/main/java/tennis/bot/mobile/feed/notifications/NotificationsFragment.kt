@@ -1,5 +1,7 @@
 package tennis.bot.mobile.feed.notifications
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
@@ -12,14 +14,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
-import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.DefaultLoadStateAdapter
 import tennis.bot.mobile.core.Inflation
+import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
 import tennis.bot.mobile.databinding.FragmentRequestBinding
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class NotificationsFragment :  CoreFragment<FragmentRequestBinding>() {
+class NotificationsFragment :  AuthorizedCoreFragment<FragmentRequestBinding>() {
 	override val bindingInflation: Inflation<FragmentRequestBinding> = FragmentRequestBinding::inflate
 	private val viewModel: NotificationsViewModel by viewModels()
 	@Inject
@@ -30,6 +32,10 @@ class NotificationsFragment :  CoreFragment<FragmentRequestBinding>() {
 
 		binding.buttonCreate.isVisible = false
 		binding.title.text = getString(R.string.notification_title)
+
+		binding.backButton.setOnClickListener {
+			parentFragmentManager.popBackStack()
+		}
 
 		binding.container.adapter = adapter.withLoadStateHeaderAndFooter(
 			header = DefaultLoadStateAdapter { adapter.retry() },
@@ -48,10 +54,23 @@ class NotificationsFragment :  CoreFragment<FragmentRequestBinding>() {
 //			binding.swipeRefreshLayout.isRefreshing = false
 //		}
 
+		adapter.clickListenerTransfer = { id ->
+
+		}
+		adapter.clickListenerTelegram = { telegram ->
+			openLink("https//t.me/$telegram")
+		}
+
 		adapter.addLoadStateListener { loadState ->
 			binding.errorLayout.errorLayout.isVisible = loadState.source.refresh is LoadState.Error
 			binding.loadingBar.isVisible = loadState.source.refresh is LoadState.Loading
 		}
 
 	}
+
+	private fun openLink(url: String) {
+		val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+		startActivity(intent)
+	}
 }
+

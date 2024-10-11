@@ -4,6 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 import tennis.bot.mobile.core.CoreUtilsItem
 import tennis.bot.mobile.profile.matches.TennisSetNetwork
@@ -16,11 +17,29 @@ interface NotificationsApi {
 		@Query("limit") limit:Int = DEFAULT_LIMIT
 	): Response<NotificationsBasicResponse>
 
+	@GET("api/notifications/new-indicators")
+	suspend fun getNotificationIndicators(): Response<NotificationIndicators>
+
+	@POST("api/notifications/read-all-indicators")
+	suspend fun postReadAllNotifications(
+		@Query("type") type: Int,
+		@Query("lastIndicator") lastIndicator: Int
+	): Response<Unit>
+
 	companion object{
 		const val DEFAULT_SKIP = 0
 		const val DEFAULT_LIMIT = 20
 	}
 }
+
+@Serializable
+data class NotificationIndicators(
+	val notifications: Int,
+	val gameOrdersAll: Int,
+	val gameOrdersInput: Int,
+	val gameOrdersOutput: Int,
+	val gameOrdersAccepted: Int
+)
 
 @Serializable
 data class NotificationsBasicResponse(

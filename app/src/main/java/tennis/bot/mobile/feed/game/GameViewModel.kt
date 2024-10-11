@@ -15,10 +15,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import tennis.bot.mobile.R
 import tennis.bot.mobile.feed.activityfeed.FeedSealedClass
+import tennis.bot.mobile.feed.notifications.NotificationsRepository
+import tennis.bot.mobile.feed.notifications.NotificationsViewModel.Companion.ACCEPTED_NOTIFICATONS_TYPE
 import tennis.bot.mobile.feed.searchopponent.OpponentItem
 import tennis.bot.mobile.feed.searchopponent.SearchOpponentsViewModel
 import tennis.bot.mobile.utils.showToast
@@ -26,10 +31,23 @@ import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
-class GameViewModel @Inject constructor(
+open class GameViewModel @Inject constructor(
 	private val repository: GameRepository,
+	private val notificationsRepository: NotificationsRepository,
 	@ApplicationContext private val context: Context
 ): ViewModel() {
+
+	private val _uiStateFlow = MutableStateFlow(
+		GameUiState(
+			isAllIndicatorActive = false,
+			isInputIndicatorActive = false,
+			isOutIndicatorActive = false,
+			isAcceptedIndicatorActive = false
+		)
+	)
+	val uiStateFlow = _uiStateFlow.asStateFlow().onStart {
+		onCheckingGameIndicators()
+	}
 
 	private var gamesPager = Pager(
 		config = PagingConfig(
@@ -46,6 +64,26 @@ class GameViewModel @Inject constructor(
 			it.id != id
 		}.toTypedArray()
 		return newArray
+	}
+
+	fun onCheckingGameIndicators() {
+		viewModelScope.launch(Dispatchers.IO) {
+//			kotlin.runCatching {
+				val result = notificationsRepository.getNotificationIndicators()
+				if (result == null) {
+					throw IllegalArgumentException("Failed to onCheckingGameIndicators")
+				} else {
+					_uiStateFlow.value = _uiStateFlow.value.copy(
+						isAllIndicatorActive = result.gameOrdersAll != 0,
+						isInputIndicatorActive = result.gameOrdersInput != 0,
+						isOutIndicatorActive = result.gameOrdersOutput != 0,
+						isAcceptedIndicatorActive = result.gameOrdersAccepted != 0
+					)
+				}
+//			}.onFailure {
+//				FirebaseCrashlytics.getInstance().recordException(it)
+//			}
+		}
 	}
 
 	fun onSendingRequestResponse(id: Long, comment: String?) {
@@ -127,6 +165,16 @@ class GameViewModel @Inject constructor(
 		}
 	}
 
+	fun readGameNotifications(type: Int, lastIndicator: Int) {
+		viewModelScope.launch(Dispatchers.IO) {
+			kotlin.runCatching {
+				notificationsRepository.postReadAllNotifications(type, lastIndicator)
+			}.onFailure {
+				FirebaseCrashlytics.getInstance().log("Failed to readGameNotifications")
+			}
+		}
+	}
+
 	fun onFetchingAllRequests(): Flow<PagingData<FeedSealedClass>> {
 		getGamesPaginationFlow(ALL_REQUESTS)
 		return gamesPager
@@ -147,7 +195,7 @@ class GameViewModel @Inject constructor(
 		return gamesPager
 	}
 
-	private fun getGamesPaginationFlow(filter: String?) {
+	private fun getGamesPaginationFlow(filter: Int) {
 		if (filter != ACCEPTED_REQUESTS) {
 			gamesPager = Pager(
 				config = PagingConfig(
@@ -179,7 +227,7 @@ class GameViewModel @Inject constructor(
 		navigationCallback.invoke()
 	}
 
-	inner class GameDataSource(private val filter: String?) : PagingSource<Int, FeedSealedClass>() {
+	inner class GameDataSource(private val filter: Int) : PagingSource<Int, FeedSealedClass>() {
 		override fun getRefreshKey(state: PagingState<Int, FeedSealedClass>): Int { return 0 }
 
 		override suspend fun load(params: LoadParams<Int>): LoadResult<Int, FeedSealedClass> {
@@ -194,6 +242,7 @@ class GameViewModel @Inject constructor(
 				}
 				val itemsList = response?.items?.let { repository.mapGameToMatchRequestPostItem(it) }
 				val nextPosition = position + 20
+				if (position == 0 && itemsList != null) readGameNotifications(filter + 1, itemsList[0].id.toInt())
 
 				LoadResult.Page(
 					data = itemsList ?: emptyList(),
@@ -224,6 +273,7 @@ class GameViewModel @Inject constructor(
 				val response: GameAcceptedResponse? = repository.getAcceptedRequests(position)
 				val itemsList = response?.items?.let { repository.mapAcceptedGameToPostItem(it) }
 				val nextPosition = position + 20
+				if (position == 0 && itemsList != null) readGameNotifications(ACCEPTED_NOTIFICATONS_TYPE, itemsList[0].id.toInt())
 
 				LoadResult.Page(
 					data = itemsList ?: emptyList(),
@@ -245,10 +295,10 @@ class GameViewModel @Inject constructor(
 	}
 
 	companion object {
-		private const val ALL_REQUESTS = "ALL_REQUESTS"
-		private const val INCOMING_REQUESTS = "INCOMING_REQUESTS"
-		private const val OUTCOMING_REQUESTS = "OUTCOMING_REQUESTS"
-		private const val ACCEPTED_REQUESTS = "ACCEPTED_REQUESTS"
+		private const val ALL_REQUESTS = 1
+		private const val INCOMING_REQUESTS = 2
+		private const val OUTCOMING_REQUESTS = 3
+		private const val ACCEPTED_REQUESTS = 4
 	}
 }
 

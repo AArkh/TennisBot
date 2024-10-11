@@ -26,4 +26,29 @@ class NotificationsRepository @Inject constructor(
 
 		return null
 	}
+
+	@WorkerThread
+	suspend fun getNotificationIndicators(): NotificationIndicators? {
+		val response = notificationsApi.getNotificationIndicators()
+
+		if (response.isSuccessful) return response.body()
+		else {
+			FirebaseCrashlytics.getInstance().log("getNotificationIndicators code ${response.code()} and message: ${response.message()}")
+			context.showToast("Something went wrong")
+		}
+
+		return null
+	}
+
+	@WorkerThread
+	suspend fun postReadAllNotifications(type: Int, lastIndicator: Int): Boolean {
+		val response = kotlin.runCatching {
+			notificationsApi.postReadAllNotifications(type, lastIndicator)
+		}.getOrElse {
+			FirebaseCrashlytics.getInstance().recordException(it)
+			return false
+		}
+
+		return response.isSuccessful
+	}
 }

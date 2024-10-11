@@ -199,7 +199,7 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 
 		holder.binding.resultsContainer.adapter = matchResultsAdapter
 		holder.binding.resultsContainer.layoutManager = LinearLayoutManager(
-			holder.binding.resultsContainer.context, LinearLayoutManager.HORIZONTAL, true)
+			holder.binding.resultsContainer.context, LinearLayoutManager.HORIZONTAL, false)
 		matchResultsAdapter.submitList(scorePostItem.matchResultsList)
 		holder.binding.date.text = scorePostItem.addedAt
 	}

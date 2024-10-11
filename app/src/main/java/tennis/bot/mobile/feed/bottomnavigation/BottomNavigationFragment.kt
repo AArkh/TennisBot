@@ -11,6 +11,12 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.google.android.material.navigation.NavigationBarView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
@@ -33,6 +39,7 @@ class BottomNavigationFragment : AuthorizedCoreFragment<FragmentBottomNavigation
 
 	override val bindingInflation: Inflation<FragmentBottomNavigationBinding> = FragmentBottomNavigationBinding::inflate
 	private val viewModel: BottomNavigationViewModel by viewModels()
+	private var fetchJob: Job? = null
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
@@ -84,9 +91,20 @@ class BottomNavigationFragment : AuthorizedCoreFragment<FragmentBottomNavigation
 			showAddScorePopup(it, viewModel.addScoreOptions)
 		}
 
+		fetchJob = CoroutineScope(Dispatchers.Main).launch { // todo ask Andrey if that's a good practice
+			while (isActive) {
+				viewModel.onCheckingNotifications()
+				delay(BottomNavigationViewModel.refreshInterval)
+			}
+		}
+
 		subscribeToFlowOn(viewModel.uiStateFlow) { uiState: BottomNavigationUiState ->
 			binding.title.text = uiState.title
 			binding.bottomNavBar.selectedItemId = uiState.currentItemId
+			displayNotificationIndicators(
+				uiState.allNotifications,
+				uiState.feedNotifications,
+				uiState.gameNotifications)
 			binding.playerPhoto.setImage(AvatarImage(uiState.playerPicture))
 			binding.playerPhoto.drawableSize = requireContext().dpToPx(32)
 		}
@@ -96,11 +114,13 @@ class BottomNavigationFragment : AuthorizedCoreFragment<FragmentBottomNavigation
 		return when (item.itemId) {
 			R.id.feed_item -> {
 				replaceFragment(FeedFragment())
+				viewModel.onCheckingNotifications()
 				viewModel.onItemChosen(BottomNavigationViewModel.FRAGMENT_FEED)
 				true
 			}
 			R.id.game_item -> {
 				replaceFragment(GameTabFragment())
+				viewModel.onCheckingNotifications()
 				viewModel.onItemChosen(BottomNavigationViewModel.FRAGMENT_GAME)
 				true
 			}
@@ -140,5 +160,24 @@ class BottomNavigationFragment : AuthorizedCoreFragment<FragmentBottomNavigation
 			true
 		}
 		menu.show()
+	}
+
+	private fun displayNotificationIndicators(allNotifications: Int, feedNotifications: Int, gameNotifications: Int) {
+		val feedIndicator = binding.bottomNavBar.getOrCreateBadge(R.id.feed_item)
+		val gameIndicator = binding.bottomNavBar.getOrCreateBadge(R.id.game_item)
+
+		binding.notificationsCounter.isVisible = allNotifications != 0
+		feedIndicator.isVisible = feedNotifications != 0
+		gameIndicator.isVisible = gameNotifications != 0
+
+		binding.notificationsCounter.text = allNotifications.toString()
+		feedIndicator.number = feedNotifications
+		gameIndicator.number = gameNotifications
+	}
+
+	override fun onDestroy() {
+		super.onDestroy()
+
+		fetchJob?.cancel()
 	}
 }

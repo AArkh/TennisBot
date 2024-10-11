@@ -41,7 +41,6 @@ class PlayersAdapter@Inject constructor(): PagingDataAdapter<OpponentItem, NewPl
 
 			holder.binding.likeButton.isVisible = false
 			holder.binding.likeAnim.isVisible = false
-			holder.binding.messageButton.isVisible = false
 			holder.binding.date.isVisible = false
 		}
 	}
