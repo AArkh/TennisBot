@@ -1,8 +1,14 @@
 package tennis.bot.mobile.feed.notifications
 
+import android.content.Context
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreAdapter
@@ -11,13 +17,21 @@ import tennis.bot.mobile.databinding.RecyclerNotificationActionableBinding
 import tennis.bot.mobile.databinding.RecyclerNotificationInfoBinding
 import tennis.bot.mobile.databinding.RecyclerNotificationPointsBinding
 import tennis.bot.mobile.databinding.RecyclerNotificationScoreBinding
+import tennis.bot.mobile.feed.activityfeed.FeedSealedClass
 import tennis.bot.mobile.profile.account.EmptyItemViewHolder
 import tennis.bot.mobile.utils.view.AvatarImage
 import javax.inject.Inject
 
-class NotificationsAdapter@Inject constructor(): CoreAdapter<RecyclerView.ViewHolder>() {
+class NotificationsAdapter@Inject constructor(): PagingDataAdapter<NotificationData, RecyclerView.ViewHolder>(NOTIFICATIONS_COMPARATOR) {
 
 	companion object {
+		val NOTIFICATIONS_COMPARATOR = object : DiffUtil.ItemCallback<NotificationData>() {
+			override fun areItemsTheSame(oldItem: NotificationData, newItem: NotificationData): Boolean =
+				oldItem.id == newItem.id
+
+			override fun areContentsTheSame(oldItem: NotificationData, newItem: NotificationData): Boolean =
+				oldItem == newItem
+		}
 		const val OTHER = 0
 		const val ACTIONABLE_NOTIFICATIONS = 1
 		const val INFO_NOTIFICATIONS = 2
@@ -26,12 +40,14 @@ class NotificationsAdapter@Inject constructor(): CoreAdapter<RecyclerView.ViewHo
 	}
 
 
-	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: Any) {
-		when(holder) {
-			is NotificationsActionableViewHolder -> { bindActionableNotifications(item, holder) }
-			is NotificationsInfoViewHolder -> { bindInfoNotifications(item, holder) }
-			is NotificationsPointsViewHolder -> { bindPointsNotifications(item, holder) }
-			is NotificationsScoreViewHolder -> { bindScoreNotifications(item, holder) }
+	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+		getItem(position)?.let { item ->
+			when (holder) {
+				is NotificationsActionableViewHolder -> { bindActionableNotifications(item, holder) }
+				is NotificationsInfoViewHolder -> { bindInfoNotifications(item, holder) }
+				is NotificationsPointsViewHolder -> { bindPointsNotifications(item, holder) }
+				is NotificationsScoreViewHolder -> { bindScoreNotifications(item, holder) }
+			}
 		}
 	}
 
@@ -63,7 +79,7 @@ class NotificationsAdapter@Inject constructor(): CoreAdapter<RecyclerView.ViewHo
 	}
 
 	override fun getItemViewType(position: Int): Int {
-		return when ((items[position] as NotificationData).content) {
+		return when ((getItem(position) as NotificationData).content) {
 			is NotificationContentParent.GameOrderInvite,
 			is NotificationContentParent.GameOrderResponse -> ACTIONABLE_NOTIFICATIONS
 
@@ -126,17 +142,20 @@ class NotificationsAdapter@Inject constructor(): CoreAdapter<RecyclerView.ViewHo
 
 		with(holder.binding) {
 			if (infoItem is NotificationContentParent.GameOrderAccept) {
-				info.text = root.context.getString(R.string.your_invite_accepted,
+				info.text = formatTextToTwoColors(root.context, root.context.getString(R.string.your_invite_accepted,
 					infoItem.playerName,
 					infoItem.telegram,
-					infoItem.phone)
+					infoItem.phone), infoItem.playerName.lastIndex + 1)
+				info.setTextIsSelectable(true)
 				playerPhoto.setImage(AvatarImage(infoItem.playerPhoto))
 			} else if (infoItem is NotificationContentParent.GameOrderCreate) {
-				info.text = root.context.getString(R.string.you_created_request)
+				info.text = formatTextToTwoColors(root.context, root.context.getString(R.string.you_created_request),
+					root.context.getString(R.string.you_created_request).indexOf(" "))
+				info.setTextIsSelectable(false)
 				playerPhoto.setImage(AvatarImage(infoItem.playerPhoto))
 			}
 
-			date.text = data.createdAt // todo add conversion
+			date.text = data.createdAt
 		}
 	}
 
@@ -145,9 +164,9 @@ class NotificationsAdapter@Inject constructor(): CoreAdapter<RecyclerView.ViewHo
 		val pointsItem = data.content as? NotificationContentParent.Bonus ?: throw IllegalArgumentException("Content must be Bonus")
 
 		with(holder.binding) {
-			info.text = root.context.getString(R.string.points_acquired,
-				pointsItem.addBonus)
-			date.text = data.createdAt // todo add conversion
+			info.text = formatTextToTwoColors(root.context, root.context.getString(R.string.points_acquired,
+				pointsItem.addBonus), root.context.getString(R.string.points_acquired).indexOf(" ", 3))
+			date.text = data.createdAt
 		}
 	}
 
@@ -161,19 +180,35 @@ class NotificationsAdapter@Inject constructor(): CoreAdapter<RecyclerView.ViewHo
 
 		with(holder.binding) {
 			if (scoreItem is NotificationContentParent.SinglesScore) {
-				info.text = root.context.getString(R.string.score_inserted,
+				info.text = formatTextToTwoColors(root.context, root.context.getString(R.string.score_inserted,
 					scoreItem.player1.name,
 					scoreItem.player2.name,
-					scoreItem.sets.joinToString(", ") { "${it.score1} - ${it.score2}" }) // todo move this out of adapter
+					scoreItem.sets.joinToString("), (") { "${it.score1} - ${it.score2}" }), scoreItem.player2.name.lastIndex + 1)
 			} else if (scoreItem is NotificationContentParent.DoublesScore) {
-				info.text = root.context.getString(R.string.score_inserted,
+				info.text = formatTextToTwoColors(root.context, root.context.getString(R.string.score_inserted,
 					("${scoreItem.player1.name}, ${scoreItem.player2.name}"),
 					("${scoreItem.player3.name}, ${scoreItem.player4.name}"),
-					scoreItem.sets.joinToString(", ") { "${it.score1} - ${it.score2}" }) // todo move this out of adapter
+					scoreItem.sets.joinToString("), (") { "${it.score1} - ${it.score2}" }), scoreItem.player4.name.lastIndex + 1)
 			}
 
-			date.text = data.createdAt // todo add conversion outside of adapter
+			date.text = data.createdAt
 		}
+	}
+
+	private fun formatTextToTwoColors(context: Context, formattedText: String, endIndex: Int): SpannableString {
+		val spannableString = SpannableString(formattedText)
+		val startIndex = 0 // testing
+		if (endIndex != -1) {
+			val color = context.getColor(R.color.tb_black)
+			spannableString.setSpan(
+				ForegroundColorSpan(color),
+				startIndex,
+				endIndex,
+				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+			)
+		}
+
+		return spannableString
 	}
 
 }

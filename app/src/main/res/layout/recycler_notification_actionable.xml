@@ -22,12 +22,11 @@
 		android:id="@+id/title"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="16dp"
 		android:layout_marginHorizontal="8dp"
 		android:text="@string/you_sent_invite"
 		android:textColor="@color/tb_black"
 		android:textSize="16sp"
-		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintTop_toTopOf="@id/player_photo"
 		app:layout_constraintStart_toEndOf="@id/player_photo"
 		app:layout_constraintEnd_toStartOf="@id/vector"
 		app:layout_constraintBottom_toTopOf="@id/sub_title"/>
@@ -36,7 +35,6 @@
 		android:id="@+id/sub_title"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
-		android:layout_marginBottom="16dp"
 		android:layout_marginHorizontal="8dp"
 		android:text="@string/sent_to_player"
 		android:textSize="12sp"
@@ -44,7 +42,7 @@
 		app:layout_constraintTop_toBottomOf="@id/title"
 		app:layout_constraintStart_toEndOf="@id/player_photo"
 		app:layout_constraintEnd_toStartOf="@id/vector"
-		app:layout_constraintBottom_toBottomOf="parent"/>
+		app:layout_constraintBottom_toBottomOf="@id/player_photo"/>
 
 	<ImageView
 		android:id="@+id/vector"

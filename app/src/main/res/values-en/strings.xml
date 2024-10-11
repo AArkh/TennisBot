@@ -374,8 +374,8 @@
 	<string name="points_acquired">%d points acquired</string>
 	<string name="from_player">From %s</string>
 	<string name="you_created_request">You created the request</string>
-	<string name="you_invited">You\'re invited to play</string>
+	<string name="you_invited">You are invited to play</string>
 	<string name="response_to_your_invite">Response to your invite</string>
-	<string name="you_responsed_to_invite">You responsed to the invite</string>
+	<string name="you_responsed_to_invite">You responded to the invite</string>
 
 </resources>

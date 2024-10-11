@@ -124,5 +124,4 @@ class FeedViewModel @Inject constructor(
 			}
 		}
 	}
-
 }
