@@ -66,7 +66,7 @@ class NotificationsViewModel @Inject constructor(
 				val response = repository.getAllNotifications(position)
 				val itemsList = response?.items?.map { it.copy(createdAt = formatDateForFeed(it.createdAt, context)) }
 				val nextPosition = position + 20
-				if (position == 0 && itemsList != null) readAllBellNotifications(itemsList[0].id)
+				if (position == 0 && !itemsList.isNullOrEmpty()) readAllBellNotifications(itemsList[0].id)
 
 				Log.d("NotificationsDataSource", "Loading page starting from position: $nextPosition")
 				LoadResult.Page(

@@ -57,8 +57,12 @@ class NotificationsFragment :  AuthorizedCoreFragment<FragmentRequestBinding>() 
 		adapter.clickListenerTransfer = { id ->
 
 		}
-		adapter.clickListenerTelegram = { telegram ->
-			openLink("https//t.me/$telegram")
+		adapter.clickListenerTelegram = { isTelegram, payload ->
+			if (isTelegram) {
+				openIntent(Intent.ACTION_VIEW, "https://t.me/$payload")
+			} else {
+				openIntent(Intent.ACTION_DIAL, "tel:$payload")
+			}
 		}
 
 		adapter.addLoadStateListener { loadState ->
@@ -68,9 +72,9 @@ class NotificationsFragment :  AuthorizedCoreFragment<FragmentRequestBinding>() 
 
 	}
 
-	private fun openLink(url: String) {
-		val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-		startActivity(intent)
+	private fun openIntent(intentAction: String, url: String) {
+		val intent = Intent(intentAction, Uri.parse(url))
+		requireContext().startActivity(intent)
 	}
 }
 

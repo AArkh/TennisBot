@@ -242,7 +242,7 @@ open class GameViewModel @Inject constructor(
 				}
 				val itemsList = response?.items?.let { repository.mapGameToMatchRequestPostItem(it) }
 				val nextPosition = position + 20
-				if (position == 0 && itemsList != null) readGameNotifications(filter + 1, itemsList[0].id.toInt())
+				if (position == 0 && !itemsList.isNullOrEmpty()) readGameNotifications(filter + 1, itemsList[0].id.toInt())
 
 				LoadResult.Page(
 					data = itemsList ?: emptyList(),
@@ -273,7 +273,7 @@ open class GameViewModel @Inject constructor(
 				val response: GameAcceptedResponse? = repository.getAcceptedRequests(position)
 				val itemsList = response?.items?.let { repository.mapAcceptedGameToPostItem(it) }
 				val nextPosition = position + 20
-				if (position == 0 && itemsList != null) readGameNotifications(ACCEPTED_NOTIFICATONS_TYPE, itemsList[0].id.toInt())
+				if (position == 0 && !itemsList.isNullOrEmpty()) readGameNotifications(ACCEPTED_NOTIFICATONS_TYPE, itemsList[0].id.toInt())
 
 				LoadResult.Page(
 					data = itemsList ?: emptyList(),

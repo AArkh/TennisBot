@@ -7,7 +7,6 @@ import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
-import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,7 +41,7 @@ class NotificationsAdapter@Inject constructor(): PagingDataAdapter<NotificationD
 		const val SCORE_NOTIFICATIONS = 4
 	}
 	var clickListenerTransfer: ((id: Int) -> Unit)? = null
-	var clickListenerTelegram: ((telegram: String) -> Unit)? = null
+	var clickListenerTelegram: ((isTelegram: Boolean, payload: String) -> Unit)? = null
 
 
 	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -155,15 +154,15 @@ class NotificationsAdapter@Inject constructor(): PagingDataAdapter<NotificationD
 
 		with(holder.binding) {
 			if (infoItem is NotificationContentParent.GameOrderAccept) {
-				info.text = formatTextToTwoColors(root.context, root.context.getString(R.string.your_invite_accepted,
-					infoItem.playerName,
+				info.text = formatTextToTwoColors(
+					root.context, root.context.getString(R.string.your_invite_accepted,
+						infoItem.playerName,
 					"@${infoItem.telegram}",
-					infoItem.phone), infoItem.playerName.lastIndex + 1)
-				info.setTextIsSelectable(true)
+					"+${infoItem.phone}"), infoItem.playerName.lastIndex + 1, infoItem.telegram, infoItem.phone)
 				playerPhoto.setImage(AvatarImage(infoItem.playerPhoto))
-				Linkify.addLinks(info, Linkify.PHONE_NUMBERS) // supposed to make phone number detectable
 
-				info.movementMethod = LinkMovementMethod.getInstance() // ?
+				info.setTextIsSelectable(false)
+				info.movementMethod = LinkMovementMethod.getInstance()
 
 			} else if (infoItem is NotificationContentParent.GameOrderCreate) {
 				info.text = formatTextToTwoColors(root.context, root.context.getString(R.string.you_created_request),
@@ -212,7 +211,7 @@ class NotificationsAdapter@Inject constructor(): PagingDataAdapter<NotificationD
 		}
 	}
 
-	private fun formatTextToTwoColors(context: Context, formattedText: String, endIndex: Int, hasTelegram: Boolean = false, telegram: String = ""): SpannableString {
+	private fun formatTextToTwoColors(context: Context, formattedText: String, endIndex: Int, telegram: String = "", phoneNumber: String = ""): SpannableString {
 		val spannableString = SpannableString(formattedText)
 		val startIndex = 0 // testing
 		if (endIndex != -1) {
@@ -224,16 +223,27 @@ class NotificationsAdapter@Inject constructor(): PagingDataAdapter<NotificationD
 				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
 			)
 		}
-		if (hasTelegram) {
+		if (telegram.isNotEmpty()) {
 			val telegramLink = object : ClickableSpan() { //
 				override fun onClick(widget: View) {
-					clickListenerTelegram?.invoke(telegram)
+					clickListenerTelegram?.invoke(true, telegram)
 				}
 			}
 
-			val telegramStart = spannableString.indexOf("@") + 1
-			val telegramEnd = telegramStart + telegram.length
+			val telegramStart = spannableString.indexOf("@")
+			val telegramEnd = telegramStart + telegram.length + 1
 			spannableString.setSpan(telegramLink, telegramStart, telegramEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+		}
+		if (phoneNumber.isNotEmpty()) {
+			val phoneLink = object : ClickableSpan() {
+				override fun onClick(widget: View) {
+					clickListenerTelegram?.invoke(false, phoneNumber)
+				}
+			}
+
+			val phoneStart = spannableString.indexOf("+")
+			val phoneEnd = phoneStart + phoneNumber.length + 1
+			spannableString.setSpan(phoneLink, phoneStart, phoneEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 		}
 
 		return spannableString
