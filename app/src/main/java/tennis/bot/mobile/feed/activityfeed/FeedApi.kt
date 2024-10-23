@@ -30,7 +30,7 @@ data class ActivityBasicResponse(
 
 @Serializable
 data class PostData(
-	val id: Long,
+	val id: Int,
 	val postType: Int,
 	val totalLikes: Int,
 	val liked: Boolean,
@@ -80,14 +80,14 @@ sealed class PostParent {
 		val opponentsCount: Int,
 		val opponentsPower: Int,
 		val date: String?,
-		val gameOrderId: Long
+		val gameOrderId: Int
 	) : PostParent()
 
 	@Serializable
 	@SerialName("3")
 	data class ScorePost(
 		val type: Int, // 3
-		val id: Long,
+		val id: Int,
 		val creatorId: Long,
 		val photo: String?,
 		val video: String?,

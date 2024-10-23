@@ -23,9 +23,9 @@ import tennis.bot.mobile.utils.dpToPx
 import tennis.bot.mobile.utils.view.AvatarImage
 import javax.inject.Inject
 
-class GameAdapter@Inject constructor(): PagingDataAdapter<FeedSealedClass, RecyclerView.ViewHolder>(FEED_COMPARATOR) {
+open class GameAdapter@Inject constructor(): PagingDataAdapter<FeedSealedClass, RecyclerView.ViewHolder>(FEED_COMPARATOR) {
 
-	var clickListener: ((command: String, id: Long?, targetPlayerId: Long?, isOwned: Boolean?) -> Unit)? = null
+	var clickListener: ((command: String, id: Int?, targetPlayerId: Long?, isOwned: Boolean?) -> Unit)? = null
 	var insertScoreCallback: ((opponentsList: Array<OpponentItem>) -> Unit)? = null
 	companion object {
 		const val REQUEST_RESPONSE = "REQUEST_RESPONSE"
@@ -86,7 +86,7 @@ class GameAdapter@Inject constructor(): PagingDataAdapter<FeedSealedClass, Recyc
 			postType.text = when {
 				matchRequestItem.targetPlayerId != null -> context.getString(if (matchRequestItem.isOwned == true) R.string.my_invite else R.string.invite)
 				matchRequestItem.isResponsed == true -> context.getString(R.string.my_response)
-				matchRequestItem.gameOrderId == matchRequestItem.playerId -> context.getString(R.string.my_request)
+				matchRequestItem.liked -> context.getString(R.string.my_request)
 				matchRequestItem.isOwned == true -> context.getString(R.string.request_response)
 				else -> context.getString(R.string.post_type_2).substringBefore(" ")
 			}

@@ -40,7 +40,7 @@ class NotificationsAdapter@Inject constructor(): PagingDataAdapter<NotificationD
 		const val POINTS_NOTIFICATIONS = 3
 		const val SCORE_NOTIFICATIONS = 4
 	}
-	var clickListenerTransfer: ((id: Int) -> Unit)? = null
+	var clickListenerTransfer: ((isIncomind: Boolean, id: Int) -> Unit)? = null
 	var clickListenerTelegram: ((isTelegram: Boolean, payload: String) -> Unit)? = null
 
 
@@ -120,7 +120,7 @@ class NotificationsAdapter@Inject constructor(): PagingDataAdapter<NotificationD
 					}
 				playerPhoto.setImage(AvatarImage(actionableItem.playerPhoto))
 				root.setOnClickListener {
-					clickListenerTransfer?.invoke(actionableItem.gameOrderId)
+					clickListenerTransfer?.invoke(!actionableItem.selfNotify, actionableItem.gameOrderId)
 				}
 				} else if (actionableItem is NotificationContentParent.GameOrderInvite) {
 					if (actionableItem.selfNotify) {
@@ -136,7 +136,7 @@ class NotificationsAdapter@Inject constructor(): PagingDataAdapter<NotificationD
 				}
 				playerPhoto.setImage(AvatarImage(actionableItem.playerPhoto))
 				root.setOnClickListener {
-					clickListenerTransfer?.invoke(actionableItem.gameOrderId)
+					clickListenerTransfer?.invoke(!actionableItem.selfNotify, actionableItem.gameOrderId)
 				}
 			}
 

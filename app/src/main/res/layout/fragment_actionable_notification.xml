@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/tb_bg"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<FrameLayout
+		android:id="@+id/toolbar"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@color/tb_white"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toTopOf="parent">
+
+		<ImageView
+			android:id="@+id/back_button"
+			android:layout_width="36dp"
+			android:layout_height="36dp"
+			android:layout_marginStart="20dp"
+			android:layout_marginTop="10dp"
+			android:layout_marginBottom="10dp"
+			android:background="@drawable/search_background"
+			android:backgroundTint="@color/tb_gray_border"
+			android:padding="6dp"
+			android:layout_gravity="start"
+			android:src="@drawable/chevron_left_wide"
+			android:visibility="visible"
+			app:tint="@color/tb_gray_active" />
+
+		<TextView
+			android:id="@+id/title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center|center_vertical"
+			android:text="@string/incoming"
+			android:textColor="@color/tb_black"
+			android:textSize="16sp" />
+
+	</FrameLayout>
+
+	<include
+		layout="@layout/recycler_game_request_response"
+		android:id="@+id/game_item_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:visibility="gone"
+		android:layout_marginTop="8dp"
+		app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

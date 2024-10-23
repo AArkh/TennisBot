@@ -30,7 +30,7 @@ class FeedViewModel @Inject constructor(
 	private val userProfileAndEnumsRepository: UserProfileAndEnumsRepository,
 ): ViewModel()  {
 
-	fun onLikeButtonPressed(isLike: Boolean, postId: Long) {
+	fun onLikeButtonPressed(isLike: Boolean, postId: Int) {
 		viewModelScope.launch {
 			kotlin.runCatching {
 				if (isLike) {

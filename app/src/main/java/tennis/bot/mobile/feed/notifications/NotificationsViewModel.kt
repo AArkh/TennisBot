@@ -28,9 +28,6 @@ class NotificationsViewModel @Inject constructor(
 ): ViewModel()  {
 	companion object {
 		const val BELL_NOTIFICATONS_TYPE = 1
-		const val GAME_ALL_NOTIFICATONS_TYPE = 2
-		const val INPUT_NOTIFICATONS_TYPE = 3
-		const val OUTPUT_NOTIFICATONS_TYPE = 4
 		const val ACCEPTED_NOTIFICATONS_TYPE = 5
 	}
 

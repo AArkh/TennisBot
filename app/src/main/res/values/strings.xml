@@ -364,6 +364,7 @@
 	<string name="decline">Отказать</string>
 	<string name="incoming">Входящие</string>
 	<string name="outcoming">Исх</string>
+	<string name="outcoming_full">Исходящие</string>
 	<string name="accepted">Подтвержденные</string>
 	<string name="invite">Вызов</string>
 	<string name="request_response_failure">Не удалось отправить ответ на заявку</string>
@@ -390,4 +391,5 @@
 	<string name="you_invited">Вас приглашают поиграть</string>
 	<string name="response_to_your_invite">Отклик на вашу заявку</string>
 	<string name="you_responsed_to_invite">Вы откликнулись на заявку</string>
+	<string name="match_no_longer_available">Этот матч больше не доступен</string>
 </resources>

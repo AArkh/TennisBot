@@ -68,7 +68,7 @@ open class GameViewModel @Inject constructor(
 
 	fun onCheckingGameIndicators() {
 		viewModelScope.launch(Dispatchers.IO) {
-//			kotlin.runCatching {
+			kotlin.runCatching {
 				val result = notificationsRepository.getNotificationIndicators()
 				if (result == null) {
 					throw IllegalArgumentException("Failed to onCheckingGameIndicators")
@@ -80,9 +80,9 @@ open class GameViewModel @Inject constructor(
 						isAcceptedIndicatorActive = result.gameOrdersAccepted != 0
 					)
 				}
-//			}.onFailure {
-//				FirebaseCrashlytics.getInstance().recordException(it)
-//			}
+			}.onFailure {
+				FirebaseCrashlytics.getInstance().recordException(it)
+			}
 		}
 	}
 
@@ -101,7 +101,7 @@ open class GameViewModel @Inject constructor(
 		}
 	}
 
-	fun onAcceptingInvite(id: Long, targetPlayerId: Long, successCallBack: () -> Unit) {
+	fun onAcceptingInvite(id: Int, targetPlayerId: Long, successCallBack: () -> Unit) {
 		viewModelScope.launch(Dispatchers.IO) {
 			kotlin.runCatching {
 				if (!repository.postInviteAccept(id, targetPlayerId)) {
@@ -117,7 +117,7 @@ open class GameViewModel @Inject constructor(
 		}
 	}
 
-	fun onDecliningInvite(id: Long, targetPlayerId: Long, successCallBack: () -> Unit) {
+	fun onDecliningInvite(id: Int, targetPlayerId: Long, successCallBack: () -> Unit) {
 		viewModelScope.launch(Dispatchers.IO) {
 			kotlin.runCatching {
 				if (!repository.postInviteDecline(id, targetPlayerId)) {
@@ -133,7 +133,7 @@ open class GameViewModel @Inject constructor(
 		}
 	}
 
-	fun onDeletingGameRequest(adapter: GameAdapter, id: Long) {
+	fun onDeletingGameRequest(adapter: GameAdapter, id: Int) {
 		viewModelScope.launch(Dispatchers.IO) {
 			kotlin.runCatching {
 				if (!repository.deleteGameRequest(id)) {
@@ -149,7 +149,7 @@ open class GameViewModel @Inject constructor(
 		}
 	}
 
-	fun onDeletingMyGameResponse(adapter: GameAdapter, id: Long) {
+	fun onDeletingMyGameResponse(adapter: GameAdapter, id: Int) {
 		viewModelScope.launch(Dispatchers.IO) {
 			kotlin.runCatching {
 				if (!repository.deleteMyGameResponse(id)) {

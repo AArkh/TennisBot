@@ -109,6 +109,7 @@ class GameFragment : AuthorizedCoreFragment<FragmentGameBinding>() {
 				GameAdapter.REQUEST_OPTIONS_RESPONSE -> {
 					showDeletePopup(binding.root.findViewById(R.id.options_dots), GameAdapter.REQUEST_OPTIONS_RESPONSE, id!!)
 				}
+
 				GameAdapter.REQUEST_OPTIONS_REQUEST -> {
 					showDeletePopup(binding.root.findViewById(R.id.options_dots), GameAdapter.REQUEST_OPTIONS_REQUEST, id!!)
 				}
@@ -203,7 +204,7 @@ class GameFragment : AuthorizedCoreFragment<FragmentGameBinding>() {
 		}
 	}
 
-	private fun showDeletePopup(view: View, command: String, id: Long) {
+	private fun showDeletePopup(view: View, command: String, id: Int) {
 		val menu = PopupMenu(requireContext(), view, Gravity.BOTTOM, 0, R.style.PopupMenuStyle)
 
 		when(command) {

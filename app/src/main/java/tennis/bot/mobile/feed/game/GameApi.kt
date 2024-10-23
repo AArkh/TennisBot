@@ -42,24 +42,24 @@ interface GameApi {
 
 	@POST("api/game-orders/{id}/accept/{playerId}")
 	suspend fun postInviteAccept(
-		@Path("id") id: Long,
+		@Path("id") id: Int,
 		@Path("playerId") playerId: Long,
 	): Response<GameRequestResponse>
 
 	@DELETE("api/game-orders/{id}/response/{playerId}")
 	suspend fun postInviteDecline(
-		@Path("id") id: Long,
+		@Path("id") id: Int,
 		@Path("playerId") playerId: Long,
 	): Response<GameRequestResponse>
 
 	@DELETE("api/game-orders/{id}")
 	suspend fun deleteGameRequest(
-		@Path("id") id: Long
+		@Path("id") id: Int
 	): Response<GameRequestResponse>
 
 	@DELETE("api/game-orders/{id}/my-response")
 	suspend fun deleteMyGameResponse(
-		@Path("id") id: Long
+		@Path("id") id: Int
 	): Response<GameRequestResponse>
 
 	companion object{
@@ -87,7 +87,7 @@ data class GameAcceptedResponse(
 
 @Serializable
 data class GameAcceptedPost(
-	val id: Long,
+	val id: Int,
 	val player: GamePlayer,
 	val targetPlayer: GamePlayer,
 	val cityId: Int,
@@ -101,7 +101,7 @@ data class GameAcceptedPost(
 
 @Serializable
 data class GamePostNetwork(
-	val id: Long,
+	val id: Int,
 	val targetPlayerId: Long?,
 	val player: GamePlayer,
 	val isOwned: Boolean,

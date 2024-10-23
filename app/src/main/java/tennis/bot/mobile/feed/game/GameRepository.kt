@@ -97,7 +97,7 @@ class GameRepository @Inject constructor(
 	}
 
 	@WorkerThread
-	suspend fun postInviteAccept(id: Long, playerId: Long): Boolean {
+	suspend fun postInviteAccept(id: Int, playerId: Long): Boolean {
 		val response = kotlin.runCatching {
 			gameApi.postInviteAccept(id, playerId)
 		}.getOrElse {
@@ -109,7 +109,7 @@ class GameRepository @Inject constructor(
 	}
 
 	@WorkerThread
-	suspend fun postInviteDecline(id: Long, playerId: Long): Boolean {
+	suspend fun postInviteDecline(id: Int, playerId: Long): Boolean {
 		val response = kotlin.runCatching {
 			gameApi.postInviteDecline(id, playerId)
 		}.getOrElse {
@@ -121,7 +121,7 @@ class GameRepository @Inject constructor(
 	}
 
 	@WorkerThread
-	suspend fun deleteGameRequest(id: Long): Boolean {
+	suspend fun deleteGameRequest(id: Int): Boolean {
 		val response = kotlin.runCatching {
 			gameApi.deleteGameRequest(id)
 		}.getOrElse {
@@ -133,7 +133,7 @@ class GameRepository @Inject constructor(
 	}
 
 	@WorkerThread
-	suspend fun deleteMyGameResponse(id: Long): Boolean {
+	suspend fun deleteMyGameResponse(id: Int): Boolean {
 		val response = kotlin.runCatching {
 			gameApi.deleteMyGameResponse(id)
 		}.getOrElse {
@@ -150,10 +150,10 @@ class GameRepository @Inject constructor(
 		else return gameList!!.map { game ->
 			MatchRequestPostItem(
 				id = game.id,
-				gameOrderId = getPlayerId(), //let's imagine this is our id
+				gameOrderId = 0,
 				postType = 2, //
 				totalLikes = 0,
-				liked = false,
+				liked = getPlayerId() == game.player.id, //let's imagine this is our my request check
 				addedAt = formatDateForFeed(game.createdAt, context), //
 				matchDate = formatDateForMatchPostItem(game.date), //
 				playerId = game.player.id, //

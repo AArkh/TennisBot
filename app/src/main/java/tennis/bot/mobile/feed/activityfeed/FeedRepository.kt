@@ -28,7 +28,7 @@ class FeedRepository @Inject constructor(
 	}
 
 	@WorkerThread
-	suspend fun postLike(postId: Long): Boolean {
+	suspend fun postLike(postId: Int): Boolean {
 		val response = kotlin.runCatching {
 			likesApi.postLike(postId)
 		}.getOrElse{
@@ -41,7 +41,7 @@ class FeedRepository @Inject constructor(
 	}
 
 	@WorkerThread
-	suspend fun postUnlike(postId: Long): Boolean {
+	suspend fun postUnlike(postId: Int): Boolean {
 		val response = kotlin.runCatching {
 			likesApi.postUnlike(postId)
 		}.getOrElse {

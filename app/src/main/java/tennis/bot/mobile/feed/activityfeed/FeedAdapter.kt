@@ -53,7 +53,7 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 		const val MATCH_REQUEST = 2
 		const val SCORE = 3
 	}
-	var clickListener: ((command: String, id: Long, playerId: Long?) -> Unit)? = null
+	var clickListener: ((command: String, id: Int, playerId: Long?) -> Unit)? = null
 
 	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 		getItem(position)?.let { item ->
@@ -204,7 +204,7 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 		holder.binding.date.text = scorePostItem.addedAt
 	}
 
-	private fun TextView.onLikePressed(isLiked: Boolean, likeAnimation: LottieAnimationView, postId: Long, totalLikes: Int) {
+	private fun TextView.onLikePressed(isLiked: Boolean, likeAnimation: LottieAnimationView, postId: Int, totalLikes: Int) {
 		if (!isLiked) {
 			setCompoundDrawablesWithIntrinsicBounds(R.drawable.fire_active, 0, 0, 0)
 			setTextColor(getColor(context, R.color.tb_red))
@@ -325,13 +325,13 @@ class AcceptedGameItemViewHolder(
 ) : RecyclerView.ViewHolder(binding.root)
 
 sealed class FeedSealedClass(
-	open val id: Long,
+	open val id: Int,
 	open var totalLikes: Int,
 	open var liked: Boolean
 ): CoreUtilsItem()
 
 data class NewPlayerPostItem( // 1
-	override val id: Long, // i don't want to store two id's so for now let's pick the post one
+	override val id: Int, // i don't want to store two id's so for now let's pick the post one
 	val postType: Int,
 	override var totalLikes: Int,
 	override var liked: Boolean,
@@ -343,8 +343,8 @@ data class NewPlayerPostItem( // 1
 ): FeedSealedClass(id, totalLikes, liked)
 
 data class MatchRequestPostItem( // 2
-	override val id: Long,  // i don't want to store two id's so for now let's pick the post one
-	val gameOrderId: Long,
+	override val id: Int,  // i don't want to store two id's so for now let's pick the post one
+	val gameOrderId: Int,
 	val postType: Int,
 	override var totalLikes: Int,
 	override var liked: Boolean,
@@ -364,7 +364,7 @@ data class MatchRequestPostItem( // 2
 ): FeedSealedClass(id, totalLikes, liked)
 
 data class ScorePostItem( // 3
-	override val id: Long, // i don't want to store two id's so for now let's pick the post one
+	override val id: Int, // i don't want to store two id's so for now let's pick the post one
 	val postType: Int,
 	override var totalLikes: Int,
 	override var liked: Boolean,
@@ -385,7 +385,7 @@ data class ScorePostItem( // 3
 ): FeedSealedClass(id, totalLikes, liked)
 
 data class AcceptedGameItem(
-	override val id: Long,
+	override val id: Int,
 	val matchDate: FormattedDate?,
 	val player: OpponentItem,
 	val targetPlayer: OpponentItem

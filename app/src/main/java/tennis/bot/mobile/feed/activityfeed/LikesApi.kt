@@ -8,11 +8,11 @@ interface LikesApi {
 
 	@POST("api/activity/{postId}/like")
 	suspend fun postLike(
-		@Path("postId") postId: Long
+		@Path("postId") postId: Int
 	): Response<Void>
 
 	@POST("api/activity/{postId}/unlike")
 	suspend fun postUnlike(
-		@Path("postId") postId: Long
+		@Path("postId") postId: Int
 	): Response<Void>
 }

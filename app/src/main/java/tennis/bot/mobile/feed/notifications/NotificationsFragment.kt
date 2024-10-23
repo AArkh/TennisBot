@@ -18,6 +18,7 @@ import tennis.bot.mobile.core.DefaultLoadStateAdapter
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.core.authentication.AuthorizedCoreFragment
 import tennis.bot.mobile.databinding.FragmentRequestBinding
+import tennis.bot.mobile.utils.traverseToAnotherFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -54,8 +55,8 @@ class NotificationsFragment :  AuthorizedCoreFragment<FragmentRequestBinding>() 
 //			binding.swipeRefreshLayout.isRefreshing = false
 //		}
 
-		adapter.clickListenerTransfer = { id ->
-
+		adapter.clickListenerTransfer = { isIncoming, id ->
+			parentFragmentManager.traverseToAnotherFragment(ActionableNotificationFragment.newInstance(isIncoming, id))
 		}
 		adapter.clickListenerTelegram = { isTelegram, payload ->
 			if (isTelegram) {

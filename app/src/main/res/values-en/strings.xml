@@ -355,6 +355,7 @@
 	<string name="decline">Decline</string>
 	<string name="incoming">Incoming</string>
 	<string name="outcoming">Out</string>
+	<string name="outcoming_full">Outcoming</string>
 	<string name="accepted">Accepted</string>
 	<string name="invite">Invite</string>
 	<string name="request_response_failure">Failed to submit response to the request</string>
@@ -381,5 +382,6 @@
 	<string name="you_invited">You are invited to play</string>
 	<string name="response_to_your_invite">Response to your invite</string>
 	<string name="you_responsed_to_invite">You responded to the invite</string>
+	<string name="match_no_longer_available">This match is no longer available</string>
 
 </resources>
