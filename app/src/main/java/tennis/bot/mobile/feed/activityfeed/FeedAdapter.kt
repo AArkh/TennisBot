@@ -52,6 +52,7 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 		const val NEW_PLAYER = 1
 		const val MATCH_REQUEST = 2
 		const val SCORE = 3
+		const val FRIENDLY_SCORE = 4
 	}
 	var clickListener: ((command: String, id: Int, playerId: Long?) -> Unit)? = null
 
@@ -61,6 +62,7 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 				is NewPlayerPostItemViewHolder -> bindNewPlayerPost(item, holder)
 				is MatchRequestPostItemViewHolder -> bindMatchRequestPost(item, holder)
 				is ScorePostItemViewHolder -> bindScorePost(item, holder, ImageSliderAdapter(), MatchResultsAdapter())
+				is FriendlyScorePostItemViewHolder -> bindFriendlyScorePost(item, holder, ImageSliderAdapter())
 			}
 		}
 	}
@@ -80,6 +82,10 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 			SCORE -> {
 				val binding = FeedPostThreeMatchScoreBinding.inflate(inflater, parent, false)
 				ScorePostItemViewHolder(binding)
+			}
+			FRIENDLY_SCORE -> {
+				val binding = FeedPostThreeMatchScoreBinding.inflate(inflater, parent, false)
+				FriendlyScorePostItemViewHolder(binding)
 			}
 			else -> {
 				val binding = RecyclerEmptyItemBinding.inflate(inflater, parent, false)
@@ -204,7 +210,41 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 		holder.binding.date.text = scorePostItem.addedAt
 	}
 
-	private fun TextView.onLikePressed(isLiked: Boolean, likeAnimation: LottieAnimationView, postId: Int, totalLikes: Int) {
+	private fun bindFriendlyScorePost(item: Any, holder: FriendlyScorePostItemViewHolder, mediaSliderAdapter: ImageSliderAdapter) {
+		val friendlyScorePostItem = item as? FriendlyScorePostItem ?: throw IllegalArgumentException("Item must be FriendlyScorePostItem")
+
+		holder.binding.playerPhoto.showPlayerPhoto(friendlyScorePostItem.players[0].photo, null)
+		holder.binding.matchTypeTitle.text = holder.binding.matchTypeTitle.context.getString(R.string.match_result_friendly)
+		holder.binding.nameSurname.text = friendlyScorePostItem.players[0].name
+		holder.binding.subTitle.text = friendlyScorePostItem.subtitle
+		holder.binding.itemPicture.isVisible = false
+		holder.binding.itemPicturesPager.isVisible = true
+		holder.binding.itemPicturesPager.adapter = mediaSliderAdapter
+		mediaSliderAdapter.submitList(friendlyScorePostItem.feedMediaItemsList)
+		holder.binding.itemPicturesPager.currentItem
+		holder.binding.resultsContainer.isVisible = false
+
+		holder.binding.date.text = friendlyScorePostItem.addedAt
+
+		TabLayoutMediator(holder.binding.tabLayout, holder.binding.itemPicturesPager) { tab, _ ->
+			tab.setCustomView(R.layout.tab_image_switch_indicator)
+		}.attach()
+		holder.binding.tabLayout.addOnTabSelectedListener(this)
+
+		holder.binding.likeButton.isLikeActive(friendlyScorePostItem.liked, friendlyScorePostItem.totalLikes)
+		holder.binding.likeButton.setOnClickListener {
+			holder.binding.likeButton.onLikePressed(
+				friendlyScorePostItem.liked,
+				holder.binding.likeAnim,
+				friendlyScorePostItem.id,
+				friendlyScorePostItem.totalLikes)
+			updateLikeUi(friendlyScorePostItem)
+		}
+		holder.binding.date.text = friendlyScorePostItem.addedAt
+	}
+
+
+		private fun TextView.onLikePressed(isLiked: Boolean, likeAnimation: LottieAnimationView, postId: Int, totalLikes: Int) {
 		if (!isLiked) {
 			setCompoundDrawablesWithIntrinsicBounds(R.drawable.fire_active, 0, 0, 0)
 			setTextColor(getColor(context, R.color.tb_red))
@@ -260,6 +300,7 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 			is NewPlayerPostItem -> NEW_PLAYER
 			is MatchRequestPostItem -> MATCH_REQUEST
 			is ScorePostItem -> SCORE
+			is FriendlyScorePostItem -> FRIENDLY_SCORE
 			else -> OTHER
 		}
 	}
@@ -317,6 +358,10 @@ class MatchRequestPostItemViewHolder(
 ) : RecyclerView.ViewHolder(binding.root)
 
 class ScorePostItemViewHolder(
+	val binding: FeedPostThreeMatchScoreBinding
+) : RecyclerView.ViewHolder(binding.root)
+
+class FriendlyScorePostItemViewHolder(
 	val binding: FeedPostThreeMatchScoreBinding
 ) : RecyclerView.ViewHolder(binding.root)
 
@@ -382,6 +427,17 @@ data class ScorePostItem( // 3
 	val sets: List<TennisSetNetwork>,
 	val feedMediaItemsList: List<FeedMediaItem>,
 	val matchResultsList: List<CoreUtilsItem>
+): FeedSealedClass(id, totalLikes, liked)
+
+data class FriendlyScorePostItem(
+	override val id: Int, // creatprId
+	val postType: Int,
+	override var totalLikes: Int,
+	override var liked: Boolean,
+	val subtitle: String,
+	val players: List<PostParent.FriendlyPlayerPostData>, // i will make the creator the first one (0)
+	val feedMediaItemsList: List<FeedMediaItem>,
+	val addedAt: String?
 ): FeedSealedClass(id, totalLikes, liked)
 
 data class AcceptedGameItem(

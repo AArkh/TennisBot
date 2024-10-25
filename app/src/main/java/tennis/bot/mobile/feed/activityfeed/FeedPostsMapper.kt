@@ -92,6 +92,30 @@ class FeedPostsMapper @Inject constructor(
 		)
 	}
 
+	fun convertToFriendlyScorePostItem(postData: PostData): FriendlyScorePostItem {
+		val friendlyScorePost = postData.post as? PostParent.FriendlyScorePost ?: throw IllegalArgumentException("Item must be FriendlyScorePost")
+		val newPlayers = movePlayerToTop(friendlyScorePost.players, friendlyScorePost.creatorId)
+
+		return FriendlyScorePostItem(
+			id = postData.id,
+			postType = friendlyScorePost.type,
+			totalLikes = postData.totalLikes,
+			liked = postData.liked,
+			subtitle = formatPlayerNamesForFriendly(newPlayers.drop(1)),
+			players = newPlayers,
+			feedMediaItemsList = createListOfMedia(friendlyScorePost),
+			addedAt = postData.addedAt?.let { formatDateForFeed(it, context) }
+		)
+	}
+
+	private fun formatPlayerNamesForFriendly(players: List<PostParent.FriendlyPlayerPostData>): String {
+		return when {
+			players.size > 2 -> context.getString(R.string.friendly_players_subtitle, players.take(2).joinToString(", ") { it.name })
+			players.isNotEmpty() -> players.joinToString(", ") { it.name }
+			else -> ""
+		}
+	}
+
 	private fun createListOfMedia(item: PostParent.ScorePost): List<FeedMediaItem> {
 		val theList = mutableListOf<FeedMediaItem>()
 		if (item.video != null && item.photo != null) {
@@ -122,7 +146,34 @@ class FeedPostsMapper @Inject constructor(
 		return theList.toList()
 	}
 
-	suspend fun formatLocationDataForPost(cityId: Int, districtId: Int?): String? {
+	private fun createListOfMedia(item: PostParent.FriendlyScorePost): List<FeedMediaItem> {
+		val theList = mutableListOf<FeedMediaItem>()
+		if (item.video != null && item.photo != null) {
+			theList.add(
+				FeedMediaItem(
+					mediaUrl = item.video,
+					isVideo = true
+				)
+			)
+			theList.add(FeedMediaItem(item.photo))
+		} else if (item.video != null) {
+			theList.add(
+				FeedMediaItem(
+					mediaUrl = item.video,
+					isVideo = true
+				)
+			)
+		} else if (item.photo != null) {
+			theList.add(FeedMediaItem(item.photo))
+		}
+		for (player in item.players) {
+			theList.add(FeedMediaItem(player.photo))
+		}
+
+		return theList.toList()
+	}
+
+	private suspend fun formatLocationDataForPost(cityId: Int, districtId: Int?): String? {
 		val locations = locationRepository.getLocations()
 		val city = locationDataMapper.findCityString(locations, cityId)
 		val district = if (districtId != null) {
@@ -137,6 +188,15 @@ class FeedPostsMapper @Inject constructor(
 		}
 
 		return location
+	}
+
+	private fun movePlayerToTop(players: List<PostParent.FriendlyPlayerPostData>, id: Long): List<PostParent.FriendlyPlayerPostData> {
+		val player = players.find { it.id == id }
+		return if (player != null) {
+			listOf(player) + players.filter { it.id != id }
+		} else {
+			players
+		}
 	}
 
 	private fun formMatchResultsList(item: PostParent.ScorePost, context: Context): List<CoreUtilsItem> {

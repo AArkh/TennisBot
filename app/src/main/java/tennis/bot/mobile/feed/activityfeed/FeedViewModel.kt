@@ -51,13 +51,14 @@ class FeedViewModel @Inject constructor(
 				FeedAdapter.NEW_PLAYER -> {
 					listOfItems.add(feedPostsMapper.convertToNewPlayerPostItem(postData))
 				}
-
 				FeedAdapter.MATCH_REQUEST -> {
 					listOfItems.add(feedPostsMapper.convertToMatchRequestPostItem(postData))
 				}
-
 				FeedAdapter.SCORE -> {
 					listOfItems.add(feedPostsMapper.convertToScorePostItem(postData))
+				}
+				FeedAdapter.FRIENDLY_SCORE -> {
+					listOfItems.add(feedPostsMapper.convertToFriendlyScorePostItem(postData))
 				}
 			}
 		}

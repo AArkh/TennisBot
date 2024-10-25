@@ -15,6 +15,7 @@ import tennis.bot.mobile.onboarding.survey.OnboardingRepository
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.utils.getCountryCodeForPhoneNumber
 import tennis.bot.mobile.utils.showToast
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -115,10 +116,10 @@ class LoginViewModel @Inject constructor(
 
 	fun onLoginPressed(username: String, password: String, navigationCallback: (isContinueRegistration: Boolean) -> Unit) {
 		showLoading()
-
 		viewModelScope.launch(Dispatchers.IO) {
-			when (accountInfo.postLogin(username, password)) {
-				200 -> {
+			kotlin.runCatching {
+				when (accountInfo.postLogin(username, password)) {
+					200 -> {
 						if(profileRepo.precacheProfile().isSuccessful) {
 							profileRepo.recordPhone(username)
 							navigationCallback.invoke(false)
@@ -128,14 +129,20 @@ class LoginViewModel @Inject constructor(
 							context.showToast(context.getString(R.string.continue_registration_text))
 							navigationCallback.invoke(true)
 						}
+					}
+					400 -> onError(loginAndPasswordError)
+					else -> {}
 				}
-				400 -> onError(loginAndPasswordError)
-				else -> {
-					FirebaseCrashlytics.getInstance().log("onLoginPressed: Not 200 or 400 was triggered")
+				onStopLoading()
+			}.onFailure {
+				onStopLoading()
+				if (it is SocketTimeoutException) {
+					context.showToast(context.getString(R.string.request_timed_out))
+				} else {
+					FirebaseCrashlytics.getInstance().log("onLoginPressed: Not 200 or 400 or 500 was triggered")
 					context.showToast(context.getString(R.string.error_text))
 				}
 			}
-			onStopLoading()
 		}
 	}
 }

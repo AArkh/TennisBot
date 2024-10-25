@@ -383,5 +383,7 @@
 	<string name="response_to_your_invite">Response to your invite</string>
 	<string name="you_responsed_to_invite">You responded to the invite</string>
 	<string name="match_no_longer_available">This match is no longer available</string>
+	<string name="friendly_players_subtitle">%1$s, and others</string>
+	<string name="request_timed_out">Request timed out. Please try again</string>
 
 </resources>

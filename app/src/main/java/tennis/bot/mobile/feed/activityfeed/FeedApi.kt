@@ -104,6 +104,16 @@ sealed class PostParent {
 	) : PostParent()
 
 	@Serializable
+	@SerialName("4")
+	data class FriendlyScorePost(
+		val type: Int, // 4
+		val photo: String?,
+		val video: String?,
+		val creatorId: Long,
+		val players: List<FriendlyPlayerPostData>
+	): PostParent()
+
+	@Serializable
 	data class PlayerPostData(
 		val id: Long,
 		val name: String,
@@ -117,16 +127,6 @@ sealed class PostParent {
 		val powerPositionNew: Int,
 		val headToHead: Int
 	)
-
-	@Serializable
-	@SerialName("4")
-	data class FriendlyScorePost(
-		val type: Int, // 4
-		val photo: String?,
-		val video: String?,
-		val creatorId: Long,
-		val players: List<FriendlyPlayerPostData>
-	): PostParent()
 
 	@Serializable
 	data class FriendlyPlayerPostData(
