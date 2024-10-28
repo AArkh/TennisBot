@@ -250,6 +250,11 @@ private fun getFileName(context: Context, uri: Uri): String? {
 	return result
 }
 
+fun isRuLocale(): Boolean {
+	val locale = Locale.getDefault().language
+	return (locale == "ru")
+}
+
 fun getCountryCodeForPhoneNumber(phoneNumber: String): String? {
 	val phoneNumberUtil = PhoneNumberUtil.getInstance()
 	return try {

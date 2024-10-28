@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tennis.bot.mobile.onboarding.survey.OnboardingRepository
+import tennis.bot.mobile.utils.isRuLocale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,6 +22,7 @@ open class LocationViewModel @Inject constructor(
 
 	private val _uiStateFlow = MutableStateFlow<LocationUiState>(LocationUiState.Initial)
 	val uiStateFlow = _uiStateFlow.asStateFlow()
+	val isRuLocale = isRuLocale()
 
 	fun onCountrySelected(selectedCountry: String) {
 		viewModelScope.launch {
@@ -28,7 +30,7 @@ open class LocationViewModel @Inject constructor(
 				kotlin.runCatching {
 					val locations = repository.getLocations()
 					val nextButtonEnabled = locations.find { country: Location ->
-						country.countryName == selectedCountry
+						(if(isRuLocale) country.countryName else country.countryNameEn) == selectedCountry
 					}?.cities.isNullOrEmpty()
 					_uiStateFlow.value = LocationUiState.CountrySelected(
 						country = selectedCountry,
@@ -50,8 +52,8 @@ open class LocationViewModel @Inject constructor(
 						country = selectedCountry,
 						city = selectedCity,
 						nextButtonEnabled = repository.getLocations()
-							.find { it.countryName == selectedCountry }
-							?.cities!!.find { it.name == selectedCity }
+							.find { (if(isRuLocale) it.countryName else it.countryNameEn) == selectedCountry }
+							?.cities!!.find { (if(isRuLocale) it.name else it.nameEn) == selectedCity }
 							?.districts!!.isEmpty()
 					)
 					_uiStateFlow.value = newState
@@ -87,20 +89,20 @@ open class LocationViewModel @Inject constructor(
 				var cityInt: Int = 0
 				var districtInt: Int? = null
 				kotlin.runCatching {
-					countryInt = repository.getLocations().find { it.countryName == selectedCountry }!!.id
+					countryInt = repository.getLocations().find { (if(isRuLocale) it.countryName else it.countryNameEn) == selectedCountry }!!.id
 				}.onFailure {
 					FirebaseCrashlytics.getInstance().log("recordLocationValues: country error")
 				}
 				kotlin.runCatching {
-					cityInt = repository.getLocations().find { it.countryName == selectedCountry }
-						?.cities!!.find { it.name == selectedCity }!!.id
+					cityInt = repository.getLocations().find { (if(isRuLocale) it.countryName else it.countryNameEn) == selectedCountry }
+						?.cities!!.find { (if(isRuLocale) it.name else it.nameEn) == selectedCity }!!.id
 				}.onFailure {
 					FirebaseCrashlytics.getInstance().log("recordLocationValues: city error")
 				}
 				kotlin.runCatching {
-					districtInt = repository.getLocations().find { it.countryName == selectedCountry }
-						?.cities!!.find { it.name == selectedCity }
-						?.districts!!.find { it.title == selectedDistrict }!!.id
+					districtInt = repository.getLocations().find { (if(isRuLocale) it.countryName else it.countryNameEn) == selectedCountry }
+						?.cities!!.find { (if(isRuLocale) it.name else it.nameEn) == selectedCity }
+						?.districts!!.find { (if(isRuLocale) it.title else it.nameEn) == selectedDistrict }!!.id
 				}.onFailure {
 					FirebaseCrashlytics.getInstance().log("recordLocationValues: district error")
 				}

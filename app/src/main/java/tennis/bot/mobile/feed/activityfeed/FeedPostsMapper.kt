@@ -181,7 +181,7 @@ class FeedPostsMapper @Inject constructor(
 		} else {
 			null
 		}
-		val location = if (district == null) {
+		val location = if (district == null || district == "") {
 			city
 		} else {
 			"$city(${district})"
@@ -306,7 +306,7 @@ suspend fun formatLocationDataForPost(cityId: Int?, districtId: Int?, locationRe
 	}
 	val location = if (city == null && district == null) {
 		null
-	} else if (district == null) {
+	} else if (district == null || district == "") {
 		city
 	} else {
 		"$city(${district})"

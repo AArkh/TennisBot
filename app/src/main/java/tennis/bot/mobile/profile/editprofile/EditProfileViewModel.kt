@@ -21,7 +21,6 @@ import tennis.bot.mobile.onboarding.survey.OnboardingRepository
 import tennis.bot.mobile.profile.account.AccountPageAdapter.Companion.NULL_STRING
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.utils.DEFAULT_DATE_TIME
-import tennis.bot.mobile.utils.buildImageRequest
 import tennis.bot.mobile.utils.convertDateAndTime
 import java.util.Locale
 import javax.inject.Inject
@@ -85,7 +84,7 @@ class EditProfileViewModel @Inject constructor(
 				} else {
 					null
 				}
-				val location = if (currentProfileData.districtId == null) {
+				val location = if (currentProfileData.districtId == null  || district == null) {
 					"$country, $city"
 				} else {
 					"$country, $city(${district})"

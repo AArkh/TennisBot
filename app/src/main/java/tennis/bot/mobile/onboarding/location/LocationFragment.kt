@@ -77,14 +77,14 @@ open class LocationFragment : CoreFragment<FragmentLocationBinding>() {
             LocationDialogViewModel.COUNTRY_REQUEST_KEY
         ) { _, result ->
             val countryResult =
-                result.getString(LocationDialogViewModel.SELECTED_COUNTRY_KEY, "Страна")
+                result.getString(LocationDialogViewModel.SELECTED_COUNTRY_KEY, getString(R.string.location_country))
             viewModel.onCountrySelected(countryResult)
         }
 
         setFragmentResultListener(
             LocationDialogViewModel.CITY_REQUEST_KEY
         ) { _, result ->
-            val cityResult = result.getString(LocationDialogViewModel.SELECTED_CITY_KEY, "Город")
+            val cityResult = result.getString(LocationDialogViewModel.SELECTED_CITY_KEY, getString(R.string.location_city))
             viewModel.onCitySelected(binding.countryTv.text.toString(), cityResult)
         }
 
@@ -92,7 +92,7 @@ open class LocationFragment : CoreFragment<FragmentLocationBinding>() {
             LocationDialogViewModel.DISTRICT_REQUEST_KEY
         ) { _, result ->
             val districtResult =
-                result.getString(LocationDialogViewModel.SELECTED_DISTRICT_KEY, "Район")
+                result.getString(LocationDialogViewModel.SELECTED_DISTRICT_KEY, getString(R.string.location_district))
             viewModel.onDistrictSelected(
                 binding.countryTv.text.toString(),
                 binding.cityTv.text.toString(),
@@ -125,15 +125,15 @@ open class LocationFragment : CoreFragment<FragmentLocationBinding>() {
                     binding.buttonNext.isEnabled = false
                     binding.buttonNext.setBackgroundResource(R.drawable.btn_bkg_disabled)
 
-                    binding.countryTv.text = "Страна"
-                    binding.cityTv.text = "Город"
-                    binding.districtTv.text = "Район"
+                    binding.countryTv.text = getString(R.string.location_country)
+                    binding.cityTv.text = getString(R.string.location_city)
+                    binding.districtTv.text = getString(R.string.location_district)
                 }
 
                 is LocationUiState.CountrySelected -> {
                     binding.countryTv.text = uiState.country
-                    binding.cityTv.text = "Город"
-                    binding.districtTv.text = "Район"
+                    binding.cityTv.text = getString(R.string.location_city)
+                    binding.districtTv.text = getString(R.string.location_district)
 
                     binding.cityPickLayout.visibility = View.INVISIBLE
                     binding.districtPickLayout.visibility = View.INVISIBLE
@@ -155,7 +155,7 @@ open class LocationFragment : CoreFragment<FragmentLocationBinding>() {
                 is LocationUiState.CitySelected -> {
                     binding.countryTv.text = uiState.country
                     binding.cityTv.text = uiState.city
-                    binding.districtTv.text = "Район"
+                    binding.districtTv.text = getString(R.string.location_district)
 
                     binding.districtPickLayout.visibility = View.INVISIBLE
                     binding.cityPickLayout.setBackgroundResource(R.drawable.country_button_outline)
