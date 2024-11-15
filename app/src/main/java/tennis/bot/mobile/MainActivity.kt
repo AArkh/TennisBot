@@ -15,6 +15,7 @@ import kotlinx.coroutines.withContext
 import tennis.bot.mobile.core.authentication.AuthTokenRepository
 import tennis.bot.mobile.databinding.ActivityMainBinding
 import tennis.bot.mobile.feed.bottomnavigation.BottomNavigationFragment
+import tennis.bot.mobile.feed.notifications.NotificationsRepository
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.onboarding.initial.LoginProposalFragment
 import tennis.bot.mobile.onboarding.location.LocationRepository
@@ -32,6 +33,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var authTokenRepository: AuthTokenRepository
     @Inject
     lateinit var userProfileAndEnumsRepository: UserProfileAndEnumsRepository
+    @Inject
+    lateinit var notificationsRepository: NotificationsRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

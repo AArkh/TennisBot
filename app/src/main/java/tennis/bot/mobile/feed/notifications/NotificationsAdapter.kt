@@ -213,7 +213,7 @@ class NotificationsAdapter@Inject constructor(): PagingDataAdapter<NotificationD
 
 	private fun formatTextToTwoColors(context: Context, formattedText: String, endIndex: Int, telegram: String = "", phoneNumber: String = ""): SpannableString {
 		val spannableString = SpannableString(formattedText)
-		val startIndex = 0 // testing
+		val startIndex = 0
 		if (endIndex != -1) {
 			val color = context.getColor(R.color.tb_black)
 			spannableString.setSpan(
@@ -248,7 +248,6 @@ class NotificationsAdapter@Inject constructor(): PagingDataAdapter<NotificationD
 
 		return spannableString
 	}
-
 }
 
 class NotificationsActionableViewHolder( // 1, 2

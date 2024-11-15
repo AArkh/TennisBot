@@ -2,6 +2,11 @@ package tennis.bot.mobile.feed.activityfeed
 
 import android.animation.Animator
 import android.animation.ObjectAnimator
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.URLSpan
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,6 +60,7 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 		const val FRIENDLY_SCORE = 4
 	}
 	var clickListener: ((command: String, id: Int, playerId: Long?) -> Unit)? = null
+	var onLinkClick:((link: String) -> Unit)? = null
 
 	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 		getItem(position)?.let { item ->
@@ -133,7 +139,8 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 		holder.binding.locationSubTitle.text = matchRequestItem.locationSubTitle
 
 		holder.bindInfoPanel(matchRequestItem.matchDate, matchRequestItem)
-		holder.binding.requestComment.text = matchRequestItem.comment
+		holder.binding.requestComment.text = formatTextToRecognizeLinks(matchRequestItem.comment)
+		holder.binding.requestComment.movementMethod = LinkMovementMethod.getInstance()
 
 		holder.binding.likeButton.isLikeActive(matchRequestItem.liked, matchRequestItem.totalLikes)
 		holder.binding.likeButton.setOnClickListener {
@@ -281,6 +288,21 @@ class FeedAdapter @Inject constructor(): PagingDataAdapter<FeedSealedClass, Recy
 		animationView.alpha = 1f
 		animationView.scaleX = 1f
 		animationView.scaleY = 1f
+	}
+
+	private fun formatTextToRecognizeLinks(formattedText: String): SpannableString {
+		val spannableString = SpannableString(formattedText)
+
+		val matcher = Patterns.WEB_URL.matcher(formattedText)
+		while (matcher.find()) {
+			val url = matcher.group() ?: continue
+			val start = matcher.start()
+			val end = matcher.end()
+
+			spannableString.setSpan(URLSpan(url), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+		}
+
+		return spannableString
 	}
 
 	private fun TextView.isLikeActive(isLiked: Boolean, totalLikes: Int?) {

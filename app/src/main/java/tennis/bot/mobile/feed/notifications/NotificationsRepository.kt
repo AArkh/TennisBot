@@ -51,4 +51,28 @@ class NotificationsRepository @Inject constructor(
 
 		return response.isSuccessful
 	}
+
+	@WorkerThread
+	suspend fun postSendTestPush(token: String): Boolean {
+		val response = kotlin.runCatching {
+			notificationsApi.postSendTestPush(token)
+		}.getOrElse {
+			FirebaseCrashlytics.getInstance().recordException(it)
+			return false
+		}
+
+		return response.isSuccessful
+	}
+
+	@WorkerThread
+	suspend fun postSetFirebaseToken(token: String): Boolean {
+		val response = kotlin.runCatching {
+			notificationsApi.postSetFirebaseToken(token)
+		}.getOrElse {
+			FirebaseCrashlytics.getInstance().recordException(it)
+			return false
+		}
+
+		return response.isSuccessful
+	}
 }

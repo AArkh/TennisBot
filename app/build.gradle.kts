@@ -17,8 +17,8 @@ android {
         applicationId = "tennis.bot.mobile"
         minSdk = 24
         targetSdk = 34
-        versionCode = 4
-        versionName = "1.0.21"
+        versionCode = 7
+        versionName = "1.0.23"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -62,9 +62,10 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-process:$lifecycleVersion")
 
-    //Crashlytics
+    //Firebase
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
     implementation ("com.google.firebase:firebase-crashlytics-ktx:19.0.3")
+    implementation("com.google.firebase:firebase-messaging")
 
 
     // Room components

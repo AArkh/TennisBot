@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-@Database(entities = [Location::class], version = 3, exportSchema = false)
+@Database(entities = [Location::class], version = 4, exportSchema = false)
 @TypeConverters(LocationCityConverter::class)
 abstract class LocationDatabase : RoomDatabase() {
     abstract fun locationDao() : LocationDao

@@ -100,6 +100,7 @@
 		android:layout_height="wrap_content"
 		android:layout_marginTop="12dp"
 		android:layout_marginHorizontal="16dp"
+		android:textIsSelectable="true"
 		android:text="@string/request_comment_placeholder"
 		android:textColor="@color/tb_black"
 		app:layout_constraintTop_toBottomOf="@id/item_picture"

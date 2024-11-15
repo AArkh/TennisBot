@@ -26,6 +26,16 @@ interface NotificationsApi {
 		@Query("lastIndicator") lastIndicator: Int
 	): Response<Unit>
 
+	@POST("api/notifications/send-test-push")
+	suspend fun postSendTestPush(
+		@Query("token") token: String,
+	): Response<Unit>
+
+	@POST("api/tennis-players/set-firebase-token")
+	suspend fun postSetFirebaseToken(
+		@Query("token") token: String,
+	): Response<Unit>
+
 	companion object{
 		const val DEFAULT_SKIP = 0
 		const val DEFAULT_LIMIT = 20

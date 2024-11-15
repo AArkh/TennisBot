@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "471244417957",
-    "project_id": "tennisbot-19f22",
-    "storage_bucket": "tennisbot-19f22.appspot.com"
+    "project_number": "976075748520",
+    "project_id": "tennisbot-57ad8",
+    "storage_bucket": "tennisbot-57ad8.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:471244417957:android:2be2cace9fdb931505964c",
+        "mobilesdk_app_id": "1:976075748520:android:5272ca19d38a7ce49dbe9d",
         "android_client_info": {
           "package_name": "tennis.bot.mobile"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDzY1-N2zQ4WSFVfZszrFw9Odl8bRgoHXY"
+          "current_key": "AIzaSyAETxaODmXUVnkbNfq8fpr7n1a7BM9vink"
         }
       ],
       "services": {

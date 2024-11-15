@@ -52,7 +52,6 @@ class NotificationsViewModel @Inject constructor(
 		}
 	}
 
-
 	inner class NotificationsDataSource : PagingSource<Int, NotificationData>() {
 		override fun getRefreshKey(state: PagingState<Int, NotificationData>): Int { return 0 }
 
