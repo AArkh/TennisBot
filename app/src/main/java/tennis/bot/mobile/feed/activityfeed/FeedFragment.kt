@@ -10,14 +10,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.messaging
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import tennis.bot.mobile.R
 import tennis.bot.mobile.core.DefaultLoadStateAdapter
 import tennis.bot.mobile.core.Inflation
@@ -72,18 +68,6 @@ class FeedFragment : AuthorizedCoreFragment<FragmentFeedBottomNavigationBinding>
 			requireContext().showInDevelopmentToast()
 		}
 
-		FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-			if (task.isSuccessful) {
-				val token = task.result
-				Log.d("MA FCM", "Token: $token")
-				lifecycleScope.launch {
-					viewModel.onSettingFirebaseToken(token)
-				}
-			} else {
-				Log.w("MA FCM", "Failed to get token")
-			}
-		}
-
 		adapter.clickListener = { command, postId, playerId ->
 			when (command) {
 				LIKE -> {
@@ -119,7 +103,6 @@ class FeedFragment : AuthorizedCoreFragment<FragmentFeedBottomNavigationBinding>
 			viewModel.getFeedPaginationFlow().collectLatest {
 				adapter.submitData(it)
 			}
-			viewModel.onSendingTestPush(Firebase.messaging.token.await())
 		}
 
 		binding.swipeRefreshLayout.setOnRefreshListener {

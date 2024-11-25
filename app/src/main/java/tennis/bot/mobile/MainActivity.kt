@@ -1,11 +1,14 @@
 package tennis.bot.mobile
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.FirebaseApp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -88,5 +91,41 @@ class MainActivity : AppCompatActivity() {
 
         FirebaseApp.initializeApp(this)
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val token = task.result
+                lifecycleScope.launch {
+                    notificationsRepository.precacheToken(token)
+                }
+            } else {
+                FirebaseCrashlytics.getInstance().log("Failed to record FCM token")
+
+            }
+        }
+
+        fun navigateToSpecificFragment(fragment: Fragment) {
+            supportFragmentManager.beginTransaction()
+                .replace(binding.fragmentContainerView.id, fragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
+        fun handlePushNotificationIntent(intent: Intent?) {
+            val type = intent?.getStringExtra("notification_type")
+
+            when (type) {
+                "NEW_MESSAGE" -> {
+//                    navigateToSpecificFragment()
+                }
+                "PROMOTION" -> {
+//                    navigateToSpecificFragment()
+                }
+                else -> {
+                    // Handle default case
+                }
+            }
+        }
+
+
     }
 }

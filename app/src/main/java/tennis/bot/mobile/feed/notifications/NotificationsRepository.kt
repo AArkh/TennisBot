@@ -14,6 +14,8 @@ class NotificationsRepository @Inject constructor(
 	@ApplicationContext private val context: Context
 ) {
 
+	private var currentToken = ""
+
 	@WorkerThread
 	suspend fun getAllNotifications(position: Int): NotificationsBasicResponse? {
 		val response = notificationsApi.getNotifications(skip = position)
@@ -62,6 +64,14 @@ class NotificationsRepository @Inject constructor(
 		}
 
 		return response.isSuccessful
+	}
+
+	@WorkerThread
+	suspend fun precacheToken(token: String) {
+		if (token != currentToken) {
+			currentToken = token
+			postSetFirebaseToken(currentToken)
+		}
 	}
 
 	@WorkerThread

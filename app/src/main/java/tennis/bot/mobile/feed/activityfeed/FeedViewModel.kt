@@ -12,12 +12,10 @@ import androidx.paging.PagingState
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import tennis.bot.mobile.feed.game.GameRepository
-import tennis.bot.mobile.feed.notifications.NotificationsRepository
 import tennis.bot.mobile.feed.searchopponent.SearchOpponentsViewModel
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.utils.showToast
@@ -29,8 +27,7 @@ class FeedViewModel @Inject constructor(
 	private val repository: FeedRepository,
 	private val feedPostsMapper: FeedPostsMapper,
 	private val gameRepository: GameRepository,
-	private val userProfileAndEnumsRepository: UserProfileAndEnumsRepository,
-	private val pushRepo: NotificationsRepository
+	private val userProfileAndEnumsRepository: UserProfileAndEnumsRepository
 ): ViewModel()  {
 
 	fun onLikeButtonPressed(isLike: Boolean, postId: Int) {
@@ -81,19 +78,6 @@ class FeedViewModel @Inject constructor(
 			),
 			pagingSourceFactory = { FeedDataSource() }
 		).flow
-	}
-
-	fun onSendingTestPush(token: String) {
-		viewModelScope.launch(Dispatchers.IO) {
-			delay(15000)
-		pushRepo.postSendTestPush(token)
-			}
-	}
-
-	fun onSettingFirebaseToken(token: String) {
-		viewModelScope.launch(Dispatchers.IO) {
-			pushRepo.postSetFirebaseToken(token)
-		}
 	}
 
 	fun onSendingRequestResponse(id: Long, comment: String?, context: Context) {
