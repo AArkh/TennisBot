@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.FirebaseApp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -18,6 +17,7 @@ import kotlinx.coroutines.withContext
 import tennis.bot.mobile.core.authentication.AuthTokenRepository
 import tennis.bot.mobile.databinding.ActivityMainBinding
 import tennis.bot.mobile.feed.bottomnavigation.BottomNavigationFragment
+import tennis.bot.mobile.feed.notifications.NotificationsFragment
 import tennis.bot.mobile.feed.notifications.NotificationsRepository
 import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.onboarding.initial.LoginProposalFragment
@@ -102,30 +102,15 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
+    }
 
-        fun navigateToSpecificFragment(fragment: Fragment) {
-            supportFragmentManager.beginTransaction()
-                .replace(binding.fragmentContainerView.id, fragment)
-                .addToBackStack(null)
-                .commit()
-        }
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
 
-        fun handlePushNotificationIntent(intent: Intent?) {
-            val type = intent?.getStringExtra("notification_type")
-
-            when (type) {
-                "NEW_MESSAGE" -> {
-//                    navigateToSpecificFragment()
-                }
-                "PROMOTION" -> {
-//                    navigateToSpecificFragment()
-                }
-                else -> {
-                    // Handle default case
-                }
-            }
-        }
-
-
+        supportFragmentManager.beginTransaction()
+            .replace(binding.fragmentContainerView.id, NotificationsFragment())
+            .setCustomAnimations(R.anim.slide_in, R.anim.fade_out, R.anim.fade_in, R.anim.slide_out)
+            .addToBackStack(BottomNavigationFragment::class.java.name)
+            .commit()
     }
 }

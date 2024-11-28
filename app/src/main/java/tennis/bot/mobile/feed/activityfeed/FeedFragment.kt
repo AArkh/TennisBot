@@ -1,7 +1,6 @@
 package tennis.bot.mobile.feed.activityfeed
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
