@@ -38,6 +38,7 @@ class PushNotificationService: FirebaseMessagingService() {
 
 		val intent = Intent(this, MainActivity::class.java).apply {
 			flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+			putExtra("navigate_to_notifications", true)
 		}
 
 		val pendingIntent = PendingIntent.getActivity(

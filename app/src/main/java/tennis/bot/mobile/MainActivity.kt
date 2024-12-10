@@ -43,15 +43,24 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        if (supportFragmentManager.fragments.isEmpty()) {
-            if (authTokenRepository.getRefreshToken() != null) {
-                supportFragmentManager.beginTransaction()
-                    .add(binding.fragmentContainerView.id, BottomNavigationFragment())
-                    .commit()
-            } else {
-                supportFragmentManager.beginTransaction()
-                    .add(binding.fragmentContainerView.id, LoginProposalFragment())
-                    .commit()
+        Log.d("123123", intent?.getBooleanExtra("navigate_to_notifications", false).toString())
+
+        if (intent?.getBooleanExtra("navigate_to_notifications", false) == true) {
+            supportFragmentManager.beginTransaction()
+                .add(binding.fragmentContainerView.id, NotificationsFragment())
+                .commit()
+        } else {
+            if (supportFragmentManager.fragments.isEmpty()) {
+                if (authTokenRepository.getRefreshToken() != null) {
+                    supportFragmentManager.beginTransaction()
+                        .add(binding.fragmentContainerView.id, BottomNavigationFragment())
+                        .commit()
+                } else {
+                    supportFragmentManager.beginTransaction()
+                        .add(binding.fragmentContainerView.id, LoginProposalFragment())
+                        .commit()
+                }
+
             }
         }
 

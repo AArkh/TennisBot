@@ -87,28 +87,32 @@ class AuthTokenRepository @Inject constructor(
 	@WorkerThread
 	@Synchronized
 	fun updateToken() {
-		val refreshToken = getRefreshToken() ?: throw IllegalStateException("No refresh token found")
-		val response = api.updateUserToken(
-			grantType = GRANT_TYPE,
-			clientId = CLIENT_ID,
-			refreshToken = refreshToken,
-			clientSecret = CLIENT_SECRET,
-			scope = SCOPE,
-			audience = AUDIENCE
-		).execute()
+		val refreshToken = getRefreshToken()
+		if (refreshToken != null) {
+			val response = api.updateUserToken(
+				grantType = GRANT_TYPE,
+				clientId = CLIENT_ID,
+				refreshToken = refreshToken,
+				clientSecret = CLIENT_SECRET,
+				scope = SCOPE,
+				audience = AUDIENCE
+			).execute()
 
-		if (response.code() == 200) {
-			Log.d("1234567", "token has been recorded")
-			recordToken(
-				TokenResponse(
-					accessToken = response.body()!!.accessToken,
-					tokenType = response.body()!!.tokenType,
-					expiresIn = response.body()!!.expiresIn,
-					refreshToken = response.body()!!.refreshToken
+			if (response.code() == 200) {
+				Log.d("1234567", "token has been recorded")
+				recordToken(
+					TokenResponse(
+						accessToken = response.body()!!.accessToken,
+						tokenType = response.body()!!.tokenType,
+						expiresIn = response.body()!!.expiresIn,
+						refreshToken = response.body()!!.refreshToken
+					)
 				)
-			)
+			} else {
+				FirebaseCrashlytics.getInstance().log("updateToken code ${response.code()} and message: ${response.message()}")
+			}
 		} else {
-			FirebaseCrashlytics.getInstance().log("updateToken code ${response.code()} and message: ${response.message()}")
+			removeToken() // lead to login screen (trigger unauth)
 		}
 	}
 
