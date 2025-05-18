@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- RelativeLayout заменить на Constraint -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:background="@drawable/survey_dialog_rounded">
+
+	<com.airbnb.lottie.LottieAnimationView
+		android:id="@+id/darts_animation"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@drawable/survey_gradient_background"
+		app:lottie_autoPlay="true"
+		app:lottie_loop="false"
+		app:lottie_rawRes="@raw/survey_dialog_darts" />
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@drawable/survey_dialog_rounded"
+		android:padding="16dp"
+		android:layout_alignTop="@id/darts_animation"
+		android:layout_marginTop="90dp"
+		tools:layout_editor_absoluteX="0dp">
+
+		<TextView
+			android:id="@+id/dialog_title"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="8dp"
+			android:gravity="center"
+			android:text="@string/survey_dialog_title"
+			android:textColor="@color/tb_black"
+			android:textSize="17sp"
+			android:textStyle="bold"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+
+		<TextView
+			android:id="@+id/dialog_text"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="4dp"
+			android:gravity="center"
+			android:text="@string/survey_dialog_text"
+			android:textSize="13sp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/dialog_title" />
+
+		<Button
+			android:id="@+id/dialog_buttonStart"
+			style="@style/Widget.TennisBot.Button.Active"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="24dp"
+			android:text="@string/survey_start_button"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/dialog_text" />
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>

@@ -65,7 +65,6 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
         subscribeToFlowOn(phoneInputViewModel.uiStateFlow) { uiState: PhoneInputUiState ->
             binding.textInputLayout.prefixText = uiState.prefix
             binding.countryIv.setImageResource(uiState.iconRes)
-            binding.phoneEt.updateTextIfNeeded(uiState.userInput)
 
             binding.buttonNext.isEnabled = uiState.proceedButtonEnabled
             val buttonBackground = if (uiState.proceedButtonEnabled) {

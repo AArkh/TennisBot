@@ -13,6 +13,9 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.databinding.FragmentLoginProposalBinding
 import tennis.bot.mobile.onboarding.location.LocationFragment
 import tennis.bot.mobile.onboarding.phone.PhoneInputFragment
+import tennis.bot.mobile.onboarding.photopick.PhotoPickFragment
+import tennis.bot.mobile.onboarding.sport.SportFragment
+import tennis.bot.mobile.onboarding.survey.SurveyFragment
 import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
@@ -49,15 +52,21 @@ class LoginProposalFragment : CoreFragment<FragmentLoginProposalBinding>() {
                 .replace(R.id.fragment_container_view, PhoneInputFragment())
                 .commit()
         }
+        binding.buttonWithoutRegistration.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .addToBackStack(this::class.java.name)
+                .replace(R.id.fragment_container_view, SportFragment())
+                .commit()
+        }
         binding.buttonLogin.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .addToBackStack(this::class.java.name)
-                .replace(R.id.fragment_container_view, LocationFragment())
+                .replace(R.id.fragment_container_view, SurveyFragment())
                 .commit()
         }
-        binding.buttonWithoutRegistration.setOnClickListener {
-            requireContext().showToast("To be implemented yet")
-        }
+//        binding.buttonWithoutRegistration.setOnClickListener {
+//            requireContext().showToast("To be implemented yet")
+//        }
 
         textAdapter.setListAndNotify(listOf(
             TitledText(

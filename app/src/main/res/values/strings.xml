@@ -1,36 +1,104 @@
 <resources>
-    <string name="app_name">Tennis bot</string>
-    <string name="onboarding_text_title">Ракеточная Эко-Система</string>
-    <string name="onboarding_text">Тысячи игроков, в разных странах мира уже нашли себе равных партнеров, друзей и присоединились к самому большому сообществу «Теннис бот»</string>
-    <string name="onboarding_start_button">Начать</string>
-    <string name="onboarding_login_button">Войти</string>
+	<string name="app_name">Tennis bot</string>
+	<string name="onboarding_text_title">Ракеточная Эко-Система</string>
+	<string name="onboarding_text">Тысячи игроков, в разных странах мира уже нашли себе равных партнеров, друзей и присоединились к самому большому сообществу «Теннис бот»</string>
+	<string name="onboarding_start_button">Начать</string>
+	<string name="onboarding_login_button">Войти</string>
 
-    <!-- phone input -->
-    <string name="onboarding_title_insert_phone_number">Введи номер телефона</string>
-    <string name="onboarding_text_incorrect_phone_number">Введите действительный номер</string>
-    <string name="onboarding_proceed_without_registration_button">Войти без регистрации</string>
-    <string name="onboarding_continue_button">Далее</string>
-    <string name="error_text">Упс! Что-то пошло не так</string>
-    <string name="error_try_again_text">Попробовать еще раз</string>
-    <string name="location_title">Твое местоположение</string>
-    <string name="error_pincode_smscode">Неверный пин-код</string>
-    <string name="smscode_repeat_timer">Повторить</string>
-    <string name="smscode_repeat_timer_time">30</string>
-    <string name="location_district">Район</string>
-    <string name="location_city">Город</string>
-    <string name="location_country">Страна</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="photopick_title">Добавь фотографию</string>
-    <string name="button_skip">Пропустить</string>
-    <string name="photopick_title_second">Или выбери из базы</string>
+	<!-- phone input -->
+	<string name="onboarding_title_insert_phone_number">Введи номер телефона</string>
+	<string name="onboarding_text_incorrect_phone_number">Введите действительный номер</string>
+	<string name="onboarding_proceed_without_registration_button">Войти без регистрации</string>
+	<string name="onboarding_continue_button">Далее</string>
+	<string name="error_text">Упс! Что-то пошло не так</string>
+	<string name="error_try_again_text">Попробовать еще раз</string>
+	<string name="location_title">Твое местоположение</string>
+	<string name="error_pincode_smscode">Неверный пин-код</string>
+	<string name="smscode_repeat_timer">Повторить</string>
+	<string name="smscode_repeat_timer_time">30</string>
+	<string name="location_district">Район</string>
+	<string name="location_city">Город</string>
+	<string name="location_country">Страна</string>
+	<!-- TODO: Remove or change this placeholder text -->
+	<string name="hello_blank_fragment">Hello blank fragment</string>
+	<string name="photopick_title">Добавь фотографию</string>
+	<string name="button_skip">Пропустить</string>
+	<string name="photopick_title_second">Или выбери из базы</string>
 
-    <!-- sms code -->
-    <string name="onboarding_sms_input_title">Введи код отправленный на\n %s</string>
-    <string name="onboarding_sms_input_failed_to_request_sms">Не удалось отправить код подтверждения на номер %s</string>
-    <string name="onboarding_sms_input_failed_to_validate_sms">Не верный код подтверждения</string>
+	<!-- sms code -->
+	<string name="onboarding_sms_input_title">Введи код отправленный на\n %s</string>
+	<string name="onboarding_sms_input_failed_to_request_sms">Не удалось отправить код подтверждения на номер %s</string>
+	<string name="onboarding_sms_input_failed_to_validate_sms">Не верный код подтверждения</string>
 
-    <!-- general messages -->
-    <string name="error_no_network_message">Ошибка, проверьте подключение в сети интернет</string>
+	<!-- general messages -->
+	<string name="error_no_network_message">Ошибка, проверьте подключение в сети интернет</string>
+
+	<!-- password -->
+	<string name="password_title">Придумай пароль</string>
+	<string name="password_create_account">Создать аккаунт</string>
+	<string name="password_hint">Пароль должен содержать не менее 8 символов, включая как минимум одну букву и одну цифру</string>
+	<string name="password_agree_with_confidentiality">Нажимая кнопку вы соглашаетесь \n<a href="https://policies.google.com/privacy?hl=ru">с Политикой конфиденциальности</a></string>
+	<string name="password_edittext_hint">Пароль</string>
+
+	<!-- survey -->
+	<string name="survey_title_1">Твой уровень игры?</string>
+	<string name="survey_small_title">Опрос</string>
+	<string name="survey_item_title_1">Новичок</string>
+	<string name="survey_item_title_2">Любитель</string>
+
+	<string name="survey_options_item_set1_1">Новичок</string>
+	<string name="survey_options_item_set1_2">Любитель</string>
+	<string name="survey_options_item_set1_3">Продвинутый</string>
+	<string name="survey_options_item_set1_4">Профессионал</string>
+	<string name="survey_options_item_set2_1">Слабый</string>
+	<string name="survey_options_item_set2_2">Средний</string>
+	<string name="survey_options_item_set2_3">Сильный</string>
+	<string name="survey_options_item_set2_4">Очень сильный</string>
+	<string name="survey_options_item_set3_1">Слабая</string>
+	<string name="survey_options_item_set3_2">Средняя</string>
+	<string name="survey_options_item_set3_3">Сильная</string>
+	<string name="survey_options_item_set3_4">Очень сильная</string>
+	<string name="survey_options_item_set4_no">Нет</string>
+	<string name="survey_options_item_set4_yes">Да</string>
+
+	<string name="survey_questionsTitlesList_1">Твой уровень игры?</string>
+	<string name="survey_questionsTitlesList_2">Оцени уровень Форхенд?</string>
+	<string name="survey_questionsTitlesList_3">Оцени уровень Бэкхенд?</string>
+	<string name="survey_questionsTitlesList_4">Резаный удар?</string>
+	<string name="survey_questionsTitlesList_5">Подача?</string>
+	<string name="survey_questionsTitlesList_6">Игра у сетки?</string>
+	<string name="survey_questionsTitlesList_7">Скорость игры?</string>
+	<string name="survey_questionsTitlesList_8">Участовал в турнирах?</string>
+	<string name="survey_questionsTitlesList_9">Занимал призовые места в турнирах?</string>
+
+	<string name="survey_side_note_title_1">Теннис бот</string>
+	<string name="survey_side_note_text_1">Доброе пожаловать в самую большую и умную эко-систему. Пройдите анкетирование, чтобы начать играть. Отвечайте на вопросы честно. От этого будет зависеть ваша сила и будущий поиск равных партнеров.</string>
+	<string name="survey_side_note_title_2">Форхенд (удар справа)</string>
+	<string name="survey_side_note_text_2">— является одним из основных ударов в теннисе и может быть выполнен справа или слева от корпуса игрока в зависимости от его ведущей руки [правша / левша]</string>
+	<string name="survey_side_note_title_3">Бекхенд (удар слева)</string>
+	<string name="survey_side_note_text_3">— является одним из основных ударов в теннисе и может быть выполнен справа или слева от корпуса игрока в зависимости от его ведущей руки [правша / левша]</string>
+	<string name="survey_side_note_title_4">Резаные или слайсы</string>
+	<string name="survey_side_note_text_4">— это удары при которых игрок придает мячу нижне-боковое или нижнее вращение</string>
+	<string name="survey_side_note_title_5">Сложный элемент</string>
+	<string name="survey_side_note_text_5">Укажите насколько легко и точно вы подаете подачу при игре на счет</string>
+	<string name="survey_side_note_title_6">Cкорость и точность</string>
+	<string name="survey_side_note_text_6">При выходе к сетке важно без промедления выставить правильно ракетку для точной атаки</string>
+	<string name="survey_side_note_title_7">Динамика игры</string>
+	<string name="survey_side_note_text_7">От скорости игры зависит ваша работа ног и реакция на качественные удары сопернику</string>
+	<string name="survey_side_note_title_8">Это важно</string>
+	<string name="survey_side_note_text_8">Ваш опыт в турнирах подскажет другим игрокам, как сильно вы готовились стать непобедимым при экстремальных нагрузках. Кстати, в «Теннис бот» есть онлайн-турниры.</string>
+	<string name="survey_side_note_title_9">Почти закончили</string>
+	<string name="survey_side_note_text_9">Последний вопрос перед определением вашей силы. Желаем вам хорошей игры и до встречи на корте!</string>
+	<string name="survey_start_button">Начать</string>
+	<string name="survey_dialog_text">Сейчас система оценит ваш уровень \nсилы. Отвечайте на вопросы честно.</string>
+	<string name="survey_dialog_title">Теннис бот опрос</string>
+	<string name="sport_title">Теннис</string>
+	<string name="namegender_title">Расскажи о себе</string>
+	<string name="namesurname_female">Девушка</string>
+	<string name="namesurname_male">Мужчина</string>
+	<string name="namesurname_name">Имя</string>
+	<string name="namesurname_surname">Фамилия</string>
+	<string name="namesurname_error_text">Поле должно содержать не менее 3-х символов</string>
+
 
 </resources>

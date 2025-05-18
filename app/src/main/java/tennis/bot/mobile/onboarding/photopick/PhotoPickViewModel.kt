@@ -1,15 +1,16 @@
 package tennis.bot.mobile.onboarding.photopick
 
+import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import tennis.bot.mobile.R
-import tennis.bot.mobile.onboarding.location.LocationDialogUiState
 import javax.inject.Inject
 
 @HiltViewModel
-class PhotoPickViewModel @Inject constructor(): ViewModel() {
+class PhotoPickViewModel @Inject constructor() : ViewModel() {
 
     val imageList = listOf(
         CircledImage(R.drawable.photo_picker_1),
@@ -27,9 +28,27 @@ class PhotoPickViewModel @Inject constructor(): ViewModel() {
     )
 
     private val _uiStateFlow = MutableStateFlow<PhotoPickUiState>(PhotoPickUiState.Loading)
+
     val uiStateFlow = _uiStateFlow.asStateFlow()
 
     init {
-        _uiStateFlow.value = PhotoPickUiState.DataPassed(imageList)
+        onInitial()
+    }
+
+    fun onInitial() {
+        _uiStateFlow.value = PhotoPickUiState.InitialWithIconList(imageList, false)
+    }
+
+    fun onPickedCircledImage(pickedCircledImage: CircledImage) {
+        val newList = imageList.map { item ->
+            if (item.isSelected) { // previously selected
+                return@map item.copy(isSelected = false)
+            } else if (item == pickedCircledImage) {
+                return@map pickedCircledImage.copy(isSelected = true)
+            } else {
+                return@map item
+            }
+        }
+        _uiStateFlow.value = PhotoPickUiState.PickedPreselectedImage(newList, true)
     }
 }

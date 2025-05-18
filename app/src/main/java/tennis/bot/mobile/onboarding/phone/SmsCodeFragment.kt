@@ -13,6 +13,7 @@ import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentSmsCodeBinding
 import tennis.bot.mobile.onboarding.location.LocationFragment
 import tennis.bot.mobile.onboarding.phone.SmsCodeViewModel.Companion.SMS_CODE_LENGTH
+import tennis.bot.mobile.onboarding.sport.SportFragment
 import tennis.bot.mobile.utils.showKeyboard
 import tennis.bot.mobile.utils.updateTextIfNeeded
 import kotlin.math.min
@@ -44,8 +45,8 @@ class SmsCodeFragment : CoreFragment<FragmentSmsCodeBinding>() {
         binding.buttonNext.setOnClickListener {
             viewModel.onNextButtonClicked {
                 parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container_view, LocationFragment())
-                    .addToBackStack(LocationFragment::class.java.name)
+                    .replace(R.id.fragment_container_view, SportFragment())
+                    .addToBackStack(SportFragment::class.java.name)
                     .commit()
             }
         }

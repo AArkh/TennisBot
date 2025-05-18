@@ -7,13 +7,13 @@ sealed class LocationUiState {
     object Loading : LocationUiState()
     data class CountrySelected(
         val country: String,
-        val nextButtonEnabled: Boolean, // true of there's no city in the country's dictionary
+        val nextButtonEnabled: Boolean,
     ) : LocationUiState()
 
     data class CitySelected(
         val country: String,
         val city: String,
-        val nextButtonEnabled: Boolean, // true of there's no district in the country's dictionary
+        val nextButtonEnabled: Boolean,
     ) : LocationUiState()
 
     data class DistrictSelected(
