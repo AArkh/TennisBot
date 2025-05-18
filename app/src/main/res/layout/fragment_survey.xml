@@ -29,6 +29,7 @@
 		android:layout_marginTop="19.5dp"
 		android:text="@string/survey_small_title"
 		android:textSize="16sp"
+		android:textColor="@color/tb_black"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent" />
@@ -58,12 +59,11 @@
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/progress_bar" />
 
-	<!-- fixme убрать маржин горизонтальный отсюда -->
 	<androidx.viewpager2.widget.ViewPager2
 		android:id="@+id/viewpager"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
-		android:layout_marginTop="6dp"
+		android:layout_marginTop="16dp"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"

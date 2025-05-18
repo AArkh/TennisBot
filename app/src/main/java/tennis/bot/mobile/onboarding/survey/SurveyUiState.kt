@@ -1,63 +1,21 @@
 package tennis.bot.mobile.onboarding.survey
 
-sealed class SurveyUiState(
-	open val progressPercent: Int,
-	open val questionTitle: String,
-	open val prevState: SurveyUiState?,
-) {
+import tennis.bot.mobile.core.CoreUtilsItem
 
-	data class OverallGameSkill(
-		override val progressPercent: Int,
-		override val questionTitle: String,
-		override val prevState: SurveyUiState?,
-		val options: List<SurveyItem>,
-	) : SurveyUiState(progressPercent, questionTitle, prevState)
+data class SurveyUiState(
+    val progress: Int,
+    val title: String,
+    val selectedPage: Int, // current shown index in surveyPages
+    val surveyPages: List<SurveyItem>
+)
 
-	data class ForehandLevel(
-		override val progressPercent: Int,
-		override val questionTitle: String,
-		override val prevState: SurveyUiState
-	) : SurveyUiState(progressPercent, questionTitle, prevState)
-
-	data class BackhandLevel(
-		override val progressPercent: Int,
-		override val questionTitle: String,
-		override val prevState: SurveyUiState
-	) : SurveyUiState(progressPercent, questionTitle, prevState)
-
-	data class SliceShotLevel(
-		override val progressPercent: Int,
-		override val questionTitle: String,
-		override val prevState: SurveyUiState
-	) : SurveyUiState(progressPercent, questionTitle, prevState)
-
-	data class ServeLevel(
-		override val progressPercent: Int,
-		override val questionTitle: String,
-		override val prevState: SurveyUiState
-	) : SurveyUiState(progressPercent, questionTitle, prevState)
-
-	data class NetGameLevel(
-		override val progressPercent: Int,
-		override val questionTitle: String,
-		override val prevState: SurveyUiState
-	) : SurveyUiState(progressPercent, questionTitle, prevState)
-
-	data class GameSpeedLevel(
-		override val progressPercent: Int,
-		override val questionTitle: String,
-		override val prevState: SurveyUiState
-	) : SurveyUiState(progressPercent, questionTitle, prevState)
-
-	data class TournamentParticipation(
-		override val progressPercent: Int,
-		override val questionTitle: String,
-		override val prevState: SurveyUiState
-	) : SurveyUiState(progressPercent, questionTitle, prevState)
-
-	data class TournamentTopPlaces(
-		override val progressPercent: Int,
-		override val questionTitle: String,
-		override val prevState: SurveyUiState
-	) : SurveyUiState(progressPercent, questionTitle, prevState)
-}
+data class SurveyItem(
+    val option1: String,
+    val option2: String,
+    val option3: String,
+    val option4: String,
+    val sideNoteTitle: String,
+    val sideNoteText: String,
+    val isTwoOptions: Boolean = false,
+    val pickedOptionId: Int = 0 // unpicked by default
+): CoreUtilsItem()

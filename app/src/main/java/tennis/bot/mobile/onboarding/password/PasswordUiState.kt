@@ -2,10 +2,35 @@ package tennis.bot.mobile.onboarding.password
 
 import androidx.annotation.DrawableRes
 
-data class PasswordUiState(
-	val userInput: CharSequence,
-	val errorMessage: String?,
-	val confidentialityText: String,
-	val nextButtonEnabled: Boolean,
-	val clearButtonVisible: Boolean,
-)
+sealed class PasswordUiState(
+	open val userInput: CharSequence,
+	open val errorMessage: String?,
+	open val confidentialityText: String,
+	open val nextButtonEnabled: Boolean,
+	open val clearButtonVisible: Boolean,
+) {
+	data class Initial(
+		override val userInput: CharSequence,
+		override val errorMessage: String?,
+		override val confidentialityText: String,
+		override val nextButtonEnabled: Boolean,
+		val nextButtonText: String,
+		override val clearButtonVisible: Boolean,
+	) : PasswordUiState(userInput, errorMessage, confidentialityText, nextButtonEnabled, clearButtonVisible)
+
+	data class Loading(
+		override val userInput: CharSequence,
+		override val errorMessage: String?,
+		override val confidentialityText: String,
+		override val nextButtonEnabled: Boolean,
+		override val clearButtonVisible: Boolean,
+	) : PasswordUiState(userInput, errorMessage, confidentialityText, nextButtonEnabled, clearButtonVisible)
+
+	data class Error(
+		override val userInput: CharSequence,
+		override val errorMessage: String?,
+		override val confidentialityText: String,
+		override val nextButtonEnabled: Boolean,
+		override val clearButtonVisible: Boolean,
+	) : PasswordUiState(userInput, errorMessage, confidentialityText, nextButtonEnabled, clearButtonVisible)
+}

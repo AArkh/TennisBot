@@ -106,6 +106,11 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
         }
 
         binding.buttonNext.setOnClickListener {
+            viewModel.recordLocationValues(
+                selectedCountry = binding.countryTv.text.toString(),
+                selectedCity = binding.cityTv.text.toString(),
+                selectedDistrict = binding.countryTv.text.toString()
+            )
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_view, PhotoPickFragment())
                 .addToBackStack(PhotoPickFragment::class.java.name)

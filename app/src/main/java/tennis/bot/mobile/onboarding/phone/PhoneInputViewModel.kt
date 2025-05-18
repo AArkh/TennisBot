@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
+import tennis.bot.mobile.onboarding.survey.AccountInfoRepository
 import tennis.bot.mobile.utils.AppCoroutineScopes
 import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
@@ -18,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PhoneInputViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val repository: PhoneInputRepository,
+    private val repository: PhoneInputRepository
 ) : ViewModel() {
 
     private val _uiStateFlow = MutableStateFlow(

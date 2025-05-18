@@ -14,7 +14,7 @@
         <item name="colorSecondary">@color/tb_gray_border</item>
         <item name="colorSecondaryVariant">@color/tb_gray_border</item>
         <item name="colorOnSecondary">@color/tb_black</item>
-        <item name="android:fontFamily">@font/questrial</item>
+        <item name="android:fontFamily">@font/red_hat_text_medium</item>
     </style>
 
     <style name="AppBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">

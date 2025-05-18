@@ -72,7 +72,7 @@
 	<string name="survey_questionsTitlesList_9">Занимал призовые места в турнирах?</string>
 
 	<string name="survey_side_note_title_1">Теннис бот</string>
-	<string name="survey_side_note_text_1">Доброе пожаловать в самую большую и умную эко-систему. Пройдите анкетирование, чтобы начать играть. Отвечайте на вопросы честно. От этого будет зависеть ваша сила и будущий поиск равных партнеров.</string>
+	<string name="survey_side_note_text_1">Добро пожаловать в самую большую и умную эко-систему. Пройдите анкетирование, чтобы начать играть. Отвечайте на вопросы честно. От этого будет зависеть ваша сила и будущий поиск равных партнеров.</string>
 	<string name="survey_side_note_title_2">Форхенд (удар справа)</string>
 	<string name="survey_side_note_text_2">— является одним из основных ударов в теннисе и может быть выполнен справа или слева от корпуса игрока в зависимости от его ведущей руки [правша / левша]</string>
 	<string name="survey_side_note_title_3">Бекхенд (удар слева)</string>
@@ -92,13 +92,29 @@
 	<string name="survey_start_button">Начать</string>
 	<string name="survey_dialog_text">Сейчас система оценит ваш уровень \nсилы. Отвечайте на вопросы честно.</string>
 	<string name="survey_dialog_title">Теннис бот опрос</string>
+
 	<string name="sport_title">Теннис</string>
+
 	<string name="namegender_title">Расскажи о себе</string>
 	<string name="namesurname_female">Девушка</string>
 	<string name="namesurname_male">Мужчина</string>
 	<string name="namesurname_name">Имя</string>
 	<string name="namesurname_surname">Фамилия</string>
 	<string name="namesurname_error_text">Поле должно содержать не менее 3-х символов</string>
+
+	<string name="survey_results_title_1">Уровень игры</string>
+	<string name="survey_results_title_2">Уровень Форхенд</string>
+	<string name="survey_results_title_3">Уровень Бэкхенд</string>
+	<string name="survey_results_title_4">Резаный удар</string>
+	<string name="survey_results_title_5">Подача</string>
+	<string name="survey_results_title_6">Игра у сетки</string>
+	<string name="survey_results_title_7">Скорость игры</string>
+	<string name="survey_results_title_8">Участовал в турнирах</string>
+	<string name="survey_results_title_9">Занимал призовые \nместа</string>
+	<string name="survey_result_small_title">Опрос завершен</string>
+	<string name="survey_result_title">Все ли верно?</string>
+	<string name="button_continue">Продолжить</string>
+	<string name="button_try_again">Пройти еще раз</string>
 
 
 </resources>

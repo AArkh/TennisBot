@@ -18,6 +18,7 @@ import javax.inject.Inject
 class LocationDialogViewModel @Inject constructor(
     private val repository: LocationRepo,
     private val dataMapper: LocationDataMapper,
+    private val
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -85,7 +86,7 @@ class LocationDialogViewModel @Inject constructor(
         }
     }
 
-    fun loadCountriesList() {
+    private fun loadCountriesList() {
         val currentState: LocationDialogUiState = _uiStateFlow.value
         val newLoadingState = LocationDialogUiState.Loading(
             currentState.currentCountry,
@@ -110,7 +111,7 @@ class LocationDialogViewModel @Inject constructor(
         }
     }
 
-    fun loadCitiesList(pickedCountry: String) {
+    private fun loadCitiesList(pickedCountry: String) {
         val currentState: LocationDialogUiState = _uiStateFlow.value
         val newLoadingState = LocationDialogUiState.Loading(
             currentState.currentCountry,
@@ -134,7 +135,7 @@ class LocationDialogViewModel @Inject constructor(
         }
     }
 
-    fun loadDistrictsList(pickedCountry: String, pickedCity: String) {
+    private fun loadDistrictsList(pickedCountry: String, pickedCity: String) {
         val currentState: LocationDialogUiState = _uiStateFlow.value
         val newLoadingState = LocationDialogUiState.Loading(
             currentState.currentCountry,

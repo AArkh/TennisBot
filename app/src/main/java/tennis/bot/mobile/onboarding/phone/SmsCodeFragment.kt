@@ -11,7 +11,6 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentSmsCodeBinding
-import tennis.bot.mobile.onboarding.location.LocationFragment
 import tennis.bot.mobile.onboarding.phone.SmsCodeViewModel.Companion.SMS_CODE_LENGTH
 import tennis.bot.mobile.onboarding.sport.SportFragment
 import tennis.bot.mobile.utils.showKeyboard

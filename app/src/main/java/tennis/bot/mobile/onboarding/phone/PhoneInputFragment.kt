@@ -29,7 +29,7 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
     private val phoneInputViewModel: PhoneInputViewModel by viewModels()
 
     companion object {
-        const val PHONE_NUMBER = "PHONE_NUMBER"
+        const val PHONE_NUMBER = "SmsCodeFragment"
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -78,13 +78,12 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
         }
 
         binding.buttonNext.setOnClickListener {
-            parentFragment?.arguments = bundleOf(
-                PHONE_NUMBER to binding.phoneEt.text.toString()
-            )
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_view, SmsCodeFragment())
-                .addToBackStack(SmsCodeFragment::class.java.name)
-                .commit()
+            phoneInputViewModel.onNextClicked {
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_view, SmsCodeFragment.newInstance(it))
+                    .addToBackStack(SmsCodeFragment::class.java.name)
+                    .commit()
+            }
         }
     }
 }

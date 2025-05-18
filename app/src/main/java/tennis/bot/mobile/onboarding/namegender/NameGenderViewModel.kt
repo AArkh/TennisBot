@@ -6,22 +6,25 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import tennis.bot.mobile.R
+import tennis.bot.mobile.onboarding.namegender.Const.FEMALE
+import tennis.bot.mobile.onboarding.namegender.Const.MALE
+import tennis.bot.mobile.onboarding.survey.AccountInfoRepository
+import tennis.bot.mobile.onboarding.survey.AccountInfoRepository.Companion.IS_MALE_HEADER
+import tennis.bot.mobile.onboarding.survey.AccountInfoRepository.Companion.NAME_HEADER
+import tennis.bot.mobile.onboarding.survey.AccountInfoRepository.Companion.SURNAME_HEADER
 import javax.inject.Inject
 
 @HiltViewModel
-class NameGenderViewModel @Inject constructor(@ApplicationContext private val context: Context): ViewModel(
+class NameGenderViewModel @Inject constructor(
+	@ApplicationContext private val context: Context,
+	private val accountInfo: AccountInfoRepository): ViewModel(
 ) {
-
-	private val errorText = context.getString(R.string.namesurname_error_text)
 
 	private val _uiStateFlow = MutableStateFlow(
 		NameGenderUiState(
 			userNameInput = "",
 			userSurnameInput = "",
 			gender = 0,
-			nameErrorMessage = null,
-			surnameErrorMessage = null,
 			clearNameButtonVisible = false,
 			clearSurnameButtonVisible = false,
 			nextButtonEnabled = false
@@ -33,14 +36,9 @@ class NameGenderViewModel @Inject constructor(@ApplicationContext private val co
 	fun onNameInput(name: CharSequence) {
 		val prevState: NameGenderUiState = _uiStateFlow.value
 		val isClearNameButtonVisible = name.isNotEmpty()
-		val errorMessage = if (name.length <= 3 && name.isNotEmpty()) {
-			errorText
-		} else {
-			null
-		}
+
 		_uiStateFlow.value = prevState.copy(
 			userNameInput = name.toString(),
-			nameErrorMessage = errorMessage,
 			clearNameButtonVisible = isClearNameButtonVisible,
 		)
 	}
@@ -48,15 +46,9 @@ class NameGenderViewModel @Inject constructor(@ApplicationContext private val co
 	fun onSurnameInput(surname: CharSequence) {
 		val prevState: NameGenderUiState = _uiStateFlow.value
 		val isClearSurnameButtonVisible = surname.isNotEmpty()
-		val errorMessage = if (surname.length <= 3 && surname.isNotEmpty()) {
-			errorText
-		} else {
-			null
-		}
 
 		_uiStateFlow.value = prevState.copy(
 			userSurnameInput = surname.toString(),
-			surnameErrorMessage = errorMessage,
 			clearSurnameButtonVisible = isClearSurnameButtonVisible,
 		)
 	}
@@ -72,10 +64,24 @@ class NameGenderViewModel @Inject constructor(@ApplicationContext private val co
 		val prevState: NameGenderUiState = _uiStateFlow.value
 		val isNameOk = prevState.userNameInput.length >= 3
 		val isSurnameOk = prevState.userSurnameInput.length >= 3
-		val isGenderPicked = prevState.gender == 1 || prevState.gender == 2
+		val isGenderPicked = prevState.gender == MALE || prevState.gender == FEMALE
 
 		_uiStateFlow.value = prevState.copy(
 			nextButtonEnabled = isNameOk && isSurnameOk && isGenderPicked
 		)
 	}
+
+	fun onNextButtonClicked() {
+		accountInfo.recordNameSurnameAndGender(
+			name = _uiStateFlow.value.userNameInput.toString(),
+			surname = _uiStateFlow.value.userNameInput.toString(),
+			gender = _uiStateFlow.value.gender
+		)
+	}
+
+}
+
+object Const {
+	const val MALE = 1
+	const val FEMALE = 2
 }

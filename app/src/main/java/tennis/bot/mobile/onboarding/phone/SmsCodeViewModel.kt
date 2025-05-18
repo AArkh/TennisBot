@@ -14,9 +14,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
+import tennis.bot.mobile.onboarding.phone.PhoneInputFragment.Companion.PHONE_NUMBER
 import tennis.bot.mobile.onboarding.phone.SmsCodeFragment.Companion.PHONE_NUMBER_ARGUMENT
 import tennis.bot.mobile.onboarding.phone.SmsCodeUiState.Companion.RETRY_BUTTON_BLOCKED_NO_COUNTDOWN
 import tennis.bot.mobile.onboarding.phone.SmsCodeUiState.Companion.RETRY_BUTTON_UNBLOCKED
+import tennis.bot.mobile.onboarding.survey.AccountInfoRepository
 import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
@@ -24,6 +26,7 @@ import javax.inject.Inject
 class SmsCodeViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val repository: PhoneInputRepository,
+    private val accountInfo: AccountInfoRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -98,6 +101,7 @@ class SmsCodeViewModel @Inject constructor(
                 }
             }.onSuccess {
                 navigationCallback.invoke()
+                accountInfo.recordPhoneNumberAndSmsCode(phone, _uiStateFlow.value.input)
             }
         }
     }

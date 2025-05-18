@@ -10,6 +10,8 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentNameGenderBinding
 import tennis.bot.mobile.onboarding.location.LocationFragment
+import tennis.bot.mobile.onboarding.namegender.Const.FEMALE
+import tennis.bot.mobile.onboarding.namegender.Const.MALE
 
 @AndroidEntryPoint
 class NameGenderFragment : CoreFragment<FragmentNameGenderBinding>() {
@@ -47,6 +49,7 @@ class NameGenderFragment : CoreFragment<FragmentNameGenderBinding>() {
 		}
 
 		binding.buttonNext.setOnClickListener {
+			viewModel.onNextButtonClicked()
 			parentFragmentManager.beginTransaction()
 				.replace(R.id.fragment_container_view, LocationFragment())
 				.addToBackStack(LocationFragment::class.java.name)
@@ -57,14 +60,11 @@ class NameGenderFragment : CoreFragment<FragmentNameGenderBinding>() {
 			binding.clearNameButton.visibility = if (uiState.clearNameButtonVisible) View.VISIBLE else View.INVISIBLE
 			binding.clearSurnameButton.visibility = if (uiState.clearSurnameButtonVisible) View.VISIBLE else View.INVISIBLE
 
-			binding.nameInputLayout.error = uiState.nameErrorMessage
-			binding.surnameInputLayout.error = uiState.surnameErrorMessage
-
 			binding.male.setBackgroundResource(R.drawable.survey_option_outline)
 			binding.female.setBackgroundResource(R.drawable.survey_option_outline)
 			when(uiState.gender) {
-				1 -> binding.male.setBackgroundResource(R.drawable.survey_option_outline_picked)
-				2 -> binding.female.setBackgroundResource(R.drawable.survey_option_outline_picked)
+				MALE -> binding.male.setBackgroundResource(R.drawable.survey_option_outline_picked)
+				FEMALE -> binding.female.setBackgroundResource(R.drawable.survey_option_outline_picked)
 			}
 
 			viewModel.isNextButtonEnabled()
