@@ -22,8 +22,8 @@ class CountryCodesViewModel @Inject constructor() : ViewModel() {
 
     fun onSearchInput(userInput: String) {
         val filteredList = initialList.filter {
-            it.countryName.contains(userInput, ignoreCase = true)
-                || it.countryCode.contains(userInput, ignoreCase = true)
+            it.name.contains(userInput, ignoreCase = true)
+                || it.code.contains(userInput, ignoreCase = true)
         }
         _uiStateFlow.value = filteredList
     }

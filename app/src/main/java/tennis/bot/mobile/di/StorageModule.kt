@@ -7,7 +7,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import tennis.bot.mobile.onboarding.location.Location
+import tennis.bot.mobile.profile.account.AllEnumsDao
+import tennis.bot.mobile.profile.account.AllEnumsDatabase
+import tennis.bot.mobile.profile.account.EnumTypeConverter
 import tennis.bot.mobile.onboarding.location.LocationCityConverter
 import tennis.bot.mobile.onboarding.location.LocationDao
 import tennis.bot.mobile.onboarding.location.LocationDatabase
@@ -45,6 +47,34 @@ class StorageModule {
         locationDatabase: LocationDatabase
     ): LocationDao {
         return locationDatabase.locationDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideEnumDatabase(
+        @ApplicationContext context: Context,
+        enumTypeConverter: EnumTypeConverter
+    ): AllEnumsDatabase {
+        return Room.databaseBuilder(
+            context.applicationContext,
+            AllEnumsDatabase::class.java,
+            "enum_database"
+        )
+            .addTypeConverter(enumTypeConverter)
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+
+    @Provides
+    fun provideEnumTypeConverter(): EnumTypeConverter{
+        return EnumTypeConverter()
+    }
+
+    @Provides
+    fun provideAllEnumsDao(
+        allEnumsDatabase: AllEnumsDatabase
+    ): AllEnumsDao {
+        return allEnumsDatabase.allEnumsDao()
     }
 
 }

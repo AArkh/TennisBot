@@ -1,7 +1,5 @@
 package tennis.bot.mobile.onboarding.password
 
-import androidx.annotation.DrawableRes
-
 sealed class PasswordUiState(
 	open val userInput: CharSequence,
 	open val errorMessage: String?,

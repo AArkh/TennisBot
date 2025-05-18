@@ -12,6 +12,7 @@ import tennis.bot.mobile.databinding.FragmentNameGenderBinding
 import tennis.bot.mobile.onboarding.location.LocationFragment
 import tennis.bot.mobile.onboarding.namegender.Const.FEMALE
 import tennis.bot.mobile.onboarding.namegender.Const.MALE
+import tennis.bot.mobile.utils.LetterInputFilter
 
 @AndroidEntryPoint
 class NameGenderFragment : CoreFragment<FragmentNameGenderBinding>() {
@@ -21,10 +22,12 @@ class NameGenderFragment : CoreFragment<FragmentNameGenderBinding>() {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 
+		binding.nameInputEt.filters = arrayOf(LetterInputFilter())
 		binding.nameInputEt.doOnTextChanged { name, _, _, _ ->
 			viewModel.onNameInput(name ?: "")
 		}
 
+		binding.surnameInputEt.filters = arrayOf(LetterInputFilter())
 		binding.surnameInputEt.doOnTextChanged { surname, _, _, _ ->
 			viewModel.onSurnameInput(surname ?: "")
 		}

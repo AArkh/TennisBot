@@ -26,24 +26,36 @@ class SurveyAdapter @Inject constructor(): CoreAdapter<SurveyItemViewHolder>() {
 		holder.binding.option2.setBackgroundResource(R.drawable.survey_option_outline)
 		holder.binding.option3.setBackgroundResource(R.drawable.survey_option_outline)
 		holder.binding.option4.setBackgroundResource(R.drawable.survey_option_outline)
-		when (surveyItem.pickedOptionId) { // fixme тот же самый индекс, что и в clickListener кидаем
-			1 -> holder.binding.option1.setBackgroundResource(R.drawable.survey_option_outline_picked)
-			2 -> holder.binding.option2.setBackgroundResource(R.drawable.survey_option_outline_picked)
-			3 -> holder.binding.option3.setBackgroundResource(R.drawable.survey_option_outline_picked)
-			4 -> holder.binding.option4.setBackgroundResource(R.drawable.survey_option_outline_picked)
-		}
 
 		if (surveyItem.isTwoOptions) {
 			holder.binding.mainPagerLayout2.visibility = View.GONE
+			when (surveyItem.pickedOptionId) {
+				0 -> holder.binding.option1.setBackgroundResource(R.drawable.survey_option_outline_picked)
+				1 -> holder.binding.option2.setBackgroundResource(R.drawable.survey_option_outline_picked)
+				}
 		} else {
 			holder.binding.mainPagerLayout2.visibility = View.VISIBLE
+			when (surveyItem.pickedOptionId) {
+				1 -> holder.binding.option1.setBackgroundResource(R.drawable.survey_option_outline_picked)
+				2 -> holder.binding.option2.setBackgroundResource(R.drawable.survey_option_outline_picked)
+				3 -> holder.binding.option3.setBackgroundResource(R.drawable.survey_option_outline_picked)
+				4 -> holder.binding.option4.setBackgroundResource(R.drawable.survey_option_outline_picked)
+			}
 		}
 		holder.binding.option1.setOnClickListener {
-			clickListener?.invoke(1, holder.binding.option1Title.text.toString())
+			if (surveyItem.isTwoOptions){
+				clickListener?.invoke(0, holder.binding.option1Title.text.toString())
+			} else {
+				clickListener?.invoke(1, holder.binding.option1Title.text.toString())
+			}
 			Log.d("ViewPager", "option1 is picked")
 		}
 		holder.binding.option2.setOnClickListener {
-			clickListener?.invoke(2, holder.binding.option2Title.text.toString())
+			if (surveyItem.isTwoOptions){
+				clickListener?.invoke(1, holder.binding.option2Title.text.toString())
+			} else {
+				clickListener?.invoke(2, holder.binding.option2Title.text.toString())
+			}
 			Log.d("ViewPager", "option2 is picked")
 		}
 		holder.binding.option3.setOnClickListener {

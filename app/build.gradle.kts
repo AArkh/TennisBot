@@ -73,6 +73,7 @@ dependencies {
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("io.coil-kt:coil:2.5.0")
     implementation("io.coil-kt:coil-svg:2.5.0")
+    implementation("io.coil-kt:coil-video:2.5.0")
 
     // Monitoring
     // Todo - add project to firebase
@@ -92,6 +93,14 @@ dependencies {
 
     // Ui
     implementation("com.airbnb.android:lottie:6.2.0")
+
+    // Video Player
+    implementation("androidx.media3:media3-exoplayer:1.3.0")
+    implementation("androidx.media3:media3-exoplayer-dash:1.3.0")
+    implementation("androidx.media3:media3-ui:1.3.0")
+
+    //Paging
+    implementation ("androidx.paging:paging-runtime-ktx:3.2.1")
 
     // DI
     val hiltVersion = "2.48"

@@ -7,12 +7,12 @@
     android:background="@drawable/bottomsheet_rounded">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="24dp"
-        android:text="Выбери страну"
+        android:text="@string/location_choose_country"
         android:textSize="20sp"
         android:textColor="@color/tb_black"
         app:layout_constraintBottom_toTopOf="@+id/search_bar_layout"
@@ -31,7 +31,7 @@
         android:background="@drawable/search_background"
         android:backgroundTint="@color/tb_gray_border"
         android:src="@drawable/x"
-        app:layout_constraintEnd_toStartOf="@+id/textView"
+        app:layout_constraintEnd_toStartOf="@+id/title"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -42,7 +42,9 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="73dp"
-        android:hint="Найти"
+        android:hint="@string/find"
+        android:textColorHint="@color/tb_gray_active"
+        app:startIconTint="@color/tb_gray_active"
         app:boxStrokeWidth="-1dp"
         app:boxStrokeWidthFocused="-1dp"
         app:endIconDrawable="@drawable/x"

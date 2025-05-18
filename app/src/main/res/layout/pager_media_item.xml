@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	xmlns:tools="http://schemas.android.com/tools"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<ImageView
+		android:id="@+id/image"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_centerInParent="true"
+		android:scaleType="centerCrop"
+		tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+	<androidx.media3.ui.PlayerView
+		android:id="@+id/video_player"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:visibility="invisible"/>
+
+	<ImageView
+		android:id="@+id/play_video_button"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:visibility="invisible"
+		android:src="@drawable/play_button"
+		android:foreground="@drawable/ripple_gray_circle"
+		android:clickable="true"
+		android:focusable="true"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		tools:visibility="visible" />
+
+	<TextView
+		android:id="@+id/video_duration_timer"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/default_time"
+		android:textSize="13sp"
+		android:paddingHorizontal="5dp"
+		android:paddingVertical="2dp"
+		android:layout_marginStart="16dp"
+		android:layout_marginBottom="12dp"
+		android:visibility="invisible"
+		android:textColor="@color/tb_white"
+		android:background="@drawable/background_corners_4dp"
+		android:backgroundTint="@color/tb_black_card"
+		tools:visibility="visible"
+		app:layout_constraintStart_toStartOf="@id/image"
+		app:layout_constraintBottom_toBottomOf="@id/image"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

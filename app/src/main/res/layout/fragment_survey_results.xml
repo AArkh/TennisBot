@@ -56,18 +56,6 @@
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent" />
 
-	<ProgressBar
-		android:id="@+id/button_loading_anim"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:indeterminate="true"
-		android:indeterminateTint="@color/tb_white"
-		android:visibility="gone"
-		app:layout_constraintBottom_toBottomOf="@id/buttonContinue"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="@id/buttonContinue" />
-
 	<Button
 		android:id="@+id/buttonContinue"
 		style="@style/Widget.TennisBot.Button.Active"
@@ -79,5 +67,17 @@
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent" />
+
+	<ProgressBar
+		android:id="@+id/button_loading_anim"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:indeterminate="true"
+		android:indeterminateTint="@color/tb_white"
+		android:visibility="gone"
+		app:layout_constraintBottom_toBottomOf="@id/buttonContinue"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="@id/buttonContinue" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

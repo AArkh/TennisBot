@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:background="@drawable/bottomsheet_rounded"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	tools:context=".profile.editgamedata.EditGameDataDialog">
+
+	<ImageView
+		android:id="@+id/close_button"
+		android:layout_width="24dp"
+		android:layout_height="24dp"
+		android:layout_marginStart="20dp"
+		android:layout_marginTop="22.5dp"
+		android:layout_marginEnd="90dp"
+		android:padding="3dp"
+		android:background="@drawable/search_background"
+		android:backgroundTint="@color/tb_gray_border"
+		android:src="@drawable/x"
+		app:layout_constraintEnd_toStartOf="@+id/title"
+		app:layout_constraintHorizontal_bias="0.0"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
+
+	<TextView
+		android:id="@+id/title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="20dp"
+		android:layout_marginBottom="24dp"
+		android:text="@string/location_choose_country"
+		android:textSize="20sp"
+		android:textColor="@color/tb_black"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
+
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/options_container"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="24dp"
+		tools:listitem="@layout/recycler_text_only_item"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/title" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

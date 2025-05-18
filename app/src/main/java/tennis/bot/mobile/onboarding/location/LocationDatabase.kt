@@ -7,9 +7,8 @@ import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import javax.inject.Inject
 
-@Database(entities = [Location::class], version = 1, exportSchema = false)
+@Database(entities = [Location::class], version = 2, exportSchema = false)
 @TypeConverters(LocationCityConverter::class)
 abstract class LocationDatabase : RoomDatabase() {
     abstract fun locationDao() : LocationDao
@@ -18,8 +17,8 @@ abstract class LocationDatabase : RoomDatabase() {
 @ProvidedTypeConverter
 class LocationCityConverter {
     @TypeConverter
-    fun CityfromList(value: List<Location.LocationCity>) = Json.encodeToString(value) //todo naming here
+    fun cityFromList(value: List<Location.LocationCity>) = Json.encodeToString(value)
 
     @TypeConverter
-    fun CitytoList(value: String) = Json.decodeFromString<List<Location.LocationCity>>(value)
+    fun cityToList(value: String) = Json.decodeFromString<List<Location.LocationCity>>(value)
 }

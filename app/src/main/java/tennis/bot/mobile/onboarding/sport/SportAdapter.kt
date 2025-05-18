@@ -1,14 +1,10 @@
 package tennis.bot.mobile.onboarding.sport
 
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreAdapter
 import tennis.bot.mobile.core.CoreUtilsItem
-import tennis.bot.mobile.databinding.PagerSurveyItemBinding
 import tennis.bot.mobile.databinding.RecyclerSportItemBinding
 import javax.inject.Inject
 
@@ -16,7 +12,7 @@ class SportAdapter @Inject constructor(): CoreAdapter<SportItemViewHolder>() {
 	var clickListener: ((item: SportItem) -> Unit)? = null
 
 	override fun onBindViewHolder(holder: SportItemViewHolder, item: Any) {
-		val sportItem = item as? SportItem ?: throw IllegalArgumentException("Item must be LoginProposalImage")
+		val sportItem = item as? SportItem ?: throw IllegalArgumentException("Item must be SportItem")
 		holder.binding.title.text = sportItem.title
 
 		holder.itemView.setOnClickListener {

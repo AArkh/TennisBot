@@ -16,8 +16,8 @@ open class CountryCodesAdapter @Inject constructor() : CoreAdapter<CountryCodeIt
     override fun onBindViewHolder(holder: CountryCodeItemViewHolder, item: Any) {
         val countryItem = item as? CountryItem ?: throw IllegalArgumentException("Item must be CountryItem")
         holder.binding.countryIconIv.setImageResource(countryItem.icon)
-        holder.binding.countryNameTv.text = countryItem.countryName
-        holder.binding.countryCodeTv.text = countryItem.countryCode
+        holder.binding.countryNameTv.text = countryItem.name
+        holder.binding.countryCodeTv.text = countryItem.code
         holder.itemView.setOnClickListener {
             clickListener?.invoke(item)
         }
@@ -37,6 +37,6 @@ class CountryCodeItemViewHolder(
 @Serializable
 data class CountryItem(
     @DrawableRes val icon: Int,
-    val countryName: String, // Russia localized
-    val countryCode: String // +7
+    val name: String,
+    val code: String
 ) : CoreUtilsItem()

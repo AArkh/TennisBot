@@ -9,16 +9,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import tennis.bot.mobile.onboarding.survey.AccountInfoRepository
-import tennis.bot.mobile.onboarding.survey.AccountInfoRepository.Companion.CITY_ID_HEADER
-import tennis.bot.mobile.onboarding.survey.AccountInfoRepository.Companion.COUNTRY_ID_HEADER
-import tennis.bot.mobile.onboarding.survey.AccountInfoRepository.Companion.DISTRICT_ID_HEADER
+import tennis.bot.mobile.onboarding.survey.OnboardingRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class LocationViewModel @Inject constructor(
-	private val repository: LocationRepo,
-	private val accountInfo: AccountInfoRepository
+open class LocationViewModel @Inject constructor(
+	private val repository: LocationRepository,
+	private val accountInfo: OnboardingRepository
 ) : ViewModel() {
 
 	private val _uiStateFlow = MutableStateFlow<LocationUiState>(LocationUiState.Initial)
@@ -84,7 +81,7 @@ class LocationViewModel @Inject constructor(
 	fun recordLocationValues(selectedCountry: String, selectedCity: String, selectedDistrict: String) {
 		viewModelScope.launch {
 			withContext(Dispatchers.IO) {
-				var countryInt= 0
+				var countryInt = 0
 				var cityInt = 0
 				var districtInt = 0
 				kotlin.runCatching {

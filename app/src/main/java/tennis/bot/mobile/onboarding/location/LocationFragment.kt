@@ -2,7 +2,6 @@ package tennis.bot.mobile.onboarding.location
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -11,11 +10,10 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentLocationBinding
-import tennis.bot.mobile.onboarding.phone.SmsCodeFragment
 import tennis.bot.mobile.onboarding.photopick.PhotoPickFragment
 
 @AndroidEntryPoint
-class LocationFragment : CoreFragment<FragmentLocationBinding>() {
+open class LocationFragment : CoreFragment<FragmentLocationBinding>() {
 
     override val bindingInflation: Inflation<FragmentLocationBinding> = FragmentLocationBinding::inflate
     private val viewModel: LocationViewModel by viewModels()
@@ -109,7 +107,7 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
             viewModel.recordLocationValues(
                 selectedCountry = binding.countryTv.text.toString(),
                 selectedCity = binding.cityTv.text.toString(),
-                selectedDistrict = binding.countryTv.text.toString()
+                selectedDistrict = binding.districtTv.text.toString()
             )
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_view, PhotoPickFragment())
@@ -122,7 +120,7 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
                 LocationUiState.Initial -> {
                     binding.titleTv.visibility = View.VISIBLE
                     binding.countryPickLayout.visibility = View.VISIBLE
-                    binding.countryPickLayout.setBackgroundResource(R.drawable.country_button_outline_active)
+                    binding.countryPickLayout.setBackgroundResource(R.drawable.outline_16dp_2dp_active)
                     binding.cityPickLayout.visibility = View.INVISIBLE
                     binding.districtPickLayout.visibility = View.INVISIBLE
                     binding.buttonNext.visibility = View.VISIBLE
@@ -142,7 +140,7 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
                     binding.cityPickLayout.visibility = View.INVISIBLE
                     binding.districtPickLayout.visibility = View.INVISIBLE
                     binding.countryPickLayout.setBackgroundResource(R.drawable.country_button_outline)
-                    binding.cityPickLayout.setBackgroundResource(R.drawable.country_button_outline_active)
+                    binding.cityPickLayout.setBackgroundResource(R.drawable.outline_16dp_2dp_active)
                     binding.districtPickLayout.setBackgroundResource(R.drawable.country_button_outline)
                     binding.buttonNext.isEnabled = false
                     binding.buttonNext.setBackgroundResource(R.drawable.btn_bkg_disabled)
@@ -163,7 +161,7 @@ class LocationFragment : CoreFragment<FragmentLocationBinding>() {
 
                     binding.districtPickLayout.visibility = View.INVISIBLE
                     binding.cityPickLayout.setBackgroundResource(R.drawable.country_button_outline)
-                    binding.districtPickLayout.setBackgroundResource(R.drawable.country_button_outline_active)
+                    binding.districtPickLayout.setBackgroundResource(R.drawable.outline_16dp_2dp_active)
                     binding.buttonNext.isEnabled = false
                     binding.buttonNext.setBackgroundResource(R.drawable.btn_bkg_disabled)
 

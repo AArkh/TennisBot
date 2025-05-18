@@ -29,7 +29,7 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 
 		val dialog = Dialog(requireContext())
 		dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-		dialog.setContentView(R.layout.survey_welcome_dialog)
+		dialog.setContentView(R.layout.dialog_survey_welcome)
 		dialog.window?.setBackgroundDrawableResource(R.drawable.survey_dialog_rounded)
 		val dialogButton = dialog.findViewById<Button>(R.id.dialog_buttonStart)
 		dialog.show()
@@ -46,9 +46,9 @@ class SurveyFragment : CoreFragment<FragmentSurveyBinding>() {
 		}
 
 		surveyAdapter.clickListener = { selectedOptionId, selectedOptionTitle ->
-			if (viewModel.surveyUiState.value.selectedPage in 0..7) {
+			if (viewModel.surveyUiState.value.selectedPage in 0..6 || (viewModel.surveyUiState.value.selectedPage == 7 && selectedOptionId == 1)) {
 				viewModel.onPickedOption(selectedOptionId, selectedOptionTitle)
-			} else if (viewModel.surveyUiState.value.selectedPage == 8) {
+			} else if ((viewModel.surveyUiState.value.selectedPage == 7 && selectedOptionId == 0) || viewModel.surveyUiState.value.selectedPage == 8) {
 				viewModel.onLastPickedOption(selectedOptionId, selectedOptionTitle)
 				parentFragmentManager.beginTransaction()
 					.replace(R.id.fragment_container_view, SurveyResultsFragment())

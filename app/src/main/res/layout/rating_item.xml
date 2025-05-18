@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:paddingHorizontal="8dp"
+		android:paddingTop="16dp"
+		android:paddingBottom="15dp"
+		android:gravity="center"
+		android:background="@drawable/search_background"
+		android:orientation="horizontal">
+
+		<LinearLayout
+			android:id="@+id/single_rating_layout"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:gravity="center"
+			android:layout_weight="50"
+			android:orientation="vertical">
+
+			<LinearLayout
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"
+				android:layout_gravity="center">
+
+				<ImageView
+					android:layout_width="24dp"
+					android:layout_height="24dp"
+					android:background="@drawable/rating_power_background"
+					android:padding="3dp"
+					android:src="@drawable/rating_power"/>
+
+				<TextView
+					android:id="@+id/single_rating_value"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="4dp"
+					android:text="1817"
+					android:textSize="17sp"
+					android:textStyle="bold"
+					android:textColor="@color/tb_black"/>
+
+			</LinearLayout>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginHorizontal="7.25dp"
+				android:text="Одиночная сила"
+				android:fontFamily="@font/roboto"
+				android:textSize="12sp"/>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:id="@+id/doubles_rating_layout"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:gravity="center"
+			android:layout_weight="50"
+			android:orientation="vertical">
+
+			<LinearLayout
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"
+				android:layout_gravity="center">
+
+				<ImageView
+					android:layout_width="24dp"
+					android:layout_height="24dp"
+					android:background="@drawable/rating_users_background"
+					android:padding="4dp"
+					android:src="@drawable/rating_users"/>
+
+				<TextView
+					android:id="@+id/doubles_rating_value"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="4dp"
+					android:text="1290"
+					android:textSize="17sp"
+					android:textStyle="bold"
+					android:textColor="@color/tb_black"/>
+
+			</LinearLayout>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginHorizontal="7.25dp"
+				android:text="Парная сила"
+				android:fontFamily="@font/roboto"
+				android:textSize="12sp"/>
+
+		</LinearLayout>
+
+	</LinearLayout>

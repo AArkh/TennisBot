@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:background="@color/tb_white"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<com.google.android.material.imageview.ShapeableImageView
+		android:id="@+id/add_photo_holder"
+		android:layout_width="0dp"
+		android:layout_height="171dp"
+		android:layout_marginStart="20dp"
+		android:layout_marginTop="12dp"
+		android:layout_marginEnd="12dp"
+		android:layout_marginBottom="12dp"
+		android:background="@drawable/dotted_background_corners_8dp"
+		android:scaleType="centerCrop"
+		app:layout_constraintEnd_toStartOf="@id/add_video_holder"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:shapeAppearanceOverlay="@style/roundedImageView" />
+
+	<TextView
+		android:id="@+id/photo_hint"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/add_photo"
+		android:textColor="@color/tb_gray_light"
+		android:textSize="13sp"
+		app:drawableTopCompat="@drawable/mountain"
+		app:layout_constraintBottom_toBottomOf="@id/add_photo_holder"
+		app:layout_constraintEnd_toEndOf="@id/add_photo_holder"
+		app:layout_constraintStart_toStartOf="@id/add_photo_holder"
+		app:layout_constraintTop_toTopOf="@id/add_photo_holder" />
+
+	<ImageView
+		android:id="@+id/delete_photo_button"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@drawable/x_dark"
+		android:padding="10dp"
+		android:visibility="invisible"
+		app:layout_constraintTop_toTopOf="@id/add_photo_holder"
+		app:layout_constraintEnd_toEndOf="@id/add_photo_holder"/>
+
+	<com.google.android.material.imageview.ShapeableImageView
+		android:id="@+id/add_video_holder"
+		android:layout_width="0dp"
+		android:layout_height="171dp"
+		android:layout_marginTop="12dp"
+		android:layout_marginEnd="20dp"
+		android:background="@drawable/dotted_background_corners_8dp"
+		android:scaleType="centerCrop"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toEndOf="@id/add_photo_holder"
+		app:layout_constraintTop_toTopOf="parent"
+		app:shapeAppearanceOverlay="@style/roundedImageView" />
+
+	<TextView
+		android:id="@+id/video_hint"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/add_video"
+		android:textColor="@color/tb_gray_light"
+		android:textSize="13sp"
+		app:drawableTopCompat="@drawable/play_circle"
+		app:layout_constraintBottom_toBottomOf="@id/add_video_holder"
+		app:layout_constraintEnd_toEndOf="@id/add_video_holder"
+		app:layout_constraintStart_toStartOf="@id/add_video_holder"
+		app:layout_constraintTop_toTopOf="@id/add_video_holder" />
+
+	<ImageView
+		android:id="@+id/delete_video_button"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@drawable/x_dark"
+		android:padding="10dp"
+		android:visibility="invisible"
+		app:layout_constraintTop_toTopOf="@id/add_video_holder"
+		app:layout_constraintEnd_toEndOf="@id/add_video_holder"/>
+
+	<TextView
+		android:id="@+id/video_duration_timer"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/default_time"
+		android:paddingHorizontal="5dp"
+		android:paddingVertical="2dp"
+		android:layout_marginEnd="12dp"
+		android:layout_marginBottom="12dp"
+		android:visibility="invisible"
+		android:textColor="@color/tb_white"
+		android:background="@drawable/background_corners_4dp"
+		android:backgroundTint="@color/tb_black_card"
+		app:layout_constraintEnd_toEndOf="@id/add_video_holder"
+		app:layout_constraintBottom_toBottomOf="@id/add_video_holder"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

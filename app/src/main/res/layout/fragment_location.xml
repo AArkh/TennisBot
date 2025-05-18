@@ -16,7 +16,7 @@
 		android:background="@drawable/search_background"
 		android:backgroundTint="@color/tb_gray_border"
 		android:padding="6dp"
-		android:src="@drawable/chevron_vertical"
+		android:src="@drawable/chevron_left_wide"
 		android:visibility="visible"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent"
@@ -68,7 +68,7 @@
 			android:layout_height="wrap_content"
 			android:layout_gravity="end|center"
 			android:layout_marginEnd="10dp"
-			android:src="@drawable/chevron_left" />
+			android:src="@drawable/chevron_down_narrow" />
 	</LinearLayout>
 
 	<LinearLayout
@@ -102,7 +102,7 @@
 			android:layout_height="wrap_content"
 			android:layout_gravity="end|center"
 			android:layout_marginEnd="10dp"
-			android:src="@drawable/chevron_left" />
+			android:src="@drawable/chevron_down_narrow" />
 
 	</LinearLayout>
 
@@ -137,7 +137,7 @@
 			android:layout_height="wrap_content"
 			android:layout_gravity="end|center"
 			android:layout_marginEnd="10dp"
-			android:src="@drawable/chevron_left" />
+			android:src="@drawable/chevron_down_narrow" />
 
 	</LinearLayout>
 

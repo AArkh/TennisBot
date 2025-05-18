@@ -66,7 +66,9 @@ abstract class CoreFragment<BINDING : ViewBinding> : Fragment() {
     ) {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(state) {
-                flow.collect { state -> action(state) }
+                flow.collect { state ->
+                    action(state)
+                }
             }
         }
     }

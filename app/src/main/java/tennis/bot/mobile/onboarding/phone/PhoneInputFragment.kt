@@ -3,7 +3,6 @@ package tennis.bot.mobile.onboarding.phone
 import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.view.View
-import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -16,21 +15,16 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentPhoneInputBinding
 import tennis.bot.mobile.utils.hideKeyboard
-import tennis.bot.mobile.utils.updateTextIfNeeded
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
+open class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
 
     override var adjustToKeyboard: Boolean = true
     override val bindingInflation: Inflation<FragmentPhoneInputBinding> = FragmentPhoneInputBinding::inflate
     @Inject
     lateinit var countryAdapter: CountryCodesAdapter
     private val phoneInputViewModel: PhoneInputViewModel by viewModels()
-
-    companion object {
-        const val PHONE_NUMBER = "SmsCodeFragment"
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

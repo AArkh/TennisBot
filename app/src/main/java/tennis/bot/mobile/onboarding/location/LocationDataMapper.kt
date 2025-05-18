@@ -33,4 +33,67 @@ class LocationDataMapper @Inject constructor() {
             return emptyList()
         }
     }
+
+    fun findCountryFromCity(responseData: List<Location>, selectedCity: Int): String? {
+        for (country in responseData) {
+            val cities: List<Location.LocationCity> = country.cities
+            val city = cities.find { it.id == selectedCity }
+            if (city != null) {
+                return country.countryName
+            }
+        }
+        return null
+    }
+
+    fun findCityIntFromString(responseData: List<Location>, cityString: String): Int? {
+        for (country in responseData) {
+            val cities: List<Location.LocationCity> = country.cities
+            val city = cities.find { it.name == cityString }
+            if (city != null) {
+                return city.id
+            }
+        }
+        return null
+    }
+
+    fun findCityString(responseData: List<Location>, selectedCity: Int): String? {
+        for (country in responseData) {
+            val cities: List<Location.LocationCity> = country.cities
+            val city = cities.find { it.id == selectedCity }
+            if (city != null) {
+                return city.name
+            }
+        }
+        return null
+    }
+
+    fun findDistrictIntFromString(responseData: List<Location>, selectedCity: Int?, selectedDistrict: String?): Int? {
+        if (selectedCity == null || selectedDistrict == null) return null
+
+        for (country in responseData) {
+            val cities: List<Location.LocationCity> = country.cities
+            val city = cities.find { it.id == selectedCity }
+            if (city != null) {
+                val district = city.districts.find { it.title == selectedDistrict }
+                if (district != null) {
+                    return district.id
+                }
+            }
+        }
+        return null
+    }
+
+    fun findDistrictFromCity(responseData: List<Location>, selectedCity: Int, selectedDistrict: Int): String? { // figure out a proper way for districts
+        for (country in responseData) {
+            val cities: List<Location.LocationCity> = country.cities
+            val city = cities.find { it.id == selectedCity }
+            if (city != null) {
+                val district = city.districts.find { it.id == selectedDistrict }
+                if (district != null) {
+                    return district.title
+                }
+            }
+        }
+        return null
+    }
 }

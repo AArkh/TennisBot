@@ -1,8 +1,10 @@
 package tennis.bot.mobile.onboarding.photopick
 
-import android.widget.ImageView
+import android.net.Uri
 
-sealed class PhotoPickUiState {
+sealed class PhotoPickUiState(
+    open val userPickedImage: Uri? = null,
+) {
     object Loading : PhotoPickUiState()
 
     object Error : PhotoPickUiState()
@@ -18,7 +20,8 @@ sealed class PhotoPickUiState {
     ) : PhotoPickUiState()
 
     data class PickedUserImage(
-        val customSelectedImage: ImageView, // choose the correct type
+        override val userPickedImage: Uri,
+        val iconList: List<CircledImage>,
         val nextButtonEnabled: Boolean
-    ) : PhotoPickUiState()
+    ) : PhotoPickUiState(userPickedImage)
 }

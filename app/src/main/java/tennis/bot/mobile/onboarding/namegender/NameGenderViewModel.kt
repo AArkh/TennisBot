@@ -8,16 +8,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import tennis.bot.mobile.onboarding.namegender.Const.FEMALE
 import tennis.bot.mobile.onboarding.namegender.Const.MALE
-import tennis.bot.mobile.onboarding.survey.AccountInfoRepository
-import tennis.bot.mobile.onboarding.survey.AccountInfoRepository.Companion.IS_MALE_HEADER
-import tennis.bot.mobile.onboarding.survey.AccountInfoRepository.Companion.NAME_HEADER
-import tennis.bot.mobile.onboarding.survey.AccountInfoRepository.Companion.SURNAME_HEADER
+import tennis.bot.mobile.onboarding.survey.OnboardingRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class NameGenderViewModel @Inject constructor(
 	@ApplicationContext private val context: Context,
-	private val accountInfo: AccountInfoRepository): ViewModel(
+	private val accountInfo: OnboardingRepository): ViewModel(
 ) {
 
 	private val _uiStateFlow = MutableStateFlow(
@@ -60,21 +57,19 @@ class NameGenderViewModel @Inject constructor(
 		)
 	}
 
-	fun isNextButtonEnabled() { // gender type?
+	fun isNextButtonEnabled() {
 		val prevState: NameGenderUiState = _uiStateFlow.value
-		val isNameOk = prevState.userNameInput.length >= 3
-		val isSurnameOk = prevState.userSurnameInput.length >= 3
 		val isGenderPicked = prevState.gender == MALE || prevState.gender == FEMALE
 
 		_uiStateFlow.value = prevState.copy(
-			nextButtonEnabled = isNameOk && isSurnameOk && isGenderPicked
+			nextButtonEnabled = isGenderPicked
 		)
 	}
 
 	fun onNextButtonClicked() {
 		accountInfo.recordNameSurnameAndGender(
 			name = _uiStateFlow.value.userNameInput.toString(),
-			surname = _uiStateFlow.value.userNameInput.toString(),
+			surname = _uiStateFlow.value.userSurnameInput.toString(),
 			gender = _uiStateFlow.value.gender
 		)
 	}

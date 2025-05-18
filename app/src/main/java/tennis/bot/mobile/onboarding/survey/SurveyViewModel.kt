@@ -3,15 +3,18 @@ package tennis.bot.mobile.onboarding.survey
 import android.content.Context
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
 import javax.inject.Inject
 
 @HiltViewModel
 class SurveyViewModel @Inject constructor(
-	private val accountInfo: AccountInfoRepository,
+	private val onboardingRepository: OnboardingRepository,
 	@ApplicationContext context: Context,
 ): ViewModel() {
 
@@ -25,12 +28,12 @@ class SurveyViewModel @Inject constructor(
 			ContextCompat.getString(context, R.string.survey_side_note_text_1)
 		),
 		SurveyItem(
-			context.getString(R.string.survey_options_item_set1_1),
-			context.getString(R.string.survey_options_item_set1_2),
-			context.getString(R.string.survey_options_item_set1_3),
-			context.getString(R.string.survey_options_item_set1_4),
-			ContextCompat.getString(context, R.string.survey_side_note_title_2),
-			ContextCompat.getString(context, R.string.survey_side_note_text_2)
+			context.getString(R.string.survey_options_item_set2_1),
+			context.getString(R.string.survey_options_item_set2_2),
+			context.getString(R.string.survey_options_item_set2_3),
+			context.getString(R.string.survey_options_item_set2_4),
+			ContextCompat.getString(context, R.string.survey_side_note_title_3),
+			ContextCompat.getString(context, R.string.survey_side_note_text_3)
 		),
 		SurveyItem(
 			context.getString(R.string.survey_options_item_set2_1),
@@ -110,6 +113,12 @@ class SurveyViewModel @Inject constructor(
 		surveyPages = optionsList
 	))
 
+	init {
+		viewModelScope.launch(Dispatchers.IO) {
+				onboardingRepository.postLogin()
+		}
+	}
+
 	fun onBackClicked() {
 		if (surveyUiState.value.selectedPage in 1..8 ) {
 			val newPageIndex = surveyUiState.value.selectedPage - 1
@@ -150,7 +159,10 @@ class SurveyViewModel @Inject constructor(
 		val currentPage = currentState.surveyPages[currentState.selectedPage]
 		val updatePage = currentPage.copy(pickedOptionId = pickedOptionId)
 		recordEntry(currentState.selectedPage, pickedOptionId, pickedOptionTitle)
-		accountInfo.updateSurveyData()
+		if(currentState.selectedPage == 7 && pickedOptionId == 0) {
+			recordEntry(currentState.selectedPage + 1, pickedOptionId, pickedOptionTitle)
+		}
+		onboardingRepository.updateSurveyData()
 
 		surveyUiState.value = currentState.copy(
 			surveyPages = currentState.surveyPages.toMutableList().apply {
@@ -160,8 +172,8 @@ class SurveyViewModel @Inject constructor(
 	}
 
 	private fun recordEntry(position: Int, id: Int, answer: String) {
-		accountInfo.rawSurveyAnswers.add(position, id)
-		accountInfo.surveyAnswers.add(position, answer)
+		onboardingRepository.rawSurveyAnswers.add(position, id)
+		onboardingRepository.surveyAnswers.add(position, answer)
 	}
 
 	private fun calculateProgressPercent(position: Int): Int {
