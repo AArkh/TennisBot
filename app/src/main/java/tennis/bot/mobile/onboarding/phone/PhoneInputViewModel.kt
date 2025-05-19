@@ -14,7 +14,7 @@ import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
 @HiltViewModel
-class PhoneInputViewModel @Inject constructor(
+open class PhoneInputViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val repository: PhoneInputRepository
 ) : ViewModel() {

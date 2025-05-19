@@ -13,13 +13,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import tennis.bot.mobile.R
 import tennis.bot.mobile.onboarding.survey.OnboardingRepository
+import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.utils.showToast
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
 	@ApplicationContext private val context: Context,
-	private val accountInfo: OnboardingRepository
+	private val accountInfo: OnboardingRepository,
+	private val profileRepo: UserProfileAndEnumsRepository
 ) : ViewModel() {
 
 	private val _uiStateFlow = MutableStateFlow(
@@ -74,7 +77,6 @@ class LoginViewModel @Inject constructor(
 	fun onPasswordInput(password: CharSequence) {
 		val prevState: LoginUiState = _uiStateFlow.value
 		val isClearPasswordButtonVisible = password.isNotEmpty()
-		// todo regex в поле класса
 		val passwordConditions: Boolean = passwordConditionsRegex.matches(password) && password.length >= PASSWORD_MIN_LENGTH
 		val passwordErrorMessage = if (!passwordConditions && password.isNotEmpty()) {
 			passwordErrorText
@@ -125,7 +127,8 @@ class LoginViewModel @Inject constructor(
 		viewModelScope.launch(Dispatchers.IO) {
 			when (accountInfo.postLogin(uiStateFlow.value.phonePrefix + username.toString(), password.toString())) {
 				200 -> {
-					context.showToast("This would be a dialog cue")
+					profileRepo.precacheProfile()
+					profileRepo.recordPhone(uiStateFlow.value.phonePrefix + username.toString())
 					navigationCallback.invoke()
 				}
 

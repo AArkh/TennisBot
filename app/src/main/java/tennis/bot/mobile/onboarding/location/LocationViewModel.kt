@@ -13,7 +13,7 @@ import tennis.bot.mobile.onboarding.survey.OnboardingRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class LocationViewModel @Inject constructor(
+open class LocationViewModel @Inject constructor(
 	private val repository: LocationRepository,
 	private val accountInfo: OnboardingRepository
 ) : ViewModel() {

@@ -12,7 +12,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tennis.bot.mobile.core.AuthTokenRepository
 import tennis.bot.mobile.databinding.ActivityMainBinding
-import tennis.bot.mobile.onboarding.account.UserProfileAndEnumsRepository
+import tennis.bot.mobile.feed.activityfeed.FeedBottomNavigationFragment
+import tennis.bot.mobile.profile.account.UserProfileAndEnumsRepository
 import tennis.bot.mobile.onboarding.initial.LoginProposalFragment
 import tennis.bot.mobile.onboarding.location.LocationRepository
 import java.io.IOException
@@ -36,9 +37,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         if (supportFragmentManager.fragments.isEmpty()) {
-            supportFragmentManager.beginTransaction()
-                .add(binding.fragmentContainerView.id, LoginProposalFragment())
-                .commit()
+            if (authTokenRepository.getRefreshToken() != null) { // blows up if there's no internet + when refresh has problems. todo think on how to act when there's no internet
+                supportFragmentManager.beginTransaction()
+                    .add(binding.fragmentContainerView.id, FeedBottomNavigationFragment())
+                    .commit()
+            } else {
+                supportFragmentManager.beginTransaction()
+                    .add(binding.fragmentContainerView.id, LoginProposalFragment())
+                    .commit()
+            }
         }
 
         lifecycleScope.launch {

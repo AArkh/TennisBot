@@ -4,14 +4,18 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.View
 import androidx.annotation.Keep
+import androidx.core.content.ContextCompat.getColor
+import coil.ImageLoader
+import coil.request.ImageRequest
+import coil.transform.CircleCropTransformation
 import kotlinx.parcelize.Parcelize
 import tennis.bot.mobile.R
+import tennis.bot.mobile.utils.buildImageRequest
 import tennis.bot.mobile.utils.dpToPx
 import kotlin.math.roundToInt
 
@@ -25,7 +29,7 @@ class ImageSeriesView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-    var drawableSize = context.dpToPx(32)
+    var drawableSize = context.dpToPx(36)
         set(value) {
             field = value
             requestLayout()
@@ -33,7 +37,7 @@ class ImageSeriesView @JvmOverloads constructor(
     private var drawables = Array<Drawable?>(3) { null }
     private val borderWidth = context.dpToPx(2)
     private val borderPaint = Paint().apply {
-        color = Color.RED
+        color = Color.WHITE
         style = Paint.Style.STROKE
         strokeWidth = borderWidth.toFloat()
     }
@@ -41,7 +45,7 @@ class ImageSeriesView @JvmOverloads constructor(
     private var imageOffsetFactor = DEFAULT_VIEW_OFFSET_FACTOR
     private var withBorder: Boolean = false
 
-    private var tokenImages: List<AvatarImage>? = null
+    private var avatarImages: List<AvatarImage>? = null
     private var additionalCount = 0
 
     init {
@@ -103,37 +107,52 @@ class ImageSeriesView @JvmOverloads constructor(
         requestLayout()
     }
 
+    fun setImage(avatarImage: AvatarImage) {
+        val drawables = drawables // to avoid index out of bounds exception when set images called twice
+        drawables[0] = TextShapeDrawable(avatarImage.shortName, getColor(context, R.color.tb_gray_border))
+        val imageLoader = ImageLoader(context)
+        val request = ImageRequest.Builder(context)
+            .data(buildImageRequest(context, avatarImage.imageUrl))
+            .target { result ->
+                drawables[0] = result
+                invalidate()
+            }
+            .crossfade(true)
+            .placeholder(R.drawable.circle_background)
+            .transformations(CircleCropTransformation())
+            .build()
+        imageLoader.enqueue(request)
+        requestLayout()
+    }
+
     fun setImages(avatarImages: List<AvatarImage>, additionalCount: Int) {
-        if (this.tokenImages == avatarImages && this.additionalCount == additionalCount) {
+        if (this.avatarImages == avatarImages && this.additionalCount == additionalCount) {
             return
         }
 
-        this.tokenImages = avatarImages
+        this.avatarImages = avatarImages
         this.additionalCount = additionalCount
 
         val drawablesCount = avatarImages.size + if (additionalCount == 0) 0 else 1
         drawables = Array(drawablesCount) { null }
         if (additionalCount > 0) {
-            drawables[drawables.lastIndex] = TextShapeDrawable("+${additionalCount}", Color.BLUE)
+            drawables[drawables.lastIndex] = TextShapeDrawable("+${additionalCount}", Color.LTGRAY)
         }
 
-        avatarImages.forEachIndexed { index, tokenImage ->
+        avatarImages.forEachIndexed { index, avatarImage ->
             val drawables = drawables // to avoid index out of bounds exception when set images called twice
-            drawables[index] = TextShapeDrawable(tokenImage.shortName, Color.MAGENTA)
-            if (!tokenImage.imageUrl.isNullOrEmpty()) {
-                // todo тут загружаем
-//                Glide.with(context).asDrawable()
-//                    .load(tokenImage.logoUrl)
-//                    .circleCrop()
-//                    .into(object : CustomTarget<Drawable>(drawableSize, drawableSize) {
-//                        override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
-//                            drawables[index] = resource
-//                            invalidate()
-//                        }
-//
-//                        override fun onLoadCleared(placeholder: Drawable?) = Unit
-//                    })
-            }
+            drawables[index] = TextShapeDrawable(avatarImage.shortName, getColor(context, R.color.tb_gray_border))
+            val imageLoader = ImageLoader(context)
+            val request = ImageRequest.Builder(context)
+                .data(buildImageRequest(context, avatarImage.imageUrl))
+                .target { result ->
+                    drawables[index] = result
+                    invalidate()
+                }
+                .crossfade(true)
+                .transformations(CircleCropTransformation())
+                .build()
+            imageLoader.enqueue(request)
         }
         requestLayout()
     }
@@ -142,6 +161,7 @@ class ImageSeriesView @JvmOverloads constructor(
         imageOffsetFactor = factor
         requestLayout()
     }
+
 
     private companion object {
         private const val DEFAULT_VIEW_OFFSET_FACTOR = 0.66f
@@ -152,5 +172,5 @@ class ImageSeriesView @JvmOverloads constructor(
 @Parcelize
 data class AvatarImage(
     val imageUrl: String?,
-    val shortName: String
+    val shortName: String = ""
 ) : Parcelable

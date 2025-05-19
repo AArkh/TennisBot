@@ -35,6 +35,7 @@ interface RegisterAndLoginApi {
 		@Field("grant_type") grantType: String,
 		@Field("client_id") clientId: String,
 		@Field("refresh_token") refreshToken: String,
+		@Field("client_secret") clientSecret: String,
 		@Field("scope") scope: String,
 		@Field("audience") audience: String
 	): Call<TokenResponse>
@@ -44,10 +45,10 @@ const val CONTENT_TYPE_HEADER: String = "application/x-www-form-urlencoded"
 
 @Serializable
 data class TokenResponse(
-	@SerialName("access_token") val accessToken: String,
-	@SerialName("token_type") val tokenType: String,
-	@SerialName("expires_in") val expiresIn: String,
-	@SerialName("refresh_token") val refreshToken: String
+	@SerialName("access_token") val accessToken: String?,
+	@SerialName("token_type") val tokenType: String?,
+	@SerialName("expires_in") val expiresIn: String?,
+	@SerialName("refresh_token") val refreshToken: String?
 )
 
 @Serializable

@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SurveyViewModel @Inject constructor(
-	private val accountInfo: OnboardingRepository,
+	private val onboardingRepository: OnboardingRepository,
 	@ApplicationContext context: Context,
 ): ViewModel() {
 
@@ -115,7 +115,7 @@ class SurveyViewModel @Inject constructor(
 
 	init {
 		viewModelScope.launch(Dispatchers.IO) {
-				accountInfo.postLogin()
+				onboardingRepository.postLogin()
 		}
 	}
 
@@ -162,7 +162,7 @@ class SurveyViewModel @Inject constructor(
 		if(currentState.selectedPage == 7 && pickedOptionId == 0) {
 			recordEntry(currentState.selectedPage + 1, pickedOptionId, pickedOptionTitle)
 		}
-		accountInfo.updateSurveyData()
+		onboardingRepository.updateSurveyData()
 
 		surveyUiState.value = currentState.copy(
 			surveyPages = currentState.surveyPages.toMutableList().apply {
@@ -172,8 +172,8 @@ class SurveyViewModel @Inject constructor(
 	}
 
 	private fun recordEntry(position: Int, id: Int, answer: String) {
-		accountInfo.rawSurveyAnswers.add(position, id)
-		accountInfo.surveyAnswers.add(position, answer)
+		onboardingRepository.rawSurveyAnswers.add(position, id)
+		onboardingRepository.surveyAnswers.add(position, answer)
 	}
 
 	private fun calculateProgressPercent(position: Int): Int {

@@ -22,7 +22,7 @@ class LocationDialogFragment : CountryCodesDialogFragment() {
 
         binding.countriesListRv.adapter = locationAdapter
 
-        locationAdapter.clickListener = {countryItem ->
+        locationAdapter.clickListener = { countryItem ->
             viewModel.onPickedListItem(countryItem, requireActivity())
             dialog?.dismiss()
         }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<item
+		android:id="@+id/selected"
+		android:drawable="@drawable/tab_dot_selected"
+		android:state_selected="true" />
+
+	<item
+		android:id="@+id/unselected"
+		android:drawable="@drawable/tab_dot_unselected" />
+
+</animated-selector>

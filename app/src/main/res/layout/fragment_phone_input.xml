@@ -94,7 +94,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_weight="50"
-			android:src="@drawable/chevron_right_md" />
+			android:src="@drawable/chevron_down_small" />
 	</LinearLayout>
 
 	<FrameLayout

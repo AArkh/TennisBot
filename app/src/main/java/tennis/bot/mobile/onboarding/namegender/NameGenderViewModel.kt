@@ -69,7 +69,7 @@ class NameGenderViewModel @Inject constructor(
 	fun onNextButtonClicked() {
 		accountInfo.recordNameSurnameAndGender(
 			name = _uiStateFlow.value.userNameInput.toString(),
-			surname = _uiStateFlow.value.userNameInput.toString(),
+			surname = _uiStateFlow.value.userSurnameInput.toString(),
 			gender = _uiStateFlow.value.gender
 		)
 	}

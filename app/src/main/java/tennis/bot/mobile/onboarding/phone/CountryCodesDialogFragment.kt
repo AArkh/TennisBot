@@ -42,7 +42,7 @@ open class CountryCodesDialogFragment : CoreBottomSheetDialogFragment<FragmentCo
         countryAdapter.clickListener = {
             requireActivity().supportFragmentManager.setFragmentResult(
                 COUNTRY_REQUEST_CODE_KEY,
-                bundleOf(SELECTED_COUNTRY_CODE_KEY to it.countryCode, SELECTED_COUNTRY_ICON_KEY to it.icon)
+                bundleOf(SELECTED_COUNTRY_CODE_KEY to it.code, SELECTED_COUNTRY_ICON_KEY to it.icon)
             )
             dialog?.dismiss()
         }

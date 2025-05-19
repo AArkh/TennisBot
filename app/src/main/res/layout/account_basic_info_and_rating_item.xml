@@ -18,7 +18,7 @@
 		app:layout_constraintTop_toTopOf="parent">
 
 		<ImageView
-			android:id="@+id/account_photo"
+			android:id="@+id/placeholder_photo"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center"
@@ -30,6 +30,14 @@
 			app:strokeColor="@android:color/white"
 			app:strokeWidth="3dp"
 			app:tint="@color/tb_gray_active" />
+
+		<com.google.android.material.imageview.ShapeableImageView
+			android:id="@+id/account_photo"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+			android:scaleType="centerCrop"
+			android:visibility="gone" />
 
 	</FrameLayout>
 
@@ -49,7 +57,7 @@
 		android:id="@+id/name_surname"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="Name Surname"
+		android:text="@string/name_surname_default"
 		android:textColor="@color/tb_black"
 		android:textSize="19sp"
 		android:layout_marginTop="12dp"
@@ -61,7 +69,7 @@
 		android:id="@+id/telegram_id"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="telegramId"
+		android:text="@string/telegramid_default"
 		android:textColor="@color/tb_gray_active"
 		android:textSize="14sp"
 		android:layout_marginStart="20dp"
@@ -96,7 +104,6 @@
 		android:textSize="14sp"
 		android:textColor="@color/tb_primary_green"
 		android:textStyle="bold"
-
 		android:paddingTop="11dp"
 		android:paddingBottom="10dp"
 		android:paddingEnd="15.5dp"

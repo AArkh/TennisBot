@@ -10,13 +10,15 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentSurveyResultsBinding
 import tennis.bot.mobile.onboarding.login.LoginDialogFragment
+import tennis.bot.mobile.profile.account.AccountPageFragment
+import tennis.bot.mobile.utils.goToAnotherSectionFragment
 import tennis.bot.mobile.utils.showToast
+import tennis.bot.mobile.utils.traverseToAnotherFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class SurveyResultsFragment : CoreFragment<FragmentSurveyResultsBinding>() {
 	override val bindingInflation: Inflation<FragmentSurveyResultsBinding> = FragmentSurveyResultsBinding::inflate
-
 	@Inject
 	lateinit var surveyResultsAdapter: SurveyResultsAdapter
 	private val viewModel: SurveyResultsViewModel by viewModels()
@@ -43,8 +45,7 @@ class SurveyResultsFragment : CoreFragment<FragmentSurveyResultsBinding>() {
 
 		binding.buttonContinue.setOnClickListener {
 			viewModel.onContinueButtonClicked {
-				val dialog = LoginDialogFragment()
-				dialog.show(childFragmentManager, dialog.tag)
+				parentFragmentManager.goToAnotherSectionFragment(AccountPageFragment())
 			}
 		}
 

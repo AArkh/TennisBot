@@ -15,7 +15,7 @@
 		android:background="@drawable/search_background"
 		android:backgroundTint="@color/tb_gray_border"
 		android:padding="6dp"
-		android:src="@drawable/chevron_vertical"
+		android:src="@drawable/chevron_left_wide"
 		android:visibility="visible"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent"
@@ -33,28 +33,20 @@
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/back_button" />
 
-	<FrameLayout
-		android:id="@+id/pickPhoto_button"
+	<ImageView
+		android:id="@+id/pickPhoto_image"
 		android:layout_width="90dp"
 		android:layout_height="90dp"
 		android:background="@drawable/circle_background"
-		android:backgroundTint="@color/tb_gray_border"
 		android:layout_marginTop="16dp"
 		android:padding="29.5dp"
+		android:src="@drawable/plus"
+		android:scaleType="centerCrop"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/title">
 
-		<com.google.android.material.imageview.ShapeableImageView
-			android:id="@+id/pickPhoto_image"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
-			android:scaleType="centerCrop"
-			android:src="@drawable/plus"
-			android:visibility="visible" />
-
-	</FrameLayout>
+	</ImageView>
 
 	<TextView
 		android:id="@+id/title_below"
@@ -66,7 +58,7 @@
 		android:layout_marginStart="20dp"
 		android:layout_marginTop="32dp"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/pickPhoto_button" />
+		app:layout_constraintTop_toBottomOf="@id/pickPhoto_image" />
 
 	<androidx.recyclerview.widget.RecyclerView
 		android:id="@+id/icons_recyclerView"

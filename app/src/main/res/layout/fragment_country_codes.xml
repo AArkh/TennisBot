@@ -43,6 +43,8 @@
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="73dp"
         android:hint="@string/find"
+        android:textColorHint="@color/tb_gray_active"
+        app:startIconTint="@color/tb_gray_active"
         app:boxStrokeWidth="-1dp"
         app:boxStrokeWidthFocused="-1dp"
         app:endIconDrawable="@drawable/x"
