@@ -21,7 +21,6 @@ import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentCountryCodesBinding
 import javax.inject.Inject
 
-
 @AndroidEntryPoint
 open class CountryCodesDialogFragment : CoreBottomSheetDialogFragment<FragmentCountryCodesBinding>() {
     override val bindingInflation: Inflation<FragmentCountryCodesBinding> =

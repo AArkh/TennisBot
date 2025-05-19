@@ -12,6 +12,12 @@
 
     <color name="tb_primary_green">#57D26A</color>
     <color name="tb_primary_green_disabled">#6657D26A</color>
+    <color name="tb_bland_green">#EBFBED</color>
+
+    <color name="tb_light_orange">#FFEDE1</color>
+    <color name="tb_orange">#FF793F</color>
+
+    <color name="tb_blue">#6B95CC</color>
 
     <color name="tb_bg_main">#FFFFFF</color>
     <color name="tb_bg">#F3F4F8</color>
@@ -21,4 +27,5 @@
     <color name="state_ripple_2">#292F8AF5</color>
 
     <color name="invisible">#00000000</color>
+    <color name="tb_semi_transparent_black">#33262729</color>
 </resources>

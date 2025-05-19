@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/item_layout"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_marginBottom="10dp"
+	android:background="@drawable/country_button_outline"
+	>
+
+	<TextView
+		android:id="@+id/title"
+		android:layout_width="140dp"
+		android:layout_height="30dp"
+		android:gravity="center"
+		android:layout_marginHorizontal="16dp"
+		android:layout_marginTop="14dp"
+		android:layout_marginBottom="13dp"
+		android:ellipsize="end"
+		android:lines="1"
+		android:text="@string/sport_title"
+		android:textColor="@color/tb_gray_active"
+		android:textSize="13sp"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

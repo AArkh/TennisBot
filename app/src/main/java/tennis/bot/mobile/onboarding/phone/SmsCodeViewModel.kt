@@ -17,14 +17,16 @@ import tennis.bot.mobile.R
 import tennis.bot.mobile.onboarding.phone.SmsCodeFragment.Companion.PHONE_NUMBER_ARGUMENT
 import tennis.bot.mobile.onboarding.phone.SmsCodeUiState.Companion.RETRY_BUTTON_BLOCKED_NO_COUNTDOWN
 import tennis.bot.mobile.onboarding.phone.SmsCodeUiState.Companion.RETRY_BUTTON_UNBLOCKED
+import tennis.bot.mobile.onboarding.survey.OnboardingRepository
 import tennis.bot.mobile.utils.showToast
 import javax.inject.Inject
 
 @HiltViewModel
 class SmsCodeViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
-    private val repository: PhoneInputRepository,
-    savedStateHandle: SavedStateHandle
+	@ApplicationContext private val context: Context,
+	private val repository: PhoneInputRepository,
+	private val accountInfo: OnboardingRepository,
+	savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val phone = savedStateHandle.get<String>(PHONE_NUMBER_ARGUMENT) ?: ""
@@ -78,7 +80,6 @@ class SmsCodeViewModel @Inject constructor(
                     throw IllegalArgumentException("Failed to request sms code for phone $phone")
             }.onFailure {
                 if (it is IllegalArgumentException) {
-                    // Неверный код, возвращаем ошибку
                     context.showToast(context.getString(R.string.onboarding_sms_input_failed_to_validate_sms))
                     _uiStateFlow.value = SmsCodeUiState.Error(
                         title = _uiStateFlow.value.title,
@@ -87,7 +88,6 @@ class SmsCodeViewModel @Inject constructor(
                         errorMessage = context.getString(R.string.onboarding_sms_input_failed_to_validate_sms)
                     )
                 } else {
-                    // Сетевая ошибка, даем возможность переотправить код
                     context.showToast(context.getString(R.string.error_no_network_message))
                     _uiStateFlow.value = SmsCodeUiState.UserInput(
                         title = _uiStateFlow.value.title,
@@ -98,6 +98,7 @@ class SmsCodeViewModel @Inject constructor(
                 }
             }.onSuccess {
                 navigationCallback.invoke()
+                accountInfo.recordPhoneNumberAndSmsCode(phone, _uiStateFlow.value.input)
             }
         }
     }

@@ -3,7 +3,6 @@ package tennis.bot.mobile.onboarding.phone
 import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.view.View
-import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -16,7 +15,6 @@ import tennis.bot.mobile.core.CoreFragment
 import tennis.bot.mobile.core.Inflation
 import tennis.bot.mobile.databinding.FragmentPhoneInputBinding
 import tennis.bot.mobile.utils.hideKeyboard
-import tennis.bot.mobile.utils.updateTextIfNeeded
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -27,10 +25,6 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
     @Inject
     lateinit var countryAdapter: CountryCodesAdapter
     private val phoneInputViewModel: PhoneInputViewModel by viewModels()
-
-    companion object {
-        const val PHONE_NUMBER = "PHONE_NUMBER"
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -65,7 +59,6 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
         subscribeToFlowOn(phoneInputViewModel.uiStateFlow) { uiState: PhoneInputUiState ->
             binding.textInputLayout.prefixText = uiState.prefix
             binding.countryIv.setImageResource(uiState.iconRes)
-            binding.phoneEt.updateTextIfNeeded(uiState.userInput)
 
             binding.buttonNext.isEnabled = uiState.proceedButtonEnabled
             val buttonBackground = if (uiState.proceedButtonEnabled) {
@@ -79,13 +72,12 @@ class PhoneInputFragment : CoreFragment<FragmentPhoneInputBinding>() {
         }
 
         binding.buttonNext.setOnClickListener {
-            parentFragment?.arguments = bundleOf(
-                PHONE_NUMBER to binding.phoneEt.text.toString()
-            )
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_view, SmsCodeFragment())
-                .addToBackStack(SmsCodeFragment::class.java.name)
-                .commit()
+            phoneInputViewModel.onNextClicked {
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_view, SmsCodeFragment.newInstance(it))
+                    .addToBackStack(SmsCodeFragment::class.java.name)
+                    .commit()
+            }
         }
     }
 }
